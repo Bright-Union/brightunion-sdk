@@ -1,0 +1,27 @@
+{
+  "name": "@brightunion/sdk",
+  "version": "1.0.0",
+  "description": "Brightjs is a set of javascript tools to interact with the Bright Union's risk platform aggregator's protocol on Ethereum, Binance Smart Chain and Polygon blockchains.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"no test specified\" "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bright-Union/brightjs.git"
+  },
+  "keywords": [
+    "risk-platforms",
+    "bright",
+    "token",
+    "multichain",
+    "coverage",
+    "marketplace"
+  ],
+  "author": "brightunion.io",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bright-Union/brightjs/issues"
+  },
+  "homepage": "https://github.com/Bright-Union/brightjs#readme"
+}
