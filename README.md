@@ -1,2 +1,2 @@
 # Bright Union SDK
-The Bright Union SDK is a set of javascript utilities that neables an easy integration between the Bright Union's multichain protocol and any web project. 
+The Bright Union SDK is a set of javascript utilities that enables an easy integration between the Bright Union's multichain protocol and any web project. 
