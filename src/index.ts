@@ -1,13 +1,32 @@
 
-// _getDistributorAddress
-// _getCoversCount
-// _getCovers
-// _getQuote
-// _buyCover
-// _buyCoverDecode
+class Distributors {
 
-function fn() {
-  console.log('SDK init');
+  constructor(registry : string){
+    return;
+  };
 }
 
-fn();
+
+function _getDistributorAddress() : any {
+
+};
+
+function _getCoversCount() : any {
+
+};
+
+function _getCovers() : any {
+
+};
+
+function _getQuote() : any {
+
+};
+
+function _buyCover() : any {
+
+};
+
+function _buyCoverDecode() : any {
+
+};
