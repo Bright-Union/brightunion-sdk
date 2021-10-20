@@ -1,13 +1,12 @@
 
-// _getDistributorAddress
-// _getCoversCount
-// _getCovers
-// _getQuote
-// _buyCover
-// _buyCoverDecode
+import getCoversCount from "./covers/covers";
+import getDistributorAddress from "./distributors/distributors";
 
-function fn() {
-  console.log('SDK init');
+export class BrightUnion {
+    chain: {};
+    constructor() {
+        this.chain = {};
+    }
 }
 
-fn();
+export default {BrightUnion , getDistributorAddress, getCoversCount}
