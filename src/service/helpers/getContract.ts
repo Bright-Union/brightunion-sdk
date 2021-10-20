@@ -1,19 +1,10 @@
-
-
 import  DistributorsABI  from '../abi/Distributors.json';
 
 function getContract(abi:any, address:string, web3:any) : any {
-    new Promise((resolve, reject) => {
-        const contractInstance = new web3.eth.Contract(abi.abi, address);
-        if (contractInstance) {
-            resolve(contractInstance);
-        } else {
-            reject('Can\'t get contact');
-        }
-    });
+    return new web3.eth.Contract(abi.abi, address);
 }
-function getNexusDistributorContract(address :string , web3:any) : any {
+function geDistributorContract(address :string , web3:any) : any {
     return getContract(DistributorsABI, address, web3);
 }
 
-export { getContract, getNexusDistributorContract };
+export default geDistributorContract ;

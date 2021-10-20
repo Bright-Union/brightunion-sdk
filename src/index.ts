@@ -1,5 +1,5 @@
 import getCoversCount from "./service/covers";
-import getDistributorAddress from "./distributors/distributors";
+import getDistributorAddress from "./service/helpers/getDistributorAddress";
 
 export class BrightUnion {
     chain: {};
