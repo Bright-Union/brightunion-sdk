@@ -1,12 +1,14 @@
 import getCoversCount from "./service/covers";
-import getDistributorAddress from "./service/helpers/getDistributorAddress";
+import getDistributorAddress from "./service/helpers/getContract";
 
-export class BrightUnion {
-    chain: {};
-    constructor() {
-        this.chain = {};
+export const BrightUnion =  {
+    covers : {
+      
+      getCoversCount:  getCoversCount,
+    },
+    staking: {
+
     }
 }
 
-
-export default {BrightUnion , getDistributorAddress, getCoversCount}
+export default BrightUnion
