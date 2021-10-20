@@ -1,32 +1,12 @@
+import getCoversCount from "./service/covers";
+import getDistributorAddress from "./distributors/distributors";
 
-class Distributors {
-
-  constructor(registry : string){
-    return;
-  };
+export class BrightUnion {
+    chain: {};
+    constructor() {
+        this.chain = {};
+    }
 }
 
 
-function _getDistributorAddress() : any {
-
-};
-
-function _getCoversCount() : any {
-
-};
-
-function _getCovers() : any {
-
-};
-
-function _getQuote() : any {
-
-};
-
-function _buyCover() : any {
-
-};
-
-function _buyCoverDecode() : any {
-
-};
+export default {BrightUnion , getDistributorAddress, getCoversCount}
