@@ -9,6 +9,7 @@ export function _getDistributorAddress() : Promise<object>  {
 }
 
 export function getCovers() : Promise<object>  {
+  console.log('asdasdasdasdasd xxx');
   return;
 }
 

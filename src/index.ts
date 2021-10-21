@@ -1,16 +1,36 @@
 /* eslint-disable */
 
-import getCoversCount from "./service/covers";
+import {getCoversCount, getCovers} from "./service/covers";
 // import getDistributorAddress from "./service/helpers/getContract";
 
-export const BrightUnion =  {
-    covers : {
+class BrightUnion{
+  hash: string
 
-      getCoversCount:  getCoversCount,
+  constructor(hash:string) {
+    this.hash = hash;
+
+  }
+
+  covers = {
+
+    getCoversCount() : Promise<object>  {
+
+      console.log(this.hash);
+      // do something with service functions and return the final object
+
+      return
     },
-    staking: {
+    getCovers() : Promise<object>  {
 
-    }
+
+      return
+    },
+  }
+
+  // staking = {
+  //   staking: 'staking fun'
+  // }
+
 }
 
 export default BrightUnion

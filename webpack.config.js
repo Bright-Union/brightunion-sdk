@@ -1,5 +1,9 @@
 const path = require('path');
 
+const DeclarationBundlerPlugin = require('declaration-bundler-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+
 var config = {
   entry: './src/index.ts',
   module: {
@@ -12,12 +16,31 @@ var config = {
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.tsx', '.ts', '.js', '.json'],
   },
   output: {
-    filename: 'bu-sdk.js',
+    filename: 'BrightUnion.js',
     path: path.resolve(__dirname, 'dist'),
+    libraryTarget: 'commonjs',
+    library: 'BrightUnion',
   },
+  plugins: [
+  // new CleanWebpackPlugin(['./@types', './dist']),
+  new DeclarationBundlerPlugin({
+    moduleName: '"@mycomp/mylib"',
+    out: '../@types/index.d.ts',
+  }),
+  // new CopyWebpackPlugin([
+  //   {
+  //     from: './types/package.json',
+  //     to: '../@types/package.json',
+  //   },
+  //   {
+  //     from: './src/package.json',
+  //     to: '../dist/package.json',
+  //   },
+  // ]),
+],
 }
 
 module.exports  = (env, argv) => {
