@@ -1,14 +1,9 @@
-import { getCoversCount } from "./service/covers";
 declare class BrightUnion {
     hash: string;
-    constructor();
-    getCovers(): Promise<object>;
+    constructor(hash: string);
     covers: {
-        getCoversCount: typeof getCoversCount;
+        getCoversCount(): Promise<object>;
         getCovers(): Promise<object>;
-    };
-    staking: {
-        staking: string;
     };
 }
 export default BrightUnion;

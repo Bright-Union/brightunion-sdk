@@ -26,10 +26,10 @@ var config = {
   },
   plugins: [
   // new CleanWebpackPlugin(['./@types', './dist']),
-  new DeclarationBundlerPlugin({
-    moduleName: '"@mycomp/mylib"',
-    out: '../@types/index.d.ts',
-  }),
+  // new DeclarationBundlerPlugin({
+  //   moduleName: '"@mycomp/mylib"',
+  //   out: '../@types/index.d.ts',
+  // }),
   // new CopyWebpackPlugin([
   //   {
   //     from: './types/package.json',
