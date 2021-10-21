@@ -1,5 +1,5 @@
 
-export interface  Cover {
+declare interface  Cover {
         coverType           ? : string ;
         productId           ? : number ;
         contractName        ? : string ;
@@ -12,6 +12,8 @@ export interface  Cover {
         refAddress          ? : string ;
 }
 
-export interface CoverArray {
-        [index:number] : Cover;
-}
+// declare interface CoversArray {
+//         [index:number] : Cover;
+// }
+
+export default Cover

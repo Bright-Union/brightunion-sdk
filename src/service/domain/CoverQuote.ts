@@ -7,6 +7,8 @@ export interface CoverQuote {
     _epochs          ? : number;
     _prodAddress     ? : number;
 }
-export interface CoverQuoteArray {
-    [index:number] : CoverQuote;
-}
+// export interface CoverQuoteArray {
+//     [index:number] : CoverQuote;
+// }
+
+export default CoverQuote

@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import {getCoversCount, getCovers} from "./service/covers";
-import getDistributorAddress from "./service/helpers/getContract";
+import geDistributorContract from "./service/helpers/getContract";
 
 class BrightUnion{
   hash: string
@@ -12,18 +12,17 @@ class BrightUnion{
 
   covers = {
 
-    getCoversCount() {
+    async getCovers() {
+      return await getCovers;
+    },
 
+    getCoversCount() {
       console.log(this.hash);
       // do something with service functions and return the final object
 
       return this.hash;
     },
-    getCovers() {
 
-
-      return
-    },
   }
 
   // staking = {
