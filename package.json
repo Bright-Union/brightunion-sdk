@@ -28,10 +28,13 @@
   },
   "homepage": "https://github.com/Bright-Union/brightjs#readme",
   "devDependencies": {
+    "@babel/core": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
     "@types/chai": "^4.2.22",
     "@types/mocha": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
+    "babel-loader": "^8.2.3",
     "chai": "^4.3.4",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^9.0.1",

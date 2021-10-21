@@ -22,7 +22,6 @@ var config = {
     filename: 'BrightUnion.js',
     path: path.resolve(__dirname, 'dist'),
     libraryTarget: 'commonjs',
-    library: 'BrightUnion',
   },
   plugins: [
   // new CleanWebpackPlugin(['./@types', './dist']),

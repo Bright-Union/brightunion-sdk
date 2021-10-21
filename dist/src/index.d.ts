@@ -2,8 +2,8 @@ declare class BrightUnion {
     hash: string;
     constructor(hash: string);
     covers: {
-        getCoversCount(): Promise<object>;
-        getCovers(): Promise<object>;
+        getCoversCount(): any;
+        getCovers(): void;
     };
 }
 export default BrightUnion;

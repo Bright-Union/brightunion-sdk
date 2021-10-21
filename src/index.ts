@@ -1,11 +1,10 @@
 /* eslint-disable */
 
 import {getCoversCount, getCovers} from "./service/covers";
-// import getDistributorAddress from "./service/helpers/getContract";
+import getDistributorAddress from "./service/helpers/getContract";
 
 class BrightUnion{
   hash: string
-
   constructor(hash:string) {
     this.hash = hash;
 
@@ -13,14 +12,14 @@ class BrightUnion{
 
   covers = {
 
-    getCoversCount() : Promise<object>  {
+    getCoversCount() {
 
       console.log(this.hash);
       // do something with service functions and return the final object
 
-      return
+      return this.hash;
     },
-    getCovers() : Promise<object>  {
+    getCovers() {
 
 
       return
