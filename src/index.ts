@@ -8,19 +8,19 @@ class BrightUnion{
 
   constructor(web3:object) {
     this.web3 = web3;
-
   }
 
-  covers = {
+  covers: object = {
+    owner: this,
 
     async getCovers() {
-      return await getCovers(this.web3);
+      return await getCovers(this.owner.web3.web3Instance);
     },
 
     getCoversCount() {
       // do something with service functions and return the final object
 
-      return ;
+      return '';
     },
 
   }
