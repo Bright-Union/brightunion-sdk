@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import {getCoversCount, getCovers} from "./service/covers/CoversService";
+import {getCoversCount, getCoversFrom} from "./service/covers/CoversService";
 import geDistributorContract from "./service/helpers/getContract";
 
 class BrightUnion{
@@ -13,8 +13,8 @@ class BrightUnion{
   covers: object = {
     owner: this,
 
-    async getCovers() {
-      return await getCovers(this.owner.web3.web3Instance);
+    async getCoversFrom(_distributorName:string) {
+      return await getCoversFrom(this.owner.web3.web3Instance, _distributorName);
     },
 
     getCoversCount() {

@@ -1,4 +1,4 @@
-export const DISTRIBUTORS  = [
+export const DISTRIBUTORS:object[]  = [
   {
     name: 'Insurace',
   },

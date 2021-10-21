@@ -1,9 +1,5 @@
-export declare const DISTRIBUTORS: {
-    name: string;
-}[];
+export declare const DISTRIBUTORS: object[];
 declare const _default: {
-    DISTRIBUTORS: {
-        name: string;
-    }[];
+    DISTRIBUTORS: object[];
 };
 export default _default;

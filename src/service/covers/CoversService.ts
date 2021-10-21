@@ -11,16 +11,17 @@ export function _getDistributorAddress() : Promise<object>  {
   return;
 }
 
+// getAllCovers()
 
-export async function  getCovers(web3: object) : Promise<object>  {
+export async function  getCoversFrom(web3: object, distributorName:string) : Promise<object>  {
 
   // DISTRIBUTORS
   for (var dist  in DISTRIBUTORS) {
-    console.log(dist);
+    console.log(dist , 'asdasd' , DISTRIBUTORS);
     // get covers
-}
+  }
 
-  const DistributorName = 'Insurace'
+  const DistributorName = distributorName
   const OwnerAddress = ''
   const ActiveCover = ''
   const limit = ''
@@ -67,6 +68,6 @@ export function _buyCoverDecode() :  Promise<object>  {
 }
 
 export default {
-  getCovers,
+  getCoversFrom,
   getCoversCount
 }
