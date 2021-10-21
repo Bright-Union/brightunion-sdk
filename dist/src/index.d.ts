@@ -1,10 +1,9 @@
-import { getCovers } from "./service/covers";
 declare class BrightUnion {
-    hash: string;
-    constructor(hash: string);
+    web3: object;
+    constructor(web3: object);
     covers: {
-        getCovers(): Promise<typeof getCovers>;
-        getCoversCount(): any;
+        getCovers(): Promise<object>;
+        getCoversCount(): void;
     };
 }
 export default BrightUnion;

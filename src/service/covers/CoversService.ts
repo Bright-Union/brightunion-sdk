@@ -1,5 +1,6 @@
-import getDistributorContract from "../service/helpers/getContract";
-import Cover from "../service/domain/Cover";
+import DISTRIBUTORS from "../../service/distributors_config";
+import getDistributorContract from "../../service/helpers/getContract";
+import Cover from "../../service/domain/Cover";
 
 export function getCoversCount(_distributorName : string, _owner: string , _isActive : boolean ) { // define address tyoe as hash
 
@@ -11,12 +12,20 @@ export function _getDistributorAddress() : Promise<object>  {
 }
 
 
-export async function  getCovers() : Promise<object>  {
+export async function  getCovers(web3: object) : Promise<object>  {
+
+  // DISTRIBUTORS
+  for (var dist  in DISTRIBUTORS) {
+    console.log(dist);
+    // get covers
+}
+
   const DistributorName = 'Insurace'
   const OwnerAddress = ''
   const ActiveCover = ''
   const limit = ''
-  const web3 = ''
+
+  console.log(web3 , 'web3');
 
   return await getDistributorContract(DistributorName , web3).methods.getCovers(DistributorName,OwnerAddress,ActiveCover,limit)
   .call()

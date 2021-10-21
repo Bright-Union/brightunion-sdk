@@ -1,26 +1,26 @@
 /* eslint-disable */
 
-import {getCoversCount, getCovers} from "./service/covers";
+import {getCoversCount, getCovers} from "./service/covers/CoversService";
 import geDistributorContract from "./service/helpers/getContract";
 
 class BrightUnion{
-  hash: string
-  constructor(hash:string) {
-    this.hash = hash;
+  web3: object
+
+  constructor(web3:object) {
+    this.web3 = web3;
 
   }
 
   covers = {
 
     async getCovers() {
-      return await getCovers;
+      return await getCovers(this.web3);
     },
 
     getCoversCount() {
-      console.log(this.hash);
       // do something with service functions and return the final object
 
-      return this.hash;
+      return ;
     },
 
   }
