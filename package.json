@@ -5,7 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "test": "mocha -r ts-node/register src/**/*.spec.ts",
-    "build-dev": "webpack --mode development --watch",
+    "lint": "eslint . --ext .ts",
+    "build-dev": "webpack --env local --mode production --watch",
     "build": "webpack --mode production"
   },
   "repository": {
@@ -29,8 +30,11 @@
   "devDependencies": {
     "@types/chai": "^4.2.22",
     "@types/mocha": "^9.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/parser": "^5.1.0",
     "chai": "^4.3.4",
     "dotenv": "^10.0.0",
+    "eslint": "^8.0.1",
     "mocha": "^9.1.3",
     "ts-loader": "^9.2.6",
     "ts-node": "^10.3.0",

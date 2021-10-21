@@ -1,6 +1,6 @@
 const path = require('path');
 
-module.exports = {
+var config = {
   entry: './src/index.ts',
   module: {
     rules: [
@@ -18,4 +18,11 @@ module.exports = {
     filename: 'bu-sdk.js',
     path: path.resolve(__dirname, 'dist'),
   },
+}
+
+module.exports  = (env, argv) => {
+  if(env.local){
+    config.output.path = path.resolve(__dirname, '../app-ui/src/store/modules');
+  }
+  return config;
 };

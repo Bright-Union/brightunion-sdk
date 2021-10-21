@@ -3,7 +3,7 @@ import Web3 from 'web3';
 import { expect } from 'chai';
 import 'mocha';
 import geDistributorContract  from '../service/helpers/getContract';
-import { getCoversCount } from '../service/covers';
+// import { getCoversCount } from '../service/covers';
 
 // From the protocol we only deal w/the "Distributors" contract.
 let contract : any;
