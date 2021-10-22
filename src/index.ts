@@ -9,22 +9,22 @@ class Distributors {
     this.web3 = _web3;
   }
 
-    async getCovers() {
-      return await getCovers;
-    }
+  async getCovers() {
+    return await getCovers;
+  }
 
-    async getCoversCount(
-      _distributorName : string,
-      _owner: string ,
-      _isActive : boolean
-    ) {
-      return await getCoversCount(
-        this.web3,
-        _distributorName,
-        _owner,
-        _isActive
-      )
-    }
+  async getCoversCount(
+    _distributorName : string,
+    _owner: string ,
+    _isActive : boolean
+  ) {
+    return await getCoversCount(
+      this.web3,
+      _distributorName,
+      _owner,
+      _isActive
+    )
+  }
 
   // staking = {
   //   staking: 'staking fun'
