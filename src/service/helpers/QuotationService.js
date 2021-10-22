@@ -49,7 +49,7 @@ function getInsuraceQuote({state, commit, getters}, {web3, amount, currency, per
       return;
     })
   }
-},
+}
 function getNexusQuote ({commit}, {state, web3, amount, currency, period, protocol}) {
   if (availableOnNetwork(web3.networkId, 'NEXUS_MUTUAL') && protocol.nexusCoverable){
     return QuotationService.fetchNexusQuote({state, web3, amount, currency, period, protocol}).then(quote => {
@@ -90,7 +90,7 @@ async function getGasPrice(web3) {
 }
 
 
-export default class QuotationService {
+class QuotationService {
 
    static getCapacity (protocol) {
         NexusApi.fetchCapacity(protocol).then(capacity => {
@@ -406,4 +406,12 @@ export default class QuotationService {
 
     }
 
+}
+
+export default {
+  QuotationService,
+  availableOnNetwork,
+  getInsuraceQuote,
+  getNexusQuote,
+  getBridgeQuote
 }

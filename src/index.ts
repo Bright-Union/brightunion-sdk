@@ -1,7 +1,7 @@
 /* use strict */
 
 import {getCoversCount , getCovers } from "@/service/Covers";
-import {getAllCoverables} from "@/service/Coverables";
+import {getCatalog} from "@/service/Catalog";
 
 class Distributors {
   web3: any;
@@ -13,7 +13,7 @@ class Distributors {
   }
 
   getCoverables(){
-    this.coverables = getAllCoverables();
+    this.coverables = getCatalog();
     console.log('getCoverables');
   }
 
