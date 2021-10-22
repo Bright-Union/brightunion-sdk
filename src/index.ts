@@ -14,11 +14,10 @@ class Distributors {
     }
 
     async getCoversCount(
-      _distributorName : string, 
-      _owner: string , 
+      _distributorName : string,
+      _owner: string ,
       _isActive : boolean
     ) {
-
       return await getCoversCount(
         this.web3,
         _distributorName,
