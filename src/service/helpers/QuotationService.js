@@ -4,12 +4,12 @@ import {quoteFromCoverable} from './objectFactory'
 import {toBN} from 'web3-utils'
 import NexusApi from '@/services/NexusApi'
 import BigNumber from 'bignumber.js'
-import {bridgePolicyBookRegistryContract, nexusDistributorContract, nexusQuotationContract} from '@/utils/contractFactory'
+import {bridgePolicyBookRegistryContract, nexusDistributorContract, nexusQuotationContract} from '@/service/helpers/contractFactory'
 import {getBridgePolicyBookContract} from '@/utils/getContract'
-import {insuraceDePegTestCurrency,sixDecimalsCurrency} from './network_config'
-import ERC20Helper from '@/services/ERC20Helper'
-import GasStationApi from "@/services/GasStationApi";
-import ExchangeRateAPI from "@/services/ExchangeRateAPI";
+import {insuraceDePegTestCurrency,sixDecimalsCurrency} from '@/service/config/network_config'
+import ERC20Helper from '@/service/helpers/ERC20Helper'
+import GasStationApi from "@/service/helpers/GasStationApi";
+import ExchangeRateAPI from "@/service/helpers/ExchangeRateAPI";
 let capacity = '';
 let quoteCurrency = '';
 let capacityETH = null;
