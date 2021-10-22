@@ -2,7 +2,7 @@ require('dotenv').config();
 import Web3 from 'web3';
 import { expect } from 'chai';
 import 'mocha';
-import Distributors from '../index'
+import Distributors from '@/index'
 let instance : Distributors = null;
 
 before(async () => {

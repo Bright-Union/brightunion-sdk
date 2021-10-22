@@ -1,5 +1,11 @@
 {
   "compilerOptions": {
+    "paths": {
+      "@/*": [
+        "*"
+      ]
+    },
+    "baseUrl" : "./src",
     "module": "commonjs",
     "noImplicitAny": true,
     "removeComments": true,
@@ -10,6 +16,6 @@
     "outDir": "./dist",
     "rootDir": ".",
     "resolveJsonModule" : true,
-    "esModuleInterop" : true
-  },
+    "esModuleInterop" : true,
+  }
 }
