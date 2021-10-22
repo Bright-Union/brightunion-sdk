@@ -1,11 +1,10 @@
 import  DistributorsABI  from '../abi/Distributors.json';
 
-function getContract(abi:any, address:string, web3:any) : any {
+const contract_rinkeby = '0x6E174A2C3E61B5E4f13Cc7035F4cB46E63f214db';
 
-    return new web3.eth.Contract(abi.abi, address);
-}
-function getDistributorContract(address :string , web3:any) : any {
-    return getContract(DistributorsABI, address, web3);
+
+function _getDistributorContract(web3:any) : any {
+    return new web3.eth.Contract(DistributorsABI.abi, contract_rinkeby,web3);
 }
 
-export default getDistributorContract ;
+export default _getDistributorContract ;
