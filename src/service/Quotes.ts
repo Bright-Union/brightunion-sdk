@@ -24,16 +24,19 @@ import CoverQuote from "./domain/CoverQuote";
  *
  * @beta
  */
-export function _getQuote(
-    _distributorName : string ,
-    _interfaceCompliant1 : number,
-    _interfaceCompliant2 : number,
-    _sumAssured : number,
-    _coverPeriod : number,
-    _contractAddress : string,
-    _coverAsset : string,
-    _coverable : string,
-    _data : any,
+export function getQuote(
+    // _distributorName : string ,
+    // _interfaceCompliant1 : number,
+    // _interfaceCompliant2 : number,
+    // _sumAssured : number,
+    // _coverPeriod : number,
+    // _contractAddress : string,
+    // _coverAsset : string,
+    // _coverable : string,
+    // _data : any,
 ) : Promise<CoverQuote>  {
   return;
 }
+
+
+export default {getQuote}

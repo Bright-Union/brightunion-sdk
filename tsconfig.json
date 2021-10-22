@@ -12,5 +12,4 @@
     "resolveJsonModule" : true,
     "esModuleInterop" : true
   },
-  "include": ["src", "src/tests"]
 }

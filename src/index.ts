@@ -1,16 +1,22 @@
 /* use strict */
 
-import {getCoversCount, getCovers} from "./service/Covers";
+import {getCoversCount , getCovers } from "./service/Covers";
+import {getQuote} from "./service/Quotes";
 
 class Distributors {
   web3: any;
 
   constructor(_web3 : any) {
     this.web3 = _web3;
+    this.getCoverables();
   }
 
-  async getCovers() {
-    return await getCovers;
+  getCoverables(){
+    console.log('getCoverables')
+  }
+
+ getCovers() {
+    return  getCovers;
   }
 
   async getCoversCount(
@@ -26,9 +32,6 @@ class Distributors {
     )
   }
 
-  // staking = {
-  //   staking: 'staking fun'
-  // }
 
 }
 
