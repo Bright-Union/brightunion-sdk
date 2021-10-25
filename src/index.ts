@@ -4,12 +4,29 @@ import { getCoversCount, getCovers } from "./service/dao/Covers";
 import { getDistributorAddress } from "./service/dao/Distributors";
 import { getQuote } from "./service/dao/Quotes";
 import { buyCoverDecode, buyCover } from "./service/dao/Buying";
+import { getCatalog } from "@/service/Catalog";
+
 
 
 class Distributors {
   web3: any;
+  catalog: any[];
+
   constructor(_web3 : any) {
     this.web3 = _web3;
+    this.catalog = [];
+    this.getCatalog();
+  }
+
+  async getCatalog (
+  ){
+     await getCatalog(
+      this.web3,
+    ).then(data => {
+    console.log(data , getCatalog);
+      this.catalog = data;
+      return data;
+    })
   }
 
   async getDistributorAddress (
