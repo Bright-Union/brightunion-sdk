@@ -1,5 +1,5 @@
-import CoverQuote from "./domain/CoverQuote";
-import _getDistributorContract from "./helpers/getContract";
+import CoverQuote from "../domain/CoverQuote";
+import _getDistributorContract from "../helpers/getContract";
 
 
 /**

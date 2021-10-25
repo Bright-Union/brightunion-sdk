@@ -1,4 +1,4 @@
-import _getDistributorContract from "./helpers/getContract";
+import _getDistributorContract from "../helpers/getContract";
 
 /**
  * Returns the contract implementation address of the intended distributor

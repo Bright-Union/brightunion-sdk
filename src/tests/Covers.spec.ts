@@ -26,7 +26,7 @@ describe('Get Owners Cover count', () => {
 describe('Get Owners Covers', () => {
   let distributorName = 'insurace';
   let owner = '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2';
-    it('should return owners\'s covers by distributor',async () => {
+    it('should return owners\'s covers by distributor', async () => {
     const result = await instance.getCovers(
         distributorName,
         owner,

@@ -1,6 +1,6 @@
 
-import BuyReceipt from "./domain/BuyReceipt";
-import _getDistributorContract from "./helpers/getContract";
+import BuyReceipt from "../domain/BuyReceipt";
+import _getDistributorContract from "../helpers/getContract";
 
 /**
  * Returns a transaction receipt.

@@ -1,5 +1,5 @@
-import Cover from "./domain/Cover";
-import _getDistributorContract from "./helpers/getContract";
+import Cover from "../domain/Cover";
+import _getDistributorContract from "../helpers/getContract";
 
 /**
  * Returns the total cover count owned by an address

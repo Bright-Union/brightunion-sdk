@@ -1,9 +1,9 @@
 /* use strict */
 
-import { getCoversCount, getCovers } from "./service/Covers";
-import { getDistributorAddress } from "./service/Distributors";
-import { getQuote } from "./service/Quotes";
-import { buyCoverDecode, buyCover } from "./service/Buying";
+import { getCoversCount, getCovers } from "./service/dao/Covers";
+import { getDistributorAddress } from "./service/dao/Distributors";
+import { getQuote } from "./service/dao/Quotes";
+import { buyCoverDecode, buyCover } from "./service/dao/Buying";
 
 
 class Distributors {
