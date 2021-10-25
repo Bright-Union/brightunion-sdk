@@ -1,5 +1,4 @@
 import Cover from "./domain/Cover";
-// import BuyReceipt from "./domain/BuyReceipt";
 import _getDistributorContract from "./helpers/getContract";
 
 /**
@@ -16,12 +15,15 @@ import _getDistributorContract from "./helpers/getContract";
 export function getCoversCount(
     _web3 : any,
     _distributorName : string,
-    _owner: string ,
+    _ownerAddress: string ,
     _isActive : boolean
 ): Promise<number>  {
   return _getDistributorContract(_web3)
          .methods
-         .getCoversCount(_distributorName,_owner,_isActive)
+         .getCoversCount(
+           _distributorName,
+           _ownerAddress,
+           _isActive)
          .call();
 }
 
@@ -39,17 +41,21 @@ export function getCoversCount(
  * @returns Cover Object
  */
 export async function  getCovers(
-    // _distributorName : string,
-    // _ownerAddress : string,
-    // _activeCover : boolean,
-    // _limit : number,
-    // _web3 : any,
+    _web3 : any,
+    _distributorName : string,
+    _ownerAddress : string,
+    _activeCover : boolean,
+    _limit : number,
 ) : Promise<Cover[]>  {
-
-
-  return
+  return _getDistributorContract(_web3)
+        .methods
+        .getCovers(
+          _distributorName,
+          _ownerAddress,
+          _activeCover,
+          _limit,
+        ).call();
 }
-
 
 export default {
   // getCovers,

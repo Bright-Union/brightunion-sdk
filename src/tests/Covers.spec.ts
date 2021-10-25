@@ -1,8 +1,8 @@
 require('dotenv').config();
 import Web3 from 'web3';
-import { expect } from 'chai';
+import { expect, assert } from 'chai';
 import 'mocha';
-import Distributors from '@/index'
+import Distributors from '../index'
 let instance : Distributors = null;
 
 before(async () => {
@@ -13,7 +13,7 @@ before(async () => {
 });
 
 describe('Get Owners Cover count', () => {
-  it('should return number cover total owned by address',async () => {
+  it('should return number of covers owned by address',async () => {
     const result = await instance.getCoversCount(
         'insurace',
         '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2',
@@ -23,6 +23,16 @@ describe('Get Owners Cover count', () => {
   });
 });
 
-
-
-// Still need to pass this logic inside BU class & test
+describe('Get Owners Covers', () => {
+  let distributorName = 'insurace';
+  let owner = '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2';
+    it('should return owners\'s covers by distributor',async () => {
+    const result = await instance.getCovers(
+        distributorName,
+        owner,
+        true,
+        20
+    );
+    assert.lengthOf(result, 4);
+  });
+});

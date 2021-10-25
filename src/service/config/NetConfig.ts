@@ -1,4 +1,7 @@
-const NETWORK_CONFIG = [
+
+class NetConfig{
+
+ static NETWORK_CONFIG = [
     {
         name: 'Ethereum',
         id: 1,
@@ -167,75 +170,66 @@ const NETWORK_CONFIG = [
     },
 ]
 
-const MAIN_NETS = [1, 56, 137];
-const TEST_NETS = [42, 97, 80001]; //using Kovan here as Eth testnet
+ static MAIN_NETS = [1, 56, 137];
+ static TEST_NETS = [42, 97, 80001]; //using Kovan here as Eth testnet
 
-function netById(id) {
-    return NETWORK_CONFIG.filter(net => {
-        return net.id === Number(id)
-    })[0]
-}
-
-function mainNets() {
-    return MAIN_NETS
-}
-
-function testNets() {
-    return TEST_NETS
-}
-
-function networkCurrency(id) {
-    const obj = netById(id);
-    return Object.keys(obj)
-        .find(key => obj[key].toString().toUpperCase() === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'.toUpperCase());
-}
-
-function isNetworkCurrencyBySymbol(asset) {
-    return asset === 'ETH' || asset === 'BNB' || asset === 'MATIC';
-}
-
-function isNetworkCurrencyByAddress(address) {
-    return address.toUpperCase() === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'.toUpperCase();
-}
-
-function requiresAllowanceReset(networkId, symbol) {
-    if (netById(networkId).symbol === 'ETH' && symbol === 'USDT') {
-        return true;
+    static netById(id:any) {
+        return NetConfig.NETWORK_CONFIG.filter(net => {
+            return net.id === Number(id)
+        })[0]
     }
-}
 
-function sixDecimalsCurrency(networkId, symbol) {
-    if (netById(networkId).symbol === 'ETH' && symbol === 'USDT') {
-        return true;
-    } else if (netById(networkId).symbol === 'POLYGON' && symbol === 'USDT') {
-        return true;
-    } else if (netById(networkId).symbol === 'POLYGON' && symbol === 'USDC') {
-        return true;
+    static mainNets() {
+        return NetConfig.MAIN_NETS
     }
+
+    static testNets() {
+        return NetConfig.TEST_NETS
+    }
+
+    static networkCurrency(id :any) : any{
+        const obj : any = NetConfig.netById(id);
+        return Object.keys(obj)
+            .find(key => obj[key].toString().toUpperCase() === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'.toUpperCase());
+    }
+
+    static isNetworkCurrencyBySymbol(asset:any) {
+        return asset === 'ETH' || asset === 'BNB' || asset === 'MATIC';
+    }
+
+    static isNetworkCurrencyByAddress(address:any) {
+        return address.toUpperCase() === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'.toUpperCase();
+    }
+
+    static requiresAllowanceReset(networkId : any, symbol : any) {
+        if (NetConfig.netById(networkId).symbol === 'ETH' && symbol === 'USDT') {
+            return true;
+        }
+    }
+
+    static sixDecimalsCurrency(networkId : any, symbol : any) {
+        if (NetConfig.netById(networkId).symbol === 'ETH' && symbol === 'USDT') {
+            return true;
+        } else if (NetConfig.netById(networkId).symbol === 'POLYGON' && symbol === 'USDT') {
+            return true;
+        } else if (NetConfig.netById(networkId).symbol === 'POLYGON' && symbol === 'USDC') {
+            return true;
+        }
+    }
+
+    // Cannot buy De-peg bundles with testnet tokens
+    static insuraceDePegTestCurrency(protocol:any,currency:any,web3Symbol:any,selectedCurrency:any) : any {
+        if(currency !== 'ETH' && protocol.name.includes('De-Peg')){
+            switch(web3Symbol){
+                case "ETH": selectedCurrency.address = NetConfig.netById(1)['USDC']; break;
+                case "BSC": selectedCurrency.address = NetConfig.netById(56)['USDC']; break;
+                case "POLYGON": selectedCurrency.address = NetConfig.netById(137)['USDC']; break;                     
+            }
+                return ['USDC',selectedCurrency]
+        }
+        return [currency,selectedCurrency]
+    }
+
 }
 
-// Cannot buy De-peg bundles with testnet tokens
-function insuraceDePegTestCurrency(protocol,currency,web3Symbol,selectedCurrency) {
-     if(currency !== 'ETH' && protocol.name.includes('De-Peg')){
-          switch(web3Symbol){
-              case "ETH": selectedCurrency.address = netById(1)['USDC']; break;
-              case "BSC": selectedCurrency.address = netById(56)['USDC']; break;
-              case "POLYGON": selectedCurrency.address = netById(137)['USDC']; break;                     
-          }
-            return ['USDC',selectedCurrency]
-      }
-       return [currency,selectedCurrency]
-}
-
-module.exports = {
-    NETWORK_CONFIG,
-    netById,
-    mainNets,
-    testNets,
-    isNetworkCurrencyBySymbol,
-    isNetworkCurrencyByAddress,
-    requiresAllowanceReset,
-    sixDecimalsCurrency,
-    networkCurrency,
-    insuraceDePegTestCurrency
-}
+export default NetConfig;

@@ -1,5 +1,6 @@
 
 import BuyReceipt from "./domain/BuyReceipt";
+import _getDistributorContract from "./helpers/getContract";
 
 /**
  * Returns a transaction receipt.
@@ -7,7 +8,7 @@ import BuyReceipt from "./domain/BuyReceipt";
  *
  * @remarks At the moment this function is only supported
  * when intended distributor is Bridge & Nexus, for Insurace please
- * refer to _buyCoverDecode function.
+ * refer to buyCoverDecode function.
  *
  * @param _distributorName
  * @param _contractAddress
@@ -19,19 +20,31 @@ import BuyReceipt from "./domain/BuyReceipt";
  * @param _data
  * @returns BuyReceipt Object
  */
-export function _buyCover(
-        // _distributorName : string,
-        // _contractAddress : string,
-        // _coverAsset : string,
-        // _sumAssured : number,
-        // _coverPeriod : number,
-        // _coverType : number,
-        // _maxPriceWithFee : number,
-        // _data : any,
+export async function buyCover(
+        _web3:any,
+        _distributorName : string,
+        _contractAddress : string,
+        _coverAsset : string,
+        _sumAssured : number,
+        _coverPeriod : number,
+        _coverType : number,
+        _maxPriceWithFee : number,
+        _data : any,
 ) :  Promise<BuyReceipt>  {
-  return;
-}
 
+  return await _getDistributorContract(_web3)
+              .methods
+              .buyCover(
+                _distributorName,
+                _contractAddress,
+                _coverAsset,
+                _sumAssured,
+                _coverPeriod,
+                _coverType,
+                _maxPriceWithFee,
+                _data,
+              ).call();
+}
 /**
  * Returns a transaction receipt.
  * (Emits a boughtCover event at contract level)
@@ -51,23 +64,71 @@ export function _buyCover(
  * @param _s
  * @returns  BuyReceipt Object
  */
-export function _buyCoverDecode (
-        // _distributorName : string,
-        // _products : Array<number>,
-        // _durationInDays : Array<number>,
-        // _amounts : Array<number>,
-        // _currency : string,
-        // _premiumAmount : number,
-        // _helperParameters : Array<number>,
-        // _securityParameters : Array<number>,
-        // _v : Array<number>,
-        // _r : Array<number>,
-        // _s: Array<number>,
+export async function buyCoverDecode (
+        _web3:any,
+        _ownerAddress:any,
+        _distributorName : string,
+        _products : Array<number>,
+        _durationInDays : Array<number>,
+        _amounts : Array<number>,
+        _currency : string,
+        _premiumAmount : number,
+        _helperParameters : Array<number>,
+        _securityParameters : Array<number>,
+        _v : Array<number>,
+        _r : Array<number>,
+        _s: Array<number>,
 ) :  Promise<BuyReceipt>  {
-  return;
+  return await _getDistributorContract(_web3)
+              .methods
+              .buyCoverDecode(
+                _distributorName,
+                _products,
+                _durationInDays,
+                _amounts,
+                _currency,
+                _premiumAmount,
+                _helperParameters,
+                _securityParameters,
+                _v,
+                _r,
+                _s
+              ).send({
+                from: _ownerAddress,
+                value: _premiumAmount
+              })
+              .on('transactionHash', (x:any) => {
+                console.log('SHOW_CONFIRMATION_DONE', {msg: 'Thanks for using us!', tx: x});
+                console.log('TX_CONFIRMING');
+                console.log('TRACK_EVENT', {
+                  action: 'buy-insurace-policy-hash',
+                  category: 'trxHash',
+                  label: 'Transaction Hash',
+                  value: 1
+                });
+              })
+              .on('confirmation', (confirmationNumber : any, receipt : any) => {
+                if (confirmationNumber === 0) {
+                  console.log('TRACK_PURCHASE', {
+                    tx: receipt.transactionHash,
+                    provider: 'insurace'
+                  });
+                  console.log('TX_CONFIRMED');
+
+                }
+              })
+              .on('error', (err : any, receipt : any) => {
+                console.error(err, receipt)
+                console.log('TRACK_EVENT', {
+                  action: 'buy-insurace-policy-error',
+                  category: 'trxError',
+                  label: 'Transaction Error',
+                  value: 1
+                });
+              });
 }
 
 
 export default {
-  _buyCoverDecode
+  buyCover, buyCoverDecode
 }

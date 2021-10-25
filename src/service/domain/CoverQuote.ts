@@ -1,5 +1,5 @@
 export interface CoverQuote {
-    _sumAssured      ? : number;
+    _sumAssured      ? : any;
     _coverPeriod     ? : number;
     _contractAddress ? : number;
     _coverAsset      ? : number;
