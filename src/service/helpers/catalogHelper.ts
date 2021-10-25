@@ -81,7 +81,7 @@ const CUSTOM_BRIDGE_PROTOCOLS = {
 
 class CatalogHelper {
 
-  public static CreateCoverable(obj:any) {
+  public static createCoverable(obj:any) {
     return {
       //Bridge
       bridgeCoverable: obj.bridgeCoverable,
@@ -105,7 +105,7 @@ class CatalogHelper {
   }
 
 
-  public static CommonCategory (category:string, provider:string) {
+  public static commonCategory (category:string, provider:string) {
     try{
       if (provider === 'nexus') {
         return bridge_nexus_insurace_categories.find((cat) => {return cat[1] === category[3]});

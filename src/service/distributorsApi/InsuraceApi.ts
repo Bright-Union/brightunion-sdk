@@ -3,10 +3,11 @@ import NetConfig from '../config/NetConfig'
 
 class InsuraceApi {
 
-    static fetchCoverables (web3:any) {
+    static fetchCoverables (_web3NetworkId:string) {
+      console.log('fetchCoverables' , _web3NetworkId )
         return axios.post(
-            `${NetConfig.netById(web3.networkId).insuraceAPI}/getProductList?code=${encodeURIComponent(NetConfig.netById(web3.networkId).insuraceAPIKey)}`, {
-            chain: web3.symbol
+            `${NetConfig.netById(_web3NetworkId).insuraceAPI}/getProductList?code=${encodeURIComponent(NetConfig.netById(_web3NetworkId).insuraceAPIKey)}`, {
+            chain: NetConfig.netById(_web3NetworkId).symbol
         })
         .then((response:any) => {
             return response.data;
@@ -26,7 +27,7 @@ class InsuraceApi {
     static getCoverPremium (
         web3 : any,
         currencyAddress : any,
-        productId : any, 
+        productId : any,
         coverDays : any,
         coverAmount : any,
         owner : any) {

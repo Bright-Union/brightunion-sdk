@@ -36,7 +36,7 @@ export async function getNexusCoverables(): Promise<any[]> {
     return await NexusApi.fetchCoverables().then( (data:any) => {
 
       const coverablesArray: any  = [];
-      for (const [key, value] of Object.entries(data)) {
+      for (const [key] of Object.entries(data)) {
         // if (value.deprecated) {
         //   //skip deprecated
         //   continue;
@@ -60,22 +60,24 @@ export async function getNexusCoverables(): Promise<any[]> {
   export async function getInsuraceCoverables(_web3:any) : Promise<any[]> {
     const trustWalletAssets = CatalogHelper.getTrustWalletAssets();
 
-    return await InsuraceApi.fetchCoverables(_web3).then((data:any[]) => {
+    console.log(_web3.networkId);
+
+    return await InsuraceApi.fetchCoverables(_web3.networkId).then((data:any[]) => {
           const coverablesArray = [];
           for (const coverable of data) {
             if (coverable.status !== 'Enabled') {
               continue;
             }
 
-            let asset = trustWalletAssets[Object.keys(trustWalletAssets).find(
-              key => trustWalletAssets[key].symbol
-              && coverable.coingecko
-              && trustWalletAssets[key].symbol.toUpperCase() == coverable.coingecko.token_id.toUpperCase())];
+            // let asset = trustWalletAssets[Object.keys(trustWalletAssets).find(
+            //   key => trustWalletAssets[key].symbol
+            //   && coverable.coingecko
+            //   && trustWalletAssets[key].symbol.toUpperCase() == coverable.coingecko.token_id.toUpperCase())];
 
-            let logo = asset ? asset.logoURI : `https://app.insurace.io/asset/product/${coverable.name.replace(/\s+/g, '')}.png`
+            // let logo = asset ? asset.logoURI : `https://app.insurace.io/asset/product/${coverable.name.replace(/\s+/g, '')}.png`
             coverablesArray.push(CatalogHelper.createCoverable({
               name: coverable.name.trim(),
-              logo: logo,
+              logo: '',
               type: CatalogHelper.commonCategory(coverable.risk_type, 'insurace'),
               coingecko: coverable.coingecko,
               source: 'insurace',

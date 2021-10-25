@@ -10,10 +10,13 @@ import { getCatalog } from "@/service/Catalog";
 
 class Distributors {
   web3: any;
+  web3NetworkId: number;
   catalog: any[];
 
   constructor(_web3 : any) {
     this.web3 = _web3;
+    this.web3NetworkId = _web3.eth.net.getId();
+    this.web3.networkId = this.web3NetworkId;
     this.catalog = [];
     this.getCatalog();
   }
