@@ -54,7 +54,7 @@ var config = {
 
 module.exports  = (env, argv) => {
   if(env.local){
-    config.output.path = path.resolve(__dirname, '../app-ui/src/store/modules');
+    config.output.path = path.resolve(__dirname, '../app-ui/node_modules/brightunion_dev/');
   }
   return config;
 };
