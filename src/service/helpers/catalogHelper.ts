@@ -81,6 +81,34 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
 
 class CatalogHelper {
 
+  public static quoteFromCoverable (protocol:string, coverable:any, obj:any, stats:object) {
+    return {
+        risk_protocol: protocol,
+        quote: {
+            name: coverable.name,
+            logoSrc: coverable.logo,
+            rating: 4.5,
+            amount: obj.amount,
+            currency: obj.currency,
+            period: obj.period,
+            chain: obj.chain,
+            chainId: obj.chainId,
+            actualPeriod: obj.actualPeriod ? obj.actualPeriod : obj.period,
+            protocol: coverable,
+            price: obj.price,
+            pricePercent: obj.pricePercent,
+            responseObj: obj.response,
+            errorMsg: obj.errorMsg,
+            cashBack: obj.cashBack,
+            cashBackInWei: obj.cashBackInWei,
+            estimatedGasPrice: obj.estimatedGasPrice,
+            estimatedGasPriceCurrency: obj.estimatedGasPriceCurrency,
+            estimatedGasPriceDefault: obj.estimatedGasPriceDefault
+        },
+        stats: stats
+    }
+}
+
   public static createCoverable(obj:any) {
     return {
       //Bridge

@@ -4,7 +4,7 @@
 // const zeroExchange = require('@/assets/img/zeroExchange.webp');
 // const anchor = require('@/assets/img/anchor.webp');
 
-const NEXUS = {
+const NEXUS:object = {
     description: {
         paymentIn: {
             ETH: ['DAI', 'ETH'],
@@ -32,7 +32,7 @@ const NEXUS = {
     fallbackQuotation: 'DAI',
 }
 
-const BRIDGE = {
+const BRIDGE:object = {
     description: {
         paymentIn: {
             ETH: ['USDT']
@@ -60,7 +60,7 @@ const BRIDGE = {
     fallbackQuotation: 'USDT',
 }
 
-const INSURACE = {
+const INSURACE:object = {
     description: {
         paymentIn: {
             ETH: ['ETH', 'DAI', 'USDC', 'USDT'],
@@ -94,7 +94,7 @@ const INSURACE = {
     },
 }
 
-const STAKE_NOTES = {
+const STAKE_NOTES:object = {
     general: {
         notes: '- Earn a return by staking projects\n' +
             '- In the event a successful claims is made your stake will be lost'
@@ -112,7 +112,7 @@ const STAKE_NOTES = {
     }
 }
 
-const CUSTOM_BRIDGE_PROTOCOLS = {
+const CUSTOM_BRIDGE_PROTOCOLS:object = {
     '0xF0939011a9bb95c3B791f0cb546377Ed2693a574': {
         // logoURI: zeroExchange,
         name: '0.exchange'
@@ -179,11 +179,11 @@ const CUSTOM_BRIDGE_PROTOCOLS = {
     },
 }
 
-const PROTOCOL_TYPES = {
+const PROTOCOL_TYPES:object = {
     protocol: 'In case the user has financial loss due to failure of the protocol caused by code, governance and oracle failures',
     custodian: 'Protects against hacks and halted withdrawals at crypto wallets',
     yield: 'In case the market price of a yield tokens deviates from the face value for a significant amount of time',
     ido:"tbd"
 }
 
-export default {CUSTOM_BRIDGE_PROTOCOLS}
+export default {CUSTOM_BRIDGE_PROTOCOLS, NEXUS, BRIDGE, INSURACE}

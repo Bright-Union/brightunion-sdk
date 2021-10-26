@@ -13,49 +13,27 @@ import NexusApi from '@/service/distributorsApi/NexusApi';
 import InsuraceApi from '@/service/distributorsApi/InsuraceApi';
 import CatalogHelper from '@/service/helpers/catalogHelper';
 
-export async  function getCatalog(_web3:any): Promise<any[]> {
 
-  const nexusCoverables =  await getNexusCoverables();
-  const insuraceCoverables =  await getInsuraceCoverables(_web3);
+export async  function getQuote(_web3:any): Promise<any[]> {
 
-  return Promise.all([nexusCoverables, insuraceCoverables]).then(() =>{
-    const mergedCoverables = nexusCoverables.concat(insuraceCoverables);
+  const nexusQuotes =  await getNexusQuote();
+  const insuraceQuotes =  await getInsuraceQuotes(_web3);
+
+  return Promise.all([nexusQuotes, insuraceQuotes]).then(() =>{
+    const mergedCoverables = nexusQuotes.concat(insuraceQuotes);
     console.log(mergedCoverables , 'mergedCoverables');
     return mergedCoverables;
   })
 
-
-
 }
 
-export async function getNexusCoverables(): Promise<any[]> {
+export async function getNexusQuote(): Promise<any[]> {
 
-    return await NexusApi.fetchCoverables().then( (data:object) => {
-
-      const coverablesArray: any  = [];
-      for ( const [ key, value ] of Object.entries(data) ) {
-        if ( value.deprecated ) {
-          //skip deprecated
-          continue;
-        }
-
-        coverablesArray.push(CatalogHelper.createCoverable({
-          protocolAddress: key,
-          nexusCoverable: key,
-          logo: `https://app.nexusmutual.io/logos/${value.logo}`,
-          name: value.name,
-          type: CatalogHelper.commonCategory(value.type, 'nexus'),
-          source: 'nexus'
-        }))
-
-        return coverablesArray;
-      }
-
-    })
-
+    // return await NexusApi.fetchQuote();
+    return [1,2];
   }
 
-  export async function getInsuraceCoverables(_web3:any) : Promise<object[]> {
+  export async function getInsuraceQuotes(_web3:any) : Promise<object[]> {
     // const trustWalletAssets:object[] = await CatalogHelper.getTrustWalletAssets();
 
     return await InsuraceApi.fetchCoverables(_web3.networkId).then((data:object) => {
@@ -76,7 +54,7 @@ export async function getNexusCoverables(): Promise<any[]> {
 
           coverablesArray.push(CatalogHelper.createCoverable({
             name: value.name.trim(),
-            logo: null,
+            logo: 'logo',
             type: CatalogHelper.commonCategory(value.risk_type, 'insurace'),
             coingecko: value.coingecko,
             source: 'insurace',
@@ -92,5 +70,5 @@ export async function getNexusCoverables(): Promise<any[]> {
 
 
 export default {
-  getCatalog
+  getQuote
 }

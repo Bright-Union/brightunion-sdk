@@ -7,7 +7,7 @@ import _getDistributorContract from "../helpers/getContract";
  *
  * @remarks
  * This function takes different params based on the intended
- * distributor, please refer to README file of the package or the protocol 
+ * distributor, please refer to README file of the package or the protocol
  * for the parameters table.
  * Parameters not used by a distributor need to be named
  * interface compliant and filled with its spec type.
@@ -32,7 +32,7 @@ export async function getQuote(
     _contractAddress : string,
     _interfaceCompliant1 : string,
     _interfaceCompliant2 : string,
-    _data : any, 
+    _data : any,
 ) : Promise<CoverQuote>  {
 
   return await _getDistributorContract(_web3)
