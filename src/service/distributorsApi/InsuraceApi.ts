@@ -3,8 +3,7 @@ import NetConfig from '../config/NetConfig'
 
 class InsuraceApi {
 
-    static fetchCoverables (_web3NetworkId:string) {
-      console.log('fetchCoverables' , _web3NetworkId )
+    static fetchCoverables (_web3NetworkId:string): Promise<object> {
         return axios.post(
             `${NetConfig.netById(_web3NetworkId).insuraceAPI}/getProductList?code=${encodeURIComponent(NetConfig.netById(_web3NetworkId).insuraceAPIKey)}`, {
             chain: NetConfig.netById(_web3NetworkId).symbol

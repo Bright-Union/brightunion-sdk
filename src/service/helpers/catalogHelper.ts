@@ -12,7 +12,7 @@ const bridge_nexus_insurace_categories : string[][] = [
     ['' , '', 'Bundled Cover', 'bundled', 'Bundled cover'],
 ];
 
-const CUSTOM_BRIDGE_PROTOCOLS = {
+const CUSTOM_BRIDGE_PROTOCOLS : object = {
     '0xF0939011a9bb95c3B791f0cb546377Ed2693a574': {
         // logoURI: zeroExchange,
         name: '0.exchange'
@@ -120,14 +120,15 @@ class CatalogHelper {
   }
 
 
-  public static getTrustWalletAssets () {
+  public static getTrustWalletAssets (): Promise<object[]> {
     let url = "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/tokenlist.json"
-    axios({ method: "GET", "url": url }).then( (result:any) => {
+    return axios({ method: "GET", "url": url }).then( (result:any) => {
       let assets = _.reduce(result.data.tokens, (dict:any, token) => {
         dict[token.address] = token
         return dict
       }, {})
-      return {...assets, ...CUSTOM_BRIDGE_PROTOCOLS};
+      const wallets : object[] = { ...assets, ...CUSTOM_BRIDGE_PROTOCOLS }
+      return wallets;
     })
     // .catch((error:object) => {
       //   console.error('could not load trustwallet assets', error);
