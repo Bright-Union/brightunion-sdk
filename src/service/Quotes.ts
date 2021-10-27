@@ -16,7 +16,7 @@ import CatalogHelper from '@/service/helpers/catalogHelper';
 
 export async  function getQuote(_web3:any): Promise<any[]> {
 
-  const nexusQuotes =  await getNexusQuote();
+  const nexusQuotes =  await getNexusQuote(_web3);
   const insuraceQuotes =  await getInsuraceQuotes(_web3);
 
   return Promise.all([nexusQuotes, insuraceQuotes]).then(() =>{
@@ -27,45 +27,30 @@ export async  function getQuote(_web3:any): Promise<any[]> {
 
 }
 
-export async function getNexusQuote(): Promise<any[]> {
+export async function getNexusQuote(_web3:any): Promise<any[]> {
 
-    // return await NexusApi.fetchQuote();
+   let amount:number = 1000;
+   let currency:string = 'ETH';
+   let period:string = '180'
+   let protocol:any = ''
+
+    // return await NexusApi.fetchQuote( _web3 , amount , currency, period, protocol);
     return [1,2];
   }
 
-  export async function getInsuraceQuotes(_web3:any) : Promise<object[]> {
+  export async function getInsuraceQuotes(_web3:any) : Promise<any[]> {
+    // web3:any, amount:string | number, currency:string , period:string, protocol:any
+
+    let amount:number = 1000;
+    let currency:string = 'ETH';
+    let period:string = '180'
+    let protocol:any = ''
+
+    // return await InsuraceApi.fetchInsuraceQuote(_web3 , amount , currency, period, protocol);
+    return [1,2];
     // const trustWalletAssets:object[] = await CatalogHelper.getTrustWalletAssets();
 
-    return await InsuraceApi.fetchCoverables(_web3.networkId).then((data:object) => {
-
-      const coverablesArray = [];
-      for (const [key, value] of Object.entries(data)) {
-        if (value.status !== 'Enabled') {
-          continue;
-        }
-
-        // let assetIndex:object = Object.keys(trustWalletAssets).find((k:object) => {
-          //     console.log(typeof k , k)
-          //     return  trustWalletAssets[k].symbol && value.coingecko  && trustWalletAssets[k].symbol.toUpperCase() == value.coingecko.token_id.toUpperCase()
-          //   });
-
-          // let asset:object = trustWalletAssets[0];
-          // let logo:string = asset ? asset.logoURI : `https://app.insurace.io/asset/product/${value.name.replace(/\s+/g, '')}.png`
-
-          coverablesArray.push(CatalogHelper.createCoverable({
-            name: value.name.trim(),
-            logo: 'logo',
-            type: CatalogHelper.commonCategory(value.risk_type, 'insurace'),
-            coingecko: value.coingecko,
-            source: 'insurace',
-            productId: value.product_id,
-            stats: { "capacityRemaining": value.capacity_remaining, "unitCost":value.unit_cost_yearly }
-          }))
-
-        }
-        return coverablesArray;
-      })
-    }
+  }
 
 
 
