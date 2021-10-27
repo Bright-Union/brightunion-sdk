@@ -60,9 +60,9 @@ class InsuraceApi {
     }
 
 
-    static async fetchInsuraceQuote (web3:any, amount:string | number, currency:string , period:string, protocol:any) {
+    static async fetchInsuraceQuote (web3:any, amount:string | number, currency:string , period:number, protocol:any): Promise<object> {
         let quoteCurrency = currency;
-        let amountInWei = web3.web3Instance.utils.toWei(amount.toString(), 'ether');
+        let amountInWei = web3.utils.toWei(amount.toString(), 'ether');
 
         // if (currency === 'USD') {
         //         currency = risk_carriers.INSURACE.fallbackQuotation[web3.symbol];
@@ -81,14 +81,14 @@ class InsuraceApi {
 
         // [currency, selectedCurrency] = insuraceDePegTestCurrency(protocol,currency,web3.symbol,selectedCurrency);
 
-        return this.getCoverPremium(
+        return await this.getCoverPremium(
                 web3,
                 selectedCurrency.address,
                 parseInt(protocol.productId),
-                parseInt(period),
+                period,
                 amountInWei,
                 web3.coinbase
-            ).then(async response => {
+            ).then( (response: any) => {
                 // const insurPrice = getters.insurPrice(state);
                 let premium = response.premiumAmount;
                 // if (sixDecimalsCurrency(web3.networkId, currency)) {
@@ -126,51 +126,7 @@ class InsuraceApi {
                     }
                 );
                 return quote;
-            }).catch((e) => {
-                let errorMsg = e.response && e.response.data ? e.response.data.message : e.message;
-
-                if (errorMsg.includes('GPCHK') && errorMsg.includes(String(4))) {
-                    errorMsg = "Invalid amount or period.";
-                } else if (errorMsg.includes('GPCHK') && errorMsg.includes(String(5))) {
-                    errorMsg = "Invalid amount or period";
-                } else if (errorMsg.includes('S') && errorMsg.includes(String(4))) {
-                    errorMsg = "Invalid amount or period";
-                } else if (errorMsg.includes('GPCHK') && errorMsg.includes(String(3))) {
-                    errorMsg = "Currency is NOT a valid premium currency"
-                } else if (errorMsg.includes('GPCHK') && errorMsg.includes(String(6))) {
-                    errorMsg = "Not sufficient capital available"
-                } else if (errorMsg.match('GP: 4')) {
-                    errorMsg = "Minimum duration is 1 day. Maximum is 365";
-                } else if (errorMsg.includes('amount exceeds the maximum capacity')) {
-                    let defaultCapacity = protocol.stats.capacityRemaining;
-                    let currency = 'ETH';
-                    if (quoteCurrency === 'USD') {
-                        // defaultCapacity = getters.eth2usd(protocol.stats.capacityRemaining);
-                        currency = 'USD';
-                    }
-                    const capacity = web3.web3Instance.utils.fromWei(defaultCapacity)
-                    const max = Number((Math.floor(Number(capacity) * 100) / 100).toFixed(2)).toLocaleString(undefined, { minimumFractionDigits: 2 });
-                    errorMsg = `MAX capacity is ${max} ${currency}`
-                }
-                const quote = CatalogHelper.quoteFromCoverable(
-                    "insurace",
-                    protocol, {
-                        amount: amountInWei,
-                        currency: currency,
-                        period: period,
-                        chain: web3.symbol,
-                        chainId: web3.networkId,
-                        price: 0,
-                        cashBack: [0, 0],
-                        pricePercent: 0,
-                        estimatedGasPrice: 0,
-                        errorMsg: errorMsg,
-                    }, {
-                        remainingCapacity: protocol.stats.capacityRemaining
-                    }
-                );
-                return quote;
-            });
+            })
     }//fetchInsuraceQuote method
 
 

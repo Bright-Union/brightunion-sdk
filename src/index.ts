@@ -5,6 +5,7 @@ import { getDistributorAddress } from "./service/dao/Distributors";
 import { getQuote } from "./service/dao/Quotes";
 import { buyCoverDecode, buyCover } from "./service/dao/Buying";
 import { getCatalog } from "./service/Catalog";
+import { getQuotes } from "./service/Quotes";
 
 
 class Distributors {
@@ -18,6 +19,9 @@ class Distributors {
 
   async getCatalog (
   ){
+
+    getQuotes(this.web3); //for test
+
      return await getCatalog(
       this.web3,
     ).then(data => {
