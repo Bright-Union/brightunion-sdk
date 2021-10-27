@@ -42,7 +42,7 @@ export async function getNexusQuote(_web3:any): Promise<object> {
     // web3:any, amount:string | number, currency:string , period:string, protocol:any
 
     let amount:number = 1000;
-    let currency:string = 'USD';
+    let currency:string = 'DAI';
     let period:number = 180
     let protocol:object = { productId:43 };
 

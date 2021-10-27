@@ -19,7 +19,7 @@ class InsuraceApi {
     static getCurrencyList (web3:any) {
         return axios.post(
             `${NetConfig.netById(web3.networkId).insuraceAPI}/getCurrencyList?code=${encodeURIComponent(NetConfig.netById(web3.networkId).insuraceAPIKey)}`, {
-            chain: web3.symbol
+            chain: NetConfig.netById(web3.networkId).symbol
         })
         .then((response:any) => {
             return response.data;
@@ -72,14 +72,15 @@ class InsuraceApi {
         // }
 
         let currencies:object[] = await this.getCurrencyList(web3)
-        let selectedCurrency:any = currencies.find((curr:any) => {curr.name === currency});
+        let selectedCurrency:any = currencies.find((curr:any) => {return curr.name == currency});
 
         if (!selectedCurrency) {
           console.error(`Selected currency is not supported by InsurAce: ${currency} on net ${web3.networkId}`)
           return;
         }
 
-        // [currency, selectedCurrency] = insuraceDePegTestCurrency(protocol,currency,web3.symbol,selectedCurrency);
+        web3.symbol = NetConfig.netById(web3.networkId).symbol;
+        // web3.coinbase = NetConfig.netById(web3.networkId);
 
         return await this.getCoverPremium(
                 web3,
@@ -89,6 +90,7 @@ class InsuraceApi {
                 amountInWei,
                 web3.coinbase
             ).then( (response: any) => {
+
                 // const insurPrice = getters.insurPrice(state);
                 let premium = response.premiumAmount;
                 // if (sixDecimalsCurrency(web3.networkId, currency)) {
@@ -122,7 +124,7 @@ class InsuraceApi {
                         // estimatedGasPriceDefault: feeInDefaultCurrency
                     },
                     {
-                        remainingCapacity: protocol.stats.capacityRemaining
+                        // remainingCapacity: protocol.stats.capacityRemaining
                     }
                 );
                 return quote;
