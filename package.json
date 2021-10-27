@@ -4,7 +4,7 @@
   "description": "Brightjs is a set of javascript tools to interact with the Bright Union's risk platform aggregator's protocol on Ethereum, Binance Smart Chain and Polygon blockchains.",
   "main": "index.ts",
   "scripts": {
-    "test": "mocha -r ts-node/register src/**/*.spec.ts",
+    "test": "mocha",
     "lint": "eslint . --ext .ts",
     "build-dev": "webpack --env local --mode production --watch",
     "build": "webpack --mode production"

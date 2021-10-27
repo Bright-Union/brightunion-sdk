@@ -9,9 +9,12 @@
 
 */
 
-import NexusApi from '@/service/distributorsApi/NexusApi';
-import InsuraceApi from '@/service/distributorsApi/InsuraceApi';
-import CatalogHelper from '@/service/helpers/catalogHelper';
+// import NetConfig from '@/service/config/NetConfig';
+// import NexusApi  from '@/service/distributorsApi/NexusApi';
+
+import NexusApi from '../service/distributorsApi/NexusApi';
+import InsuraceApi from '../service/distributorsApi/InsuraceApi';
+import CatalogHelper from '../service/helpers/catalogHelper';
 
 export async  function getCatalog(_web3:any): Promise<any[]> {
 
