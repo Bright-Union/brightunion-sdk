@@ -9,10 +9,9 @@
 
 */
 
-import NexusApi from '@/service/distributorsApi/NexusApi';
-import InsuraceApi from '@/service/distributorsApi/InsuraceApi';
-import CatalogHelper from '@/service/helpers/catalogHelper';
-
+import NexusApi from './distributorsApi/NexusApi';
+import InsuraceApi from './distributorsApi/InsuraceApi';
+import CatalogHelper from './helpers/catalogHelper';
 
 export async  function getQuote(_web3:any): Promise<any[]> {
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import NetConfig from '../config/NetConfig'
-import CatalogHelper from '@/service/helpers/catalogHelper';
+import CatalogHelper from '../helpers/catalogHelper';
 import BigNumber from 'bignumber.js'
 
 
