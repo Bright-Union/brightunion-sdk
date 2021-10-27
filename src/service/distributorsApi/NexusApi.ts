@@ -1,5 +1,5 @@
 import axios from 'axios';
-import NetConfig from '@/service/config/NetConfig'
+import NetConfig from '../config/NetConfig'
 
 export default class NexusApi {
 

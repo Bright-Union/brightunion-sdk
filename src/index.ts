@@ -4,8 +4,7 @@ import { getCoversCount, getCovers } from "./service/dao/Covers";
 import { getDistributorAddress } from "./service/dao/Distributors";
 import { getQuote } from "./service/dao/Quotes";
 import { buyCoverDecode, buyCover } from "./service/dao/Buying";
-import { getCatalog } from "@/service/Catalog";
-
+import { getCatalog } from "./service/Catalog";
 
 
 class Distributors {

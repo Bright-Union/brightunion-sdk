@@ -19,6 +19,7 @@ var config = {
   resolve: {
     alias: {
       '@': '/src',
+      '/': '/src',
     },
     extensions: ['.tsx', '.ts', '.js', '.json'],
   },
