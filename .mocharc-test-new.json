@@ -1,5 +1,0 @@
-{
-  "extension": ["ts", "tsx"],
-  "spec": ["./src/tests/**/*.spec.ts"],
-  "require": [ "./src/tests/compiler.js"]
-}
