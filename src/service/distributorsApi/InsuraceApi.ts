@@ -44,7 +44,6 @@ class InsuraceApi {
             referralCode: NetConfig.netById(web3.networkId).insuraceReferral ? NetConfig.netById(web3.networkId).insuraceReferral : ''
         })
         .then((response : any) => {
-            console.log(response)
             return response.data;
         });
     }

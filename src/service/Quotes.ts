@@ -12,22 +12,51 @@
 import NexusApi from './distributorsApi/NexusApi';
 import InsuraceApi from './distributorsApi/InsuraceApi';
 import CatalogHelper from './helpers/catalogHelper';
+import { getQuote } from "./dao/Quotes";
+import Web3 from 'web3';
+import BigNumber from 'bignumber.js'
 
-export async  function getQuotes(_web3:any): Promise<any[]> {
+export async  function getQuotes(_web3:Web3): Promise<any[]> {
 
+  const bridgeQuote =  await getBridgeQuote(_web3);
   const nexusQuote =  await getNexusQuote(_web3);
-  const insuraceQuotes =  await getInsuraceQuotes(_web3);
+  const insuraceQuote =  await getInsuraceQuotes(_web3);
 
-  return Promise.all([nexusQuote, insuraceQuotes]).then(() =>{
-    const mergedCoverables:object[] = [insuraceQuotes];
+  return Promise.all([nexusQuote, insuraceQuote, bridgeQuote]).then(() =>{
+    const mergedCoverables:object[] = [];
+    mergedCoverables.push(insuraceQuote);
     mergedCoverables.push(nexusQuote);
+    mergedCoverables.push(bridgeQuote);
+
     console.log('mergedCoverables - ' , mergedCoverables , ' - mergedCoverables');
     return mergedCoverables;
   })
 
 }
 
-export async function getNexusQuote(_web3:any): Promise<object> {
+export async function getBridgeQuote(_web3:Web3) : Promise<object>{
+
+  let periodInWeeks: number = 26;
+  let amount: number = 100000000000;
+  // let amount: any = _web3.utils.toBN('1000000000000000000000').toNumber();
+  let contractAddress: string = "0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f"
+  let interfaceCompliant1: string = "0x0000000000000000000000000000000000000000"
+  let interfaceCompliant2: string = "0x0000000000000000000000000000000000000000"
+  let data:number[] = _web3.utils.hexToBytes(_web3.utils.numberToHex(500));
+
+  return await getQuote(
+         _web3,
+         'bridge',
+         periodInWeeks,
+         amount,
+         contractAddress,
+         interfaceCompliant1,
+         interfaceCompliant2,
+         data,
+    );
+}
+
+export async function getNexusQuote(_web3:Web3): Promise<object> {
 
    let amount:number = 1000;
    let currency:string = 'DAI';
@@ -38,7 +67,7 @@ export async function getNexusQuote(_web3:any): Promise<object> {
     // return [1,2];
   }
 
-  export async function getInsuraceQuotes(_web3:any) : Promise<object> {
+  export async function getInsuraceQuotes(_web3:Web3) : Promise<object> {
     // web3:any, amount:string | number, currency:string , period:string, protocol:any
 
     let amount:number = 1000;
