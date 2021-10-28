@@ -1,4 +1,4 @@
-import _getDistributorContract from "../helpers/getContract";
+import {_getDistributorContract} from "../helpers/getContract";
 
 /**
  * Returns the contract implementation address of the intended distributor
@@ -10,10 +10,11 @@ import _getDistributorContract from "../helpers/getContract";
  * @returns blockchain address of specified distributor contract
  */
 export async function getDistributorAddress(
+  contractAddress: string,
   _web3 : any,
   _distributorName : string
   ) : Promise<string>  {
-  return await _getDistributorContract(_web3)
+  return await _getDistributorContract(contractAddress,_web3)
               .methods
               .getDistributorAddress(_distributorName)
               .call();

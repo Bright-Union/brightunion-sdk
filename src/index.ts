@@ -5,17 +5,35 @@ import { getDistributorAddress } from "./service/dao/Distributors";
 import { getQuote } from "./service/dao/Quotes";
 import { buyCoverDecode, buyCover } from "./service/dao/Buying";
 
-
+/**
+ * Main module class, entry point of the 
+ * BrightUnion SDK services...
+ *
+ * @remarks
+ * Returns a Bright Union Distributors service instance.
+ *
+ * @param _web3 - Name of distributor in lower case
+ * @param _brightProtoAddress - The Blue Bright contract address
+ * @returns Bright Union instance
+ */
 class Distributors {
+
   web3: any;
-  constructor(_web3 : any) {
+  brightProtoAddress: string;
+
+  constructor(_brightProtoAddress: string, _web3 : any) {
     this.web3 = _web3;
+    this.brightProtoAddress = _brightProtoAddress;
+
+    console.log( this.brightProtoAddress )
+
   }
 
   async getDistributorAddress (
       _distributorName : string,
   ){
     return await getDistributorAddress(
+      this.brightProtoAddress,
       this.web3,
       _distributorName
     )
@@ -27,6 +45,7 @@ class Distributors {
     _isActive : boolean
   ) {
    return await getCoversCount(
+      this.brightProtoAddress,
       this.web3,
       _distributorName,
       _owner,
@@ -41,6 +60,7 @@ class Distributors {
     _limit : number,
   ) {
    return await getCovers(
+        this.brightProtoAddress,
         this.web3,
         _distributorName,
         _ownerAddress,
@@ -59,6 +79,7 @@ async getQuote(
   _data : any,
 ) {
  return await getQuote(
+        this.brightProtoAddress,
         this.web3,
         _distributorName,
         _period,
@@ -82,6 +103,7 @@ async buyCover(
   _data : any,
 ){
   return await buyCover(
+              this.brightProtoAddress,
               this.web3,
               _distributorName,
               _contractAddress,
@@ -110,6 +132,7 @@ async buyCoverDecode (
   _s: Array<number>,
 ){
   return await buyCoverDecode(
+                this.brightProtoAddress,
                 this.web3,
                 _ownerAddress,
                 _distributorName,

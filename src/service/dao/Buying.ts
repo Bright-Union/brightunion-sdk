@@ -1,6 +1,6 @@
 
 import BuyReceipt from "../domain/BuyReceipt";
-import _getDistributorContract from "../helpers/getContract";
+import {_getDistributorContract} from "../helpers/getContract";
 
 /**
  * Returns a transaction receipt.
@@ -8,7 +8,7 @@ import _getDistributorContract from "../helpers/getContract";
  *
  * @remarks At the moment this function is only supported
  * when intended distributor is Bridge & Nexus, for Insurace please
- * refer to buyCoverDecode function.
+ * refer to buyCoverDecode function.2
  *
  * @param _distributorName
  * @param _contractAddress
@@ -21,6 +21,7 @@ import _getDistributorContract from "../helpers/getContract";
  * @returns BuyReceipt Object
  */
 export async function buyCover(
+        _brightProtoAddress:string,
         _web3:any,
         _distributorName : string,
         _contractAddress : string,
@@ -32,7 +33,7 @@ export async function buyCover(
         _data : any,
 ) :  Promise<BuyReceipt>  {
 
-  return await _getDistributorContract(_web3)
+  return await _getDistributorContract(_brightProtoAddress, _web3)
               .methods
               .buyCover(
                 _distributorName,
@@ -65,6 +66,7 @@ export async function buyCover(
  * @returns  BuyReceipt Object
  */
 export async function buyCoverDecode (
+        _brightProtoAddress:string,
         _web3:any,
         _ownerAddress:any,
         _distributorName : string,
@@ -78,24 +80,30 @@ export async function buyCoverDecode (
         _v : Array<number>,
         _r : Array<number>,
         _s: Array<number>,
-) :  Promise<BuyReceipt>  {
-  return await _getDistributorContract(_web3)
+)   {
+  console.log('price: ',_premiumAmount)
+  return await _getDistributorContract(_brightProtoAddress,_web3)
               .methods
               .buyCoverDecode(
-                _distributorName,
+                //_distributorName,
                 _products,
                 _durationInDays,
                 _amounts,
                 _currency,
+                _ownerAddress,
                 _premiumAmount,
                 _helperParameters,
                 _securityParameters,
                 _v,
                 _r,
                 _s
-              ).send({
+              )
+               
+              // testing only: 
+              .send({
                 from: _ownerAddress,
-                value: _premiumAmount
+                value: 2200000000000000,
+                gasLimit: 129913, // 7000000
               })
               .on('transactionHash', (x:any) => {
                 console.log('SHOW_CONFIRMATION_DONE', {msg: 'Thanks for using us!', tx: x});
