@@ -28,3 +28,12 @@ describe('Get Cover Quote', () => {
     assert.typeOf(result, 'Array');
   });
 });
+
+
+describe('Get Cover Quotes from all Distributors', () => {
+  it('Should get the quotes of all supported distributor',async () => {
+    const result = await instance.getQuotes();
+    assert.lengthOf(result, 2);
+    // assert.typeOf(result, 'Array');
+  });
+});

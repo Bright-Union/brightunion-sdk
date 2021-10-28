@@ -18,15 +18,21 @@ import BigNumber from 'bignumber.js'
 
 export async  function getQuotes(_web3:Web3): Promise<any[]> {
 
-  const bridgeQuote =  await getBridgeQuote(_web3);
+  // const bridgeQuote =  await getBridgeQuote(_web3);
   const nexusQuote =  await getNexusQuote(_web3);
   const insuraceQuote =  await getInsuraceQuotes(_web3);
+  const quotesArray = [
+    // bridgeQuote,
+    nexusQuote,
+    insuraceQuote
+  ]
 
-  return Promise.all([nexusQuote, insuraceQuote, bridgeQuote]).then(() =>{
-    const mergedCoverables:object[] = [];
-    mergedCoverables.push(insuraceQuote);
-    mergedCoverables.push(nexusQuote);
-    mergedCoverables.push(bridgeQuote);
+  return Promise.all(quotesArray).then(() =>{
+    const mergedCoverables:object[] = [
+      insuraceQuote,
+      nexusQuote,
+      // bridgeQuote
+    ];
 
     console.log('mergedCoverables - ' , mergedCoverables , ' - mergedCoverables');
     return mergedCoverables;

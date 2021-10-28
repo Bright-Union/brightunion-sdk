@@ -67,6 +67,12 @@ class Distributors {
      );
  }
 
+ async getQuotes(
+ ){
+   return await getQuotes(this.web3);
+ }
+
+
 async getQuote(
   _distributorName : string ,
   _period : number,
