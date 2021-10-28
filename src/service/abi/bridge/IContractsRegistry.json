@@ -1,0 +1,3604 @@
+{
+  "contractName": "IContractsRegistry",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "getUniswapRouterContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getUniswapBMIToETHPairContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getWETHContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getUSDTContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getBMIContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPriceFeedContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPolicyBookRegistryContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPolicyBookFabricContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getBMICoverStakingContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getRewardsGeneratorContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getBMIUtilityNFTContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getLiquidityMiningContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getClaimingRegistryContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPolicyRegistryContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getLiquidityRegistryContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getClaimVotingContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getReinsurancePoolContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPolicyBookAdminContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPolicyQuoteContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getLegacyBMIStakingContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getBMIStakingContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getSTKBMIContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getVBMIContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getLegacyLiquidityMiningStakingContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getLiquidityMiningStakingContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getReputationSystemContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.7.4+commit.3f05b770\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"getBMIContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getBMICoverStakingContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getBMIStakingContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getBMIUtilityNFTContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getClaimVotingContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getClaimingRegistryContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getLegacyBMIStakingContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getLegacyLiquidityMiningStakingContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getLiquidityMiningContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getLiquidityMiningStakingContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getLiquidityRegistryContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPolicyBookAdminContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPolicyBookFabricContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPolicyBookRegistryContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPolicyQuoteContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPolicyRegistryContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPriceFeedContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getReinsurancePoolContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getReputationSystemContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getRewardsGeneratorContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getSTKBMIContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getUSDTContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getUniswapBMIToETHPairContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getUniswapRouterContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getVBMIContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getWETHContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/home/artem/Projects/Distributed_Lab/Applicature/bridgemutual-core/contracts/interfaces/IContractsRegistry.sol\":\"IContractsRegistry\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/artem/Projects/Distributed_Lab/Applicature/bridgemutual-core/contracts/interfaces/IContractsRegistry.sol\":{\"keccak256\":\"0x650a311f3c0f4fc9bf660cda38652019b415f5e7dbe28104369097395a6eddb8\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://70911cb9af859c009709d2932c8bda21bf12872815e6b1bb346cf0596f6efd58\",\"dweb:/ipfs/QmPUC3fYaVrQzsZi39vrrLz8Gd1skPoSGSkk24oZo8GEBu\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.7.4;\npragma experimental ABIEncoderV2;\n\ninterface IContractsRegistry {\n    function getUniswapRouterContract() external view returns (address);\n\n    function getUniswapBMIToETHPairContract() external view returns (address);\n\n    function getWETHContract() external view returns (address);\n\n    function getUSDTContract() external view returns (address);\n\n    function getBMIContract() external view returns (address);\n\n    function getPriceFeedContract() external view returns (address);\n\n    function getPolicyBookRegistryContract() external view returns (address);\n\n    function getPolicyBookFabricContract() external view returns (address);\n\n    function getBMICoverStakingContract() external view returns (address);\n\n    function getRewardsGeneratorContract() external view returns (address);\n\n    function getBMIUtilityNFTContract() external view returns (address);\n\n    function getLiquidityMiningContract() external view returns (address);\n\n    function getClaimingRegistryContract() external view returns (address);\n\n    function getPolicyRegistryContract() external view returns (address);\n\n    function getLiquidityRegistryContract() external view returns (address);\n\n    function getClaimVotingContract() external view returns (address);\n\n    function getReinsurancePoolContract() external view returns (address);\n\n    function getPolicyBookAdminContract() external view returns (address);\n\n    function getPolicyQuoteContract() external view returns (address);\n\n    function getLegacyBMIStakingContract() external view returns (address);\n\n    function getBMIStakingContract() external view returns (address);\n\n    function getSTKBMIContract() external view returns (address);\n\n    function getVBMIContract() external view returns (address);\n\n    function getLegacyLiquidityMiningStakingContract() external view returns (address);\n\n    function getLiquidityMiningStakingContract() external view returns (address);\n\n    function getReputationSystemContract() external view returns (address);\n}\n",
+  "sourcePath": "/home/artem/Projects/Distributed_Lab/Applicature/bridgemutual-core/contracts/interfaces/IContractsRegistry.sol",
+  "ast": {
+    "absolutePath": "/home/artem/Projects/Distributed_Lab/Applicature/bridgemutual-core/contracts/interfaces/IContractsRegistry.sol",
+    "exportedSymbols": {
+      "IContractsRegistry": [
+        20539
+      ]
+    },
+    "id": 20540,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 20407,
+        "literals": [
+          "solidity",
+          "^",
+          "0.7",
+          ".4"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:23:28"
+      },
+      {
+        "id": 20408,
+        "literals": [
+          "experimental",
+          "ABIEncoderV2"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "56:33:28"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 20539,
+        "linearizedBaseContracts": [
+          20539
+        ],
+        "name": "IContractsRegistry",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "functionSelector": "dfd71781",
+            "id": 20413,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getUniswapRouterContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20409,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "159:2:28"
+            },
+            "returnParameters": {
+              "id": 20412,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20411,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20413,
+                  "src": "185:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20410,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "185:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "184:9:28"
+            },
+            "scope": 20539,
+            "src": "126:68:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "1298fcd2",
+            "id": 20418,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getUniswapBMIToETHPairContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20414,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "239:2:28"
+            },
+            "returnParameters": {
+              "id": 20417,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20416,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20418,
+                  "src": "265:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20415,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "265:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "264:9:28"
+            },
+            "scope": 20539,
+            "src": "200:74:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "467834bb",
+            "id": 20423,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getWETHContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20419,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "304:2:28"
+            },
+            "returnParameters": {
+              "id": 20422,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20421,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20423,
+                  "src": "330:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20420,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "330:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "329:9:28"
+            },
+            "scope": 20539,
+            "src": "280:59:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "9038a3ce",
+            "id": 20428,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getUSDTContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20424,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "369:2:28"
+            },
+            "returnParameters": {
+              "id": 20427,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20426,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20428,
+                  "src": "395:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20425,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "395:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "394:9:28"
+            },
+            "scope": 20539,
+            "src": "345:59:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "2fe83b02",
+            "id": 20433,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getBMIContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20429,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "433:2:28"
+            },
+            "returnParameters": {
+              "id": 20432,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20431,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20433,
+                  "src": "459:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20430,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "459:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "458:9:28"
+            },
+            "scope": 20539,
+            "src": "410:58:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "9bc0c5d2",
+            "id": 20438,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getPriceFeedContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20434,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "503:2:28"
+            },
+            "returnParameters": {
+              "id": 20437,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20436,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20438,
+                  "src": "529:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20435,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "529:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "528:9:28"
+            },
+            "scope": 20539,
+            "src": "474:64:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "dc9c563f",
+            "id": 20443,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getPolicyBookRegistryContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20439,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "582:2:28"
+            },
+            "returnParameters": {
+              "id": 20442,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20441,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20443,
+                  "src": "608:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20440,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "608:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "607:9:28"
+            },
+            "scope": 20539,
+            "src": "544:73:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "2bf0f853",
+            "id": 20448,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getPolicyBookFabricContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20444,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "659:2:28"
+            },
+            "returnParameters": {
+              "id": 20447,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20446,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20448,
+                  "src": "685:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20445,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "685:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "684:9:28"
+            },
+            "scope": 20539,
+            "src": "623:71:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "f0f8c04e",
+            "id": 20453,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getBMICoverStakingContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20449,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "735:2:28"
+            },
+            "returnParameters": {
+              "id": 20452,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20451,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20453,
+                  "src": "761:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20450,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "761:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "760:9:28"
+            },
+            "scope": 20539,
+            "src": "700:70:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "fb6db8a8",
+            "id": 20458,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getRewardsGeneratorContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20454,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "812:2:28"
+            },
+            "returnParameters": {
+              "id": 20457,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20456,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20458,
+                  "src": "838:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20455,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "838:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "837:9:28"
+            },
+            "scope": 20539,
+            "src": "776:71:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "7506b865",
+            "id": 20463,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getBMIUtilityNFTContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20459,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "886:2:28"
+            },
+            "returnParameters": {
+              "id": 20462,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20461,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20463,
+                  "src": "912:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20460,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "912:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "911:9:28"
+            },
+            "scope": 20539,
+            "src": "853:68:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "fae7baef",
+            "id": 20468,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getLiquidityMiningContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20464,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "962:2:28"
+            },
+            "returnParameters": {
+              "id": 20467,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20466,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20468,
+                  "src": "988:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20465,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "988:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "987:9:28"
+            },
+            "scope": 20539,
+            "src": "927:70:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "39f9615f",
+            "id": 20473,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getClaimingRegistryContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20469,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1039:2:28"
+            },
+            "returnParameters": {
+              "id": 20472,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20471,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20473,
+                  "src": "1065:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20470,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1065:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1064:9:28"
+            },
+            "scope": 20539,
+            "src": "1003:71:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "0bc3f29d",
+            "id": 20478,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getPolicyRegistryContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20474,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1114:2:28"
+            },
+            "returnParameters": {
+              "id": 20477,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20476,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20478,
+                  "src": "1140:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20475,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1140:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1139:9:28"
+            },
+            "scope": 20539,
+            "src": "1080:69:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "3279c2fa",
+            "id": 20483,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getLiquidityRegistryContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20479,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1192:2:28"
+            },
+            "returnParameters": {
+              "id": 20482,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20481,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20483,
+                  "src": "1218:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20480,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1218:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1217:9:28"
+            },
+            "scope": 20539,
+            "src": "1155:72:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "ae0a0f86",
+            "id": 20488,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getClaimVotingContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20484,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1264:2:28"
+            },
+            "returnParameters": {
+              "id": 20487,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20486,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20488,
+                  "src": "1290:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20485,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1290:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1289:9:28"
+            },
+            "scope": 20539,
+            "src": "1233:66:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "34dd1054",
+            "id": 20493,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getReinsurancePoolContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20489,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1340:2:28"
+            },
+            "returnParameters": {
+              "id": 20492,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20491,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20493,
+                  "src": "1366:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20490,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1366:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1365:9:28"
+            },
+            "scope": 20539,
+            "src": "1305:70:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "1ef35fc9",
+            "id": 20498,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getPolicyBookAdminContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20494,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1416:2:28"
+            },
+            "returnParameters": {
+              "id": 20497,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20496,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20498,
+                  "src": "1442:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20495,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1442:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1441:9:28"
+            },
+            "scope": 20539,
+            "src": "1381:70:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "db43ccb5",
+            "id": 20503,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getPolicyQuoteContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20499,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1488:2:28"
+            },
+            "returnParameters": {
+              "id": 20502,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20501,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20503,
+                  "src": "1514:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20500,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1514:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1513:9:28"
+            },
+            "scope": 20539,
+            "src": "1457:66:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "abcccc70",
+            "id": 20508,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getLegacyBMIStakingContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20504,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1565:2:28"
+            },
+            "returnParameters": {
+              "id": 20507,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20506,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20508,
+                  "src": "1591:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20505,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1591:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1590:9:28"
+            },
+            "scope": 20539,
+            "src": "1529:71:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "2463efd6",
+            "id": 20513,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getBMIStakingContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20509,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1636:2:28"
+            },
+            "returnParameters": {
+              "id": 20512,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20511,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20513,
+                  "src": "1662:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20510,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1662:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1661:9:28"
+            },
+            "scope": 20539,
+            "src": "1606:65:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "53c6d6f1",
+            "id": 20518,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getSTKBMIContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20514,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1703:2:28"
+            },
+            "returnParameters": {
+              "id": 20517,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20516,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20518,
+                  "src": "1729:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20515,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1729:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1728:9:28"
+            },
+            "scope": 20539,
+            "src": "1677:61:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "7ce9ad4d",
+            "id": 20523,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getVBMIContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20519,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1768:2:28"
+            },
+            "returnParameters": {
+              "id": 20522,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20521,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20523,
+                  "src": "1794:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20520,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1794:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1793:9:28"
+            },
+            "scope": 20539,
+            "src": "1744:59:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "61572de2",
+            "id": 20528,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getLegacyLiquidityMiningStakingContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20524,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1857:2:28"
+            },
+            "returnParameters": {
+              "id": 20527,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20526,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20528,
+                  "src": "1883:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20525,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1883:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1882:9:28"
+            },
+            "scope": 20539,
+            "src": "1809:83:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "a9b45bf2",
+            "id": 20533,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getLiquidityMiningStakingContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20529,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1940:2:28"
+            },
+            "returnParameters": {
+              "id": 20532,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20531,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20533,
+                  "src": "1966:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20530,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1966:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1965:9:28"
+            },
+            "scope": 20539,
+            "src": "1898:77:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "7d57b152",
+            "id": 20538,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getReputationSystemContract",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20534,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2017:2:28"
+            },
+            "returnParameters": {
+              "id": 20537,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20536,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20538,
+                  "src": "2043:7:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20535,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2043:7:28",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2042:9:28"
+            },
+            "scope": 20539,
+            "src": "1981:71:28",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 20540,
+        "src": "91:1963:28"
+      }
+    ],
+    "src": "32:2023:28"
+  },
+  "legacyAST": {
+    "attributes": {
+      "absolutePath": "/home/artem/Projects/Distributed_Lab/Applicature/bridgemutual-core/contracts/interfaces/IContractsRegistry.sol",
+      "exportedSymbols": {
+        "IContractsRegistry": [
+          20539
+        ]
+      },
+      "license": "MIT"
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "^",
+            "0.7",
+            ".4"
+          ]
+        },
+        "id": 20407,
+        "name": "PragmaDirective",
+        "src": "32:23:28"
+      },
+      {
+        "attributes": {
+          "literals": [
+            "experimental",
+            "ABIEncoderV2"
+          ]
+        },
+        "id": 20408,
+        "name": "PragmaDirective",
+        "src": "56:33:28"
+      },
+      {
+        "attributes": {
+          "abstract": false,
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "interface",
+          "fullyImplemented": false,
+          "linearizedBaseContracts": [
+            20539
+          ],
+          "name": "IContractsRegistry",
+          "scope": 20540
+        },
+        "children": [
+          {
+            "attributes": {
+              "functionSelector": "dfd71781",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getUniswapRouterContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20409,
+                "name": "ParameterList",
+                "src": "159:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20413,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20410,
+                        "name": "ElementaryTypeName",
+                        "src": "185:7:28"
+                      }
+                    ],
+                    "id": 20411,
+                    "name": "VariableDeclaration",
+                    "src": "185:7:28"
+                  }
+                ],
+                "id": 20412,
+                "name": "ParameterList",
+                "src": "184:9:28"
+              }
+            ],
+            "id": 20413,
+            "name": "FunctionDefinition",
+            "src": "126:68:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "1298fcd2",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getUniswapBMIToETHPairContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20414,
+                "name": "ParameterList",
+                "src": "239:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20418,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20415,
+                        "name": "ElementaryTypeName",
+                        "src": "265:7:28"
+                      }
+                    ],
+                    "id": 20416,
+                    "name": "VariableDeclaration",
+                    "src": "265:7:28"
+                  }
+                ],
+                "id": 20417,
+                "name": "ParameterList",
+                "src": "264:9:28"
+              }
+            ],
+            "id": 20418,
+            "name": "FunctionDefinition",
+            "src": "200:74:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "467834bb",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getWETHContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20419,
+                "name": "ParameterList",
+                "src": "304:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20423,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20420,
+                        "name": "ElementaryTypeName",
+                        "src": "330:7:28"
+                      }
+                    ],
+                    "id": 20421,
+                    "name": "VariableDeclaration",
+                    "src": "330:7:28"
+                  }
+                ],
+                "id": 20422,
+                "name": "ParameterList",
+                "src": "329:9:28"
+              }
+            ],
+            "id": 20423,
+            "name": "FunctionDefinition",
+            "src": "280:59:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "9038a3ce",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getUSDTContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20424,
+                "name": "ParameterList",
+                "src": "369:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20428,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20425,
+                        "name": "ElementaryTypeName",
+                        "src": "395:7:28"
+                      }
+                    ],
+                    "id": 20426,
+                    "name": "VariableDeclaration",
+                    "src": "395:7:28"
+                  }
+                ],
+                "id": 20427,
+                "name": "ParameterList",
+                "src": "394:9:28"
+              }
+            ],
+            "id": 20428,
+            "name": "FunctionDefinition",
+            "src": "345:59:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "2fe83b02",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getBMIContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20429,
+                "name": "ParameterList",
+                "src": "433:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20433,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20430,
+                        "name": "ElementaryTypeName",
+                        "src": "459:7:28"
+                      }
+                    ],
+                    "id": 20431,
+                    "name": "VariableDeclaration",
+                    "src": "459:7:28"
+                  }
+                ],
+                "id": 20432,
+                "name": "ParameterList",
+                "src": "458:9:28"
+              }
+            ],
+            "id": 20433,
+            "name": "FunctionDefinition",
+            "src": "410:58:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "9bc0c5d2",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getPriceFeedContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20434,
+                "name": "ParameterList",
+                "src": "503:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20438,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20435,
+                        "name": "ElementaryTypeName",
+                        "src": "529:7:28"
+                      }
+                    ],
+                    "id": 20436,
+                    "name": "VariableDeclaration",
+                    "src": "529:7:28"
+                  }
+                ],
+                "id": 20437,
+                "name": "ParameterList",
+                "src": "528:9:28"
+              }
+            ],
+            "id": 20438,
+            "name": "FunctionDefinition",
+            "src": "474:64:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "dc9c563f",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getPolicyBookRegistryContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20439,
+                "name": "ParameterList",
+                "src": "582:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20443,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20440,
+                        "name": "ElementaryTypeName",
+                        "src": "608:7:28"
+                      }
+                    ],
+                    "id": 20441,
+                    "name": "VariableDeclaration",
+                    "src": "608:7:28"
+                  }
+                ],
+                "id": 20442,
+                "name": "ParameterList",
+                "src": "607:9:28"
+              }
+            ],
+            "id": 20443,
+            "name": "FunctionDefinition",
+            "src": "544:73:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "2bf0f853",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getPolicyBookFabricContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20444,
+                "name": "ParameterList",
+                "src": "659:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20448,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20445,
+                        "name": "ElementaryTypeName",
+                        "src": "685:7:28"
+                      }
+                    ],
+                    "id": 20446,
+                    "name": "VariableDeclaration",
+                    "src": "685:7:28"
+                  }
+                ],
+                "id": 20447,
+                "name": "ParameterList",
+                "src": "684:9:28"
+              }
+            ],
+            "id": 20448,
+            "name": "FunctionDefinition",
+            "src": "623:71:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "f0f8c04e",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getBMICoverStakingContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20449,
+                "name": "ParameterList",
+                "src": "735:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20453,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20450,
+                        "name": "ElementaryTypeName",
+                        "src": "761:7:28"
+                      }
+                    ],
+                    "id": 20451,
+                    "name": "VariableDeclaration",
+                    "src": "761:7:28"
+                  }
+                ],
+                "id": 20452,
+                "name": "ParameterList",
+                "src": "760:9:28"
+              }
+            ],
+            "id": 20453,
+            "name": "FunctionDefinition",
+            "src": "700:70:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "fb6db8a8",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getRewardsGeneratorContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20454,
+                "name": "ParameterList",
+                "src": "812:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20458,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20455,
+                        "name": "ElementaryTypeName",
+                        "src": "838:7:28"
+                      }
+                    ],
+                    "id": 20456,
+                    "name": "VariableDeclaration",
+                    "src": "838:7:28"
+                  }
+                ],
+                "id": 20457,
+                "name": "ParameterList",
+                "src": "837:9:28"
+              }
+            ],
+            "id": 20458,
+            "name": "FunctionDefinition",
+            "src": "776:71:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "7506b865",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getBMIUtilityNFTContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20459,
+                "name": "ParameterList",
+                "src": "886:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20463,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20460,
+                        "name": "ElementaryTypeName",
+                        "src": "912:7:28"
+                      }
+                    ],
+                    "id": 20461,
+                    "name": "VariableDeclaration",
+                    "src": "912:7:28"
+                  }
+                ],
+                "id": 20462,
+                "name": "ParameterList",
+                "src": "911:9:28"
+              }
+            ],
+            "id": 20463,
+            "name": "FunctionDefinition",
+            "src": "853:68:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "fae7baef",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getLiquidityMiningContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20464,
+                "name": "ParameterList",
+                "src": "962:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20468,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20465,
+                        "name": "ElementaryTypeName",
+                        "src": "988:7:28"
+                      }
+                    ],
+                    "id": 20466,
+                    "name": "VariableDeclaration",
+                    "src": "988:7:28"
+                  }
+                ],
+                "id": 20467,
+                "name": "ParameterList",
+                "src": "987:9:28"
+              }
+            ],
+            "id": 20468,
+            "name": "FunctionDefinition",
+            "src": "927:70:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "39f9615f",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getClaimingRegistryContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20469,
+                "name": "ParameterList",
+                "src": "1039:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20473,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20470,
+                        "name": "ElementaryTypeName",
+                        "src": "1065:7:28"
+                      }
+                    ],
+                    "id": 20471,
+                    "name": "VariableDeclaration",
+                    "src": "1065:7:28"
+                  }
+                ],
+                "id": 20472,
+                "name": "ParameterList",
+                "src": "1064:9:28"
+              }
+            ],
+            "id": 20473,
+            "name": "FunctionDefinition",
+            "src": "1003:71:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "0bc3f29d",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getPolicyRegistryContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20474,
+                "name": "ParameterList",
+                "src": "1114:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20478,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20475,
+                        "name": "ElementaryTypeName",
+                        "src": "1140:7:28"
+                      }
+                    ],
+                    "id": 20476,
+                    "name": "VariableDeclaration",
+                    "src": "1140:7:28"
+                  }
+                ],
+                "id": 20477,
+                "name": "ParameterList",
+                "src": "1139:9:28"
+              }
+            ],
+            "id": 20478,
+            "name": "FunctionDefinition",
+            "src": "1080:69:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "3279c2fa",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getLiquidityRegistryContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20479,
+                "name": "ParameterList",
+                "src": "1192:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20483,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20480,
+                        "name": "ElementaryTypeName",
+                        "src": "1218:7:28"
+                      }
+                    ],
+                    "id": 20481,
+                    "name": "VariableDeclaration",
+                    "src": "1218:7:28"
+                  }
+                ],
+                "id": 20482,
+                "name": "ParameterList",
+                "src": "1217:9:28"
+              }
+            ],
+            "id": 20483,
+            "name": "FunctionDefinition",
+            "src": "1155:72:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "ae0a0f86",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getClaimVotingContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20484,
+                "name": "ParameterList",
+                "src": "1264:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20488,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20485,
+                        "name": "ElementaryTypeName",
+                        "src": "1290:7:28"
+                      }
+                    ],
+                    "id": 20486,
+                    "name": "VariableDeclaration",
+                    "src": "1290:7:28"
+                  }
+                ],
+                "id": 20487,
+                "name": "ParameterList",
+                "src": "1289:9:28"
+              }
+            ],
+            "id": 20488,
+            "name": "FunctionDefinition",
+            "src": "1233:66:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "34dd1054",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getReinsurancePoolContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20489,
+                "name": "ParameterList",
+                "src": "1340:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20493,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20490,
+                        "name": "ElementaryTypeName",
+                        "src": "1366:7:28"
+                      }
+                    ],
+                    "id": 20491,
+                    "name": "VariableDeclaration",
+                    "src": "1366:7:28"
+                  }
+                ],
+                "id": 20492,
+                "name": "ParameterList",
+                "src": "1365:9:28"
+              }
+            ],
+            "id": 20493,
+            "name": "FunctionDefinition",
+            "src": "1305:70:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "1ef35fc9",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getPolicyBookAdminContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20494,
+                "name": "ParameterList",
+                "src": "1416:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20498,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20495,
+                        "name": "ElementaryTypeName",
+                        "src": "1442:7:28"
+                      }
+                    ],
+                    "id": 20496,
+                    "name": "VariableDeclaration",
+                    "src": "1442:7:28"
+                  }
+                ],
+                "id": 20497,
+                "name": "ParameterList",
+                "src": "1441:9:28"
+              }
+            ],
+            "id": 20498,
+            "name": "FunctionDefinition",
+            "src": "1381:70:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "db43ccb5",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getPolicyQuoteContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20499,
+                "name": "ParameterList",
+                "src": "1488:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20503,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20500,
+                        "name": "ElementaryTypeName",
+                        "src": "1514:7:28"
+                      }
+                    ],
+                    "id": 20501,
+                    "name": "VariableDeclaration",
+                    "src": "1514:7:28"
+                  }
+                ],
+                "id": 20502,
+                "name": "ParameterList",
+                "src": "1513:9:28"
+              }
+            ],
+            "id": 20503,
+            "name": "FunctionDefinition",
+            "src": "1457:66:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "abcccc70",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getLegacyBMIStakingContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20504,
+                "name": "ParameterList",
+                "src": "1565:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20508,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20505,
+                        "name": "ElementaryTypeName",
+                        "src": "1591:7:28"
+                      }
+                    ],
+                    "id": 20506,
+                    "name": "VariableDeclaration",
+                    "src": "1591:7:28"
+                  }
+                ],
+                "id": 20507,
+                "name": "ParameterList",
+                "src": "1590:9:28"
+              }
+            ],
+            "id": 20508,
+            "name": "FunctionDefinition",
+            "src": "1529:71:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "2463efd6",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getBMIStakingContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20509,
+                "name": "ParameterList",
+                "src": "1636:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20513,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20510,
+                        "name": "ElementaryTypeName",
+                        "src": "1662:7:28"
+                      }
+                    ],
+                    "id": 20511,
+                    "name": "VariableDeclaration",
+                    "src": "1662:7:28"
+                  }
+                ],
+                "id": 20512,
+                "name": "ParameterList",
+                "src": "1661:9:28"
+              }
+            ],
+            "id": 20513,
+            "name": "FunctionDefinition",
+            "src": "1606:65:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "53c6d6f1",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getSTKBMIContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20514,
+                "name": "ParameterList",
+                "src": "1703:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20518,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20515,
+                        "name": "ElementaryTypeName",
+                        "src": "1729:7:28"
+                      }
+                    ],
+                    "id": 20516,
+                    "name": "VariableDeclaration",
+                    "src": "1729:7:28"
+                  }
+                ],
+                "id": 20517,
+                "name": "ParameterList",
+                "src": "1728:9:28"
+              }
+            ],
+            "id": 20518,
+            "name": "FunctionDefinition",
+            "src": "1677:61:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "7ce9ad4d",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getVBMIContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20519,
+                "name": "ParameterList",
+                "src": "1768:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20523,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20520,
+                        "name": "ElementaryTypeName",
+                        "src": "1794:7:28"
+                      }
+                    ],
+                    "id": 20521,
+                    "name": "VariableDeclaration",
+                    "src": "1794:7:28"
+                  }
+                ],
+                "id": 20522,
+                "name": "ParameterList",
+                "src": "1793:9:28"
+              }
+            ],
+            "id": 20523,
+            "name": "FunctionDefinition",
+            "src": "1744:59:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "61572de2",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getLegacyLiquidityMiningStakingContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20524,
+                "name": "ParameterList",
+                "src": "1857:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20528,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20525,
+                        "name": "ElementaryTypeName",
+                        "src": "1883:7:28"
+                      }
+                    ],
+                    "id": 20526,
+                    "name": "VariableDeclaration",
+                    "src": "1883:7:28"
+                  }
+                ],
+                "id": 20527,
+                "name": "ParameterList",
+                "src": "1882:9:28"
+              }
+            ],
+            "id": 20528,
+            "name": "FunctionDefinition",
+            "src": "1809:83:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "a9b45bf2",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getLiquidityMiningStakingContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20529,
+                "name": "ParameterList",
+                "src": "1940:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20533,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20530,
+                        "name": "ElementaryTypeName",
+                        "src": "1966:7:28"
+                      }
+                    ],
+                    "id": 20531,
+                    "name": "VariableDeclaration",
+                    "src": "1966:7:28"
+                  }
+                ],
+                "id": 20532,
+                "name": "ParameterList",
+                "src": "1965:9:28"
+              }
+            ],
+            "id": 20533,
+            "name": "FunctionDefinition",
+            "src": "1898:77:28"
+          },
+          {
+            "attributes": {
+              "functionSelector": "7d57b152",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getReputationSystemContract",
+              "scope": 20539,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 20534,
+                "name": "ParameterList",
+                "src": "2017:2:28"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "scope": 20538,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 20535,
+                        "name": "ElementaryTypeName",
+                        "src": "2043:7:28"
+                      }
+                    ],
+                    "id": 20536,
+                    "name": "VariableDeclaration",
+                    "src": "2043:7:28"
+                  }
+                ],
+                "id": 20537,
+                "name": "ParameterList",
+                "src": "2042:9:28"
+              }
+            ],
+            "id": 20538,
+            "name": "FunctionDefinition",
+            "src": "1981:71:28"
+          }
+        ],
+        "id": 20539,
+        "name": "ContractDefinition",
+        "src": "91:1963:28"
+      }
+    ],
+    "id": 20540,
+    "name": "SourceUnit",
+    "src": "32:2023:28"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.7.4+commit.3f05b770.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.1",
+  "updatedAt": "2021-07-07T20:09:05.269Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

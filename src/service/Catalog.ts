@@ -1,14 +1,3 @@
-/**
-
-    THIS IS A BUSINESS LOGIC CLASS, SINCE ITS NOT AN OUTPUT OF THE PROTOCOL
-    BUT A MIX OF ONCHAIN AND HTTP DATA.
-
-    IF WE KEEP THE CONTRACT ACCESS OBJECT CALLS IN SEPARATE DIR AND USE THEM
-    ONLY TO FORM THE CUSTOM LOGIC, TYPESCRIPT CAN GIVE US THE OOO APPROACH
-    WE NEED, AS OPPOSED TO THE APP UI...
-
-*/
-
 // import NetConfig from '@/service/config/NetConfig';
 // import NexusApi  from '@/service/distributorsApi/NexusApi';
 
@@ -16,19 +5,24 @@ import NexusApi from './distributorsApi/NexusApi';
 import InsuraceApi from './distributorsApi/InsuraceApi';
 import CatalogHelper from './helpers/catalogHelper';
 
-export async  function getCatalog(_web3:any): Promise<any[]> {
+export async function getCatalog(_web3:any): Promise<any[]> {
 
   const nexusCoverables =  await getNexusCoverables();
   const insuraceCoverables =  await getInsuraceCoverables(_web3);
+  const bridgeCoverables =  await getBridgeCoverables(_web3);
 
-  return Promise.all([nexusCoverables, insuraceCoverables]).then(() =>{
-    const mergedCoverables = nexusCoverables.concat(insuraceCoverables);
-    console.log(mergedCoverables , 'mergedCoverables');
-    return mergedCoverables;
-  })
+  return Promise.all([ nexusCoverables, insuraceCoverables, bridgeCoverables])
+                .then(() => {
+                    let mergedCoverables = nexusCoverables.concat(insuraceCoverables);
+                    mergedCoverables = mergedCoverables.concat(bridgeCoverables);
+                    console.log(mergedCoverables , 'mergedCoverables');
+                    return mergedCoverables;
+                })
+}
 
-
-
+export async function getBridgeCoverables(_web3:any): Promise<any[]> {
+  _web3.chainId = await _web3.eth.getChainId();;
+ return CatalogHelper.getBridgeCatalogTemp(_web3);
 }
 
 export async function getNexusCoverables(): Promise<any[]> {
@@ -60,8 +54,8 @@ export async function getNexusCoverables(): Promise<any[]> {
 
   export async function getInsuraceCoverables(_web3:any) : Promise<object[]> {
     // const trustWalletAssets:object[] = await CatalogHelper.getTrustWalletAssets();
-
-    return await InsuraceApi.fetchCoverables(_web3.networkId).then((data:object) => {
+    const NetID = await _web3.eth.getChainId();
+    return await InsuraceApi.fetchCoverables(NetID).then((data:object) => {
 
       const coverablesArray = [];
       for (const [key, value] of Object.entries(data)) {
@@ -95,5 +89,5 @@ export async function getNexusCoverables(): Promise<any[]> {
 
 
 export default {
-  getCatalog
+  getCatalog,
 }

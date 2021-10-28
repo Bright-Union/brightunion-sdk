@@ -16,7 +16,7 @@ import { getQuote } from "./dao/Quotes";
 import Web3 from 'web3';
 import BigNumber from 'bignumber.js'
 
-export async  function getQuotes(_web3:Web3, _protocolAddress:string): Promise<any[]> {
+export async function getQuotes(_web3:Web3, _protocolAddress:string): Promise<any[]> {
 
   const bridgeQuote =  await getBridgeQuote(_web3, _protocolAddress);
   const nexusQuote =  await getNexusQuote(_web3);

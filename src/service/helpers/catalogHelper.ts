@@ -1,5 +1,14 @@
 import axios from 'axios';
 import * as _ from  "lodash";
+import {
+  _getBridgeRegistryContract,
+  _getBridgePolicyBookRegistryContract,
+  _getBridgePolicyQuoteContract,
+  _getBridgePolicyBookContract,
+  _getBridgePolicyRegistryContract,
+} from '../helpers/getContract';
+import NetConfig from '../config/NetConfig';
+
 
 const bridge_nexus_insurace_categories : string[][] = [
     // BRIDGE CATEGORY, NEXUS CATEGORY, INSURACE, COMMON CATEGORY, DESCRIPTION
@@ -163,6 +172,25 @@ class CatalogHelper {
       // })
   }
 
+  public static   getBridgeCatalogTemp(_web3:any) : any{
+    const bridgeRegistryAdd = NetConfig.netById(_web3.chainId ).bridgeRegistry;
+
+    const BridgeContract = _getBridgeRegistryContract(bridgeRegistryAdd,_web3);
+     BridgeContract.methods.getPolicyBookRegistryContract().call().then(async (policyBookRegistryAddr:any) => {
+      let BridgePolicyBookRegistryContract = await _getBridgePolicyBookRegistryContract(policyBookRegistryAddr,_web3);
+           BridgePolicyBookRegistryContract.methods.count().call().then((policyBookCounter:any) => {
+             BridgePolicyBookRegistryContract.methods.listWithStats(0, policyBookCounter).call()
+                .then(({_policyBooksArr, _stats}:any) => {
+                
+                  console.log('policyBookCounter -: ',policyBookCounter);
+                  console.log('_stats:  ', _stats);
+                  console.log('_policyBooksArr: ',_policyBooksArr);
+                  return { policyBookCounter,_stats,_policyBooksArr}
+                  
+            });
+          });
+      });
+  }
 
 }
 
