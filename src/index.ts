@@ -7,20 +7,42 @@ import { buyCoverDecode, buyCover } from "./service/dao/Buying";
 import { getCatalog } from "./service/Catalog";
 import { getQuotes } from "./service/Quotes";
 
-
+/**
+ * Main module class, entry point of the
+ * BrightUnion SDK services...
+ *
+ * @remarks
+ * Returns a Bright Union Distributors service instance.
+ *
+ * @param _web3 - Name of distributor in lower case
+ * @param _brightProtoAddress - The Blue Bright contract address
+ * @returns Bright Union instance
+ */
 class Distributors {
-  web3: any;
-  catalog: any[];
 
-  constructor(_web3 : any) {
-    this.catalog = [];
+  web3: any;
+  catalog: object[];
+  brightProtoAddress: string;
+
+  constructor(_brightProtoAddress: string, _web3 : any) {
     this.web3 = _web3;
+    this.brightProtoAddress = _brightProtoAddress;
+    console.log( this.brightProtoAddress )
+  }
+
+  async init(): Promise<object>{
+    if(!this.web3.coinbase || !this.web3.networkId){
+      return {status: false, message: 'Bright Union Initializing'};
+    }else{
+      this.web3.coinbase = (await this.web3.eth.getAccounts())[0];
+      this.web3.networkId = await this.web3.eth.net.getId();
+      return {status: true, message: 'Bright Union Initialized'};
+    }
   }
 
   async getCatalog (
   ){
-
-    getQuotes(this.web3); //for test
+    getQuotes( this.web3 , this.brightProtoAddress ); //for test
 
      return await getCatalog(
       this.web3,
@@ -28,12 +50,14 @@ class Distributors {
       this.catalog = data;
       return data;
     })
+
   }
 
   async getDistributorAddress (
       _distributorName : string,
   ){
     return await getDistributorAddress(
+      this.brightProtoAddress,
       this.web3,
       _distributorName
     )
@@ -45,6 +69,7 @@ class Distributors {
     _isActive : boolean
   ) {
    return await getCoversCount(
+      this.brightProtoAddress,
       this.web3,
       _distributorName,
       _owner,
@@ -59,6 +84,7 @@ class Distributors {
     _limit : number,
   ) {
    return await getCovers(
+        this.brightProtoAddress,
         this.web3,
         _distributorName,
         _ownerAddress,
@@ -69,7 +95,7 @@ class Distributors {
 
  async getQuotes(
  ){
-   return await getQuotes(this.web3);
+   return await getQuotes(this.web3, this.brightProtoAddress);
  }
 
 
@@ -83,6 +109,7 @@ async getQuote(
   _data : any,
 ) {
  return await getQuote(
+        this.brightProtoAddress,
         this.web3,
         _distributorName,
         _period,
@@ -106,6 +133,7 @@ async buyCover(
   _data : any,
 ){
   return await buyCover(
+              this.brightProtoAddress,
               this.web3,
               _distributorName,
               _contractAddress,
@@ -134,6 +162,7 @@ async buyCoverDecode (
   _s: Array<number>,
 ){
   return await buyCoverDecode(
+                this.brightProtoAddress,
                 this.web3,
                 _ownerAddress,
                 _distributorName,

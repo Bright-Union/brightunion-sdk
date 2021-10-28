@@ -1,5 +1,5 @@
 import Cover from "../domain/Cover";
-import _getDistributorContract from "../helpers/getContract";
+import {_getDistributorContract} from "../helpers/getContract";
 
 /**
  * Returns the total cover count owned by an address
@@ -13,12 +13,13 @@ import _getDistributorContract from "../helpers/getContract";
  * @returns Number of total covers
  */
 export function getCoversCount(
+    _contractAddress: string,
     _web3 : any,
     _distributorName : string,
     _ownerAddress: string ,
     _isActive : boolean
 ): Promise<number>  {
-  return _getDistributorContract(_web3)
+  return _getDistributorContract(_contractAddress, _web3)
          .methods
          .getCoversCount(
            _distributorName,
@@ -40,14 +41,15 @@ export function getCoversCount(
  * @param web3
  * @returns Cover Object
  */
-export async function  getCovers(
+export async function getCovers(
+    _contractAddress: string,
     _web3 : any,
     _distributorName : string,
     _ownerAddress : string,
     _activeCover : boolean,
     _limit : number,
 ) : Promise<Cover[]>  {
-  return _getDistributorContract(_web3)
+  return _getDistributorContract(_contractAddress, _web3)
         .methods
         .getCovers(
           _distributorName,
@@ -58,6 +60,6 @@ export async function  getCovers(
 }
 
 export default {
-  // getCovers,
-  getCoversCount
+   getCovers,
+   getCoversCount
 }

@@ -16,13 +16,13 @@ import { getQuote } from "./dao/Quotes";
 import Web3 from 'web3';
 import BigNumber from 'bignumber.js'
 
-export async  function getQuotes(_web3:Web3): Promise<any[]> {
+export async  function getQuotes(_web3:Web3, _protocolAddress:string): Promise<any[]> {
 
-  // const bridgeQuote =  await getBridgeQuote(_web3);
+  const bridgeQuote =  await getBridgeQuote(_web3, _protocolAddress);
   const nexusQuote =  await getNexusQuote(_web3);
   const insuraceQuote =  await getInsuraceQuotes(_web3);
   const quotesArray = [
-    // bridgeQuote,
+    bridgeQuote,
     nexusQuote,
     insuraceQuote
   ]
@@ -40,7 +40,7 @@ export async  function getQuotes(_web3:Web3): Promise<any[]> {
 
 }
 
-export async function getBridgeQuote(_web3:Web3) : Promise<object>{
+export async function getBridgeQuote(_web3:Web3, _protocolAddress:string) : Promise<object>{
 
   let periodInWeeks: number = 26;
   let amount: number = 100000000000;
@@ -51,6 +51,7 @@ export async function getBridgeQuote(_web3:Web3) : Promise<object>{
   let data:number[] = _web3.utils.hexToBytes(_web3.utils.numberToHex(500));
 
   return await getQuote(
+    _protocolAddress,
          _web3,
          'bridge',
          periodInWeeks,

@@ -10,6 +10,7 @@
         bridgeRegistry: '0x8050c5a46FC224E3BCfa5D7B7cBacB1e4010118d',
         nexusDistributor: '0x3756C3C9374f38e0d9aAcB637Fed1641504a5b28',
         nexusAPI: 'https://api.nexusmutual.io',
+        brightProtocol:'',
         brightContractRegistry: '0xAA66e85682429a29363556ef757c44AfC5000F00',
         insuraceCover: '0x88Ef6F235a4790292068646e79Ee563339c796a0',
         insuraceAPI: 'https://api.insurace.io/ops/v1',
@@ -28,6 +29,7 @@
         explorer: 'https://ropsten.etherscan.io',
         provider: 'https://ropsten.infura.io/v3/98d7e501879243c5877bac07a57cde7e',
         nexusAPI: 'https://api.nexusmutual.io',                 //not used
+        brightProtocol:'',
         brightContractRegistry: '',                             //not used
         insuraceCover: '',                                      //not used
         insuraceAPI: '',                                        //not used
@@ -47,6 +49,7 @@
         explorer: 'https://rinkeby.etherscan.io',
         provider: 'https://rinkeby.infura.io/v3/98d7e501879243c5877bac07a57cde7e',
         nexusAPI: 'https://api.nexusmutual.io',                 //not used
+        brightProtocol:'0x6E174A2C3E61B5E4f13Cc7035F4cB46E63f214db',
         brightContractRegistry: '',                             //not used
         insuraceCover: '0x0921f628b8463227615D2199D0D3860E4fBcD411',
         insuraceAPI: 'https://insurace-sl-microservice.azurewebsites.net',
@@ -69,6 +72,7 @@
         // modules: process.env.VUE_APP_KOVAN_MODULES.split(' '),
         nexusDistributor: '0x95454264489114534dD39D81E03Cf4003F948cA6',
         nexusAPI: 'https://api.staging.nexusmutual.io',
+        brightProtocol:'',
         brightContractRegistry: '0x269601a1825dB9194620477e2D251167Ae938117',
         insuraceCover: '',                                      //not used
         insuraceAPI: '',                                        //not used
@@ -90,6 +94,7 @@
         bridgeRegistry: '',
         nexusDistributor: '',
         nexusAPI: '',
+        brightProtocol:'',
         brightContractRegistry: '',
         insuraceCover: '0xfBa24bdbb36001F1F88B3a552c77EC1c10f5E4C0',
         insuraceAPI: 'https://api.insurace.io/ops/v1',
@@ -111,6 +116,7 @@
         // modules: process.env.VUE_APP_BSC_TESTNET_MODULES.split(' '),
         nexusDistributor: '',
         nexusAPI: '',
+        brightProtocol:'',
         brightContractRegistry: '',
         insuraceCover: '0x5f463Cc70f9706E63d4b927E25c28d5A709828b9',
         insuraceAPI: 'https://insurace-sl-microservice.azurewebsites.net',
@@ -133,6 +139,7 @@
         bridgeRegistry: '',
         nexusDistributor: '',
         nexusAPI: '',
+        brightProtocol:'',
         brightContractRegistry: '',
         insuraceCover: '0x3e00FE643337A0f4E345539096cA01e6B8d4374A',
         insuraceAPI: 'https://api.insurace.io/ops/v1',
@@ -154,6 +161,7 @@
         // modules: process.env.VUE_APP_MUMBAI_TESTNET_MODULES.split(' '),
         nexusDistributor: '',
         nexusAPI: '',
+        brightProtocol:'',
         brightContractRegistry: '',
         insuraceCover: '0xE2Edf233eDB3F971415FD76A7b447e4bfFfcd221',
         insuraceAPI: 'https://insurace-sl-microservice.azurewebsites.net',

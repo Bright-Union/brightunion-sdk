@@ -33,9 +33,10 @@ class InsuraceApi {
         coverDays : any,
         coverAmount : any,
         owner : any) {
-        return axios.post(
-            `${NetConfig.netById(web3.networkId).insuraceAPI}/getCoverPremium?code=${encodeURIComponent(NetConfig.netById(web3.networkId).insuraceAPIKey)}`, {
-            chain: web3.symbol,
+        let url = `${NetConfig.netById(web3.networkId).insuraceAPI}/getCoverPremium?code=${encodeURIComponent(NetConfig.netById(web3.networkId).insuraceAPIKey)}`;
+        return  axios.post(
+            url, {
+            chain: NetConfig.netById(web3.networkId).symbol,
             coverCurrency: currencyAddress,
             productIds: [productId],
             coverDays: [coverDays],
@@ -45,6 +46,8 @@ class InsuraceApi {
         })
         .then((response : any) => {
             return response.data;
+        }).catch(error =>{
+            console.log('ERROR on getCoverPremium : ' ,error);
         });
     }
 
@@ -54,8 +57,10 @@ class InsuraceApi {
             chain: state.web3.web3Active.symbol,
             params: params
         }).then((response : any) => {
-                return response.data;
-            });
+            return response.data;
+        }).catch(error =>{
+            console.log('ERROR on confirmCoverPremium : ',error);
+        });;
     }
 
 
