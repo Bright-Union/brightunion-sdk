@@ -1,14 +1,12 @@
 
-class NetConfig{
-
- static NETWORK_CONFIG = [
+ const NETWORK_CONFIG = [
     {
         name: 'Ethereum',
         id: 1,
         symbol: 'ETH',
         explorer: 'https://etherscan.io',
         provider: 'https://eth-mainnet.alchemyapi.io/v2/OlIDDqLH9Uo3AUQ_0ezj6sfqHIGxJRxw',
-        modules: process.env.VUE_APP_MAINNET_MODULES.split(' '),
+        // modules: process.env.VUE_APP_MAINNET_MODULES.split(' '),
         bridgeRegistry: '0x8050c5a46FC224E3BCfa5D7B7cBacB1e4010118d',
         nexusDistributor: '0x3756C3C9374f38e0d9aAcB637Fed1641504a5b28',
         nexusAPI: 'https://api.nexusmutual.io',
@@ -37,7 +35,7 @@ class NetConfig{
         insuraceAPI: '',                                        //not used
         insuraceAPIKey: '',                                     //not used
         insuraceReferral: '',
-        modules: process.env.VUE_APP_ROPSTEN_MODULES.split(' '),
+        // modules: process.env.VUE_APP_ROPSTEN_MODULES.split(' '),
         ETH: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
         DAI: '0x69dDdb0F010D9Cac595F75d8b0fff59CDCD1D44f',      //not used
         USDT: '0xcc54b12a18f2c575ca97991046090f43c3070aa0',     //not used
@@ -57,7 +55,7 @@ class NetConfig{
         insuraceAPI: 'https://insurace-sl-microservice.azurewebsites.net',
         insuraceAPIKey: 'OmgwnM39a/M9/9Q856wbRkILcYh2ZmlJPpG9cVxT5Vy6aR8eNl3/jw==',
         insuraceReferral: '',
-        modules: process.env.VUE_APP_RINKEBY_MODULES.split(' '),
+        // modules: process.env.VUE_APP_RINKEBY_MODULES.split(' '),
         bridgeRegistry: '0x0Ac28BcDcef8D8C95c4a079418dbC34e4AD4DF1D',
         ETH: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
         DAI: '0x69dDdb0F010D9Cac595F75d8b0fff59CDCD1D44f',      //not used
@@ -71,7 +69,7 @@ class NetConfig{
         symbol: 'ETH',
         explorer: 'https://kovan.etherscan.io',
         provider: 'https://eth-kovan.alchemyapi.io/v2/9r8lwXZcACNfMovcyYaquN_CNK81Cqxi',
-        modules: process.env.VUE_APP_KOVAN_MODULES.split(' '),
+        // modules: process.env.VUE_APP_KOVAN_MODULES.split(' '),
         nexusDistributor: '0x95454264489114534dD39D81E03Cf4003F948cA6',
         nexusAPI: 'https://api.staging.nexusmutual.io',
         brightProtocol:'',
@@ -92,7 +90,7 @@ class NetConfig{
         symbol: 'BSC',
         explorer: 'https://bscscan.com',
         provider: 'https://bsc-dataseed.binance.org',
-        modules: process.env.VUE_APP_BSC_MODULES.split(' '),
+        // modules: process.env.VUE_APP_BSC_MODULES.split(' '),
         bridgeRegistry: '',
         nexusDistributor: '',
         nexusAPI: '',
@@ -115,7 +113,7 @@ class NetConfig{
         symbol: 'BSC',
         explorer: 'https://testnet.bscscan.com',
         provider: 'https://data-seed-prebsc-1-s1.binance.org:8545',
-        modules: process.env.VUE_APP_BSC_TESTNET_MODULES.split(' '),
+        // modules: process.env.VUE_APP_BSC_TESTNET_MODULES.split(' '),
         nexusDistributor: '',
         nexusAPI: '',
         brightProtocol:'',
@@ -137,7 +135,7 @@ class NetConfig{
         symbol: 'POLYGON',
         explorer: 'https://polygonscan.com',
         provider: 'https://polygon-rpc.com',
-        modules: process.env.VUE_APP_POLYGON_MODULES.split(' '),
+        // modules: process.env.VUE_APP_POLYGON_MODULES.split(' '),
         bridgeRegistry: '',
         nexusDistributor: '',
         nexusAPI: '',
@@ -160,7 +158,7 @@ class NetConfig{
         symbol: 'POLYGON',
         explorer: 'https://explorer-mumbai.maticvigil.com',
         provider: 'https://rpc-mumbai.matic.today',
-        modules: process.env.VUE_APP_MUMBAI_TESTNET_MODULES.split(' '),
+        // modules: process.env.VUE_APP_MUMBAI_TESTNET_MODULES.split(' '),
         nexusDistributor: '',
         nexusAPI: '',
         brightProtocol:'',
@@ -178,65 +176,70 @@ class NetConfig{
     },
 ]
 
- static MAIN_NETS = [1, 56, 137];
- static TEST_NETS = [42, 97, 80001]; //using Kovan here as Eth testnet
 
-    static netById(id:any) {
-        return NetConfig.NETWORK_CONFIG.filter(net => {
-            return net.id === Number(id)
-        })[0]
-    }
+class NetConfig{
 
-    static mainNets() {
-        return NetConfig.MAIN_NETS
-    }
+  public static NETWORK_CONFIG = NETWORK_CONFIG;
 
-    static testNets() {
-        return NetConfig.TEST_NETS
-    }
+  public MAIN_NETS = [1, 56, 137];
+  public TEST_NETS = [42, 97, 80001]; //using Kovan here as Eth testnet
 
-    static networkCurrency(id :any) : any{
-        const obj : any = NetConfig.netById(id);
-        return Object.keys(obj)
-            .find(key => obj[key].toString().toUpperCase() === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'.toUpperCase());
-    }
+  public static netById(id:any) {
+    return this.NETWORK_CONFIG.filter(net => {
+      return net.id === Number(id)
+    })[0]
+  }
 
-    static isNetworkCurrencyBySymbol(asset:any) {
-        return asset === 'ETH' || asset === 'BNB' || asset === 'MATIC';
-    }
+  public mainNets() {
+    return this.MAIN_NETS
+  }
 
-    static isNetworkCurrencyByAddress(address:any) {
-        return address.toUpperCase() === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'.toUpperCase();
-    }
+  public testNets() {
+    return this.TEST_NETS
+  }
 
-    static requiresAllowanceReset(networkId : any, symbol : any) {
-        if (NetConfig.netById(networkId).symbol === 'ETH' && symbol === 'USDT') {
-            return true;
-        }
-    }
+  public static networkCurrency(id :any) : any{
+    const obj : any = this.netById(id);
+    return Object.keys(obj)
+    .find(key => obj[key].toString().toUpperCase() === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'.toUpperCase());
+  }
 
-    static sixDecimalsCurrency(networkId : any, symbol : any) {
-        if (NetConfig.netById(networkId).symbol === 'ETH' && symbol === 'USDT') {
-            return true;
-        } else if (NetConfig.netById(networkId).symbol === 'POLYGON' && symbol === 'USDT') {
-            return true;
-        } else if (NetConfig.netById(networkId).symbol === 'POLYGON' && symbol === 'USDC') {
-            return true;
-        }
-    }
+  public isNetworkCurrencyBySymbol(asset:any) {
+    return asset === 'ETH' || asset === 'BNB' || asset === 'MATIC';
+  }
 
-    // Cannot buy De-peg bundles with testnet tokens
-    static insuraceDePegTestCurrency(protocol:any,currency:any,web3Symbol:any,selectedCurrency:any) : any {
-        if(currency !== 'ETH' && protocol.name.includes('De-Peg')){
-            switch(web3Symbol){
-                case "ETH": selectedCurrency.address = NetConfig.netById(1)['USDC']; break;
-                case "BSC": selectedCurrency.address = NetConfig.netById(56)['USDC']; break;
-                case "POLYGON": selectedCurrency.address = NetConfig.netById(137)['USDC']; break;                     
-            }
-                return ['USDC',selectedCurrency]
-        }
-        return [currency,selectedCurrency]
+  public isNetworkCurrencyByAddress(address:any) {
+    return address.toUpperCase() === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'.toUpperCase();
+  }
+
+  public static requiresAllowanceReset(networkId : any, symbol : any) {
+    if (this.netById(networkId).symbol === 'ETH' && symbol === 'USDT') {
+      return true;
     }
+  }
+
+  public static sixDecimalsCurrency(networkId : any, symbol : any) {
+    if (this.netById(networkId).symbol === 'ETH' && symbol === 'USDT') {
+      return true;
+    } else if (this.netById(networkId).symbol === 'POLYGON' && symbol === 'USDT') {
+      return true;
+    } else if (this.netById(networkId).symbol === 'POLYGON' && symbol === 'USDC') {
+      return true;
+    }
+  }
+
+  // Cannot buy De-peg bundles with testnet tokens
+  public static insuraceDePegTestCurrency(protocol:any,currency:any,web3Symbol:any,selectedCurrency:any) : any {
+    if(currency !== 'ETH' && protocol.name.includes('De-Peg')){
+      switch(web3Symbol){
+        case "ETH": selectedCurrency.address = this.netById(1)['USDC']; break;
+        case "BSC": selectedCurrency.address = this.netById(56)['USDC']; break;
+        case "POLYGON": selectedCurrency.address = this.netById(137)['USDC']; break;
+      }
+      return ['USDC',selectedCurrency]
+    }
+    return [currency,selectedCurrency]
+  }
 
 }
 

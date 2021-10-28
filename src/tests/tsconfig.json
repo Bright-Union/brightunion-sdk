@@ -1,20 +1,24 @@
 {
+  "ts-node": {
+    "files": true
+  },
   "compilerOptions": {
-    "baseUrl" : "./src",
+    "baseUrl" : "src",
     "paths": {
       "@/*": [ "*" ],
       "/*": [ "*" ]
     },
-    "module": "commonjs",
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
-    "outDir": "./dist",
-    "rootDir": ".",
     "resolveJsonModule" : true,
     "esModuleInterop" : true,
-  }
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": ".",
+  },
+   "include": ["./test/**/*"]
 }

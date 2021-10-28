@@ -4,6 +4,7 @@ import { getCoversCount, getCovers } from "./service/dao/Covers";
 import { getDistributorAddress } from "./service/dao/Distributors";
 import { getQuote } from "./service/dao/Quotes";
 import { buyCoverDecode, buyCover } from "./service/dao/Buying";
+import { getCatalog } from "./service/Catalog";
 
 /**
  * Main module class, entry point of the 
@@ -20,12 +21,23 @@ class Distributors {
 
   web3: any;
   brightProtoAddress: string;
+  catalog:any;
 
   constructor(_brightProtoAddress: string, _web3 : any) {
     this.web3 = _web3;
     this.brightProtoAddress = _brightProtoAddress;
 
     console.log( this.brightProtoAddress )
+  }
+
+  async getCatalog (
+  ){
+     return await getCatalog(
+      this.web3,
+    ).then(data => {
+      this.catalog = data;
+      return data;
+    })
 
   }
 
