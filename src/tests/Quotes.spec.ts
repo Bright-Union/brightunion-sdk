@@ -40,7 +40,7 @@ describe('Get Cover Quote', () => {
     const result = await instance.getQuote(
                           "bridge",
                           26,
-                          web3.utils.toBN('1000000000000000000000').toNumber(),
+                          web3.utils.toBN('1000000000000000000000'),
                           "0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f",
                           "0x0000000000000000000000000000000000000000",
                           "0x0000000000000000000000000000000000000000",
