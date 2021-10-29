@@ -25,8 +25,6 @@ import {_getDistributorContract} from "../helpers/getContract";
  * @beta
  */
 export async function getQuote(
-    _protocolAddress: string,
-    _web3:any,
     _distributorName : string ,
     _period : any,
     _sumAssured : any,
@@ -36,7 +34,7 @@ export async function getQuote(
     _data : any,
 ) : Promise<CoverQuote>  {
 
-  return await _getDistributorContract(_protocolAddress,_web3)
+  return await _getDistributorContract()
               .methods
               .getQuote(
                 _distributorName,

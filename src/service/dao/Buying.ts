@@ -33,7 +33,7 @@ export async function buyCover(
         _data : any,
 ) :  Promise<BuyReceipt>  {
 
-  return await _getDistributorContract(_brightProtoAddress, _web3)
+  return await _getDistributorContract()
               .methods
               .buyCover(
                 _distributorName,
@@ -82,7 +82,7 @@ export async function buyCoverDecode (
         _s: Array<number>,
 )   {
   console.log('price: ',_premiumAmount)
-  return await _getDistributorContract(_brightProtoAddress,_web3)
+  return await _getDistributorContract()
               .methods
               .buyCoverDecode(
                 //_distributorName,
@@ -98,8 +98,8 @@ export async function buyCoverDecode (
                 _r,
                 _s
               )
-               
-              // testing only: 
+
+              // testing only:
               .send({
                 from: _ownerAddress,
                 value: 2200000000000000,

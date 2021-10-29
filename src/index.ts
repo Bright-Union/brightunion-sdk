@@ -119,8 +119,6 @@ async getQuote(
   _data : any,
 ) {
  return await getQuote(
-        this.brightProtoAddress,
-        this.web3,
         _distributorName,
         _period,
         _sumAssured,
