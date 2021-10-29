@@ -40,6 +40,20 @@ export async function getQuotes(): Promise<any[]> {
 
 }
 
+export async function getQuoteFrom(_distributorName:string): Promise<object> {
+  if(_distributorName == 'bridge'){
+    return await getBridgeQuote();
+  }else if(_distributorName == 'nexus'){
+    return await getNexusQuote();
+
+  }else if(_distributorName == 'insurace'){
+    return await getInsuraceQuote();
+  }else {
+    return  {error: 'supported distributor names are: bridge, insurace, nexus'}
+  }
+}
+
+
 export async function getBridgeQuote() : Promise<object>{
 
   let periodInWeeks: number = 26;
@@ -72,7 +86,7 @@ export async function getNexusQuote(): Promise<object> {
     // return [1,2];
   }
 
-  export async function getInsuraceQuotes() : Promise<object> {
+  export async function getInsuraceQuote() : Promise<object> {
     // web3:any, amount:string | number, currency:string , period:string, protocol:any
 
     let amount:number = 1000;
@@ -89,5 +103,6 @@ export async function getNexusQuote(): Promise<object> {
 
 
 export default {
-  getQuotes
+  getQuotes,
+  getQuoteFrom,
 }
