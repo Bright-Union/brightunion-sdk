@@ -38,7 +38,7 @@ before(async () => {
       brightProtoAddress:netConfig.brightProtocol,
     }
     instance = new Distributors(instanceConf);
-    await instance.Initialize();
+    await instance.initialize();
 
 
 });
@@ -91,7 +91,6 @@ describe('Buy Cover on Insurace', () => {
 
 describe('Buy Cover on Bridge', () => {
     it('Should buy bridge quote', (done) => {
-<<<<<<< HEAD
                    instance.buyCover( 
                       'bridge',
                       '_contractAddress',
@@ -101,21 +100,7 @@ describe('Buy Cover on Bridge', () => {
                         1,
                         10000,
                       '_data',
-=======
-                   instance.buyCoverDecode(
-                      "0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2",
-                      'insurace',
-                      confirmCoverResult[0],
-                      confirmCoverResult[1],
-                      confirmCoverResult[2],
-                      confirmCoverResult[3],
-                      confirmCoverResult[6],
-                      confirmCoverResult[7],
-                      confirmCoverResult[8],
-                      confirmCoverResult[9],
-                      confirmCoverResult[10],
-                      confirmCoverResult[11],
->>>>>>> 3f2029f327ff3f0aa466947b96063c716d1b5022
+
                   ).then((result) => {
                       assert.typeOf(result, 'Array');
                       done();
