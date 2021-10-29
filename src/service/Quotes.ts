@@ -20,7 +20,7 @@ export async function getQuotes(): Promise<any[]> {
 
   const bridgeQuote =  await getBridgeQuote();
   const nexusQuote =  await getNexusQuote();
-  const insuraceQuote =  await getInsuraceQuotes();
+  const insuraceQuote =  await getInsuraceQuote();
   const quotesArray = [
     bridgeQuote,
     nexusQuote,
@@ -40,11 +40,30 @@ export async function getQuotes(): Promise<any[]> {
 
 }
 
+export async function getQuoteFrom(_distributorName:string): Promise<object> {
+  if(_distributorName == 'bridge'){
+    return await getBridgeQuote();
+  }else if(_distributorName == 'nexus'){
+    return await getNexusQuote();
+  }else if(_distributorName == 'insurace'){
+    return await getInsuraceQuote();
+  }else {
+    return  {error: 'supported distributor names are: bridge, insurace, nexus'}
+  }
+}
+
+
 export async function getBridgeQuote() : Promise<object>{
 
+
+  // if (currency === 'ETH') {
+  //     amountInWei = getters.eth2usd(amountInWei);
+  // }
+
   let periodInWeeks: number = 26;
-  let amount: number = 100000000000;
-  // let amount: any = _web3.utils.toBN('1000000000000000000000').toNumber();
+  let amountWei:string = global.user.web3.utils.toWei( '10000', 'ether');
+  // let amount: string = amountInWei;
+  let amount: any = global.user.web3.utils.toBN(amountWei);
   let contractAddress: string = "0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f"
   let interfaceCompliant1: string = "0x0000000000000000000000000000000000000000"
   let interfaceCompliant2: string = "0x0000000000000000000000000000000000000000"
@@ -72,7 +91,7 @@ export async function getNexusQuote(): Promise<object> {
     // return [1,2];
   }
 
-  export async function getInsuraceQuotes() : Promise<object> {
+  export async function getInsuraceQuote() : Promise<object> {
     // web3:any, amount:string | number, currency:string , period:string, protocol:any
 
     let amount:number = 1000;
@@ -89,5 +108,6 @@ export async function getNexusQuote(): Promise<object> {
 
 
 export default {
-  getQuotes
+  getQuotes,
+  getQuoteFrom,
 }

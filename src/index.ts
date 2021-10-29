@@ -6,7 +6,7 @@ import { getDistributorAddress } from "./service/dao/Distributors";
 import { getQuote } from "./service/dao/Quotes";
 import { buyCoverDecode, buyCover } from "./service/dao/Buying";
 import { getCatalog } from "./service/Catalog";
-import { getQuotes } from "./service/Quotes";
+import { getQuotes, getQuoteFrom } from "./service/Quotes";
 
 /**
  * Main module class, entry point of the
@@ -40,7 +40,7 @@ class Distributors {
 
   }
 
-  async init(): Promise<object>{
+  async Initialize(): Promise<object>{
     if(!global.user.account || !global.user.networkId){
       return {status: false, message: 'Bright Union Initializing'};
     }else{
@@ -52,8 +52,6 @@ class Distributors {
 
   async getCatalog (
   ){
-    getQuotes(); //for test
-
      return await getCatalog(
     ).then(data => {
       this.catalog = data;
@@ -101,8 +99,11 @@ class Distributors {
    return await getQuotes();
  }
 
+ async getQuoteFrom(_distributorName:string): Promise<object>{
+   return await getQuoteFrom(_distributorName);
+ }
 
-async getQuote(
+async getQuote( // remove after
   _distributorName : string ,
   _period : number,
   _sumAssured : number,
