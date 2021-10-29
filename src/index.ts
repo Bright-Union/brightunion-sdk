@@ -41,11 +41,11 @@ class Distributors {
   }
 
   async init(): Promise<object>{
-    if(!this.web3.coinbase || !this.web3.networkId){
+    if(!global.user.account || !global.user.networkId){
       return {status: false, message: 'Bright Union Initializing'};
     }else{
-      this.web3.coinbase = (await this.web3.eth.getAccounts())[0];
-      this.web3.networkId = await this.web3.eth.net.getId();
+      global.user.account = (await this.web3.eth.getAccounts())[0];
+      global.user.networkId = await this.web3.eth.net.getId();
       return {status: true, message: 'Bright Union Initialized'};
     }
   }
