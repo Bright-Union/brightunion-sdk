@@ -23,7 +23,7 @@ let instance : Distributors = null;
 let web3 : any;
 
 // testing Insurace buy directly with Impl contract
-netConfig.brightProtocol = '0x486135ec25eA3445E141C95dfDc7a70aaB663dd6';
+// netConfig.brightProtocol = '0x486135ec25eA3445E141C95dfDc7a70aaB663dd6';
 
 /**  Init contract test instance  */
 before(async () => {
@@ -79,27 +79,27 @@ describe('Buy Cover on Insurace', () => {
 });
 
 
-// describe('Buy Cover on Bridge', () => {
-//     it('Should buy bridge quote', (done) => {
-//                    instance.buyCoverDecode( web3,
-//                       "0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2",
-//                       'insurace',
-//                       confirmCoverResult[0],
-//                       confirmCoverResult[1],
-//                       confirmCoverResult[2],
-//                       confirmCoverResult[3],
-//                       confirmCoverResult[6],
-//                       confirmCoverResult[7],
-//                       confirmCoverResult[8],
-//                       confirmCoverResult[9],
-//                       confirmCoverResult[10],
-//                       confirmCoverResult[11],
-//                   ).then((result) => {
-//                       assert.typeOf(result, 'Array');
-//                       done();
-//                    }).catch(done);
-//               })
-//   });
+describe('Buy Cover on Bridge', () => {
+    it('Should buy bridge quote', (done) => {
+                   instance.buyCoverDecode( web3,
+                      "0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2",
+                      'insurace',
+                      confirmCoverResult[0],
+                      confirmCoverResult[1],
+                      confirmCoverResult[2],
+                      confirmCoverResult[3],
+                      confirmCoverResult[6],
+                      confirmCoverResult[7],
+                      confirmCoverResult[8],
+                      confirmCoverResult[9],
+                      confirmCoverResult[10],
+                      confirmCoverResult[11],
+                  ).then((result) => {
+                      assert.typeOf(result, 'Array');
+                      done();
+                   }).catch(done);
+              })
+  });
 
   
 // describe('Buy Cover on Nexus', () => {
