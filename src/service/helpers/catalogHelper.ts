@@ -183,12 +183,10 @@ class CatalogHelper {
            BridgePolicyBookRegistryContract.methods.count().call().then((policyBookCounter:any) => {
              BridgePolicyBookRegistryContract.methods.listWithStats(0, policyBookCounter).call()
                 .then(({_policyBooksArr, _stats}:any) => {
-
                   console.log('policyBookCounter -: ',policyBookCounter);
                   console.log('_stats:  ', _stats);
                   console.log('_policyBooksArr: ',_policyBooksArr);
                   return { policyBookCounter,_stats,_policyBooksArr}
-
             });
           });
       });

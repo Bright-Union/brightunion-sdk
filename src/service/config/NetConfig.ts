@@ -49,7 +49,7 @@
         explorer: 'https://rinkeby.etherscan.io',
         provider: 'https://rinkeby.infura.io/v3/98d7e501879243c5877bac07a57cde7e',
         nexusAPI: 'https://api.nexusmutual.io',                 //not used
-        brightProtocol:'0x6E174A2C3E61B5E4f13Cc7035F4cB46E63f214db',
+        brightProtocol:'0x902eaf0Df408a8c170bC1f389FB8D1bC4Fe22f2f',
         brightContractRegistry: '',                             //not used
         insuraceCover: '0x0921f628b8463227615D2199D0D3860E4fBcD411',
         insuraceAPI: 'https://insurace-sl-microservice.azurewebsites.net',
@@ -72,7 +72,7 @@
         // modules: process.env.VUE_APP_KOVAN_MODULES.split(' '),
         nexusDistributor: '0x95454264489114534dD39D81E03Cf4003F948cA6',
         nexusAPI: 'https://api.staging.nexusmutual.io',
-        brightProtocol:'',
+        brightProtocol:'0x4d968a79d76a42761620B64533718D56A9E978D2',
         brightContractRegistry: '0x269601a1825dB9194620477e2D251167Ae938117',
         insuraceCover: '',                                      //not used
         insuraceAPI: '',                                        //not used

@@ -15,7 +15,7 @@ export async function getCatalog(): Promise<any[]> {
                 .then(() => {
                     let mergedCoverables = nexusCoverables.concat(insuraceCoverables);
                     mergedCoverables = mergedCoverables.concat(bridgeCoverables);
-                    console.log(mergedCoverables , 'mergedCoverables');
+                    // console.log(mergedCoverables , 'mergedCoverables');
                     return mergedCoverables;
                 })
 }

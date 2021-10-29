@@ -6,6 +6,7 @@ import Distributors from '../index';
 import InsuraceApi from '../service/distributorsApi/InsuraceApi';
 import {BigNumber} from "bignumber.js";
 import NetConfig from '../service/config/NetConfig';
+import InsuraceDistributor from '../service/abi/InsuraceDistributor.json';
 
 /**
  * 
@@ -17,19 +18,19 @@ import NetConfig from '../service/config/NetConfig';
  * */
 
 const NETWORK_ID : number = 4;
-const netConfig = NetConfig.NETWORK_CONFIG.filter(net => net.id === NETWORK_ID)[0];
+const netConfig = NetConfig.netById(NETWORK_ID);
 let instance : Distributors = null;
 let web3 : any;
 
 // testing Insurace buy directly with Impl contract
-netConfig.brightProtocol = '0xbC49e923e25B5b88259176701CFB08448E47C492';
+netConfig.brightProtocol = '0x486135ec25eA3445E141C95dfDc7a70aaB663dd6';
 
 /**  Init contract test instance  */
 before(async () => {
     web3 = new Web3(netConfig.provider);
     web3.networkId = NETWORK_ID;
     web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY);
-    // instance = new Distributors(netConfig.brightProtocol, web3);
+    instance = new Distributors(netConfig.brightProtocol, web3);
 });
 
 let premium : any;
@@ -49,33 +50,33 @@ before(async () => {
     return confirmCoverResult;
 });
 
-// describe('Buy Cover on Insurace', () => {
-//   it('Should buy insurace quote', (done) => {
-//     // let toWei = Web3.utils.toWei(confirmCoverResult[6]+100, 'ether').toString();
-//     // let fromWei = Web3.utils.fromWei(confirmCoverResult[6], 'ether').toString();
+describe('Buy Cover on Insurace', () => {
+  it('Should buy insurace quote', (done) => {
+    // let toWei = Web3.utils.toWei(confirmCoverResult[6]+100, 'ether').toString();
+    // let fromWei = Web3.utils.fromWei(confirmCoverResult[6], 'ether').toString();
    
-//     // console.log('fromWei: ',toWei)
-//     // console.log('fromWei: ',fromWei)
+    // console.log('fromWei: ',toWei)
+    // console.log('fromWei: ',fromWei)
 
-//                  instance.buyCoverDecode( web3,
-//                     "0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2",
-//                     'insurace',
-//                     confirmCoverResult[0],
-//                     confirmCoverResult[1],
-//                     confirmCoverResult[2],
-//                     confirmCoverResult[3],
-//                     confirmCoverResult[6],
-//                     confirmCoverResult[7],
-//                     confirmCoverResult[8],
-//                     confirmCoverResult[9],
-//                     confirmCoverResult[10],
-//                     confirmCoverResult[11],
-//                 ).then((result) => {
-//                     assert.typeOf(result, 'Array');
-//                     done();
-//                  }).catch(done);
-//             })
-// });
+                 instance.buyCoverDecode( web3,
+                    "0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2",
+                    'insurace',
+                    confirmCoverResult[0],
+                    confirmCoverResult[1],
+                    confirmCoverResult[2],
+                    confirmCoverResult[3],
+                    confirmCoverResult[6],
+                    confirmCoverResult[7],
+                    confirmCoverResult[8],
+                    confirmCoverResult[9],
+                    confirmCoverResult[10],
+                    confirmCoverResult[11],
+                ).then((result:any) => {
+                    assert.typeOf(result, 'Array');
+                    done();
+                 }).catch(done);
+            })
+});
 
 
 // describe('Buy Cover on Bridge', () => {
