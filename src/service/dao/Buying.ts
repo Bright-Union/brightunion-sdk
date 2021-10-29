@@ -102,7 +102,7 @@ export async function buyCoverDecode (
               // testing only: 
               .send({
                 from: _ownerAddress,
-                value: 2200000000000000,
+                value: _premiumAmount+1,
                 gasLimit: 129913, // 7000000
               })
               .on('transactionHash', (x:any) => {
