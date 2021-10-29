@@ -24,10 +24,10 @@ before(async () => {
     instanceConf = {
       web3: web3,
       brightProtoAddress:netConfig.brightProtocol,
-      networkId: NETWORK_ID,
-      account: (await web3.eth.getAccounts())[0],
     }
     instance = new Distributors(instanceConf);
+    await instance.initialize();
+
 });
 
 describe('Get Covers Catalog', () => {
