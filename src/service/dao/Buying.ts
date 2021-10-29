@@ -21,8 +21,6 @@ import {_getDistributorContract} from "../helpers/getContract";
  * @returns BuyReceipt Object
  */
 export async function buyCover(
-        _brightProtoAddress:string,
-        _web3:any,
         _distributorName : string,
         _contractAddress : string,
         _coverAsset : string,
@@ -66,8 +64,6 @@ export async function buyCover(
  * @returns  BuyReceipt Object
  */
 export async function buyCoverDecode (
-        _brightProtoAddress:string,
-        _web3:any,
         _ownerAddress:any,
         _distributorName : string,
         _products : Array<number>,
