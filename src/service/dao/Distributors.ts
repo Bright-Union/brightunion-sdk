@@ -14,7 +14,7 @@ export async function getDistributorAddress(
   _web3 : any,
   _distributorName : string
   ) : Promise<string>  {
-  return await _getDistributorContract(contractAddress,_web3)
+  return await _getDistributorContract()
               .methods
               .getDistributorAddress(_distributorName)
               .call();

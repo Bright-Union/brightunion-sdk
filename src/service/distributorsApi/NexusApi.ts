@@ -10,8 +10,8 @@ export default class NexusApi {
             });
     }
 
-    static fetchQuote (web3:any, amount:number, currency:string, period:number, protocol:any) :Promise<object[]> {
-      return axios.get(`${NetConfig.netById(web3.networkId).nexusAPI}/v1/quote?coverAmount=${amount}&currency=${currency}&period=${period}&contractAddress=${protocol.nexusCoverable}`)
+    static fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<object[]> {
+      return axios.get(`${NetConfig.netById(global.user.networkId).nexusAPI}/v1/quote?coverAmount=${amount}&currency=${currency}&period=${period}&contractAddress=${protocol.nexusCoverable}`)
       .then((response:any) => {
         return response.data;
       });

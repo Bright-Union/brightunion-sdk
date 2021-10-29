@@ -19,7 +19,7 @@ export function getCoversCount(
     _ownerAddress: string ,
     _isActive : boolean
 ): Promise<number>  {
-  return _getDistributorContract(_contractAddress, _web3)
+  return _getDistributorContract()
          .methods
          .getCoversCount(
            _distributorName,
@@ -49,7 +49,7 @@ export async function getCovers(
     _activeCover : boolean,
     _limit : number,
 ) : Promise<Cover[]>  {
-  return _getDistributorContract(_contractAddress, _web3)
+  return _getDistributorContract()
         .methods
         .getCovers(
           _distributorName,

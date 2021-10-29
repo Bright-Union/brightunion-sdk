@@ -66,6 +66,9 @@ class InsuraceApi {
 
     static async fetchInsuraceQuote ( amount:string | number, currency:string , period:number, protocol:any): Promise<object> {
         let quoteCurrency = currency;
+
+        console.log('global.user.web3 INUSRACE QUOTE' , global.user.web3);
+
         let amountInWei = global.user.web3.utils.toWei(amount.toString(), 'ether');
 
         // if (currency === 'USD') {
