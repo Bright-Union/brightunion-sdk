@@ -21,6 +21,8 @@ const NETWORK_ID : number = 4;
 const netConfig = NetConfig.netById(NETWORK_ID);
 let instance : Distributors = null;
 let web3 : any;
+let instanceConf:object;
+
 
 // testing Insurace buy directly with Impl contract
 // netConfig.brightProtocol = '0x486135ec25eA3445E141C95dfDc7a70aaB663dd6';
@@ -28,9 +30,15 @@ let web3 : any;
 /**  Init contract test instance  */
 before(async () => {
     web3 = new Web3(netConfig.provider);
-    web3.networkId = NETWORK_ID;
     web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY);
-    instance = new Distributors(netConfig.brightProtocol, web3);
+
+    instanceConf = {
+      web3: web3,
+      brightProtoAddress:netConfig.brightProtocol,
+    }
+    instance = new Distributors(instanceConf);
+    await instance.initialize();
+
 });
 
 let premium : any;
@@ -81,7 +89,7 @@ describe('Buy Cover on Insurace', () => {
 
 describe('Buy Cover on Bridge', () => {
     it('Should buy bridge quote', (done) => {
-                   instance.buyCoverDecode( web3,
+                   instance.buyCoverDecode(
                       "0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2",
                       'insurace',
                       confirmCoverResult[0],
