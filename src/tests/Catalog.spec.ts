@@ -34,6 +34,7 @@ describe('Get Covers Catalog', () => {
   it('Should get the Catalog of all covers by all supported distributors',async () => {
     const result = await instance.getCatalog();
     assert.typeOf(result, 'Array');
+    console.log(result.length);
     return result;
   });
 });

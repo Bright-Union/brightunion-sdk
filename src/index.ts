@@ -39,14 +39,10 @@ class Distributors {
 
   }
 
-  async Initialize(): Promise<object>{
-    if(!global.user.account || !global.user.networkId){
-      return {status: false, message: 'Bright Union Initializing'};
-    }else{
-      global.user.account = (await this.web3.eth.getAccounts())[0];
-      global.user.networkId = await this.web3.eth.net.getId();
+  async initialize(): Promise<object>{
+      global.user.account = (await global.user.web3.eth.getAccounts())[0];
+      global.user.networkId = await global.user.web3.eth.net.getId();
       return {status: true, message: 'Bright Union Initialized'};
-    }
   }
 
   async getCatalog (
