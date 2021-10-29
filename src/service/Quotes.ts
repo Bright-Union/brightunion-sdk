@@ -20,7 +20,7 @@ export async function getQuotes(): Promise<any[]> {
 
   const bridgeQuote =  await getBridgeQuote();
   const nexusQuote =  await getNexusQuote();
-  const insuraceQuote =  await getInsuraceQuotes();
+  const insuraceQuote =  await getInsuraceQuote();
   const quotesArray = [
     bridgeQuote,
     nexusQuote,
