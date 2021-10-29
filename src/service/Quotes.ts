@@ -11,10 +11,7 @@
 
 import NexusApi from './distributorsApi/NexusApi';
 import InsuraceApi from './distributorsApi/InsuraceApi';
-import CatalogHelper from './helpers/catalogHelper';
 import { getQuote } from "./dao/Quotes";
-import Web3 from 'web3';
-import BigNumber from 'bignumber.js'
 
 export async function getQuotes(): Promise<any[]> {
 
