@@ -16,25 +16,31 @@ import InsuraceDistributor from '../service/abi/InsuraceDistributor.json';
  *  Rinkeby 4 | Kovan 42 | Mumbai 80001 | BSCT 97
  *
  * */
- const NETWORK_ID : number = 4;
- const netConfig = NetConfig.netById(NETWORK_ID);
- let instance : Distributors = null;
- let web3 : any;
- let owner: any; 
+
+
+const NETWORK_ID : number = 4;
+const netConfig = NetConfig.netById(NETWORK_ID);
+let instance : Distributors = null;
+let web3 : any;
+let instanceConf:object;
+
+
+// testing Insurace buy directly with Impl contract
+// netConfig.brightProtocol = '0x486135ec25eA3445E141C95dfDc7a70aaB663dd6';
 
 /**  Init contract test instance  */
 before(async () => {
-  web3 = new Web3(netConfig.provider);
-  web3.networkId = NETWORK_ID;
-  web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY);
-  owner = (await web3.eth.getAccounts())[0]
-  console.log(owner)
-  instance = new Distributors({
-                                web3: web3,
-                                networkId: NETWORK_ID,
-                                brightProtoAddress: netConfig.brightProtocol,
-                                account: owner,
-                            });
+    web3 = new Web3(netConfig.provider);
+    web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY);
+
+    instanceConf = {
+      web3: web3,
+      brightProtoAddress:netConfig.brightProtocol,
+    }
+    instance = new Distributors(instanceConf);
+    await instance.Initialize();
+
+
 });
 
 let premium : any;
@@ -85,6 +91,7 @@ describe('Buy Cover on Insurace', () => {
 
 describe('Buy Cover on Bridge', () => {
     it('Should buy bridge quote', (done) => {
+<<<<<<< HEAD
                    instance.buyCover( 
                       'bridge',
                       '_contractAddress',
@@ -94,6 +101,21 @@ describe('Buy Cover on Bridge', () => {
                         1,
                         10000,
                       '_data',
+=======
+                   instance.buyCoverDecode(
+                      "0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2",
+                      'insurace',
+                      confirmCoverResult[0],
+                      confirmCoverResult[1],
+                      confirmCoverResult[2],
+                      confirmCoverResult[3],
+                      confirmCoverResult[6],
+                      confirmCoverResult[7],
+                      confirmCoverResult[8],
+                      confirmCoverResult[9],
+                      confirmCoverResult[10],
+                      confirmCoverResult[11],
+>>>>>>> 3f2029f327ff3f0aa466947b96063c716d1b5022
                   ).then((result) => {
                       assert.typeOf(result, 'Array');
                       done();

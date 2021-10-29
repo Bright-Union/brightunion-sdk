@@ -26,7 +26,6 @@ import { getQuotes, getQuoteFrom } from "./service/Quotes";
 
 class Distributors {
 
-  web3: any;
   catalog: object[];
 
   constructor(_config:any) {
