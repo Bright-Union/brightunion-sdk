@@ -53,7 +53,7 @@ class Distributors {
 
   async getCatalog (
   ){
-    getQuotes( this.web3 , this.brightProtoAddress ); //for test
+    getQuotes(); //for test
 
      return await getCatalog(
     ).then(data => {
@@ -105,7 +105,7 @@ class Distributors {
 
  async getQuotes(
  ){
-   return await getQuotes(this.web3, this.brightProtoAddress);
+   return await getQuotes();
  }
 
 
