@@ -45,7 +45,6 @@ export async function getQuoteFrom(_distributorName:string): Promise<object> {
     return await getBridgeQuote();
   }else if(_distributorName == 'nexus'){
     return await getNexusQuote();
-
   }else if(_distributorName == 'insurace'){
     return await getInsuraceQuote();
   }else {
@@ -56,9 +55,15 @@ export async function getQuoteFrom(_distributorName:string): Promise<object> {
 
 export async function getBridgeQuote() : Promise<object>{
 
+
+  // if (currency === 'ETH') {
+  //     amountInWei = getters.eth2usd(amountInWei);
+  // }
+
   let periodInWeeks: number = 26;
-  let amount: number = 100000000000;
-  // let amount: any = _web3.utils.toBN('1000000000000000000000').toNumber();
+  let amountWei:string = global.user.web3.utils.toWei( '10000', 'ether');
+  // let amount: string = amountInWei;
+  let amount: any = global.user.web3.utils.toBN(amountWei);
   let contractAddress: string = "0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f"
   let interfaceCompliant1: string = "0x0000000000000000000000000000000000000000"
   let interfaceCompliant2: string = "0x0000000000000000000000000000000000000000"

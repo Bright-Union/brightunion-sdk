@@ -119,7 +119,7 @@ class InsuraceApi {
                         currency: currency,
                         period: period,
                         chain: web3.symbol,
-                        chainId: web3.networkId,
+                        chainId: global.user.networkId,
                         price: premium,
                         // cashBack: [(cashbackInStable / insurPrice), cashbackInStable],
                         // cashBackInWei: web3.web3Instance.utils.toWei(cashbackInStable.toString(), 'ether'),

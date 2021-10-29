@@ -40,7 +40,7 @@ class Distributors {
 
   }
 
-  async init(): Promise<object>{
+  async Initialize(): Promise<object>{
     if(!global.user.account || !global.user.networkId){
       return {status: false, message: 'Bright Union Initializing'};
     }else{
@@ -52,8 +52,6 @@ class Distributors {
 
   async getCatalog (
   ){
-    getQuotes(); //for test
-
      return await getCatalog(
     ).then(data => {
       this.catalog = data;
