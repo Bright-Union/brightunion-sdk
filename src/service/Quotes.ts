@@ -82,7 +82,7 @@ export async function getNexusQuote(_web3:Web3): Promise<object> {
     let period:number = 180
     let protocol:object = { productId:43 };
 
-    return await InsuraceApi.fetchInsuraceQuote(_web3 , amount , currency, period, protocol);
+    return await InsuraceApi.fetchInsuraceQuote( amount , currency, period, protocol);
     // return [1,2];
     // const trustWalletAssets:object[] = await CatalogHelper.getTrustWalletAssets();
 

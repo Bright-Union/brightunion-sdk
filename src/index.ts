@@ -1,5 +1,6 @@
 /* use strict */
 
+import User from './service/domain/User';
 import { getCoversCount, getCovers } from "./service/dao/Covers";
 import { getDistributorAddress } from "./service/dao/Distributors";
 import { getQuote } from "./service/dao/Quotes";
@@ -18,16 +19,26 @@ import { getQuotes } from "./service/Quotes";
  * @param _brightProtoAddress - The Blue Bright contract address
  * @returns Bright Union instance
  */
+
+ declare global {
+   var user:User;
+ }
+
 class Distributors {
 
   web3: any;
   catalog: object[];
   brightProtoAddress: string;
 
-  constructor(_brightProtoAddress: string, _web3 : any) {
-    this.web3 = _web3;
-    this.brightProtoAddress = _brightProtoAddress;
-    console.log( this.brightProtoAddress )
+  constructor(_config:any) {
+
+    global.user = {
+      web3: _config.web3,
+      networkId: _config.networkId,
+      brightProtoAddress: _config.brightProtocol,
+      account: _config.account,
+    };
+
   }
 
   async init(): Promise<object>{
@@ -45,7 +56,6 @@ class Distributors {
     getQuotes( this.web3 , this.brightProtoAddress ); //for test
 
      return await getCatalog(
-      this.web3,
     ).then(data => {
       this.catalog = data;
       return data;
