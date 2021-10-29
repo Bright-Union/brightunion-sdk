@@ -63,7 +63,7 @@ export async function buyCover(
  * @param _s
  * @returns  BuyReceipt Object
  */
-export async function buyCoverDecode (
+export async function buyCoverInsurace (
         _ownerAddress:any,
         _distributorName : string,
         _products : Array<number>,
@@ -80,7 +80,7 @@ export async function buyCoverDecode (
   console.log('price: ',_premiumAmount)
   return await _getDistributorContract()
               .methods
-              .buyCoverDecode(
+              .buyCoverInsurace(
                 //_distributorName,
                 _products,
                 _durationInDays,
@@ -134,5 +134,5 @@ export async function buyCoverDecode (
 
 
 export default {
-  buyCover, buyCoverDecode
+  buyCover, buyCoverInsurace
 }

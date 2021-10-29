@@ -4,7 +4,7 @@ import User from './service/domain/User';
 import { getCoversCount, getCovers } from "./service/dao/Covers";
 import { getDistributorAddress } from "./service/dao/Distributors";
 import { getQuote } from "./service/dao/Quotes";
-import { buyCoverDecode, buyCover } from "./service/dao/Buying";
+import { buyCoverInsurace, buyCover } from "./service/dao/Buying";
 import { getCatalog } from "./service/Catalog";
 import { getQuotes, getQuoteFrom } from "./service/Quotes";
 
@@ -33,17 +33,21 @@ class Distributors {
 
     global.user = {
       web3: _config.web3,
+      networkId: _config.networkId,
       brightProtoAddress: _config.brightProtoAddress,
-      networkId: null,
-      account: null,
+      account: _config.account,
     };
 
   }
 
-  async initialize(): Promise<object>{
-      global.user.account = (await global.user.web3.eth.getAccounts())[0];
-      global.user.networkId = await global.user.web3.eth.net.getId();
+  async Initialize(): Promise<object>{
+    if(!global.user.account || !global.user.networkId){
+      return {status: false, message: 'Bright Union Initializing'};
+    }else{
+      global.user.account = (await this.web3.eth.getAccounts())[0];
+      global.user.networkId = await this.web3.eth.net.getId();
       return {status: true, message: 'Bright Union Initialized'};
+    }
   }
 
   async getCatalog (
@@ -120,7 +124,6 @@ async getQuote( // remove after
 }
 
 async buyCover(
-  _web3:any,
   _distributorName : string,
   _contractAddress : string,
   _coverAsset : string,
@@ -142,7 +145,7 @@ async buyCover(
   )
 }
 
-async buyCoverDecode (
+async buyCoverInsurace (
   _ownerAddress:any,
   _distributorName : string,
   _products : Array<number>,
@@ -156,7 +159,7 @@ async buyCoverDecode (
   _r : Array<number>,
   _s: Array<number>,
 ){
-  return await buyCoverDecode(
+  return await buyCoverInsurace(
                 _ownerAddress,
                 _distributorName,
                 _products,
