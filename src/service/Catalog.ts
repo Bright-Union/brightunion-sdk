@@ -5,11 +5,11 @@ import NexusApi from './distributorsApi/NexusApi';
 import InsuraceApi from './distributorsApi/InsuraceApi';
 import CatalogHelper from './helpers/catalogHelper';
 
-export async function getCatalog(_web3:any): Promise<any[]> {
+export async function getCatalog(): Promise<any[]> {
 
   const nexusCoverables =  await getNexusCoverables();
-  const insuraceCoverables =  await getInsuraceCoverables(_web3);
-  const bridgeCoverables =  await getBridgeCoverables(_web3);
+  const insuraceCoverables =  await getInsuraceCoverables();
+  const bridgeCoverables =  await getBridgeCoverables();
 
   return Promise.all([ nexusCoverables, insuraceCoverables, bridgeCoverables])
                 .then(() => {
@@ -20,9 +20,9 @@ export async function getCatalog(_web3:any): Promise<any[]> {
                 })
 }
 
-export async function getBridgeCoverables(_web3:any): Promise<any[]> {
-  _web3.chainId = await _web3.eth.getChainId();;
- return CatalogHelper.getBridgeCatalogTemp(_web3);
+export async function getBridgeCoverables(): Promise<any[]> {
+  // _web3.chainId = await global.user.web3.eth.getChainId();
+ return await CatalogHelper.getBridgeCatalogTemp();
 }
 
 export async function getNexusCoverables(): Promise<any[]> {
@@ -52,10 +52,10 @@ export async function getNexusCoverables(): Promise<any[]> {
 
   }
 
-  export async function getInsuraceCoverables(_web3:any) : Promise<object[]> {
+  export async function getInsuraceCoverables() : Promise<object[]> {
     // const trustWalletAssets:object[] = await CatalogHelper.getTrustWalletAssets();
-    const NetID = await _web3.eth.getChainId();
-    return await InsuraceApi.fetchCoverables(NetID).then((data:object) => {
+    // const NetID = await global.user.web3.eth.getChainId();
+    return await InsuraceApi.fetchCoverables().then((data:object) => {
 
       const coverablesArray = [];
       for (const [key, value] of Object.entries(data)) {

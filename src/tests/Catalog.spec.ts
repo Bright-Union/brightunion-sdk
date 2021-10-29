@@ -9,15 +9,25 @@ import Distributors from '../index'
 let instance : Distributors = null;
 let bridgeContract : any = null;
 let web3 : Web3;
+let instanceConf:object;
+
 const NETWORK_ID : number = 4;
-const netConfig = NetConfig.netById(NETWORK_ID);
+let netConfig = NetConfig.netById(NETWORK_ID);
+netConfig.brightProtocol = '0xbC49e923e25B5b88259176701CFB08448E47C492';
 
 
 before(async () => {
     process.env.DISTRIBUTOR_RINKEBY_ADDRESS;
     web3 = new Web3(process.env.INFURA_RINKEBY);
     web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY);
-    instance = new Distributors( netConfig.brightProtocol, web3);
+
+    instanceConf = {
+      web3: web3,
+      brightProtoAddress:netConfig.brightProtocol,
+      networkId: NETWORK_ID,
+      account: (await web3.eth.getAccounts())[0],
+    }
+    instance = new Distributors(instanceConf);
 });
 
 describe('Get Covers Catalog', () => {
@@ -27,4 +37,3 @@ describe('Get Covers Catalog', () => {
     return result;
   });
 });
-

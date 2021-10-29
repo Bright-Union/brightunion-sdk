@@ -6,20 +6,20 @@ import BigNumber from 'bignumber.js'
 
 class InsuraceApi {
 
-    static fetchCoverables (_web3NetworkId:string): Promise<object> {
+    static fetchCoverables (): Promise<object> {
         return axios.post(
-            `${NetConfig.netById(_web3NetworkId).insuraceAPI}/getProductList?code=${encodeURIComponent(NetConfig.netById(_web3NetworkId).insuraceAPIKey)}`, {
-            chain: NetConfig.netById(_web3NetworkId).symbol
+            `${NetConfig.netById(global.user.networkId).insuraceAPI}/getProductList?code=${encodeURIComponent(NetConfig.netById(global.user.networkId).insuraceAPIKey)}`, {
+            chain: NetConfig.netById(global.user.networkId).symbol
         })
         .then((response:any) => {
             return response.data;
         });
     }
 
-    static getCurrencyList (web3:any) {
+    static getCurrencyList () {
         return axios.post(
-            `${NetConfig.netById(web3.networkId).insuraceAPI}/getCurrencyList?code=${encodeURIComponent(NetConfig.netById(web3.networkId).insuraceAPIKey)}`, {
-            chain: NetConfig.netById(web3.networkId).symbol
+            `${NetConfig.netById(global.user.networkId).insuraceAPI}/getCurrencyList?code=${encodeURIComponent(NetConfig.netById(global.user.networkId).insuraceAPIKey)}`, {
+            chain: NetConfig.netById(global.user.networkId).symbol
         })
         .then((response:any) => {
             return response.data;
@@ -27,22 +27,22 @@ class InsuraceApi {
     }
 
     static getCoverPremium (
-        web3 : any,
+      web3: any,
         currencyAddress : any,
         productId : any,
         coverDays : any,
         coverAmount : any,
         owner : any) {
-        let url = `${NetConfig.netById(web3.networkId).insuraceAPI}/getCoverPremium?code=${encodeURIComponent(NetConfig.netById(web3.networkId).insuraceAPIKey)}`;
+        let url = `${NetConfig.netById(global.user.networkId).insuraceAPI}/getCoverPremium?code=${encodeURIComponent(NetConfig.netById(global.user.networkId).insuraceAPIKey)}`;
         return  axios.post(
             url, {
-            chain: NetConfig.netById(web3.networkId).symbol,
+            chain: NetConfig.netById(global.user.networkId).symbol,
             coverCurrency: currencyAddress,
             productIds: [productId],
             coverDays: [coverDays],
             coverAmounts: [coverAmount],
             owner: owner,
-            referralCode: NetConfig.netById(web3.networkId).insuraceReferral ? NetConfig.netById(web3.networkId).insuraceReferral : ''
+            referralCode: NetConfig.netById(global.user.networkId).insuraceReferral ? NetConfig.netById(global.user.networkId).insuraceReferral : ''
         })
         .then((response : any) => {
             return response.data;
@@ -53,7 +53,7 @@ class InsuraceApi {
 
     static confirmCoverPremium (state :any , params : any) {
         return axios.post(
-            `${NetConfig.netById(state.web3.web3Active.networkId).insuraceAPI}/confirmCoverPremium?code=${encodeURIComponent(NetConfig.netById(state.web3.web3Active.networkId).insuraceAPIKey)}`, {
+            `${NetConfig.netById(global.user.networkId).insuraceAPI}/confirmCoverPremium?code=${encodeURIComponent(NetConfig.netById(global.user.networkId).insuraceAPIKey)}`, {
             chain: state.web3.web3Active.symbol,
             params: params
         }).then((response : any) => {
@@ -64,9 +64,9 @@ class InsuraceApi {
     }
 
 
-    static async fetchInsuraceQuote (web3:any, amount:string | number, currency:string , period:number, protocol:any): Promise<object> {
+    static async fetchInsuraceQuote ( amount:string | number, currency:string , period:number, protocol:any): Promise<object> {
         let quoteCurrency = currency;
-        let amountInWei = web3.utils.toWei(amount.toString(), 'ether');
+        let amountInWei = global.user.web3.utils.toWei(amount.toString(), 'ether');
 
         // if (currency === 'USD') {
         //         currency = risk_carriers.INSURACE.fallbackQuotation[web3.symbol];
@@ -75,15 +75,16 @@ class InsuraceApi {
         //     amountInWei = ERC20Helper.ERCtoUSDTDecimals(amountInWei);
         // }
 
-        let currencies:object[] = await this.getCurrencyList(web3)
+        let currencies:object[] = await this.getCurrencyList()
         let selectedCurrency:any = currencies.find((curr:any) => {return curr.name == currency});
 
         if (!selectedCurrency) {
-          console.error(`Selected currency is not supported by InsurAce: ${currency} on net ${web3.networkId}`)
+          console.error(`Selected currency is not supported by InsurAce: ${currency} on net ${global.user.networkId}`)
           return;
         }
 
-        web3.symbol = NetConfig.netById(web3.networkId).symbol;
+        let web3 : any = global.user.web3;
+        web3.symbol = NetConfig.netById(global.user.networkId).symbol;
         // web3.coinbase = NetConfig.netById(web3.networkId);
 
         return await this.getCoverPremium(
@@ -92,7 +93,7 @@ class InsuraceApi {
                 parseInt(protocol.productId),
                 period,
                 amountInWei,
-                web3.coinbase
+                global.user.account,
             ).then( (response: any) => {
 
                 // const insurPrice = getters.insurPrice(state);
