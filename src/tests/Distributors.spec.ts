@@ -15,16 +15,22 @@ import NetConfig from '../service/config/NetConfig';
  * 
  * */
 
-const NETWORK_ID : number = 4;
-const netConfig = NetConfig.NETWORK_CONFIG.filter(net => net.id === NETWORK_ID)[0];
+const NETWORK_ID : number = 42;
+const netConfig = NetConfig.netById(NETWORK_ID);
 let instance : Distributors = null;
 let web3 : any;
 
 /**  Init contract test instance  */
+
 before(async () => {
   web3 = new Web3(netConfig.provider);
   web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY);
-  instance = new Distributors(netConfig.brightProtocol, web3);
+  instance = new Distributors({
+                                web3: web3,
+                                networkId: NETWORK_ID,
+                                brightProtoAddress: netConfig.brightProtocol,
+                                account: await (web3.eth.accounts[0]),
+                            });
 });
 
 describe('Get distributor address', () => {

@@ -15,16 +15,24 @@ import NetConfig from '../service/config/NetConfig';
  * */
 
  const NETWORK_ID : number = 4;
- const netConfig = NetConfig.NETWORK_CONFIG.filter(net => net.id === NETWORK_ID)[0];
+ const netConfig = NetConfig.netById(NETWORK_ID);
  let instance : Distributors = null;
  let web3 : any;
+ let owner: any; 
 
 /**  Init contract test instance  */
 before(async () => {
   web3 = new Web3(netConfig.provider);
   web3.networkId = NETWORK_ID;
   web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY);
-  instance = new Distributors(netConfig.brightProtocol, web3);
+  owner = (await web3.eth.getAccounts())[0]
+  console.log(owner)
+  instance = new Distributors({
+                                web3: web3,
+                                networkId: NETWORK_ID,
+                                brightProtoAddress: netConfig.brightProtocol,
+                                account: owner,
+                            });
 });
 
 describe('Get Owners Cover count', () => {
@@ -39,15 +47,14 @@ describe('Get Owners Cover count', () => {
 });
 
 describe('Get Owners Covers', () => {
-  let distributorName = 'insurace';
-  let owner = '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2';
+  let distributorName = 'bridge';
     it('should return owners\'s covers by distributor', async () => {
     const result = await instance.getCovers(
         distributorName,
-        owner,
-        true,
+        '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2',
+        false,
         20
     );
-    assert.lengthOf(result, 4);
+    expect(result).to.be.a('array');
   });
 });

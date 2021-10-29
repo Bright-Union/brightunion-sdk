@@ -15,20 +15,26 @@ import NetConfig from '../service/config/NetConfig';
  *
  * */
 
-const NETWORK_ID : number = 4;
-const netConfig = NetConfig.NETWORK_CONFIG.filter(net => net.id === NETWORK_ID)[0];
-let instance : Distributors = null;
-let web3 : any;
+ const NETWORK_ID : number = 4;
+ const netConfig = NetConfig.netById(NETWORK_ID);
+ let instance : Distributors = null;
+ let web3 : any;
+ let owner: any; 
 
 /**  Init contract test instance  */
 before(async () => {
-    web3 = new Web3(netConfig.provider);
-    web3.networkId = NETWORK_ID;
-    web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY);
-    instance = new Distributors(netConfig.brightProtocol, web3);
+  web3 = new Web3(netConfig.provider);
+  web3.networkId = NETWORK_ID;
+  web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY);
+  owner = (await web3.eth.getAccounts())[0]
+  console.log(owner)
+  instance = new Distributors({
+                                web3: web3,
+                                networkId: NETWORK_ID,
+                                brightProtoAddress: netConfig.brightProtocol,
+                                account: owner,
+                            });
 });
-
-
 describe('Get Cover Quote', () => {
   it('Should get the quote of specified cover by distributor',async () => {
     const result = await instance.getQuote(
@@ -45,10 +51,10 @@ describe('Get Cover Quote', () => {
 });
 
 
-describe('Get Cover Quotes from all Distributors', () => {
-  it('Should get the quotes of all supported distributor',async () => {
-    const result = await instance.getQuotes();
-    assert.lengthOf(result, 2);
-    // assert.typeOf(result, 'Array');
-  });
-});
+// describe('Get Cover Quotes from all Distributors', () => {
+//   it('Should get the quotes of all supported distributor',async () => {
+//     const result = await instance.getQuotes();
+//     assert.lengthOf(result, 2);
+//     // assert.typeOf(result, 'Array');
+//   });
+// });
