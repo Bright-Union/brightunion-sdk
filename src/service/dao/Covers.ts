@@ -13,8 +13,6 @@ import {_getDistributorContract} from "../helpers/getContract";
  * @returns Number of total covers
  */
 export function getCoversCount(
-    _contractAddress: string,
-    _web3 : any,
     _distributorName : string,
     _ownerAddress: string ,
     _isActive : boolean
@@ -42,8 +40,6 @@ export function getCoversCount(
  * @returns Cover Object
  */
 export async function getCovers(
-    _contractAddress: string,
-    _web3 : any,
     _distributorName : string,
     _ownerAddress : string,
     _activeCover : boolean,

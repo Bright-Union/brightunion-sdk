@@ -28,14 +28,13 @@ class Distributors {
 
   web3: any;
   catalog: object[];
-  brightProtoAddress: string;
 
   constructor(_config:any) {
 
     global.user = {
       web3: _config.web3,
       networkId: _config.networkId,
-      brightProtoAddress: _config.brightProtocol,
+      brightProtoAddress: _config.brightProtoAddress,
       account: _config.account,
     };
 
@@ -67,8 +66,6 @@ class Distributors {
       _distributorName : string,
   ){
     return await getDistributorAddress(
-      this.brightProtoAddress,
-      this.web3,
       _distributorName
     )
   }
@@ -79,8 +76,6 @@ class Distributors {
     _isActive : boolean
   ) {
    return await getCoversCount(
-      this.brightProtoAddress,
-      this.web3,
       _distributorName,
       _owner,
       _isActive
@@ -94,8 +89,6 @@ class Distributors {
     _limit : number,
   ) {
    return await getCovers(
-        this.brightProtoAddress,
-        this.web3,
         _distributorName,
         _ownerAddress,
         _activeCover,
@@ -141,8 +134,6 @@ async buyCover(
   _data : any,
 ){
   return await buyCover(
-              this.brightProtoAddress,
-              this.web3,
               _distributorName,
               _contractAddress,
               _coverAsset,
@@ -155,7 +146,6 @@ async buyCover(
 }
 
 async buyCoverDecode (
-  _web3:any,
   _ownerAddress:any,
   _distributorName : string,
   _products : Array<number>,
@@ -170,8 +160,6 @@ async buyCoverDecode (
   _s: Array<number>,
 ){
   return await buyCoverDecode(
-                this.brightProtoAddress,
-                this.web3,
                 _ownerAddress,
                 _distributorName,
                 _products,

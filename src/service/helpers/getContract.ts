@@ -19,8 +19,6 @@ function _getDistributorContract() : any {
   const web3:any = global.user.web3;
   const address: string = global.user.brightProtoAddress;
 
-    console.log('_getDistributorContract' , web3, address);
-
     return new web3.eth.Contract(DistributorsABI.abi, address , web3);
 
 }

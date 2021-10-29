@@ -10,8 +10,6 @@ import {_getDistributorContract} from "../helpers/getContract";
  * @returns blockchain address of specified distributor contract
  */
 export async function getDistributorAddress(
-  contractAddress: string,
-  _web3 : any,
   _distributorName : string
   ) : Promise<string>  {
   return await _getDistributorContract()

@@ -9,12 +9,12 @@ import NetConfig from '../service/config/NetConfig';
 import InsuraceDistributor from '../service/abi/InsuraceDistributor.json';
 
 /**
- * 
+ *
  *  Switch NETWORK_ID to test the
  *  Protocol on different test-net
- * 
+ *
  *  Rinkeby 4 | Kovan 42 | Mumbai 80001 | BSCT 97
- * 
+ *
  * */
 
 const NETWORK_ID : number = 4;
@@ -46,7 +46,7 @@ let confirmCoverResult : any ;
 before(async () => {
     let state = { web3 : { web3Active:{networkId : 4, symbol:'ETH'} } };
     confirmCoverResult = await InsuraceApi.confirmCoverPremium(state, premium.params)
-    console.log(confirmCoverResult)                    
+    console.log(confirmCoverResult)
     return confirmCoverResult;
 });
 
@@ -54,11 +54,11 @@ describe('Buy Cover on Insurace', () => {
   it('Should buy insurace quote', (done) => {
     // let toWei = Web3.utils.toWei(confirmCoverResult[6]+100, 'ether').toString();
     // let fromWei = Web3.utils.fromWei(confirmCoverResult[6], 'ether').toString();
-   
+
     // console.log('fromWei: ',toWei)
     // console.log('fromWei: ',fromWei)
 
-                 instance.buyCoverDecode( web3,
+                 instance.buyCoverDecode(
                     "0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2",
                     'insurace',
                     confirmCoverResult[0],
@@ -101,15 +101,15 @@ describe('Buy Cover on Insurace', () => {
 //               })
 //   });
 
-  
+
 // describe('Buy Cover on Nexus', () => {
 //     it('Should buy nexus quote', (done) => {
 //       // let toWei = Web3.utils.toWei(confirmCoverResult[6]+100, 'ether').toString();
 //       // let fromWei = Web3.utils.fromWei(confirmCoverResult[6], 'ether').toString();
-     
+
 //       // console.log('fromWei: ',toWei)
 //       // console.log('fromWei: ',fromWei)
-  
+
 //                    instance.buyCoverDecode( web3,
 //                       "0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2",
 //                       'insurace',
@@ -129,4 +129,3 @@ describe('Buy Cover on Insurace', () => {
 //                    }).catch(done);
 //               })
 //   });
-  
