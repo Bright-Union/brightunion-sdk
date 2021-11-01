@@ -4,7 +4,7 @@
 // const zeroExchange = require('@/assets/img/zeroExchange.webp');
 // const anchor = require('@/assets/img/anchor.webp');
 
-const NEXUS:object = {
+const NEXUS:any = {
     description: {
         paymentIn: {
             ETH: ['DAI', 'ETH'],
@@ -60,7 +60,7 @@ const BRIDGE:object = {
     fallbackQuotation: 'USDT',
 }
 
-const INSURACE:object = {
+const INSURACE:any = {
     description: {
         paymentIn: {
             ETH: ['ETH', 'DAI', 'USDC', 'USDT'],
@@ -186,4 +186,9 @@ const PROTOCOL_TYPES:object = {
     ido:"tbd"
 }
 
-export default {CUSTOM_BRIDGE_PROTOCOLS, NEXUS, BRIDGE, INSURACE}
+export default class RiskCarriers {
+  public static INSURACE = INSURACE;
+  public static NEXUS = NEXUS;
+}
+
+// export default { CUSTOM_BRIDGE_PROTOCOLS, NEXUS, BRIDGE, INSURACE }

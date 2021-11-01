@@ -47,14 +47,15 @@ before(async () => {
     await brightClient.initialize();
 });
 
-// Test temp DAO 
+// Test temp DAO
 let bridgeQuote : any;
 let bridgeProductAddress : string = '0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f';
 
 before( async () => {
     erc20Instance = _getIERC20Contract(netConfig.USDT);
     ercBalance = await erc20Instance.methods.balanceOf(owner).call();
-    bridgeQuote = await brightClient.getQuoteFrom('bridge',bridgeProductAddress);
+    bridgeQuote = await brightClient.getQuoteFrom('bridge',  10000, bridgeProductAddress , 32, {bridgeProductAddress: bridgeProductAddress});
+    // bridgeQuote = await brightClient.getQuoteFrom('bridge',bridgeProductAddress);
     console.log('getQuoteFrom bridge : ',bridgeQuote)
     return bridgeQuote;
 });
@@ -62,12 +63,13 @@ before( async () => {
 describe('Get Bridge Quote', () => {
     it('Should have.property(totalPrice)', async () => {
       let dist = ['insurace','nexus','bridge'];
-      const bridgeQuote = await brightClient.getQuoteFrom('bridge',bridgeProductAddress);
+      // const bridgeQuote = await brightClient.getQuoteFrom('bridge',bridgeProductAddress);
+      const bridgeQuote = await brightClient.getQuoteFrom('bridge',  10000, bridgeProductAddress , 32, {bridgeProductAddress: bridgeProductAddress});
       console.log('Bridge quote:',bridgeQuote);
       expect(bridgeQuote).to.have.property('totalPrice')
     });
   });
-  
+
 
 
 describe('Buy Cover on Bridge', () => {
@@ -89,7 +91,7 @@ describe('Buy Cover on Bridge', () => {
                         web3.utils.toBN('10000000000000000000'), // price, amount to allow spender spend in wei
                         () => { // onAllowanceReset
                         console.log('SHOW_CONFIRMATION_WAITING', {msg: `(1/3) Resetting USDT allowance to 0`});
-                        },async () => { 
+                        },async () => {
 
                             // Sign tx manually
                             web3.eth.accounts.signTransaction({
@@ -100,7 +102,7 @@ describe('Buy Cover on Bridge', () => {
                             .then(console.log);
 
 
-                            console.log('calling  brightClient.buyCover...')                            
+                            console.log('calling  brightClient.buyCover...')
                             await brightClient.buyCover(
                                 owner,
                                 'bridge',
@@ -116,7 +118,7 @@ describe('Buy Cover on Bridge', () => {
 
                         }, () => { console.log(Error);  }  //onError
                     );
-              } 
+              }
 
      })
 });

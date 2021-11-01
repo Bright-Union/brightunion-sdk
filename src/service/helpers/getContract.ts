@@ -18,8 +18,9 @@ const _getBridgePolicyRegistryContract     =  (address:string,web3:any)  : any =
 function _getDistributorContract() : any {
   const web3:any = global.user.web3;
   const address: string = global.user.brightProtoAddress;
-
-  return new web3.eth.Contract(DistributorsABI.abi, address , web3);
+  const distAbi:any = DistributorsABI.abi;
+  
+  return new web3.eth.Contract(distAbi, address , web3);
 }
 
 function _getIERC20Contract(address:any) : any {

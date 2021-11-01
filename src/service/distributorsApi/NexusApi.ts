@@ -1,6 +1,7 @@
 require('dotenv').config();
 import axios from 'axios';
 import NetConfig from '../config/NetConfig'
+import RiskCarriers from '../config/RiskCarriers'
 
 export default class NexusApi {
 
@@ -14,11 +15,13 @@ export default class NexusApi {
     }
     
     static fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<object[]> {
+ 
       return axios.get(
         `${NetConfig.netById(global.user.networkId).nexusAPI}/v1/quote?coverAmount=${amount}&currency=${currency}&period=${period}&contractAddress=${protocol.nexusCoverable}`
         ,{headers : {
           Origin: process.env.API_REQUEST_ORIGIN,
         }})
+ 
       .then((response:any) => {
         return response.data;
       }).catch(error => {

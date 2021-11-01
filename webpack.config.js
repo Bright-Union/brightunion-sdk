@@ -6,7 +6,7 @@ const path = require('path');
 // const ESLintPlugin = require('eslint-webpack-plugin');
 
 var config = {
-  entry: './src/index.ts',
+  entry: './src/BrightClient.ts',
   module: {
     rules: [
       {
@@ -19,12 +19,11 @@ var config = {
   resolve: {
     alias: {
       '@': '/src',
-      '/': '/src',
     },
     extensions: ['.tsx', '.ts', '.js', '.json'],
   },
   output: {
-    filename: 'BrightUnion.js',
+    filename: 'BrightClient.js',
     path: path.resolve(__dirname, 'dist'),
     libraryTarget: 'commonjs',
   },

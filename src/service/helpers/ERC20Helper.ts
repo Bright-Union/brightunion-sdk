@@ -31,9 +31,9 @@ export default class ERC20Helper {
     //  @dev USDT (unfortunately) doesn't allow to change the allowance, let say from X to Y
     //  Instead, we have to set it to 0 first, and then set it to Y
     static approveUSDTAndCall (state:any, erc20Instance:any, spender:any, amount:any, onAllowanceReset:any, onConfirmation:any, onError:any) {
-   
+
         erc20Instance.methods.allowance(state.web3.web3Active.coinbase, spender).call().then((currentAllowance:any) => {
-            
+
             if (toBN(ERC20Helper.USDTtoERCDecimals(currentAllowance)).gte(toBN(amount))) {
                 //current allowance is sufficient
                 console.log('approveUSDTAndCall: calling onConfirmation() ')

@@ -6,7 +6,8 @@ import { getDistributorAddress } from "./service/dao/Distributors";
 import { getQuote } from "./service/dao/Quotes";
 import { buyCoverInsurace, buyCover } from "./service/dao/Buying";
 import { getCatalog } from "./service/Catalog";
-import { getQuoteFrom } from "./service/Quotes";
+import { getQuoteFrom, getQuotes } from "./service/Quotes";
+import NetConfig from './service/config/NetConfig'
 
 /**
  * Main module class, entry point of the
@@ -32,6 +33,7 @@ class BrightClient {
 
     global.user = {
       web3: _config.web3,
+      web3Passive: [],
       networkId: _config.networkId,
       brightProtoAddress: _config.brightProtoAddress,
       account: _config.account,
@@ -42,6 +44,9 @@ class BrightClient {
   async initialize(): Promise<object>{
       global.user.account = (await global.user.web3.eth.getAccounts())[0];
       global.user.networkId = await global.user.web3.eth.net.getId();
+      global.user.brightProtoAddress = '0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f';
+      // global.user.brightProtoAddress = NetConfig.netById(global.user.networkId).brightProtocol;
+      global.user.web3Passive = NetConfig.createWeb3Passives();
       return {status: true, message: 'Bright Union Initialized'};
   }
 
@@ -85,6 +90,15 @@ class BrightClient {
         _limit
      );
  }
+
+ async getQuotes(
+   _amount: number,
+   _currency: string,
+   _period: number,
+   _protocol: any
+){
+  return await getQuotes(_amount, _currency, _period, _protocol);
+}
 
 
 getQuoteFrom(_distributorName:string,
