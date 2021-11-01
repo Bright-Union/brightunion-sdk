@@ -1,5 +1,6 @@
 import axios from 'axios';
 import NetConfig from '../config/NetConfig'
+import RiskCarriers from '../config/RiskCarriers'
 
 export default class NexusApi {
 
@@ -13,6 +14,14 @@ export default class NexusApi {
     }
 
     static fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<object[]> {
+
+      if (currency === 'USD') {
+        currency = RiskCarriers.NEXUS.fallbackQuotation;
+      }
+      if (!Number.isInteger(amount)) {
+        amount = Math.round(amount);
+      }
+
       return axios.get(`${NetConfig.netById(global.user.networkId).nexusAPI}/v1/quote?coverAmount=${amount}&currency=${currency}&period=${period}&contractAddress=${protocol.nexusCoverable}`)
       .then((response:any) => {
         return response.data;
