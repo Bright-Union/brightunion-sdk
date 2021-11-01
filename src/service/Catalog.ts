@@ -21,7 +21,6 @@ export async function getCatalog(): Promise<any[]> {
 }
 
 export async function getBridgeCoverables(): Promise<any[]> {
-  // _web3.chainId = await global.user.web3.eth.getChainId();
  return await CatalogHelper.getBridgeCatalogTemp();
 }
 

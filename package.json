@@ -52,6 +52,7 @@
     "webpack-cli": "^4.9.1"
   },
   "dependencies": {
+    "@ethereumjs/tx": "^3.3.2",
     "@types/lodash": "^4.14.176",
     "axios": "^0.23.0",
     "lodash": "^4.17.21",

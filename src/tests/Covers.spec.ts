@@ -2,7 +2,7 @@ require('dotenv').config();
 import Web3 from 'web3';
 import { expect, assert } from 'chai';
 import 'mocha';
-import Distributors from '../index'
+import Distributors from '../BrightClient'
 import NetConfig from '../service/config/NetConfig';
 
 /**

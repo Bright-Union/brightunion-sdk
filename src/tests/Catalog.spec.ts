@@ -5,7 +5,7 @@ import 'mocha';
 import NetConfig from '../service/config/NetConfig';
 import Catalog from '../service/Catalog';
 
-import Distributors from '../index'
+import Distributors from '../BrightClient'
 let instance : Distributors = null;
 let bridgeContract : any = null;
 let web3 : Web3;

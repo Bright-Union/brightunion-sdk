@@ -13,6 +13,8 @@ class InsuraceApi {
         })
         .then((response:any) => {
             return response.data;
+        }).catch(error =>{
+            console.log('ERROR on Insurace fetchCoverables : ' , error.response.data && error.response.data.message);
         });
     }
 
@@ -23,6 +25,8 @@ class InsuraceApi {
         })
         .then((response:any) => {
             return response.data;
+        }).catch(error =>{
+            console.log('ERROR on Insurace getCurrencyList : ' , error.response.data && error.response.data.message);
         });
     }
 
@@ -34,20 +38,23 @@ class InsuraceApi {
         coverAmount : any,
         owner : any) {
         let url = `${NetConfig.netById(global.user.networkId).insuraceAPI}/getCoverPremium?code=${encodeURIComponent(NetConfig.netById(global.user.networkId).insuraceAPIKey)}`;
+        let referral = `${NetConfig.netById(global.user.networkId).insuraceReferral}`;
+        
+        console.log('global.user.networkId ',global.user.networkId)
+        
         return  axios.post(
             url, {
-            chain: NetConfig.netById(global.user.networkId).symbol,
+            chain: NetConfig.netById(1).symbol, // always get quotes from mainnet
             coverCurrency: currencyAddress,
             productIds: [productId],
             coverDays: [coverDays],
             coverAmounts: [coverAmount],
             owner: owner,
-            referralCode: NetConfig.netById(global.user.networkId).insuraceReferral ? NetConfig.netById(global.user.networkId).insuraceReferral : ''
-        })
-        .then((response : any) => {
+            referralCode: referral
+        }).then((response : any) => {
             return response.data;
         }).catch(error =>{
-            console.log('ERROR on getCoverPremium : ' ,error);
+            console.log('ERROR on Insurace getCoverPremium : ' , error.response.data && error.response.data.message);
         });
     }
 
@@ -59,7 +66,7 @@ class InsuraceApi {
         }).then((response : any) => {
             return response.data;
         }).catch(error =>{
-            console.log('ERROR on confirmCoverPremium : ',error);
+            console.log('ERROR on Insurace confirmCoverPremium : ', error.response.data && error.response.data.message);
         });;
     }
 
@@ -68,13 +75,6 @@ class InsuraceApi {
         let quoteCurrency = currency;
 
         let amountInWei = global.user.web3.utils.toWei(amount.toString(), 'ether');
-
-        // if (currency === 'USD') {
-        //         currency = risk_carriers.INSURACE.fallbackQuotation[web3.symbol];
-        // }
-        // if (sixDecimalsCurrency(web3.networkId, currency)) {
-        //     amountInWei = ERC20Helper.ERCtoUSDTDecimals(amountInWei);
-        // }
 
         let currencies:object[] = await this.getCurrencyList()
         let selectedCurrency:any = currencies.find((curr:any) => {return curr.name == currency});
@@ -85,7 +85,7 @@ class InsuraceApi {
         }
 
         let web3 : any = global.user.web3;
-        web3.symbol = NetConfig.netById(global.user.networkId).symbol;
+        web3.symbol = NetConfig.netById(1).symbol;
         // web3.coinbase = NetConfig.netById(web3.networkId);
 
         return await this.getCoverPremium(
@@ -98,7 +98,7 @@ class InsuraceApi {
             ).then( (response: any) => {
 
                 // const insurPrice = getters.insurPrice(state);
-                let premium = response.premiumAmount;
+                let premium = 1000//response.premiumAmount;
                 // if (sixDecimalsCurrency(web3.networkId, currency)) {
                 //     premium = ERC20Helper.USDTtoERCDecimals(premium);
                 // }
@@ -135,9 +135,7 @@ class InsuraceApi {
                 );
                 return quote;
             })
-    }//fetchInsuraceQuote method
-
-
+    }
 }
 
 export default InsuraceApi;

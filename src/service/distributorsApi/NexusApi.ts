@@ -7,6 +7,8 @@ export default class NexusApi {
         return axios.get(`https://api.nexusmutual.io/coverables/contracts.json`)
             .then((response) => {
                 return response.data;
+            }).catch(error => {
+              console.log('ERROR Nexus fetchCoverables:',error.response.data && error.response.data.message);
             });
     }
 
@@ -14,6 +16,8 @@ export default class NexusApi {
       return axios.get(`${NetConfig.netById(global.user.networkId).nexusAPI}/v1/quote?coverAmount=${amount}&currency=${currency}&period=${period}&contractAddress=${protocol.nexusCoverable}`)
       .then((response:any) => {
         return response.data;
+      }).catch(error => {
+        console.log('ERROR Nexus fetchQuote:',error.response.data && error.response.data.message);
       });
     }
 

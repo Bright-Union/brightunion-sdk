@@ -2,7 +2,7 @@ const {fromRpcSig} = require('ethereumjs-util');
 
 const {MAX_UINT256} = require('./constants');
 
-const sign2612 = async (domain, message, nonce, web3Instance) => {
+const sign2612 = async (domain:any, message:any, nonce:any, web3Instance:any) => {
   const {name, version= '1', chainId= web3Instance.networkId, verifyingContract} = domain;
   const {owner, spender, value, deadline=MAX_UINT256.toString(10)} = message;
 
@@ -39,7 +39,7 @@ const sign2612 = async (domain, message, nonce, web3Instance) => {
   return fromRpcSig(signature);
 };
 
-const getSignature = async (stakingAmount, stakingAddress, tokenAddress, contractName, nonce, store)  => {
+const getSignature = async (stakingAmount:any, stakingAddress:any, tokenAddress:any, contractName:any, nonce:any, store:any)  => {
   const [ownerCurrentAccount] = await store.state.web3.web3Active.web3Instance.eth.getAccounts();
   const contractData = {name: contractName, verifyingContract: tokenAddress};
   const transactionData = {

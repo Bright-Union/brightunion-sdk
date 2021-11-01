@@ -32,19 +32,18 @@ export async function getQuote(
     _interfaceCompliant1 : string,
     _interfaceCompliant2 : string,
     _data : any,
-) : Promise<CoverQuote>  {
-
+) : Promise<any>  {
   return await _getDistributorContract()
-              .methods
-              .getQuote(
-                _distributorName,
-                _period,
-                _sumAssured,
-                _contractAddress,
-                _interfaceCompliant1,
-                _interfaceCompliant2,
-                _data
-              ).call();
+                      .methods
+                      .getQuote(
+                        _distributorName,
+                        _period,
+                        _sumAssured,
+                        _contractAddress,
+                        _interfaceCompliant1,
+                        _interfaceCompliant2,
+                        _data).call();
 }
+
 
 export default getQuote;

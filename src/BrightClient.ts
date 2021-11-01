@@ -6,7 +6,7 @@ import { getDistributorAddress } from "./service/dao/Distributors";
 import { getQuote } from "./service/dao/Quotes";
 import { buyCoverInsurace, buyCover } from "./service/dao/Buying";
 import { getCatalog } from "./service/Catalog";
-import { getQuotes, getQuoteFrom } from "./service/Quotes";
+import { getQuoteFrom } from "./service/Quotes";
 
 /**
  * Main module class, entry point of the
@@ -24,7 +24,7 @@ import { getQuotes, getQuoteFrom } from "./service/Quotes";
    var user:User;
  }
 
-class Distributors {
+class BrightClient {
 
   catalog: object[];
 
@@ -45,14 +45,11 @@ class Distributors {
       return {status: true, message: 'Bright Union Initialized'};
   }
 
-  async getCatalog (
-  ){
-     return await getCatalog(
-    ).then(data => {
+  async getCatalog () {
+     return await getCatalog().then(data => {
       this.catalog = data;
       return data;
     })
-
   }
 
   async getDistributorAddress (
@@ -89,36 +86,22 @@ class Distributors {
      );
  }
 
- async getQuotes(
- ){
-   return await getQuotes();
- }
 
- async getQuoteFrom(_distributorName:string): Promise<object>{
-   return await getQuoteFrom(_distributorName);
- }
+getQuoteFrom(_distributorName:string,
+             _amount:number,
+             _currency:string,
+             _period:number,
+             _protocol:any): any {
 
-async getQuote( // remove after
-  _distributorName : string ,
-  _period : number,
-  _sumAssured : number,
-  _contractAddress : string,
-  _interfaceCompliant1 : string,
-  _interfaceCompliant2 : string,
-  _data : any,
-) {
- return await getQuote(
-        _distributorName,
-        _period,
-        _sumAssured,
-        _contractAddress,
-        _interfaceCompliant1,
-        _interfaceCompliant2,
-        _data,
-   );
-}
+   return  getQuoteFrom(_distributorName,
+                       _amount,
+                       _currency,
+                       _period,
+                       _protocol);
+ }
 
 async buyCover(
+  _ownerAddress : string,
   _distributorName : string,
   _contractAddress : string,
   _coverAsset : string,
@@ -129,15 +112,16 @@ async buyCover(
   _data : any,
 ){
   return await buyCover(
-              _distributorName,
-              _contractAddress,
-              _coverAsset,
-              _sumAssured,
-              _coverPeriod,
-              _coverType,
-              _maxPriceWithFee,
-              _data,
-  )
+                  _ownerAddress,
+                  _distributorName,
+                  _contractAddress,
+                  _coverAsset,
+                  _sumAssured,
+                  _coverPeriod,
+                  _coverType,
+                  _maxPriceWithFee,
+                  _data,
+   )
 }
 
 async buyCoverInsurace (
@@ -168,8 +152,7 @@ async buyCoverInsurace (
                 _r,
                 _s
               );
+    }
 }
 
-}
-
-export default Distributors;
+export default BrightClient;
