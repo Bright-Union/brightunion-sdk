@@ -47,3 +47,75 @@ before(async () => {
     await brightClient.initialize();
 });
 
+
+let nexusQuote:any;
+describe('Get Nexus Quote', () => {
+    it('Should print quote', async () => {
+  
+      nexusQuote = await brightClient.getQuoteFrom(
+                                        "nexus",
+                                        web3.utils.toBN('1000000000000000000000'),
+                                        netConfig.DAI,
+                                        180,
+                                        '0x11111254369792b2Ca5d084aB5eEA397cA8fa48B');
+  
+      console.log('Nexus quote:',nexusQuote);
+  
+    });
+  });
+
+
+  /**
+   * Signing tx manually until impl with UI
+   */
+
+  describe('Buy Cover on Nexus', () => {
+    it('Should buy Nexus quote',  (done) => {
+        let price = nexusQuote.totalPrice;
+        console.log('Bridge cover price: ', price);
+  
+              console.log(owner)
+  
+              console.log('ercBalance: ', ercBalance)
+  
+              if (Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(price)) {
+                      console.log('enter helper...');
+                      let state = { web3:{ web3Active:{ coinbase: owner }}};
+                      ERC20Helper.approveUSDTAndCall(
+                          state, // state
+                          erc20Instance, // pay with asset
+                          'exus address', // spender
+                          web3.utils.toBN('10000000000000000000'), // price, amount to allow spender spend in wei
+                          () => { // onAllowanceReset
+                          console.log('SHOW_CONFIRMATION_WAITING', {msg: `(1/3) Resetting USDT allowance to 0`});
+                          },async () => { 
+  
+                              // Sign tx manually
+                              web3.eth.accounts.signTransaction({
+                                  to: nexusQuote.address,
+                                  // value: '1000000000',
+                                  gas: 2000000
+                              }, process.env.PRIVATE_KEY)
+                              .then(console.log);
+  
+  
+                              console.log('calling  brightClient.buyCover...')                            
+                              await brightClient.buyCover(
+                                  owner,
+                                  'bridge',
+                                  nexusQuote.address,
+                                  netConfig.USDT,  // payment asset
+                                  0, // sum assured, compliant
+                                  26, // period
+                                  1, //coverType
+                                  web3.utils.toBN("100000000000000000000"), // token amount to cover
+                                  web3.utils.hexToBytes(web3.utils.numberToHex(500)) // random data
+                              )
+  
+  
+                          }, () => { console.log(Error);  }  //onError
+                      );
+                } 
+  
+       })
+  });
