@@ -19,12 +19,11 @@ var config = {
   resolve: {
     alias: {
       '@': '/src',
-      '/': '/src',
     },
     extensions: ['.tsx', '.ts', '.js', '.json'],
   },
   output: {
-    filename: 'BrightUnion.js',
+    filename: 'BrightClient.js',
     path: path.resolve(__dirname, 'dist'),
     libraryTarget: 'commonjs',
   },

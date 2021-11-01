@@ -11,17 +11,20 @@ export async function getCatalog(): Promise<any[]> {
   const insuraceCoverables =  await getInsuraceCoverables();
   const bridgeCoverables =  await getBridgeCoverables();
 
-  console.log('nexusCoverables' , nexusCoverables)
-  console.log('insuraceCoverables' , insuraceCoverables)
-  console.log('bridgeCoverables' , bridgeCoverables)
+  // console.log('nexusCoverables' , nexusCoverables)
+  // console.log('insuraceCoverables' , insuraceCoverables)
+  // console.log('bridgeCoverables' , bridgeCoverables)
 
   return Promise.all([ nexusCoverables, insuraceCoverables, bridgeCoverables])
-                .then(() => {
-                    let mergedCoverables = nexusCoverables
-                    .concat(insuraceCoverables)
-                    .concat(bridgeCoverables);
-                    return mergedCoverables;
-                })
+  .then(() => {
+    const allCoverables: any[] = nexusCoverables
+    .concat(insuraceCoverables)
+    .concat(bridgeCoverables);
+
+    const mergedCoverables:any[] =  CatalogHelper.mergeCoverables(allCoverables)
+    return mergedCoverables;
+  })
+
 }
 
 export async function getBridgeCoverables(): Promise<any[]> {
@@ -48,8 +51,8 @@ export async function getNexusCoverables(): Promise<any[]> {
           source: 'nexus'
         }))
 
-        return coverablesArray;
       }
+      return coverablesArray;
 
     })
 

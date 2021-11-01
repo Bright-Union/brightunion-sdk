@@ -9,6 +9,30 @@ import {
 } from '../helpers/getContract';
 import NetConfig from '../config/NetConfig';
 
+const bridge_nexus_insurace = [
+    // BRIDGE NAME, NEXUS NAME, INSURACE NAME, COMMON NAME
+    ['88mph.app', '', '88mph', '88mph'],
+    ['1INCH Token', '1Inch (DEX & Liquidity Pools)', '1Inch', '1Inch'],
+    ['Aave', 'Aave V2', 'Aave V2', 'Aave V2'],
+    ['Aave', 'Aave V1', '', 'Aave V1'],
+    ['Anchor', 'Anchor Protocol', 'Anchor', 'Anchor'],
+    ['Alchemix', 'Alchemix V1', '', 'Alchemix V1'],
+    ['BadgerDAO', 'BadgerDAO', 'Badger Finance', 'BadgerDAO'],
+    ['BarnBridge', 'Barnbridge Smart Yield V1', '', 'Barnbridge V1'],
+    ['Compound', 'Compound V2', 'Compound V2', 'Compound V2'],
+    ['Cream', 'C.R.E.A.M. V1', '', 'C.R.E.A.M.'],
+    ['', 'Curve All Pools (incl staking)', 'Curve (All Pools)', 'Curve (All Pools)'],
+    ['', 'DODO Exchange', 'DODO', 'DODO'],
+    ['MakerDAO', 'MakerDAO MCD', 'MakerDAO MCD', 'MakerDAO'],
+    ['', 'Pancakeswap V1', 'PancakeSwap', 'PancakeSwap'],
+    ['Synthetix Network Token', 'Synthetix', '', 'Synthetix'],
+    ['Sushi', 'SushiSwap V1', '', 'Sushi'],
+    ['Uniswap', 'Uniswap V1', '', 'Uniswap V1'],
+    ['Uniswap', 'Uniswap V2', 'Uniswap V2', 'Uniswap V2'],
+    ['Uniswap', 'Uniswap V3', 'Uniswap V3', 'Uniswap V3'],
+    ['','Convex Finance V1','Convex', 'Convex']
+]
+
 
 const bridge_nexus_insurace_categories : string[][] = [
     // BRIDGE CATEGORY, NEXUS CATEGORY, INSURACE, COMMON CATEGORY, DESCRIPTION
@@ -183,11 +207,121 @@ class CatalogHelper {
            BridgePolicyBookRegistryContract.methods.count().call().then((policyBookCounter:any) => {
              BridgePolicyBookRegistryContract.methods.listWithStats(0, policyBookCounter).call()
                 .then(({_policyBooksArr, _stats}:any) => {
+
+                  // policyBooksArray.push(createCoverable({
+                  //   bridgeProductAddress: _policyBooksArr[i],
+                  //   bridgeCoverable: _stats[i].insuredContract,
+                  //   protocolAddress: _stats[i].insuredContract,
+                  //   bridgeAPY: Number(_stats[i].APY) / (10 ** 5),
+                  //   logo: logo,
+                  //   name: name,
+                  //   type: commonCategory(_stats[i].contractType, 'bridge'),
+                  //   source: 'bridge',
+                  // }))
+
                   return { policyBookCounter,_stats,_policyBooksArr}
             });
           });
       });
   }
+
+  public static mergeCoverables(_catalog: any[]) : any[] {
+
+    let coverablesNoDuplicates:any[] = [];
+    let duplicateIndexes:any[] = [];
+    for (let i = 0; i < _catalog.length; i++) { // compare every with every
+      if (!duplicateIndexes.includes(i)) {
+        let duplicates = 1;
+        let mergedCoverableObject:any = {};
+        for (let j = i + 1; j < _catalog.length; j++) {
+          const mergedName = this.coverableDuplicate(_catalog[i], _catalog[j]);
+          if (mergedName) {
+            //duplicate found. merge the fields
+            const mergedPair = _.mergeWith({}, _catalog[i], _catalog[j], (o, s) => _.isNull(s) ? o : s);
+            mergedCoverableObject = _.mergeWith({}, mergedCoverableObject, mergedPair, (o, s) => _.isNull(s) ? o : s);
+
+            mergedCoverableObject.availableCounter = ++duplicates;
+            mergedCoverableObject.name = mergedName;
+            duplicateIndexes.push(j)
+          }
+        }
+        if (duplicates > 1) {
+          coverablesNoDuplicates.push(mergedCoverableObject);
+        } else {
+          //no duplicate for it, leave it as is
+          coverablesNoDuplicates.push(_catalog[i])
+        }
+      }
+    }
+    coverablesNoDuplicates = coverablesNoDuplicates.sort((first, second) => {
+      var nameA = first.name.toUpperCase();
+      var nameB = second.name.toUpperCase();
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+      return 0;
+    });
+
+    return coverablesNoDuplicates;
+
+
+  }
+
+
+static coverableDuplicate (cov1:any, cov2:any) {
+
+  if(!cov1 || !cov2){
+    return;
+  }
+
+    if (cov1.name.toUpperCase() === cov2.name.toUpperCase()) {
+        // name equals
+        return cov1.name;
+    } else if (cov1.protocolAddress && cov2.protocolAddress &&
+        cov1.protocolAddress.toUpperCase() === cov2.protocolAddress.toUpperCase()){
+        // BRIDGE address equals NEXUS address
+        return cov1.name;
+    }
+    else if (cov1.source !== cov2.source){
+        let cov1SourceNameIndex;
+        if (cov1.source === 'bridge') {
+            cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[0].toUpperCase() === cov1.name.toUpperCase())
+        } else if(cov1.source === 'nexus') {
+            cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[1].toUpperCase() === cov1.name.toUpperCase())
+        } else if(cov1.source === 'insurace') {
+            cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[2].toUpperCase() === cov1.name.toUpperCase())
+        }
+        if (cov1SourceNameIndex > -1) {
+            let cov2SourceNameFound;
+            if (cov2.source === 'bridge') {
+                cov2SourceNameFound = bridge_nexus_insurace[cov1SourceNameIndex][0].toUpperCase() === cov2.name.toUpperCase();
+            } else if(cov2.source === 'nexus') {
+                cov2SourceNameFound = bridge_nexus_insurace[cov1SourceNameIndex][1].toUpperCase() === cov2.name.toUpperCase();
+            } else if(cov2.source === 'insurace') {
+                cov2SourceNameFound = bridge_nexus_insurace[cov1SourceNameIndex][2].toUpperCase() === cov2.name.toUpperCase();
+            }
+            if (cov2SourceNameFound) {
+                //both found in custom mapping
+                return bridge_nexus_insurace[cov1SourceNameIndex][3];
+            } else {
+                return;
+            }
+        } else {
+            return;
+        }
+    } else {
+        return;
+    }
+}
+
+static availableOnNetwork(networkId:number, module:string) {
+
+  return NetConfig.netById(networkId).modules.find(mod => mod === module);
+}
+
 
 }
 

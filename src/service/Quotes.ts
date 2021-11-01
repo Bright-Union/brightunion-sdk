@@ -1,6 +1,7 @@
 import NexusApi from './distributorsApi/NexusApi';
 import InsuraceApi from './distributorsApi/InsuraceApi';
 import { getQuote } from "./dao/Quotes";
+import CatalogHelper from './helpers/catalogHelper'
 
 
 /**
@@ -142,13 +143,21 @@ export async function getBridgeQuote( _amount :any,
                 );
  */
 
-export async function getNexusQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
-    return await NexusApi.fetchQuote( _amount , _currency, _period, _protocol);
-  }
+ export async function getNexusQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
+   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL') && _protocol.nexusCoverable){
+     return await NexusApi.fetchQuote( _amount , _currency, _period, _protocol);
+   }else{
+     return [];
+   }
+ }
 
-export async function getInsuraceQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
-    return await InsuraceApi.fetchInsuraceQuote( _amount , _currency, _period, _protocol);
-  }
+ export async function getInsuraceQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
+   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE') && _protocol.productId) {
+     return await InsuraceApi.fetchInsuraceQuote( _amount , _currency, _period, _protocol);
+   }else{
+     return [];
+   }
+ }
 
 
 

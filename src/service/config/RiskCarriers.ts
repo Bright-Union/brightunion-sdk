@@ -60,7 +60,7 @@ const BRIDGE:object = {
     fallbackQuotation: 'USDT',
 }
 
-const INSURACE:object = {
+const INSURACE:any = {
     description: {
         paymentIn: {
             ETH: ['ETH', 'DAI', 'USDC', 'USDT'],
@@ -186,4 +186,8 @@ const PROTOCOL_TYPES:object = {
     ido:"tbd"
 }
 
-export default {CUSTOM_BRIDGE_PROTOCOLS, NEXUS, BRIDGE, INSURACE}
+export default class RiskCarriers {
+  public static INSURACE = INSURACE;
+}
+
+// export default { CUSTOM_BRIDGE_PROTOCOLS, NEXUS, BRIDGE, INSURACE }
