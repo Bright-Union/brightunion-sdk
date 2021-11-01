@@ -6,7 +6,7 @@ import { getDistributorAddress } from "./service/dao/Distributors";
 import { getQuote } from "./service/dao/Quotes";
 import { buyCoverInsurace, buyCover } from "./service/dao/Buying";
 import { getCatalog } from "./service/Catalog";
-import { getQuoteFrom } from "./service/Quotes";
+import { getQuoteFrom, getQuotes } from "./service/Quotes";
 
 /**
  * Main module class, entry point of the
@@ -85,6 +85,15 @@ class BrightClient {
         _limit
      );
  }
+
+ async getQuotes(
+   _amount: number,
+   _currency: string,
+   _period: number,
+   _protocol: any
+){
+  return await getQuotes(_amount, _currency, _period, _protocol);
+}
 
 
 getQuoteFrom(_distributorName:string,

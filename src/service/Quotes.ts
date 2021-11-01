@@ -23,7 +23,7 @@ export async function getQuotes(
 
 ): Promise<any[]> {
 
-  const bridgeQuote =  await getBridgeQuote(_amount, _currency, _period, _protocol);
+  const bridgeQuote =  await getBridgeQuote(_amount, _period, _protocol);
   const nexusQuote =  await getNexusQuote(_amount, _currency, _period, _protocol);
   const insuraceQuote =  await getInsuraceQuote(_amount, _currency, _period, _protocol);
   const quotesArray = [
@@ -65,7 +65,7 @@ export async function getQuoteFrom(
     ): Promise<object> {
 
   if(_distributorName == 'bridge'){
-     return await getBridgeQuote(_amount,_currency,_period,_protocol);
+     return await getBridgeQuote(_amount,_period,_protocol);
   }else if(_distributorName == 'nexus'){
     return await getNexusQuote(_amount,_currency,_period,_protocol );
   }else if(_distributorName == 'insurace'){
@@ -79,13 +79,13 @@ export async function getQuoteFrom(
  *  Hard coding only interface compliant since they are CONSTANTS
  *
  * @param _amount
- * @param _currency  Only for bridge this param is the bridgeProductAddress, bridge only handles USDT...
+ * //@param _currency  Only for bridge this param is the bridgeProductAddress, bridge only handles USDT...
  * @param _period
  * @param _protocol
  * @returns
  */
 export async function getBridgeQuote( _amount :any,
-                                      _currency :any,
+                                      // _currency :any,
                                       _period :any,
                                       _protocol :any ) : Promise<object>{
 
@@ -93,7 +93,7 @@ export async function getBridgeQuote( _amount :any,
                                 'bridge',
                                 _period,
                                 _amount,
-                                _currency,
+                                _protocol.bridgeProductAddress,
                                 '0x0000000000000000000000000000000000000000',
                                 '0x0000000000000000000000000000000000000000',
                                 global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500))
@@ -152,4 +152,4 @@ export async function getInsuraceQuote( _amount :any,_currency :any,_period :any
 
 
 
-export default getQuoteFrom ;
+export default {getQuoteFrom, getQuotes} ;

@@ -54,7 +54,7 @@ let bridgeProductAddress : string = '0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f'
 before( async () => {
     erc20Instance = _getIERC20Contract(netConfig.USDT);
     ercBalance = await erc20Instance.methods.balanceOf(owner).call();
-    bridgeQuote = await brightClient.getQuoteFrom('bridge',  10000, bridgeProductAddress , 32, 'protocol obj');
+    bridgeQuote = await brightClient.getQuoteFrom('bridge',  10000, bridgeProductAddress , 32, {bridgeProductAddress: bridgeProductAddress});
     // bridgeQuote = await brightClient.getQuoteFrom('bridge',bridgeProductAddress);
     console.log('getQuoteFrom bridge : ',bridgeQuote)
     return bridgeQuote;
@@ -64,7 +64,7 @@ describe('Get Bridge Quote', () => {
     it('Should have.property(totalPrice)', async () => {
       let dist = ['insurace','nexus','bridge'];
       // const bridgeQuote = await brightClient.getQuoteFrom('bridge',bridgeProductAddress);
-      const bridgeQuote = await brightClient.getQuoteFrom('bridge',  10000, bridgeProductAddress , 32, 'protocol obj');
+      const bridgeQuote = await brightClient.getQuoteFrom('bridge',  10000, bridgeProductAddress , 32, {bridgeProductAddress: bridgeProductAddress});
       console.log('Bridge quote:',bridgeQuote);
       expect(bridgeQuote).to.have.property('totalPrice')
     });
