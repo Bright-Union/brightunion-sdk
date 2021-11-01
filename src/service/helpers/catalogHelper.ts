@@ -208,18 +208,31 @@ class CatalogHelper {
              BridgePolicyBookRegistryContract.methods.listWithStats(0, policyBookCounter).call()
                 .then(({_policyBooksArr, _stats}:any) => {
 
-                  // policyBooksArray.push(createCoverable({
-                  //   bridgeProductAddress: _policyBooksArr[i],
-                  //   bridgeCoverable: _stats[i].insuredContract,
-                  //   protocolAddress: _stats[i].insuredContract,
-                  //   bridgeAPY: Number(_stats[i].APY) / (10 ** 5),
-                  //   logo: logo,
-                  //   name: name,
-                  //   type: commonCategory(_stats[i].contractType, 'bridge'),
-                  //   source: 'bridge',
-                  // }))
+                  const policyBooksArray = [];
+                      for (let i = 0; i < _stats.length; i++) {
+                        if (!_stats[i].whitelisted) {
+                          continue;
+                        }
 
-                  return { policyBookCounter,_stats,_policyBooksArr}
+                        // let asset = state.trustWalletAssets[Object.keys(state.trustWalletAssets)
+                            // .find(key => key.toLowerCase() === _stats[i].insuredContract.toLowerCase())];
+                        // let logo = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${_stats[i].insuredContract}/logo.png`;
+
+                        let name = _stats[i][0]
+                        policyBooksArray.push(this.createCoverable({
+                          bridgeProductAddress: _policyBooksArr[i],
+                          bridgeCoverable: _stats[i].insuredContract,
+                          protocolAddress: _stats[i].insuredContract,
+                          bridgeAPY: Number(_stats[i].APY) / (10 ** 5),
+                          // logo: logo,
+                          name: name,
+                          type: this.commonCategory(_stats[i].contractType, 'bridge'),
+                          source: 'bridge',
+                        }))
+                      }
+
+                      return policyBooksArray;
+
             });
           });
       });

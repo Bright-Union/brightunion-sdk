@@ -41,8 +41,6 @@ class InsuraceApi {
         let url = `${NetConfig.netById(global.user.networkId).insuraceAPI}/getCoverPremium?code=${encodeURIComponent(NetConfig.netById(global.user.networkId).insuraceAPIKey)}`;
         let referral = `${NetConfig.netById(global.user.networkId).insuraceReferral}`;
 
-        console.log('global.user.networkId ',global.user.networkId)
-
         return  axios.post(
             url, {
             chain: NetConfig.netById(1).symbol, // always get quotes from mainnet

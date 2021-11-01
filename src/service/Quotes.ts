@@ -80,39 +80,45 @@ export async function getQuoteFrom(
  *  Hard coding only interface compliant since they are CONSTANTS
  *
  * @param _amount
- * //@param _currency  Only for bridge this param is the bridgeProductAddress, bridge only handles USDT...
  * @param _period
  * @param _protocol
  * @returns
  */
-export async function getBridgeQuote( _amount :any,
-                                      // _currency :any,
-                                      _period :any,
-                                      _protocol :any ) : Promise<object>{
 
-  const quote =  await getQuote(
-                                'bridge',
-                                _period,
-                                _amount,
-                                _protocol.bridgeProductAddress,
-                                '0x0000000000000000000000000000000000000000',
-                                '0x0000000000000000000000000000000000000000',
-                                global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500))
-                            );
+ export async function getBridgeQuote( _amount :any,  _period :any, _protocol :any ) : Promise<object>{
 
-    // mapping to bridge object Or could be mapping to UI object
-    // only reason of why we have diff get<provider>Quote methods
-    const bridgeQuote = {
-      totalSeconds       : quote.prop1,
-      totalPrice         : quote.prop2,
-      totalLiquidity     : quote.prop3,
-      totalCoverTokens   : quote.prop4,
-      prop5              : quote.prop5,
-      prop6              : quote.prop6,
-      prop7              : quote.prop7
-  }
-  return bridgeQuote;
-}
+   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeCoverable) {
+
+     const quote =  await getQuote(
+       'bridge',
+       _period,
+       _amount,
+       _protocol.bridgeProductAddress,
+       '0x0000000000000000000000000000000000000000',
+       '0x0000000000000000000000000000000000000000',
+       global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500))
+     );
+
+     // mapping to bridge object Or could be mapping to UI object
+     // only reason of why we have diff get<provider>Quote methods
+     const bridgeQuote = {
+       totalSeconds       : quote.prop1,
+       totalPrice         : quote.prop2,
+       totalLiquidity     : quote.prop3,
+       totalCoverTokens   : quote.prop4,
+       prop5              : quote.prop5,
+       prop6              : quote.prop6,
+       prop7              : quote.prop7
+     }
+     return bridgeQuote;
+
+
+   }else{
+     return []
+   }
+
+
+ }
 
 /**
  *  I suggest doing this in this class to let the http api calls decuple from any business logic

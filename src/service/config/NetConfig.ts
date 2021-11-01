@@ -1,4 +1,5 @@
 
+
  const NETWORK_CONFIG = [
     {
         name: 'Ethereum',
@@ -177,12 +178,38 @@
 ]
 
 
+const MAIN_NETS = [1, 56, 137];
+const TEST_NETS = [42, 97, 80001]; //using Kovan here as Eth testnet
+
 class NetConfig{
 
-  public static NETWORK_CONFIG = NETWORK_CONFIG;
+  public static createWeb3Passives() {
 
-  public MAIN_NETS = [1, 56, 137];
-  public TEST_NETS = [42, 97, 80001]; //using Kovan here as Eth testnet
+    let nets: any[];
+
+    if (MAIN_NETS.includes(Number(global.user.networkId))) {
+      //all mainnets except current
+      nets = MAIN_NETS.filter(net => net != Number(global.user.networkId))
+    } else {
+      //all testnets except current
+      nets = TEST_NETS.filter(net => net != Number(global.user.networkId))
+    }
+
+    let web3Passives = [];
+    for (let net of nets) {
+      web3Passives.push({
+        account: global.user.account,
+        networkId: net,
+        symbol: this.netById(net).symbol,
+        // web3Instance: new Web3(new Web3.providers.HttpProvider(this.netById(net).provider)),
+        readOnly: true,
+      });
+    }
+    return web3Passives;
+    // this.$store.commit('registerWeb3Passive', web3Passive);
+  }
+
+  public static NETWORK_CONFIG = NETWORK_CONFIG;
 
   public static netById(id:any) {
     return this.NETWORK_CONFIG.filter(net => {
@@ -191,11 +218,11 @@ class NetConfig{
   }
 
   public mainNets() {
-    return this.MAIN_NETS
+    return MAIN_NETS
   }
 
   public testNets() {
-    return this.TEST_NETS
+    return TEST_NETS
   }
 
   public static networkCurrency(id :any) : any{
