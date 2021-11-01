@@ -11,6 +11,10 @@ export async function getCatalog(): Promise<any[]> {
   const insuraceCoverables =  await getInsuraceCoverables();
   const bridgeCoverables =  await getBridgeCoverables();
 
+  console.log('nexusCoverables' , nexusCoverables)
+  console.log('insuraceCoverables' , insuraceCoverables)
+  console.log('bridgeCoverables' , bridgeCoverables)
+
   return Promise.all([ nexusCoverables, insuraceCoverables, bridgeCoverables])
                 .then(() => {
                     let mergedCoverables = nexusCoverables

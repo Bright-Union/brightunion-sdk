@@ -4,18 +4,60 @@ import { getQuote } from "./dao/Quotes";
 
 
 /**
- * 
+ *
+ * Generci call, which will return an array of quotes from all supported distributors
+ *
+ * @param _amount
+ * @param _currency
+ * @param _period
+ * @param _protocol
+ * @returns Array of quotes from all supported distributors
+ */
+
+
+export async function getQuotes(
+  _amount:number,
+  _currency:string, // coverAddress for bridge
+  _period: number,
+  _protocol:any
+
+): Promise<any[]> {
+
+  const bridgeQuote =  await getBridgeQuote(_amount, _currency, _period, _protocol);
+  const nexusQuote =  await getNexusQuote(_amount, _currency, _period, _protocol);
+  const insuraceQuote =  await getInsuraceQuote(_amount, _currency, _period, _protocol);
+  const quotesArray = [
+    bridgeQuote,
+    nexusQuote,
+    insuraceQuote
+  ]
+
+  return Promise.all(quotesArray).then(() =>{
+    const mergedCoverables:object[] = [
+      insuraceQuote,
+      nexusQuote,
+      bridgeQuote
+    ];
+
+    console.log('mergedCoverables - ' , mergedCoverables , ' - mergedCoverables');
+    return mergedCoverables;
+  })
+
+}
+
+/**
+ *
  * Trying to normalize params since they are all very similar
- * 
- * @param _distributorName 
- * @param _amount 
- * @param _currency 
- * @param _period 
- * @param _protocol 
+ *
+ * @param _distributorName
+ * @param _amount
+ * @param _currency
+ * @param _period
+ * @param _protocol
  * @returns Distributor Quote
  */
 export async function getQuoteFrom(
-                                    _distributorName:string, 
+                                    _distributorName:string,
                                     _amount:number,
                                     _currency:string, // coverAddress for bridge
                                     _period: number,
@@ -35,23 +77,23 @@ export async function getQuoteFrom(
 
 /**
  *  Hard coding only interface compliant since they are CONSTANTS
- * 
- * @param _amount 
+ *
+ * @param _amount
  * @param _currency  Only for bridge this param is the bridgeProductAddress, bridge only handles USDT...
- * @param _period 
- * @param _protocol 
- * @returns 
+ * @param _period
+ * @param _protocol
+ * @returns
  */
 export async function getBridgeQuote( _amount :any,
                                       _currency :any,
                                       _period :any,
                                       _protocol :any ) : Promise<object>{
- 
+
   const quote =  await getQuote(
                                 'bridge',
                                 _period,
                                 _amount,
-                                _currency, 
+                                _currency,
                                 '0x0000000000000000000000000000000000000000',
                                 '0x0000000000000000000000000000000000000000',
                                 global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500))
@@ -75,7 +117,7 @@ export async function getBridgeQuote( _amount :any,
  *  I suggest doing this in this class to let the http api calls decuple from any business logic
  *  This mapping to the ui object can be done on each method of this class or create a common function only
  *  to pass params to fill.... SUGGESTION
- * 
+ *
  *    const quote = CatalogHelper.quoteFromCoverable(
                     'insurace',
                     protocol,
@@ -111,4 +153,3 @@ export async function getInsuraceQuote( _amount :any,_currency :any,_period :any
 
 
 export default getQuoteFrom ;
-

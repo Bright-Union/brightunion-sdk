@@ -6,7 +6,7 @@ const path = require('path');
 // const ESLintPlugin = require('eslint-webpack-plugin');
 
 var config = {
-  entry: './src/index.ts',
+  entry: './src/BrightClient.ts',
   module: {
     rules: [
       {
