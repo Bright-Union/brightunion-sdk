@@ -51,13 +51,13 @@ before(async () => {
 let nexusQuote:any;
 describe('Get Nexus Quote', () => {
     it('Should print quote', async () => {
-  
+     let protocol = { nexusCoverable:'0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9' };
       nexusQuote = await brightClient.getQuoteFrom(
                                         "nexus",
                                         web3.utils.toBN('1000000000000000000000'),
-                                        netConfig.DAI,
+                                        'DAI',
                                         180,
-                                        '0x11111254369792b2Ca5d084aB5eEA397cA8fa48B');
+                                        protocol);
   
       console.log('Nexus quote:',nexusQuote);
   
@@ -84,7 +84,7 @@ describe('Get Nexus Quote', () => {
                       ERC20Helper.approveUSDTAndCall(
                           state, // state
                           erc20Instance, // pay with asset
-                          'exus address', // spender
+                          'nexus address', // spender
                           web3.utils.toBN('10000000000000000000'), // price, amount to allow spender spend in wei
                           () => { // onAllowanceReset
                           console.log('SHOW_CONFIRMATION_WAITING', {msg: `(1/3) Resetting USDT allowance to 0`});
@@ -119,3 +119,18 @@ describe('Get Nexus Quote', () => {
   
        })
   });
+
+
+// {
+//     "currency": "ETH",
+//     "period": "180",
+//     "amount": "1",
+//     "price": "12813141683778234",
+//     "priceInNXM": "334880198350683026",
+//     "expiresAt": 1640946938,
+//     "generatedAt": 1635762937230,
+//     "contract": "0x7d2768de32b0b80b7a3454c06bdac94a69ddc7a9",
+//     "v": 27,
+//     "r": "0x9059d04512ad7e74f236499789e1ee0d4bb6bf1d6b7b36e96b2eee22f666b132",
+//     "s": "0x5ffe8a197be6df897679392318b7ef0156526d4df91c19e3c1ec41be8da304f0"
+// }
