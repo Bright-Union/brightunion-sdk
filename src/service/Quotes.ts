@@ -23,23 +23,23 @@ export async function getQuotes(
 
 ): Promise<any[]> {
 
-  const bridgeQuote =  await getBridgeQuote(_amount, _period, _protocol);
   const nexusQuote =  await getNexusQuote(_amount, _currency, _period, _protocol);
   const insuraceQuote =  await getInsuraceQuote(_amount, _currency, _period, _protocol);
+  const bridgeQuote =  await getBridgeQuote(_amount, _period, _protocol);
+
   const quotesArray = [
-    bridgeQuote,
     nexusQuote,
-    insuraceQuote
+    insuraceQuote,
+    bridgeQuote,
   ]
 
   return Promise.all(quotesArray).then(() =>{
     const mergedCoverables:object[] = [
       insuraceQuote,
       nexusQuote,
-      bridgeQuote
+      bridgeQuote,
     ];
 
-    console.log('mergedCoverables - ' , mergedCoverables , ' - mergedCoverables');
     return mergedCoverables;
   })
 
