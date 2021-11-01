@@ -44,7 +44,8 @@ class BrightClient {
   async initialize(): Promise<object>{
       global.user.account = (await global.user.web3.eth.getAccounts())[0];
       global.user.networkId = await global.user.web3.eth.net.getId();
-      global.user.brightProtoAddress = NetConfig.netById(global.user.networkId).brightProtocol;
+      global.user.brightProtoAddress = '0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f';
+      // global.user.brightProtoAddress = NetConfig.netById(global.user.networkId).brightProtocol;
       global.user.web3Passive = NetConfig.createWeb3Passives();
       return {status: true, message: 'Bright Union Initialized'};
   }
