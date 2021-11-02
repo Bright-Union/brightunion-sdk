@@ -1,7 +1,7 @@
 
 
 
-export async function buyQuote(): Promise<any[]> {
+export async function buyQuote(_distributorName: string, _quoteProtocol: any): Promise<any[]> {
 
   if(_distributorName == 'bridge'){
 
@@ -26,6 +26,8 @@ export async function buyQuote(): Promise<any[]> {
     // );
 
   }
+
+  return [];
 
 }
 

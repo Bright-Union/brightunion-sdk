@@ -128,6 +128,9 @@ getQuoteFrom(_distributorName:string,
  ){
 
    return await buyQuote(
+     _distributorName,
+     {}
+     
      // _ownerAddress,
      // _distributorName,
      // _contractAddress,
