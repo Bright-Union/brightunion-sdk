@@ -71,10 +71,10 @@ class InsuraceApi {
     }
 
 
-    static async fetchInsuraceQuote ( amount:string | number, currency:string , period:number, protocol:any): Promise<object> {
+    static async fetchInsuraceQuote ( web3:any, amount:string | number, currency:string , period:number, protocol:any): Promise<object> {
         let quoteCurrency = currency;
 
-        let amountInWei = global.user.web3.utils.toWei(amount.toString(), 'ether');
+        let amountInWei = web3.web3Instance.utils.toWei(amount.toString(), 'ether');
 
         if (currency === 'USD') {
           currency = RiskCarriers.INSURACE.fallbackQuotation[NetConfig.netById(global.user.networkId).symbol];
@@ -91,16 +91,16 @@ class InsuraceApi {
           return;
         }
 
-        let web3 : any = global.user.web3;
-        web3.symbol = NetConfig.netById(1).symbol;
+        // let web3 : any = web3;
+        web3.symbol = NetConfig.netById(web3.networkId).symbol;
         // web3.coinbase = NetConfig.netById(web3.networkId);
 
         return await this.getCoverPremium(
-                selectedCurrency.address,
-                parseInt(protocol.productId),
-                period,
-                amountInWei,
-                global.user.account,
+          amountInWei,
+          selectedCurrency.address,
+          period,
+          parseInt(protocol.productId),
+          global.user.account,
             ).then( (response: any) => {
 
                 // const insurPrice = getters.insurPrice(state);
@@ -125,7 +125,7 @@ class InsuraceApi {
                         currency: currency,
                         period: period,
                         chain: web3.symbol,
-                        chainId: global.user.networkId,
+                        chainId: web3.networkId,
                         price: premium,
                         // cashBack: [(cashbackInStable / insurPrice), cashbackInStable],
                         // cashBackInWei: web3.web3Instance.utils.toWei(cashbackInStable.toString(), 'ether'),

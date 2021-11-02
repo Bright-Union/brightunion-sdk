@@ -33,8 +33,8 @@ catalog: object[];
 constructor(_config:any) {
     global.user = {
       web3: _config.web3,
-      web3Passive: [],
       networkId: _config.networkId,
+      web3Passive: [],
       brightProtoAddress: _config.brightProtoAddress,
       account: _config.account,
     };

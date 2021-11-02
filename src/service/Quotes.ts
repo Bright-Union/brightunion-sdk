@@ -24,25 +24,20 @@ export async function getQuotes(
   _protocol:any
 
 ): Promise<any[]> {
+  const quotesArray = [];
 
-  const nexusQuote =  await getNexusQuote(_amount, _currency, _period, _protocol);
-  const insuraceQuote =  await getInsuraceQuote(_amount, _currency, _period, _protocol);
-  const bridgeQuote =  await getBridgeQuote(_amount, _period, _protocol);
+  quotesArray.push(getQuoteFrom('nexus', _amount, _currency, _period, _protocol))
+  quotesArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol))
+  quotesArray.push(getQuoteFrom('bridge' , _amount, _currency, _period, _protocol))
 
-  const quotesArray = [
-    nexusQuote,
-    insuraceQuote,
-    bridgeQuote,
-  ]
+  for (let net of global.user.web3Passive) {
+    quotesArray.push( getInsuraceQuote(net , _amount, _currency, _period, _protocol))
+  }
 
-  return Promise.all(quotesArray).then(() =>{
-    const mergedCoverables:object[] = [];
+  return Promise.all(quotesArray).then((data:any) => {
+    const allQuotes:object[] = data.filter((q:any) => { if(q)return q });
 
-    if(insuraceQuote) mergedCoverables.push(insuraceQuote);
-    if(nexusQuote) mergedCoverables.push(nexusQuote);
-    if(bridgeQuote) mergedCoverables.push(bridgeQuote);
-
-    return mergedCoverables;
+    return allQuotes;
   })
 
 }
@@ -71,7 +66,7 @@ export async function getQuoteFrom(
   }else if(_distributorName == 'nexus'){
     return await getNexusQuote(_amount,_currency,_period,_protocol );
   }else if(_distributorName == 'insurace'){
-    return await getInsuraceQuote(_amount,_currency,_period,_protocol);
+    return await getInsuraceQuote(global.user.web3 , _amount,_currency,_period,_protocol);
   }else {
     return  {error: 'supported distributor names are: bridge, insurace, nexus'}
   }
@@ -112,30 +107,35 @@ export async function getQuoteFrom(
  }
 
 
-
  export async function getNexusQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
     if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL') && _protocol.nexusCoverable){
      return await NexusApi.fetchQuote( _amount , _currency, _period, _protocol);
    }
  }
 
- export async function getInsuraceQuote( _amount:number, _currency:string, _period: number, _protocol:any ) {
-    if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE') && _protocol.productId) {
-
-      const _owner        = global.user.account;
-      const chainSymbol   = NetConfig.netById(global.user.networkId).symbol;
-      const premium : any = await InsuraceApi.getCoverPremium( _amount, _currency, _period,_protocol, _owner);
-      const quote   : any = await InsuraceApi.confirmCoverPremium(chainSymbol, premium.params);
-
-      return quote;
-    }
-}
-
-// export async function getInsuraceQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
-//   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE') && _protocol.productId) {
-//     return await InsuraceApi.fetchInsuraceQuote( _amount , _currency, _period, _protocol);
-//   }
+//  export async function getInsuraceQuote( _amount:number, _currency:string, _period: number, _protocol:any ) {
+//     if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE') && _protocol.productId) {
+//
+//       const _owner        = global.user.account;
+//       const chainSymbol   = NetConfig.netById(global.user.networkId).symbol;
+//       const premium : any = await InsuraceApi.getCoverPremium( _amount, _currency, _period,_protocol, _owner);
+//       const quote   : any = await InsuraceApi.confirmCoverPremium(chainSymbol, premium.params);
+//
+//       return quote;
+//     }
 // }
+
+export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
+
+  if(!_web3.networkId){ // if not passive net
+    _web3.web3Instance = _web3;
+    _web3.networkId = global.user.networkId;
+  }
+
+  if (CatalogHelper.availableOnNetwork(_web3.networkId, 'INSURACE') && _protocol.productId) {
+    return await InsuraceApi.fetchInsuraceQuote(_web3, _amount , _currency, _period, _protocol);
+  }
+}
 
 
 
