@@ -19,7 +19,7 @@ import NetConfig from '../service/config/NetConfig';
  const netConfig = NetConfig.netById(NETWORK_ID);
  let brightClient : BrightClient = null;
  let web3 : any;
- let owner: any; 
+ let owner: any;
 
 /**  Init contract test instance  */
 before(async () => {

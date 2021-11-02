@@ -86,7 +86,9 @@ export async function getQuoteFrom(
  * @returns
  */
  async function getBridgeQuote( _amount :any,  _period :any, _protocol :any ) : Promise<object>{
-     const quote =  await getQuote( 'bridge', _period, _amount, _protocol.bridgeProductAddress,
+
+   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeCoverable) {
+     const quote =  await getQuote( 'bridge', _period, _amount, _protocol.bridgeCoverable,
        '0x0000000000000000000000000000000000000000',
        '0x0000000000000000000000000000000000000000',
        global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500))
@@ -107,12 +109,14 @@ export async function getQuoteFrom(
 
 
    }
-
+ }
 
 
 
  export async function getNexusQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
+    if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL') && _protocol.nexusCoverable){
      return await NexusApi.fetchQuote( _amount , _currency, _period, _protocol);
+   }
  }
 
  export async function getInsuraceQuote( _amount:number, _currency:string, _period: number, _protocol:any ) {
@@ -126,6 +130,12 @@ export async function getQuoteFrom(
       return quote;
     }
 }
+
+// export async function getInsuraceQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
+//   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE') && _protocol.productId) {
+//     return await InsuraceApi.fetchInsuraceQuote( _amount , _currency, _period, _protocol);
+//   }
+// }
 
 
 
