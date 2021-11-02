@@ -26,9 +26,8 @@ before(async () => {
   web3 = new Web3(netConfig.provider);
   web3.networkId = NETWORK_ID;
   web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY);
-  console.log(' web3.eth.accounts: ', web3.eth.accounts[0]);
-  owner = (await web3.eth.getAccounts())[0]
-
+  owner = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY).address; // web3.active.coinbase
+  console.log(owner)
   brightClient = new BrightClient({
                                 web3: web3,
                                 networkId: NETWORK_ID,
@@ -38,50 +37,46 @@ before(async () => {
   brightClient.initialize();
 });
 
-/**
- * getQuoteFrom(_distributorName:string,
-             _amount:number,
-             _currency:string,
-             _period:number,
-             _protocol:string): any {
- }
- */
-describe('Get Bridge Quote', () => {
+
+describe('BRIDGE QUOTE', () => {
   it('Should print quote',async () => {
+    let protocol = { bridgeProductAddress:'0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f'};
     const result = await brightClient.getQuoteFrom(
                                       "bridge",
                                       web3.utils.toBN('1000000000000000000000'),
-                                      "0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f",
+                                      'ETH',
                                       26,
-                                      'bridge does not use this param');
-    console.log('Bridge Quote: ',result)
+                                      protocol)
+    console.log(result)
 
   });
 });
 
-describe('Get Nexus Quote', () => {
+describe('NEXUS QUOTE', () => {
   it('Should print quote', async () => {
-
+    let protocol = { nexusCoverable:'0x11111254369792b2Ca5d084aB5eEA397cA8fa48B'};
     const result = await brightClient.getQuoteFrom(
                                       "nexus",
                                       web3.utils.toBN('1000000000000000000000'),
-                                      netConfig.DAI,
+                                      'DAI',
                                       180,
-                                      '0x11111254369792b2Ca5d084aB5eEA397cA8fa48B');
+                                      protocol);
 
-    console.log('Nexus quote:',result);
+    console.log(result);
 
   });
 });
 
-describe('Get Insurace Quote', () => {
+describe('INSURACE QUOTE', () => {
   it('Should have.property(totalPrice)', async () => {
+    let protocol = { productId:2};
+
     const result = await brightClient.getQuoteFrom(
                                       "insurace",
-                                      web3.utils.toBN('1000'),
+                                      web3.utils.toBN("2000000000000000000").toString(),
                                       netConfig.ETH,
                                       180,
-                                      { productId:43 });
+                                      2); //prod id
     console.log('Insurace quote:',result);
     return result;
   });

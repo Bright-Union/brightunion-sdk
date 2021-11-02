@@ -1,54 +1,16 @@
 import NexusApi from './distributorsApi/NexusApi';
 import InsuraceApi from './distributorsApi/InsuraceApi';
 import { getQuote } from "./dao/Quotes";
-import CatalogHelper from './helpers/catalogHelper'
+import CatalogHelper from './helpers/catalogHelper';
+import NetConfig from '../service/config/NetConfig';
 
 
 /**
  *
- * Generci call, which will return an array of quotes from all supported distributors
- *
- * @param _amount
- * @param _currency
- * @param _period
- * @param _protocol
- * @returns Array of quotes from all supported distributors
- */
-
-
-export async function getQuotes(
-  _amount:number,
-  _currency:string, // coverAddress for bridge
-  _period: number,
-  _protocol:any
-
-): Promise<any[]> {
-
-  const nexusQuote =  await getNexusQuote(_amount, _currency, _period, _protocol);
-  const insuraceQuote =  await getInsuraceQuote(_amount, _currency, _period, _protocol);
-  const bridgeQuote =  await getBridgeQuote(_amount, _period, _protocol);
-
-  const quotesArray = [
-    nexusQuote,
-    insuraceQuote,
-    bridgeQuote,
-  ]
-
-  return Promise.all(quotesArray).then(() =>{
-    const mergedCoverables:object[] = [
-      insuraceQuote,
-      nexusQuote,
-      bridgeQuote,
-    ];
-
-    return mergedCoverables;
-  })
-
-}
-
-/**
- *
- * Trying to normalize params since they are all very similar
+ * Simple to fetch http premiums and quotes from distributors
+ * 
+ * @remarks
+ * Bridge is native contract call to Bridge Mutual contract
  *
  * @param _distributorName
  * @param _amount
@@ -84,16 +46,8 @@ export async function getQuoteFrom(
  * @param _protocol
  * @returns
  */
-
- export async function getBridgeQuote( _amount :any,  _period :any, _protocol :any ) : Promise<object>{
-
-   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeCoverable) {
-
-     const quote =  await getQuote(
-       'bridge',
-       _period,
-       _amount,
-       _protocol.bridgeProductAddress,
+ async function getBridgeQuote( _amount :any,  _period :any, _protocol :any ) : Promise<object>{
+     const quote =  await getQuote( 'bridge', _period, _amount, _protocol.bridgeProductAddress,
        '0x0000000000000000000000000000000000000000',
        '0x0000000000000000000000000000000000000000',
        global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500))
@@ -111,60 +65,21 @@ export async function getQuoteFrom(
        prop7              : quote.prop7
      }
      return bridgeQuote;
-
-
-   }else{
-     return []
-   }
-
-
  }
-
-/**
- *  I suggest doing this in this class to let the http api calls decuple from any business logic
- *  This mapping to the ui object can be done on each method of this class or create a common function only
- *  to pass params to fill.... SUGGESTION
- *
- *    const quote = CatalogHelper.quoteFromCoverable(
-                    'insurace',
-                    protocol,
-                    {
-                        amount: amountInWei,
-                        currency: currency,
-                        period: period,
-                        chain: web3.symbol,
-                        chainId: global.user.networkId,
-                        price: premium,
-                        // cashBack: [(cashbackInStable / insurPrice), cashbackInStable],
-                        // cashBackInWei: web3.web3Instance.utils.toWei(cashbackInStable.toString(), 'ether'),
-                        pricePercent: new BigNumber(premium).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000), //%, annualize
-                        response: response,
-                        // estimatedGasPrice: estimatedGasPrice,
-                        estimatedGasPriceCurrency: defaultCurrencySymbol,
-                        // estimatedGasPriceDefault: feeInDefaultCurrency
-                    },
-                    {
-                        // remainingCapacity: protocol.stats.capacityRemaining
-                    }
-                );
- */
 
  export async function getNexusQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
-   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL') && _protocol.nexusCoverable){
      return await NexusApi.fetchQuote( _amount , _currency, _period, _protocol);
-   }else{
-     return [];
-   }
  }
 
- export async function getInsuraceQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
-   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE') && _protocol.productId) {
-     return await InsuraceApi.fetchInsuraceQuote( _amount , _currency, _period, _protocol);
-   }else{
-     return [];
-   }
- }
+ export async function getInsuraceQuote( _amount:number, _currency:string, _period: number, _protocol:any ) {
+      const _owner        = global.user.account;
+      const chainSymbol   = NetConfig.netById(global.user.networkId).symbol;
+      const premium : any = await InsuraceApi.getCoverPremium( _amount, _currency, _period,_protocol, _owner);
+      const confirm       = await InsuraceApi.confirmCoverPremium(chainSymbol,premium.params);
+      
+      return confirm;
+}
 
 
 
-export default {getQuoteFrom, getQuotes} ;
+export default getQuoteFrom;
