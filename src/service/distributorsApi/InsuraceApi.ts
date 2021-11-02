@@ -49,12 +49,13 @@ class InsuraceApi {
                     "coverDays": [period],
                     "coverAmounts": [amount],
                     "owner": owner,
-                    "referralCode": ""
+                    "referralCode": referral,
 
         }).then((response : any) => {
             return response.data;
         }).catch(error =>{
             console.log('ERROR on Insurace getCoverPremium : ' , error.response.data && error.response.data.message);
+            return error;
         });
     }
 
@@ -117,6 +118,9 @@ class InsuraceApi {
                 // let feeInDefaultCurrency = (RiskCarriers.INSURACE.description.estimatedGas * gasPrice) / 10**9;
                 let defaultCurrencySymbol = web3.symbol === 'POLYGON'? 'MATIC': web3.symbol === 'BSC' ? 'BNB' : 'ETH';
 
+
+                console.log("INSU QUOTE - " , response)
+
                 const quote = CatalogHelper.quoteFromCoverable(
                     'insurace',
                     protocol,
@@ -141,6 +145,10 @@ class InsuraceApi {
                 );
                 return quote;
             })
+            // .catch( (err:any) => {
+            //   console.log('err' , err);
+            //   return {}
+            // })
     }
 
 }
