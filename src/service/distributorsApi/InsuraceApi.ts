@@ -38,7 +38,9 @@ class InsuraceApi {
         protocol : any,
         owner : any) {
         let url = `${NetConfig.netById(global.user.networkId).insuraceAPI}/getCoverPremium?code=${encodeURIComponent(NetConfig.netById(global.user.networkId).insuraceAPIKey)}`;
-        let referral = `${NetConfig.netById(global.user.networkId).insuraceReferral}`;
+        let referral = NetConfig.netById(global.user.networkId).insuraceReferral;
+
+        console.log('getCoverPremium' , referral);
 
         return  axios.post(
             url, {
