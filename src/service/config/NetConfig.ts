@@ -1,4 +1,4 @@
-
+import Web3 from 'web3';
 
  const NETWORK_CONFIG = [
     {
@@ -201,7 +201,7 @@ class NetConfig{
         account: global.user.account,
         networkId: net,
         symbol: this.netById(net).symbol,
-        // web3Instance: new Web3(new Web3.providers.HttpProvider(this.netById(net).provider)),
+        web3Instance: new Web3(new Web3.providers.HttpProvider(this.netById(net).provider)),
         readOnly: true,
       });
     }

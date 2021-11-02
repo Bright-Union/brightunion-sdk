@@ -114,7 +114,7 @@ export async function getQuoteFrom(
 
 
    }else{
-     return []
+     return
    }
 
 
@@ -153,7 +153,7 @@ export async function getQuoteFrom(
    if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL') && _protocol.nexusCoverable){
      return await NexusApi.fetchQuote( _amount , _currency, _period, _protocol);
    }else{
-     return [];
+     return
    }
  }
 
@@ -161,7 +161,7 @@ export async function getQuoteFrom(
    if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE') && _protocol.productId) {
      return await InsuraceApi.fetchInsuraceQuote( _amount , _currency, _period, _protocol);
    }else{
-     return [];
+     return
    }
  }
 

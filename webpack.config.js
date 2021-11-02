@@ -5,8 +5,11 @@ const path = require('path');
 // const CleanWebpackPlugin = require('clean-webpack-plugin');
 // const ESLintPlugin = require('eslint-webpack-plugin');
 
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
+
 var config = {
   entry: './src/BrightClient.ts',
+  // target: 'node',
   module: {
     rules: [
       {
@@ -21,6 +24,16 @@ var config = {
       '@': '/src',
     },
     extensions: ['.tsx', '.ts', '.js', '.json'],
+    fallback: {
+      "fs":false,
+      "stream": require.resolve("stream-browserify"),
+      "path": require.resolve("path-browserify") ,
+      "http": require.resolve("stream-http") ,
+      "https": require.resolve("https-browserify"),
+      "os": require.resolve("os-browserify/browser"),
+      "url": require.resolve("url/"),
+      "crypto": require.resolve('crypto-browserify'),
+    }
   },
   output: {
     filename: 'BrightClient.js',
@@ -28,6 +41,7 @@ var config = {
     libraryTarget: 'commonjs',
   },
   plugins: [
+    // new NodePolyfillPlugin(),
     // new ESLintPlugin(
     //   {
     //     extensions: ['.tsx', '.ts', '.js', 'json'],
