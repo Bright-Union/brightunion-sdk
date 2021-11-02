@@ -89,6 +89,16 @@ async getCovers(
      );
  }
 
+ async getQuotes(
+  _amount: number,
+  _currency: string,
+  _period: number,
+  _protocol: any
+){
+ return await getQuotes(_amount, _currency, _period, _protocol);
+}
+
+
 
 async getQuoteFrom(_distributorName:string,
              _amount:number,
@@ -102,6 +112,7 @@ async getQuoteFrom(_distributorName:string,
                        _period,
                        _protocol);
  }
+
 
  async buyQuote(
    _ownerAddress : string,
