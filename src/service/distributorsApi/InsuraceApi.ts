@@ -57,7 +57,6 @@ class InsuraceApi {
     }
 
     static confirmCoverPremium (chainSymbol :any, params : any) {
-        console.log('calling  confirm...')
         return axios.post(
             `${NetConfig.netById(global.user.networkId).insuraceAPI}/confirmCoverPremium?code=${encodeURIComponent(NetConfig.netById(global.user.networkId).insuraceAPIKey)}`, {
             chain: chainSymbol,

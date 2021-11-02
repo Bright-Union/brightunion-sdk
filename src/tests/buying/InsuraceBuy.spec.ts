@@ -58,8 +58,7 @@ before( async () => {
 
 let confirmCoverResult : any ;
 before(async () => {
-    let state = { web3 : { web3Active:{networkId : 4, symbol:'ETH'} } };
-    confirmCoverResult = await InsuraceApi.confirmCoverPremium(state, premium.params)
+    confirmCoverResult = await InsuraceApi.confirmCoverPremium('ETH', premium.params)
     console.log(confirmCoverResult)
     return confirmCoverResult;
 });

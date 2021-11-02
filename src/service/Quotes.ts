@@ -75,9 +75,9 @@ export async function getQuoteFrom(
       const _owner        = global.user.account;
       const chainSymbol   = NetConfig.netById(global.user.networkId).symbol;
       const premium : any = await InsuraceApi.getCoverPremium( _amount, _currency, _period,_protocol, _owner);
-      const confirm       = await InsuraceApi.confirmCoverPremium(chainSymbol,premium.params);
+      const quote   : any = await InsuraceApi.confirmCoverPremium(chainSymbol, premium.params);
       
-      return confirm;
+      return quote;
 }
 
 
