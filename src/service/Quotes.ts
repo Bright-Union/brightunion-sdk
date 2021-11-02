@@ -4,7 +4,6 @@ import { getQuote } from "./dao/Quotes";
 import CatalogHelper from './helpers/catalogHelper';
 import NetConfig from '../service/config/NetConfig';
 
-
 /**
  *
  * Generci call, which will return an array of quotes from all supported distributors
@@ -100,6 +99,34 @@ export async function getQuoteFrom(
        prop6              : quote.prop6,
        prop7              : quote.prop7
      }
+
+     return CatalogHelper.quoteFromCoverable(
+       'bridge',
+       _protocol,
+       {
+         amount: _amount,
+         currency: '',
+         period: _period,
+         chain: '',
+         chainId: global.user.networkId,
+         // actualPeriod: actualPeriod,
+         // price: totalPrice,
+         // pricePercent: new BigNumber(totalPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000, //%, annualize
+         // estimatedGasPrice: estimatedGasPrice,
+         // estimatedGasPriceCurrency: defaultCurrencySymbol,
+         // estimatedGasPriceDefault: feeInDefaultCurrency
+       },
+       {
+         // totalUSDTLiquidity: toBN(totalLiquidity),
+         // maxCapacity: _stats[0].maxCapacity,
+         // stakedSTBL: _stats[0].stakedSTBL,
+         // activeCovers: toBN(coverTokens),
+         // utilizationRatio: toBN(coverTokens).mul(toBN(10000)).div(toBN(totalLiquidity)).toNumber() / 100,
+       }
+     );
+
+
+
      return bridgeQuote;
 
 
@@ -113,17 +140,6 @@ export async function getQuoteFrom(
    }
  }
 
-//  export async function getInsuraceQuote( _amount:number, _currency:string, _period: number, _protocol:any ) {
-//     if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE') && _protocol.productId) {
-//
-//       const _owner        = global.user.account;
-//       const chainSymbol   = NetConfig.netById(global.user.networkId).symbol;
-//       const premium : any = await InsuraceApi.getCoverPremium( _amount, _currency, _period,_protocol, _owner);
-//       const quote   : any = await InsuraceApi.confirmCoverPremium(chainSymbol, premium.params);
-//
-//       return quote;
-//     }
-// }
 
 export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
 
@@ -137,6 +153,18 @@ export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_
   }
 }
 
+
+//  export async function getInsuraceQuote( _amount:number, _currency:string, _period: number, _protocol:any ) {
+  //     if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE') && _protocol.productId) {
+    //
+    //       const _owner        = global.user.account;
+    //       const chainSymbol   = NetConfig.netById(global.user.networkId).symbol;
+    //       const premium : any = await InsuraceApi.getCoverPremium( _amount, _currency, _period,_protocol, _owner);
+    //       const quote   : any = await InsuraceApi.confirmCoverPremium(chainSymbol, premium.params);
+    //
+    //       return quote;
+    //     }
+    // }
 
 
 export default getQuoteFrom;

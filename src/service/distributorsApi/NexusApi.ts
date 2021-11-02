@@ -2,6 +2,7 @@ require('dotenv').config();
 import axios from 'axios';
 import NetConfig from '../config/NetConfig'
 import RiskCarriers from '../config/RiskCarriers'
+import CatalogHelper from '../helpers/catalogHelper'
 
 
 export default class NexusApi {
@@ -35,7 +36,41 @@ export default class NexusApi {
        )
 
       .then((response:any) => {
+
+        return CatalogHelper.quoteFromCoverable(
+          'nexus',
+          protocol,
+          {
+            amount: amount,
+            currency: currency,
+            period: period,
+            chain: 'ETH',
+            chainId: global.user.networkId,
+            // price: priceWithFee.toString(),
+            // pricePercent: new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000), //%, annualize
+            response: response.data,
+            // estimatedGasPrice: estimatedGasPrice,
+            // estimatedGasPriceCurrency: defaultCurrencySymbol,
+            // estimatedGasPriceDefault: feeInDefaultCurrency,
+          },
+          {
+            // activeCoversETH: activeCoversETH,
+            // activeCoversDAI: activeCoversDAI,
+            // capacityETH: capacityETH,
+            // capacityDAI: capacityDAI,
+            // totalCovers: totalCovers,
+            // totalActiveCoversDAI: totalActiveCoversDAI,
+            // totalActiveCoversETH: totalActiveCoversETH,
+            // nexusMaxCapacityError: nexusMaxCapacityError
+          }
+        );
+
+
+
+
         return response.data;
+
+
       }).catch(error => {
         console.log('ERROR Nexus fetchQuote:',error.response.data && error.response.data.message);
       });

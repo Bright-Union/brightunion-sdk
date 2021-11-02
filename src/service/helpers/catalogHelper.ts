@@ -116,7 +116,7 @@ class CatalogHelper {
 
   public static quoteFromCoverable (protocol:string, coverable:any, obj:any, stats:object) {
     return {
-        risk_protocol: protocol,
+        distributorName: protocol,
         quote: {
             name: coverable.name,
             logoSrc: coverable.logo,

@@ -1,29 +1,37 @@
+import {_getIERC20Contract} from './helpers/getContract';
+import { buyCoverInsurace, buyCover } from "./dao/Buying";
+import NetConfig from './config/NetConfig';
+import InsuraceApi from './distributorsApi/InsuraceApi';
 
 
+export async function buyQuote(_quoteProtocol: any): Promise<any[]> {
 
-export async function buyQuote(_distributorName: string, _quoteProtocol: any): Promise<any[]> {
+  if(_quoteProtocol.distributorName == 'bridge'){
 
-  if(_distributorName == 'bridge'){
+    // return await buyCover()
 
-  }else if(_distributorName == 'nexus'){
+  }else if(_quoteProtocol.distributorName == 'nexus'){
 
 
-  }else if(_distributorName == 'insurace'){
+  }else if(_quoteProtocol.distributorName == 'insurace'){
 
-    // return await buyCoverInsurace(
-    //   _ownerAddress,
-    //   _distributorName,
-    //   _products,
-    //   _durationInDays,
-    //   _amounts,
-    //   _currency,
-    //   _premiumAmount,
-    //   _helperParameters,
-    //   _securityParameters,
-    //   _v,
-    //   _r,
-    //   _s
-    // );
+    const chainSymbol:string  = NetConfig.netById(global.user.networkId).symbol;
+    const confirmCoverResult  : any = await InsuraceApi.confirmCoverPremium(chainSymbol, _quoteProtocol.params);
+
+    return await buyCoverInsurace(
+       global.user.account,
+       'insurace',
+       confirmCoverResult[0],
+       confirmCoverResult[1],
+       confirmCoverResult[2],
+       confirmCoverResult[3],
+       confirmCoverResult[6],
+       confirmCoverResult[7],
+       confirmCoverResult[8],
+       confirmCoverResult[9],
+       confirmCoverResult[10],
+       confirmCoverResult[11],
+   )
 
   }
 

@@ -115,30 +115,10 @@ async getQuoteFrom(_distributorName:string,
 
 
  async buyQuote(
-   _ownerAddress : string,
-   _distributorName : string,
-   _contractAddress : string,
-   _coverAsset : string,
-   _sumAssured : number,
-   _coverPeriod : number,
-   _coverType : number,
-   _maxPriceWithFee : number,
-   _data : any,
+   _quote:any,
  ){
-
    return await buyQuote(
-     _distributorName,
-     {}
-
-     // _ownerAddress,
-     // _distributorName,
-     // _contractAddress,
-     // _coverAsset,
-     // _sumAssured,
-     // _coverPeriod,
-     // _coverType,
-     // _maxPriceWithFee,
-     // _data,
+     _quote
    )
 
  }
