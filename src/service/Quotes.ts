@@ -35,11 +35,11 @@ export async function getQuotes(
   ]
 
   return Promise.all(quotesArray).then(() =>{
-    const mergedCoverables:object[] = [
-      insuraceQuote,
-      nexusQuote,
-      bridgeQuote,
-    ];
+    const mergedCoverables:object[] = [];
+
+    if(insuraceQuote) mergedCoverables.push(insuraceQuote);
+    if(nexusQuote) mergedCoverables.push(nexusQuote);
+    if(bridgeQuote) mergedCoverables.push(bridgeQuote);
 
     return mergedCoverables;
   })
@@ -113,8 +113,6 @@ export async function getQuoteFrom(
      return bridgeQuote;
 
 
-   }else{
-     return
    }
 
 
@@ -152,16 +150,12 @@ export async function getQuoteFrom(
  export async function getNexusQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
    if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL') && _protocol.nexusCoverable){
      return await NexusApi.fetchQuote( _amount , _currency, _period, _protocol);
-   }else{
-     return
    }
  }
 
  export async function getInsuraceQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
    if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE') && _protocol.productId) {
      return await InsuraceApi.fetchInsuraceQuote( _amount , _currency, _period, _protocol);
-   }else{
-     return
    }
  }
 

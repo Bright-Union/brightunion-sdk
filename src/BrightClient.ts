@@ -6,6 +6,7 @@ import { getDistributorAddress } from "./service/dao/Distributors";
 import { getQuote } from "./service/dao/Quotes";
 import { buyCoverInsurace, buyCover } from "./service/dao/Buying";
 import { getCatalog } from "./service/Catalog";
+import { buyQuote } from "./service/Buying";
 import { getQuoteFrom, getQuotes } from "./service/Quotes";
 import NetConfig from './service/config/NetConfig'
 
@@ -112,6 +113,32 @@ getQuoteFrom(_distributorName:string,
                        _currency,
                        _period,
                        _protocol);
+ }
+
+ async buyQuote(
+   _ownerAddress : string,
+   _distributorName : string,
+   _contractAddress : string,
+   _coverAsset : string,
+   _sumAssured : number,
+   _coverPeriod : number,
+   _coverType : number,
+   _maxPriceWithFee : number,
+   _data : any,
+ ){
+
+   return await buyQuote(
+     // _ownerAddress,
+     // _distributorName,
+     // _contractAddress,
+     // _coverAsset,
+     // _sumAssured,
+     // _coverPeriod,
+     // _coverType,
+     // _maxPriceWithFee,
+     // _data,
+   )
+
  }
 
 async buyCover(

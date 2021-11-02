@@ -3,6 +3,7 @@ import axios from 'axios';
 import NetConfig from '../config/NetConfig'
 import RiskCarriers from '../config/RiskCarriers'
 
+
 export default class NexusApi {
 
     static fetchCoverables () {
@@ -13,15 +14,26 @@ export default class NexusApi {
               console.log('ERROR Nexus fetchCoverables:',error.response.data && error.response.data.message);
             });
     }
-    
+
     static fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<object[]> {
- 
-      return axios.get(
-        `${NetConfig.netById(global.user.networkId).nexusAPI}/v1/quote?coverAmount=${amount}&currency=${currency}&period=${period}&contractAddress=${protocol.nexusCoverable}`
-        ,{headers : {
-          Origin: process.env.API_REQUEST_ORIGIN,
-        }})
- 
+
+       if (currency === 'USD') {
+           currency = RiskCarriers.NEXUS.fallbackQuotation;
+       }
+       if (!Number.isInteger(amount)) {
+           amount = Math.round(amount);
+       }
+
+       return axios.get(
+         `${NetConfig.netById(global.user.networkId).nexusAPI}/v1/quote?coverAmount=${amount}&currency=${currency}&period=${period}&contractAddress=${protocol.nexusCoverable}`
+         ,
+         {
+           headers : {
+             // Origin: process.env.API_REQUEST_ORIGIN,
+           }
+         }
+       )
+
       .then((response:any) => {
         return response.data;
       }).catch(error => {
