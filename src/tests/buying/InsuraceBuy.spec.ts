@@ -45,16 +45,20 @@ before(async () => {
 let premium : any;
 before( async () => {
     premium = await InsuraceApi.getCoverPremium(
-                    web3,netConfig.ETH,2,180,"2000000000000000000",
-                    "0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2")
+                                                "2000000000000000000",
+                                                netConfig.ETH,
+                                                180,
+                                                2,
+                                                owner)
+
+    console.log(premium)
     return premium;
 });
 
 
 let confirmCoverResult : any ;
 before(async () => {
-    let state = { web3 : { web3Active:{networkId : 4, symbol:'ETH'} } };
-    confirmCoverResult = await InsuraceApi.confirmCoverPremium(state, premium.params)
+    confirmCoverResult = await InsuraceApi.confirmCoverPremium('ETH', premium.params)
     console.log(confirmCoverResult)
     return confirmCoverResult;
 });

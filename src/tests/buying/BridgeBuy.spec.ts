@@ -30,8 +30,6 @@ let owner :any;
 let ercBalance :any;
 let erc20Instance : any;
 
-// testing Insurace buy directly with Impl contract
-// netConfig.brightProtocol = '0x486135ec25eA3445E141C95dfDc7a70aaB663dd6';
 
 /**  Init BrightClient test instance  */
 before(async () => {
@@ -54,18 +52,17 @@ let bridgeProductAddress : string = '0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f'
 before( async () => {
     erc20Instance = _getIERC20Contract(netConfig.USDT);
     ercBalance = await erc20Instance.methods.balanceOf(owner).call();
-    bridgeQuote = await brightClient.getQuoteFrom('bridge',  10000, bridgeProductAddress , 32, {bridgeProductAddress: bridgeProductAddress});
-    // bridgeQuote = await brightClient.getQuoteFrom('bridge',bridgeProductAddress);
-    console.log('getQuoteFrom bridge : ',bridgeQuote)
-    return bridgeQuote;
 });
 
 describe('Get Bridge Quote', () => {
     it('Should have.property(totalPrice)', async () => {
-      let dist = ['insurace','nexus','bridge'];
-      // const bridgeQuote = await brightClient.getQuoteFrom('bridge',bridgeProductAddress);
-      const bridgeQuote = await brightClient.getQuoteFrom('bridge',  10000, bridgeProductAddress , 32, {bridgeProductAddress: bridgeProductAddress});
-      console.log('Bridge quote:',bridgeQuote);
+      const protocol = { bridgeProductAddress:'0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f'};
+      bridgeQuote = await brightClient.getQuoteFrom("bridge",
+                                                     web3.utils.toBN('1000000000000000000000'),
+                                                     'ETH',
+                                                     26,
+                                                     protocol);
+      console.log('Bridge quote: ', bridgeQuote);
       expect(bridgeQuote).to.have.property('totalPrice')
     });
   });

@@ -1,8 +1,6 @@
 import  DistributorsABI  from '../abi/Distributors.json';
 import IERC20ABI from '../abi/IERC20Metadata.json';
 import InsuraceDistributor from '../abi/InsuraceDistributor.json';
-
-
 import BridgeRegistryContractABI from '../abi/bridge/IContractsRegistry.json';
 import BridgePolicyBookRegistryABI from '../abi/bridge/IPolicyBookRegistry.json';
 import BridgePolicyQuoteABI from '../abi/bridge/IPolicyQuote.json';
