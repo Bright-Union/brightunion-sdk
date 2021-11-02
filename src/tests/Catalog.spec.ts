@@ -5,8 +5,8 @@ import 'mocha';
 import NetConfig from '../service/config/NetConfig';
 import Catalog from '../service/Catalog';
 
-import Distributors from '../BrightClient'
-let instance : Distributors = null;
+import BrightClient from '../BrightClient'
+let instance : BrightClient = null;
 let bridgeContract : any = null;
 let web3 : Web3;
 let instanceConf:object;
@@ -23,9 +23,8 @@ before(async () => {
 
     instanceConf = {
       web3: web3,
-      brightProtoAddress:netConfig.brightProtocol,
     }
-    instance = new Distributors(instanceConf);
+    instance = new BrightClient(instanceConf);
     await instance.initialize();
 
 });
