@@ -7,19 +7,18 @@ import CatalogHelper from './helpers/catalogHelper';
 
 export async function getCatalog(): Promise<any[]> {
 
-  const nexusCoverables =  await getNexusCoverables();
-  const insuraceCoverables =  await getInsuraceCoverables();
-  const bridgeCoverables =  await getBridgeCoverables();
+  const catalogPromiseArray:any[] = [];
+  catalogPromiseArray.push(getNexusCoverables())
+  catalogPromiseArray.push(getInsuraceCoverables())
+  catalogPromiseArray.push(getBridgeCoverables())
 
-  // console.log('nexusCoverables' , nexusCoverables)
-  // console.log('insuraceCoverables' , insuraceCoverables)
-  // console.log('bridgeCoverables' , bridgeCoverables)
+  return Promise.all(catalogPromiseArray)
+  .then((_data: any) => {
+    let allCoverables: any[] = [];
 
-  return Promise.all([ nexusCoverables, insuraceCoverables, bridgeCoverables])
-  .then(() => {
-    const allCoverables: any[] = nexusCoverables
-    .concat(insuraceCoverables)
-    .concat(bridgeCoverables);
+    for(let array of _data){
+      if(array) allCoverables = allCoverables.concat(array);
+    }
 
     const mergedCoverables:any[] =  CatalogHelper.mergeCoverables(allCoverables)
     return mergedCoverables;

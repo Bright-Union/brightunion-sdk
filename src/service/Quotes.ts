@@ -22,17 +22,17 @@ export async function getQuotes(
   _protocol:any
 
 ): Promise<any[]> {
-  const quotesArray = [];
+  const quotesPromiseArray = [];
 
-  quotesArray.push(getQuoteFrom('nexus', _amount, _currency, _period, _protocol))
-  quotesArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol))
-  quotesArray.push(getQuoteFrom('bridge' , _amount, _currency, _period, _protocol))
+  quotesPromiseArray.push(getQuoteFrom('nexus', _amount, _currency, _period, _protocol))
+  quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol))
+  quotesPromiseArray.push(getQuoteFrom('bridge' , _amount, _currency, _period, _protocol))
 
   for (let net of global.user.web3Passive) {
-    quotesArray.push( getInsuraceQuote(net , _amount, _currency, _period, _protocol))
+    quotesPromiseArray.push( getInsuraceQuote(net , _amount, _currency, _period, _protocol))
   }
 
-  return Promise.all(quotesArray).then((data:any) => {
+  return Promise.all(quotesPromiseArray).then((data:any) => {
     const allQuotes:object[] = data.filter((q:any) => { if(q)return q });
 
     return allQuotes;
