@@ -15,7 +15,6 @@ import NetConfig from '../service/config/NetConfig';
  * @returns Array of quotes from all supported distributors
  */
 
-
 export async function getQuotes(
   _amount:number,
   _currency:string, // coverAddress for bridge
@@ -154,17 +153,17 @@ export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_
 }
 
 
-//  export async function getInsuraceQuote( _amount:number, _currency:string, _period: number, _protocol:any ) {
-  //     if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE') && _protocol.productId) {
-    //
-    //       const _owner        = global.user.account;
-    //       const chainSymbol   = NetConfig.netById(global.user.networkId).symbol;
-    //       const premium : any = await InsuraceApi.getCoverPremium( _amount, _currency, _period,_protocol, _owner);
-    //       const quote   : any = await InsuraceApi.confirmCoverPremium(chainSymbol, premium.params);
-    //
-    //       return quote;
-    //     }
-    // }
+export async function getInsuraceQuoteWithConfirm( _amount:number, _currency:string, _period: number, _protocol:any ) {
+  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE') && _protocol.productId) {
+
+    const _owner        = global.user.account;
+    const chainSymbol   = NetConfig.netById(global.user.networkId).symbol;
+    const premium : any = await InsuraceApi.getCoverPremium( _amount, _currency, _period,_protocol, _owner);
+    const quote   : any = await InsuraceApi.confirmCoverPremium(chainSymbol, premium.params);
+
+    return quote;
+  }
+}
 
 
-export default getQuoteFrom;
+export default {getQuoteFrom, getInsuraceQuoteWithConfirm};

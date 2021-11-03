@@ -41,7 +41,7 @@ constructor(_config:any) {
   }
 
 async initialize(): Promise<object>{
-      global.user.account = global.user.account;
+      global.user.account = (await  global.user.web3.eth.getAccounts())[0];;
       global.user.networkId = await global.user.web3.eth.net.getId();
       global.user.brightProtoAddress = NetConfig.netById(global.user.networkId).brightProtocol;
       global.user.web3Passive = NetConfig.createWeb3Passives();

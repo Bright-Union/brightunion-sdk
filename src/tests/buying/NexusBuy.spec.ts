@@ -78,16 +78,14 @@ describe('Buy Cover on Nexus', () => {
         console.log('ercBalance: ',ercBalance)
 
         console.log('Nexus cover price: ', nexusResponse.price);
-        
+
               console.log(owner)
               console.log('ercBalance: ', ercBalance)
-  
+
 
                 //    if (Number(ercBalance) >= (Number)(nexusResponse.price)) {
-                    let state = { web3:{ web3Active:{ coinbase: owner }}};
 
                         ERC20Helper.approveAndCall(
-                            state,
                             erc20Instance,
                             nexusResponse.contract,
                             nexusResponse.price,
@@ -101,14 +99,14 @@ describe('Buy Cover on Nexus', () => {
                                     }, process.env.PRIVATE_KEY)
                                     .then(console.log);
 
-                            
+
                           const data = web3.eth.abi.encodeParameters(
                               ['uint', 'uint', 'uint', 'uint', 'uint8', 'bytes32', 'bytes32'],
-                              [nexusResponse.price, nexusResponse.priceInNXM, nexusResponse.expiresAt, 
+                              [nexusResponse.price, nexusResponse.priceInNXM, nexusResponse.expiresAt,
                                nexusResponse.generatedAt, nexusResponse.v, nexusResponse.r, nexusResponse.s],
                           );
 
-                            console.log('calling  brightClient.buyCover...')                            
+                            console.log('calling  brightClient.buyCover...')
                                 brightClient.buyCover(
                                     owner,
                                     'nexus',
@@ -124,7 +122,7 @@ describe('Buy Cover on Nexus', () => {
                             },(err : any) => {
                               console.log(err);
                          });
-                    //   } 
+                    //   }
                 });
     });
 

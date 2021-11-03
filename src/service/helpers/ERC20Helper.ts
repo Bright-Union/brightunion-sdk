@@ -10,10 +10,10 @@ export default class ERC20Helper {
         return toBN(ercAmount).div(toBN(10 ** 12)).toString();
     }
 
-    static approveAndCall (state:any, erc20Instance:any, spender:any, amount:any, onConfirmation:any, onError:any) {
+    static approveAndCall ( erc20Instance:any, spender:any, amount:any, onConfirmation:any, onError:any) {
         return erc20Instance.methods
             .approve(spender, amount)
-            .send({from: state.web3.web3Active.coinbase})
+            .send({from: global.user.account})
             .on('transactionHash', () => {
                 //
             })
@@ -48,11 +48,11 @@ export default class ERC20Helper {
                     .on('confirmation', (confirmationNumber:any) => {
                         if (confirmationNumber === 0) {
                             //starting over again
-                            ERC20Helper.approveAndCall(state, erc20Instance, spender, ERC20Helper.ERCtoUSDTDecimals(amount), onConfirmation, onError);
+                            ERC20Helper.approveAndCall(erc20Instance, spender, ERC20Helper.ERCtoUSDTDecimals(amount), onConfirmation, onError);
                         }
                     })
             } else {
-                ERC20Helper.approveAndCall(state, erc20Instance, spender, ERC20Helper.ERCtoUSDTDecimals(amount), onConfirmation, onError);
+                ERC20Helper.approveAndCall(erc20Instance, spender, ERC20Helper.ERCtoUSDTDecimals(amount), onConfirmation, onError);
             }
         });
     }

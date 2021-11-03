@@ -1,7 +1,7 @@
 import axios from 'axios';
 import NetConfig from '../config/NetConfig'
 import BigNumber from 'bignumber.js'
-// import ERC20Helper from '../helpers/ERC20Helper';
+import ERC20Helper from '../helpers/ERC20Helper';
 import RiskCarriers from '../config/RiskCarriers'
 import CatalogHelper from '../helpers/catalogHelper'
 
@@ -35,23 +35,20 @@ class InsuraceApi {
         amount : any,
         currency : any,
         period : any,
-        protocol : any,
+        protocolId : any,
         owner : any) {
-        let url = `${NetConfig.netById(global.user.networkId).insuraceAPI}/getCoverPremium?code=${encodeURIComponent(NetConfig.netById(global.user.networkId).insuraceAPIKey)}`;
-        let referral = NetConfig.netById(global.user.networkId).insuraceReferral;
 
-        console.log('getCoverPremium' , referral);
+        let url = `${NetConfig.netById(global.user.networkId).insuraceAPI}/getCoverPremium?code=${encodeURIComponent(NetConfig.netById(global.user.networkId).insuraceAPIKey)}`;
 
         return  axios.post(
             url, {
-
                     "chain": NetConfig.netById(global.user.networkId).symbol,
                     "coverCurrency": currency,
-                    "productIds": [protocol],
+                    "productIds": [protocolId],
                     "coverDays": [period],
                     "coverAmounts": [amount],
                     "owner": owner,
-                    "referralCode": referral,
+                    "referralCode": NetConfig.netById(global.user.networkId).insuraceReferral,
 
         }).then((response : any) => {
             return response.data;
@@ -82,9 +79,9 @@ class InsuraceApi {
         if (currency === 'USD') {
           currency = RiskCarriers.INSURACE.fallbackQuotation[NetConfig.netById(global.user.networkId).symbol];
         }
-        // if (NetConfig.sixDecimalsCurrency(global.user.networkId, currency)) {
-          // amountInWei = ERC20Helper.ERCtoUSDTDecimals(amountInWei);
-        // }
+        if (NetConfig.sixDecimalsCurrency(global.user.networkId, currency)) {
+          amountInWei = ERC20Helper.ERCtoUSDTDecimals(amountInWei);
+        }
 
         let currencies:object[] = await this.getCurrencyList()
         let selectedCurrency:any = currencies.find((curr:any) => {return curr.name == currency});
@@ -93,6 +90,8 @@ class InsuraceApi {
           console.error(`Selected currency is not supported by InsurAce: ${currency} on net ${global.user.networkId}`)
           return;
         }
+
+        [currency, selectedCurrency] = NetConfig.insuraceDePegTestCurrency(protocol,currency,web3.symbol,selectedCurrency);
 
         // let web3 : any = web3;
         web3.symbol = NetConfig.netById(web3.networkId).symbol;
@@ -104,7 +103,7 @@ class InsuraceApi {
           period,
           parseInt(protocol.productId),
           global.user.account,
-            ).then( (response: any) => {
+        ).then( (response: any) => {
 
                 // const insurPrice = getters.insurPrice(state);
                 let premium = 1000//response.premiumAmount;
@@ -119,9 +118,6 @@ class InsuraceApi {
                 // let estimatedGasPrice = (RiskCarriers.INSURACE.description.estimatedGas * gasPrice) * USDRate / (10**9);
                 // let feeInDefaultCurrency = (RiskCarriers.INSURACE.description.estimatedGas * gasPrice) / 10**9;
                 let defaultCurrencySymbol = web3.symbol === 'POLYGON'? 'MATIC': web3.symbol === 'BSC' ? 'BNB' : 'ETH';
-
-
-                console.log("INSU QUOTE - " , response)
 
                 const quote = CatalogHelper.quoteFromCoverable(
                     'insurace',
