@@ -54,14 +54,15 @@ export async function buyQuote(_quoteProtocol: any): Promise<any[]> {
 
 
     let asset:any;
-    if (this.buyingWithNetworkCurrency) {
-      asset = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
-    } else if (this.paymentCurrency === 'DAI') {
-      asset = this.activeNetworkConfig().DAI;
-    } else {
+    asset = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
+    // if (this.buyingWithNetworkCurrency) {
+      // asset = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
+    // } else if (this.paymentCurrency === 'DAI') {
+      // asset = this.activeNetworkConfig().DAI;
+    // } else {
       //Not supported yet
-      throw new Error();
-    }
+      // throw new Error();
+    // }
 
     _getIERC20Contract(asset).then((erc20Instance:any) => {
 
