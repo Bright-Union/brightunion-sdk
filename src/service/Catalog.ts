@@ -32,16 +32,11 @@ export async function getCatalog(): Promise<any[]> {
   .then((_data: any) => {
     let allCoverables: any[] = [];
 
-    console.log('SDK - _data - ' , _data);
-
     for(let array of _data){
       if(array) {
-        console.log('cat - ' , array.length);
         allCoverables = allCoverables.concat(array);
       }
     }
-
-    console.log('SDK  - allCoverables - ' , allCoverables.length );
 
     const mergedCoverables:any[] =  CatalogHelper.mergeCoverables(allCoverables)
     return mergedCoverables;
@@ -87,8 +82,6 @@ export async function getBridgeCoverables(): Promise<any[]> {
               source: 'bridge',
             }))
           }
-
-          console.log("getBridgeCatalogTemp SDK - " , policyBooksArray.length)
 
           return policyBooksArray;
 
