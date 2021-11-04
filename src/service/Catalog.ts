@@ -4,21 +4,44 @@
 import NexusApi from './distributorsApi/NexusApi';
 import InsuraceApi from './distributorsApi/InsuraceApi';
 import CatalogHelper from './helpers/catalogHelper';
+import {
+  _getBridgeRegistryContract,
+  _getBridgePolicyBookRegistryContract,
+  _getBridgePolicyQuoteContract,
+  _getBridgePolicyBookContract,
+  _getBridgePolicyRegistryContract,
+} from './helpers/getContract';
+import NetConfig from './config/NetConfig';
+
 
 export async function getCatalog(): Promise<any[]> {
 
   const catalogPromiseArray:any[] = [];
-  catalogPromiseArray.push(getNexusCoverables())
-  catalogPromiseArray.push(getInsuraceCoverables())
-  catalogPromiseArray.push(getBridgeCoverables())
+
+  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL')) {
+    catalogPromiseArray.push(getNexusCoverables())
+  }
+  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE')) {
+    catalogPromiseArray.push(getInsuraceCoverables())
+  }
+  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL')) {
+    catalogPromiseArray.push(getBridgeCoverables())
+  }
 
   return Promise.all(catalogPromiseArray)
   .then((_data: any) => {
     let allCoverables: any[] = [];
 
+    console.log('SDK - _data - ' , _data);
+
     for(let array of _data){
-      if(array) allCoverables = allCoverables.concat(array);
+      if(array) {
+        console.log('cat - ' , array.length);
+        allCoverables = allCoverables.concat(array);
+      }
     }
+
+    console.log('SDK  - allCoverables - ' , allCoverables.length );
 
     const mergedCoverables:any[] =  CatalogHelper.mergeCoverables(allCoverables)
     return mergedCoverables;
@@ -27,8 +50,54 @@ export async function getCatalog(): Promise<any[]> {
 }
 
 export async function getBridgeCoverables(): Promise<any[]> {
- return await CatalogHelper.getBridgeCatalogTemp();
-}
+
+  const chainId = await global.user.web3.eth.getChainId();
+  const bridgeRegistryAdd = NetConfig.netById( chainId ).bridgeRegistry;
+
+  const BridgeContract = await _getBridgeRegistryContract(bridgeRegistryAdd,global.user.web3);
+
+  return BridgeContract.methods.getPolicyBookRegistryContract().call().then(async (policyBookRegistryAddr:any) => {
+
+    let BridgePolicyBookRegistryContract = await _getBridgePolicyBookRegistryContract(policyBookRegistryAddr,global.user.web3);
+
+    return BridgePolicyBookRegistryContract.methods.count().call().then((policyBookCounter:any) => {
+
+      return BridgePolicyBookRegistryContract.methods.listWithStats(0, policyBookCounter).call()
+      .then(({_policyBooksArr, _stats}:any) => {
+
+        const policyBooksArray = [];
+        for (let i = 0; i < _stats.length; i++) {
+          if (!_stats[i].whitelisted) {
+            continue;
+          }
+
+          // let asset = state.trustWalletAssets[Object.keys(state.trustWalletAssets)
+            // .find(key => key.toLowerCase() === _stats[i].insuredContract.toLowerCase())];
+            // let logo = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${_stats[i].insuredContract}/logo.png`;
+
+            let name = _stats[i][0]
+            policyBooksArray.push(CatalogHelper.createCoverable({
+              bridgeProductAddress: _policyBooksArr[i],
+              bridgeCoverable: _stats[i].insuredContract,
+              protocolAddress: _stats[i].insuredContract,
+              bridgeAPY: Number(_stats[i].APY) / (10 ** 5),
+              // logo: logo,
+              name: name,
+              type: CatalogHelper.commonCategory(_stats[i].contractType, 'bridge'),
+              source: 'bridge',
+            }))
+          }
+
+          console.log("getBridgeCatalogTemp SDK - " , policyBooksArray.length)
+
+          return policyBooksArray;
+
+        });
+      });
+    });
+
+    // return await CatalogHelper.getBridgeCatalogTemp();
+  }
 
 export async function getNexusCoverables(): Promise<any[]> {
 
