@@ -42,7 +42,8 @@ export async function getQuote(
                         _contractAddress,
                         _interfaceCompliant1,
                         _interfaceCompliant2,
-                        _data).call();
+                        _data
+                      ).call();
 }
 
 

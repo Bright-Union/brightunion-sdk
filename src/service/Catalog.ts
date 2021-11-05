@@ -18,12 +18,13 @@ export async function getCatalog(): Promise<any[]> {
 
   const catalogPromiseArray:any[] = [];
 
-  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL')) {
-    catalogPromiseArray.push(getNexusCoverables())
-  }
-  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE')) {
-    catalogPromiseArray.push(getInsuraceCoverables())
-  }
+  // if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL')) {
+  //   catalogPromiseArray.push(getNexusCoverables())
+  // }
+  // if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE')) {
+  //   catalogPromiseArray.push(getInsuraceCoverables())
+  // }
+
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL')) {
     catalogPromiseArray.push(getBridgeCoverables())
   }

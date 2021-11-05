@@ -41,6 +41,8 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
 
 }
 
+
+
 export async function callNexus(_quoteProtocol:any){
 
   const data = global.user.web3.eth.abi.encodeParameters(
@@ -121,49 +123,72 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
 }
 
+export async function callBridge(_quoteProtocol:any){
 
-  export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
+  // const data = global.user.web3.eth.abi.encodeParameters(
+  //   ['uint', 'uint', 'uint', 'uint', 'uint8', 'bytes32', 'bytes32'],
+  //   [_quoteProtocol.quote.responseObj.price, _quoteProtocol.quote.responseObj.priceInNXM, _quoteProtocol.quote.responseObj.expiresAt,
+  //     _quoteProtocol.quote.responseObj.generatedAt, _quoteProtocol.quote.responseObj.v, _quoteProtocol.quote.responseObj.r, _quoteProtocol.quote.responseObj.s],
+  //   );
 
-    // console.log('enter helper...');
-    // let state = { web3:{ web3Active:{ coinbase: owner }}};
-    // ERC20Helper.approveUSDTAndCall(
-      //     state, // state
-      //     erc20Instance, // pay with asset
-      //     bridgeProductAddress, // spender
-      //     web3.utils.toBN('10000000000000000000'), // price, amount to allow spender spend in wei
-      //     () => { // onAllowanceReset
-        //     console.log('SHOW_CONFIRMATION_WAITING', {msg: `(1/3) Resetting USDT allowance to 0`});
-        //     },async () => {
-          //
-          //         // Sign tx manually
-          //         web3.eth.accounts.signTransaction({
-            //             to: bridgeProductAddress,
-            //             // value: '1000000000',
-            //             gas: 2000000
-            //         }, process.env.PRIVATE_KEY)
-            //         .then(console.log);
-            //
-            //
-            //         console.log('calling  brightClient.buyCover...')
-            //         await brightClient.buyCover(
-              //             owner,
-              //             'bridge',
-              //             bridgeProductAddress,
-              //             netConfig.USDT,  // payment asset
-              //             0, // sum assured, compliant
-              //             26, // bridge epochs
-              //             1, //coverType
-              //             web3.utils.toBN("100000000000000000000"), // token amount to cover
-              //             web3.utils.hexToBytes(web3.utils.numberToHex(500)) // random data
-              //         )
-              //
-              //
-              //     }, () => { console.log(Error);  }  //onError
-              // );
+    console.log('callBridge - ' , _quoteProtocol );
 
-              return;
+    let bridgeProductAddress: any = '0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f';
 
-            }
+    await buyCover(
+        global.user.account,
+        'bridge',
+        bridgeProductAddress,
+        NetConfig.netById(global.user.networkId).USDT,  // payment asset
+        0, // sum assured, compliant
+        _quoteProtocol.quote.responseObj.period, // bridge epochs - weeks
+        1, //coverType
+        _quoteProtocol.quote.responseObj.amount, // token amount to cover
+        global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500)) // random data
+    )
+
+}
+
+
+export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
+
+  console.log('buyOnBridge - ' , _quoteProtocol );
+
+  const erc20Instance = _getIERC20Contract(NetConfig.netById(global.user.networkId).USDT);
+  const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
+
+  if (Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.quote.reposnseObj.price)) {
+    this.showModal = false;
+    ERC20Helper.approveUSDTAndCall(
+      erc20Instance,
+      _quoteProtocol.quote.protocol.bridgeProductAddress,
+      _quoteProtocol.quote.reposnseObj.price,
+      () => {
+        // EventBus.publish('SHOW_CONFIRMATION_WAITING', {msg: `(1/3) Resetting USDT allowance to 0`});
+        console.log('Confirmation waiting');
+      },
+      () => {
+        this.callBridge(_quoteProtocol);
+      },
+      () => {
+        console.log('Error')
+        // EventBus.publish('CLOSE_CONFIRMATION_WAITING');
+        // this.showModal = true;
+      })
+
+    } else {
+      console.log('CLOSE_CONFIRMATION_WAITING');
+      console.log('TRACK_EVENT', {
+        action: 'buy-bridge-policy-error',
+        category: 'trxError',
+        label: 'You have insufficient funds to continue with this transaction',
+        value: 1
+      });
+    }
+
+    return;
+
+  }
 
 
   export default buyQuote

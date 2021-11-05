@@ -24,8 +24,8 @@ export async function getQuotes(
 ): Promise<any[]> {
   const quotesPromiseArray = [];
 
-  quotesPromiseArray.push(getQuoteFrom('nexus', _amount, _currency, _period, _protocol))
-  quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol))
+  // quotesPromiseArray.push(getQuoteFrom('nexus', _amount, _currency, _period, _protocol))
+  // quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol))
   quotesPromiseArray.push(getQuoteFrom('bridge' , _amount, _currency, _period, _protocol))
 
   for (let net of global.user.web3Passive) {
@@ -81,14 +81,20 @@ export async function getQuoteFrom(
  async function getBridgeQuote( _amount :any,  _period :any, _protocol :any ) : Promise<object>{
 
    if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeCoverable) {
+
+     console.log('getBridgeQuote' , _protocol);
+
      const quote =  await getQuote( 'bridge', _period, _amount, _protocol.bridgeCoverable,
        '0x0000000000000000000000000000000000000000',
        '0x0000000000000000000000000000000000000000',
-       global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500))
+       global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500)),
      );
+
+     console.log('getBridgeQuote QUOTE - '  , quote);
 
      // mapping to bridge object Or could be mapping to UI object
      // only reason of why we have diff get<provider>Quote methods
+
      const bridgeQuote = {
        totalSeconds       : quote.prop1,
        totalPrice         : quote.prop2,
@@ -124,10 +130,7 @@ export async function getQuoteFrom(
        }
      );
 
-
-
-     return bridgeQuote;
-
+     // return bridgeQuote;
 
    }
  }
