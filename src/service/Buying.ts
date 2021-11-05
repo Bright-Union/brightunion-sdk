@@ -8,8 +8,6 @@ import ERC20Helper from './helpers/ERC20Helper';
 
 export async function buyQuote(_quoteProtocol: any): Promise<any> {
 
-  console.log('BUY Q')
-
   if(_quoteProtocol.distributorName == 'bridge'){
 
     return await buyOnBridge(_quoteProtocol);
@@ -17,8 +15,6 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
   }else if(_quoteProtocol.distributorName == 'nexus'){
 
     return await buyOnNexus(_quoteProtocol);
-
-    console.log('buyOnNexus');
 
   }else if(_quoteProtocol.distributorName == 'insurace'){
 
@@ -39,7 +35,6 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
       confirmCoverResult[10],
       confirmCoverResult[11],
     )
-
   }
 
   return ;
@@ -62,27 +57,21 @@ export async function callNexus(_quoteProtocol:any){
       0, // sum assured, compliant
       _quoteProtocol.quote.responseObj.period, // period
       1, //coverType
-      // global.user.web3.utils.toBN('100000000000000000000'), // token amount to cover
-      _quoteProtocol.quote.responseObj.amount,
+      _quoteProtocol.quote.responseObj.amount, // token amount to cover
       data// random data
     )
 
 }
 
 
-
 export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
   let asset:any;
-  // asset = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
-
   if (NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.quote.responseObj.currency)) {
-    // asset = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
     asset = NetConfig.netById(global.user.networkId).ETH;
   } else if (_quoteProtocol.currency === 'DAI') {
     asset = NetConfig.netById(global.user.networkId).DAI;
   } else {
-    console.log('asset error')
     //Not supported yet
     throw new Error();
   }
@@ -105,8 +94,6 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
         const onError =  (err:any) => {
           console.log('CLOSE_CONFIRMATION_WAITING');
-          // this.errorMessage = err.message;
-          // this.showModal = true;
         }
 
         ERC20Helper.approveAndCall( erc20Instance,  _quoteProtocol.quote.responseObj.contract,  _quoteProtocol.quote.responseObj.price, onSuccess, onError);
@@ -118,35 +105,19 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
           label: 'You have insufficient funds to continue with this transaction',
           value: 1
         });
-        console.log('CLOSE_CONFIRMATION_WAITING xxx1');
+        console.log('CLOSE_CONFIRMATION_WAITING');
         // this.errorMessage = "You have insufficient funds to continue with this transaction";
       }
 
   }else{
 
   const netBalance = await global.user.web3.eth.getBalance(global.user.account);
-    console.log('sdsd' ,  netBalance , _quoteProtocol.quote.responseObj.price );
-
     if (Number(netBalance) >= (Number)(_quoteProtocol.quote.responseObj.price)) {
-      // this.showModal = false;
-      console.log('SHOW_CONFIRMATION_WAITING xxxx', {msg: `Buying cover for xxx`});
       callNexus(_quoteProtocol);
-
-      // this.callDistributorBuy(asset);
-
     } else {
       console.log("You have insufficient funds to continue with this transaction");
     }
   }
-
-
-
-
-
-
-
-
-
 
 }
 
