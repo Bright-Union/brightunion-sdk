@@ -29,6 +29,7 @@ import NetConfig from './service/config/NetConfig'
 class BrightClient {
 
 catalog: object[];
+catalogUnsorted: object[];
 
 constructor(_config:any) {
     global.user = {
@@ -40,6 +41,23 @@ constructor(_config:any) {
     };
   }
 
+  covers: object = {
+    // owner: this,
+    async getCatalog() {
+      return await this.getCatalog();
+    },
+    async getCatalogUnsorted() {
+      return await this.catalogUnsorted;
+    },
+    async getQuotes() {
+      return await this.getQuotes();
+    },
+    async buyQuote() {
+      return await this.buyQuote();
+    },
+  }
+
+
 async initialize(): Promise<object>{
       global.user.account = (await  global.user.web3.eth.getAccounts())[0];;
       global.user.networkId = await global.user.web3.eth.net.getId();
@@ -50,8 +68,9 @@ async initialize(): Promise<object>{
 
 async getCatalog () {
      return await getCatalog().then(data => {
-      this.catalog = data;
-      return data;
+      this.catalog = data.sorted;
+      this.catalogUnsorted = data.unSorted;
+      return data.sorted;
     })
   }
 

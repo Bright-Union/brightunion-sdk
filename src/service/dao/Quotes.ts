@@ -25,7 +25,7 @@ import {_getDistributorContract} from "../helpers/getContract";
  * @beta
  */
 export async function getQuote(
-    _distributorName : string ,
+    _distributorName : string,
     _period : any,
     _sumAssured : number,
     _contractAddress : string,
@@ -33,7 +33,7 @@ export async function getQuote(
     _interfaceCompliant2 : string,
     _data : any,
 ) : Promise<any>  {
-  return await _getDistributorContract()
+  return await _getDistributorContract() // SDK
                       .methods
                       .getQuote(
                         _distributorName,

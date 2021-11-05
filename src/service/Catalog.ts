@@ -14,16 +14,16 @@ import {
 import NetConfig from './config/NetConfig';
 
 
-export async function getCatalog(): Promise<any[]> {
+export async function getCatalog(): Promise<any> {
 
   const catalogPromiseArray:any[] = [];
 
-  // if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL')) {
-  //   catalogPromiseArray.push(getNexusCoverables())
-  // }
-  // if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE')) {
-  //   catalogPromiseArray.push(getInsuraceCoverables())
-  // }
+  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL')) {
+    catalogPromiseArray.push(getNexusCoverables())
+  }
+  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE')) {
+    catalogPromiseArray.push(getInsuraceCoverables())
+  }
 
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL')) {
     catalogPromiseArray.push(getBridgeCoverables())
@@ -40,7 +40,7 @@ export async function getCatalog(): Promise<any[]> {
     }
 
     const mergedCoverables:any[] =  CatalogHelper.mergeCoverables(allCoverables)
-    return mergedCoverables;
+    return { sorted: mergedCoverables, unSrted: allCoverables };
   })
 
 }
