@@ -78,17 +78,15 @@ export async function getQuoteFrom(
  * @param _protocol
  * @returns
  */
- async function getBridgeQuote( _amount :any,  _period :any, _protocol :any ) : Promise<object>{
+ async function getBridgeQuote( _period :any, _amount :any, _protocol :any ) : Promise<object>{
 
    if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeCoverable) {
 
-     console.log('getBridgeQuote' ,  _period,    _amount,    _protocol.bridgeProductAddress );
-
      const quote =  await getQuote(
        'bridge',
+       _period,
        _amount,
-     _period,
-     _protocol.bridgeProductAddress,
+      _protocol.bridgeCoverable,
      '0x0000000000000000000000000000000000000000',
      '0x0000000000000000000000000000000000000000',
      global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500)),
