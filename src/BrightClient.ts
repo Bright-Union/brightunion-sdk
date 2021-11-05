@@ -125,11 +125,13 @@ async getQuoteFrom(_distributorName:string,
              _period:number,
              _protocol:any): Promise<any> {
 
-   return await getQuoteFrom(_distributorName,
-                       _amount,
-                       _currency,
-                       _period,
-                       _protocol);
+   return await getQuoteFrom(
+     _distributorName,
+     _amount,
+     _currency,
+     _period,
+     _protocol
+                     );
  }
 
 

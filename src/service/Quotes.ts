@@ -24,8 +24,8 @@ export async function getQuotes(
 ): Promise<any[]> {
   const quotesPromiseArray = [];
 
-  quotesPromiseArray.push(getQuoteFrom('nexus', _amount, _currency, _period, _protocol))
-  quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol))
+  // quotesPromiseArray.push(getQuoteFrom('nexus', _amount, _currency, _period, _protocol))
+  // quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol))
   quotesPromiseArray.push(getQuoteFrom('bridge' , _amount, _currency, _period, _protocol))
 
   for (let net of global.user.web3Passive) {
@@ -82,12 +82,12 @@ export async function getQuoteFrom(
 
    if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeCoverable) {
 
-     console.log('getBridgeQuote' , _protocol);
+     console.log('getBridgeQuote' ,  _period,    _amount,    _protocol.bridgeProductAddress );
 
      const quote =  await getQuote(
        'bridge',
+       _amount,
      _period,
-     _amount,
      _protocol.bridgeProductAddress,
      '0x0000000000000000000000000000000000000000',
      '0x0000000000000000000000000000000000000000',
