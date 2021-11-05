@@ -268,6 +268,10 @@ class NetConfig{
     return [currency,selectedCurrency]
   }
 
+  public static isNetworkCurrencyBySymbol(asset:any) {
+    return asset === 'ETH' || asset === 'BNB' || asset === 'MATIC';
+  }
+
 }
 
 export default NetConfig;

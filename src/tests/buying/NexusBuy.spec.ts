@@ -39,9 +39,9 @@ before(async () => {
 
     brightClient = new BrightClient({
         web3: web3,
-        networkId: NETWORK_ID,
-        brightProtoAddress: netConfig.brightProtocol,
-        account: owner,
+        // networkId: NETWORK_ID,
+        // brightProtoAddress: netConfig.brightProtocol,
+        // account: owner,
     });
     await brightClient.initialize();
     erc20Instance = await _getIERC20Contract(netConfig.ETH);
@@ -49,6 +49,7 @@ before(async () => {
 
 
 let nexusResponse:any;
+let quote:any;
 describe('Get Nexus Quote', () => {
     it('Should print quote', async () => {
      let protocol = { nexusCoverable:'0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9' };
@@ -59,8 +60,13 @@ describe('Get Nexus Quote', () => {
                                         30,
                                         protocol);
 
-      console.log('Nexus quote:', owner);
+
+      quote = nexusResponse.quote.responseObj;
+      console.log('Nexus quote:', quote);
+      console.log('Owner:', owner);
       ercBalance = await erc20Instance.methods.balanceOf(owner).call();
+
+      return quote;
 
     });
   });
@@ -77,7 +83,7 @@ describe('Buy Cover on Nexus', () => {
     it('Should buy Nexus quote',  (done) => {
         console.log('ercBalance: ',ercBalance)
 
-        console.log('Nexus cover price: ', nexusResponse.price);
+        console.log('Nexus cover price: ', quote.price);
 
               console.log(owner)
               console.log('ercBalance: ', ercBalance)
@@ -87,13 +93,13 @@ describe('Buy Cover on Nexus', () => {
 
                         ERC20Helper.approveAndCall(
                             erc20Instance,
-                            nexusResponse.contract,
-                            nexusResponse.price,
+                            quote.contract,
+                            quote.price,
                             () => {
                               console.log('signing tx')
                                       // Sign tx manually
                                     web3.eth.accounts.signTransaction({
-                                        to: nexusResponse.contract,
+                                        to: quote.contract,
                                         // value: '1000000000',
                                         gas: 2000000
                                     }, process.env.PRIVATE_KEY)
@@ -102,15 +108,15 @@ describe('Buy Cover on Nexus', () => {
 
                           const data = web3.eth.abi.encodeParameters(
                               ['uint', 'uint', 'uint', 'uint', 'uint8', 'bytes32', 'bytes32'],
-                              [nexusResponse.price, nexusResponse.priceInNXM, nexusResponse.expiresAt,
-                               nexusResponse.generatedAt, nexusResponse.v, nexusResponse.r, nexusResponse.s],
+                              [quote.price, quote.priceInNXM, quote.expiresAt,
+                               quote.generatedAt, quote.v, quote.r, quote.s],
                           );
 
                             console.log('calling  brightClient.buyCover...')
                                 brightClient.buyCover(
                                     owner,
                                     'nexus',
-                                    nexusResponse.contract,
+                                    quote.contract,
                                     netConfig.USDT,  // payment asset
                                     0, // sum assured, compliant
                                     26, // period
