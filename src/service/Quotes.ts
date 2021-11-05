@@ -30,7 +30,7 @@ export async function getQuoteFrom(
   if(_distributorName == 'bridge'){
      return await getBridgeQuote(_amount,_period,_protocol);
   }else if(_distributorName == 'nexus'){
-    return await getNexusQuote(_amount,_currency,_period,_protocol );
+    return await getNexusQuote(_amount,_currency,_plseriod,_protocol );
   }else if(_distributorName == 'insurace'){
     return await getInsuraceQuote(_amount,_currency,_period,_protocol);
   }else {
@@ -47,7 +47,10 @@ export async function getQuoteFrom(
  * @returns
  */
  async function getBridgeQuote( _amount :any,  _period :any, _protocol :any ) : Promise<object>{
-     const quote =  await getQuote( 'bridge', _period, _amount, _protocol.bridgeProductAddress,
+     const quote =  await getQuote( 'bridge', 
+                             _period, 
+                             _amount, 
+                             _protocol.bridgeProductAddress,
        '0x0000000000000000000000000000000000000000',
        '0x0000000000000000000000000000000000000000',
        global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500))

@@ -1,1 +1,6 @@
-// import BrightClient from '@brightunion/sdk';
+
+const BrightClient =  require('../dist/BrightClient.js');
+
+console.log('bright...')
+
+

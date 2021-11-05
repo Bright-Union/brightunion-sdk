@@ -1,6 +1,3 @@
-// import NetConfig from '@/service/config/NetConfig';
-// import NexusApi  from '@/service/distributorsApi/NexusApi';
-
 import NexusApi from './distributorsApi/NexusApi';
 import InsuraceApi from './distributorsApi/InsuraceApi';
 import CatalogHelper from './helpers/catalogHelper';

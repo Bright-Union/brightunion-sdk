@@ -81,6 +81,7 @@ describe('Buy Cover on Bridge', () => {
             if (Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(price)) {
                     console.log('enter helper...');
                     let state = { web3:{ web3Active:{ coinbase: owner }}};
+                  
                     ERC20Helper.approveUSDTAndCall(
                         state, // state
                         erc20Instance, // pay with asset
