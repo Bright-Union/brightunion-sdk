@@ -138,7 +138,7 @@ class InsuraceApi {
                         // estimatedGasPriceDefault: feeInDefaultCurrency
                     },
                     {
-                        // remainingCapacity: protocol.stats.capacityRemaining
+                        remainingCapacity: protocol.stats.capacityRemaining
                     }
                 );
                 return quote;

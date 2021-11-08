@@ -19,7 +19,7 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
   }else if(_quoteProtocol.distributorName == 'insurace'){
 
     const chainSymbol:string  = NetConfig.netById(global.user.networkId).symbol;
-    const confirmCoverResult  : any = await InsuraceApi.confirmCoverPremium(chainSymbol, _quoteProtocol.quote.responseObj.params);
+    const confirmCoverResult  : any = await InsuraceApi.confirmCoverPremium(chainSymbol, _quoteProtocol.rawData.params);
 
     return await buyCoverInsurace(
       global.user.account,
@@ -47,19 +47,19 @@ export async function callNexus(_quoteProtocol:any){
 
   const data = global.user.web3.eth.abi.encodeParameters(
     ['uint', 'uint', 'uint', 'uint', 'uint8', 'bytes32', 'bytes32'],
-    [_quoteProtocol.quote.responseObj.price, _quoteProtocol.quote.responseObj.priceInNXM, _quoteProtocol.quote.responseObj.expiresAt,
-      _quoteProtocol.quote.responseObj.generatedAt, _quoteProtocol.quote.responseObj.v, _quoteProtocol.quote.responseObj.r, _quoteProtocol.quote.responseObj.s],
+    [_quoteProtocol.rawData.price, _quoteProtocol.rawData.priceInNXM, _quoteProtocol.rawData.expiresAt,
+      _quoteProtocol.rawData.generatedAt, _quoteProtocol.rawData.v, _quoteProtocol.rawData.r, _quoteProtocol.rawData.s],
     );
 
     buyCover(
       global.user.account,
       'nexus',
-      _quoteProtocol.quote.responseObj.contract,
+      _quoteProtocol.rawData.contract,
       NetConfig.netById(global.user.networkId).USDT,  // payment asset
       0, // sum assured, compliant
-      _quoteProtocol.quote.responseObj.period, // period
+      _quoteProtocol.rawData.period, // period
       1, //coverType
-      _quoteProtocol.quote.responseObj.amount, // token amount to cover
+      _quoteProtocol.rawData.amount, // token amount to cover
       data// random data
     )
 
@@ -69,7 +69,7 @@ export async function callNexus(_quoteProtocol:any){
 export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
   let asset:any;
-  if (NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.quote.responseObj.currency)) {
+  if (NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.rawData.currency)) {
     asset = NetConfig.netById(global.user.networkId).ETH;
   } else if (_quoteProtocol.currency === 'DAI') {
     asset = NetConfig.netById(global.user.networkId).DAI;
@@ -78,13 +78,13 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
     throw new Error();
   }
 
-  if(!NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.quote.responseObj.currency)){
+  if(!NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.rawData.currency)){
 
     const erc20Instance = await _getIERC20Contract(NetConfig.netById(global.user.networkId).ETH);
 
     const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
-    if (Number(ercBalance) >= (Number)(_quoteProtocol.quote.responseObj.price)) {
+    if (Number(ercBalance) >= (Number)(_quoteProtocol.rawData.price)) {
       this.showModal = false;
 
       const onSuccess =  () => {
@@ -98,7 +98,7 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
           console.log('CLOSE_CONFIRMATION_WAITING');
         }
 
-        ERC20Helper.approveAndCall( erc20Instance,  _quoteProtocol.quote.responseObj.contract,  _quoteProtocol.quote.responseObj.price, onSuccess, onError);
+        ERC20Helper.approveAndCall( erc20Instance,  _quoteProtocol.rawData.contract,  _quoteProtocol.rawData.price, onSuccess, onError);
 
       } else {
         console.log('TRACK_EVENT', {
@@ -114,7 +114,7 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
   }else{
 
   const netBalance = await global.user.web3.eth.getBalance(global.user.account);
-    if (Number(netBalance) >= (Number)(_quoteProtocol.quote.responseObj.price)) {
+    if (Number(netBalance) >= (Number)(_quoteProtocol.rawData.price)) {
       callNexus(_quoteProtocol);
     } else {
       console.log("You have insufficient funds to continue with this transaction");
@@ -127,8 +127,8 @@ export async function callBridge(_quoteProtocol:any){
 
   // const data = global.user.web3.eth.abi.encodeParameters(
   //   ['uint', 'uint', 'uint', 'uint', 'uint8', 'bytes32', 'bytes32'],
-  //   [_quoteProtocol.quote.responseObj.price, _quoteProtocol.quote.responseObj.priceInNXM, _quoteProtocol.quote.responseObj.expiresAt,
-  //     _quoteProtocol.quote.responseObj.generatedAt, _quoteProtocol.quote.responseObj.v, _quoteProtocol.quote.responseObj.r, _quoteProtocol.quote.responseObj.s],
+  //   [_quoteProtocol.rawData.price, _quoteProtocol.rawData.priceInNXM, _quoteProtocol.rawData.expiresAt,
+  //     _quoteProtocol.rawData.generatedAt, _quoteProtocol.rawData.v, _quoteProtocol.rawData.r, _quoteProtocol.rawData.s],
   //   );
 
     console.log('callBridge - ' , _quoteProtocol );
@@ -141,9 +141,9 @@ export async function callBridge(_quoteProtocol:any){
         bridgeProductAddress,
         NetConfig.netById(global.user.networkId).USDT,  // payment asset
         0, // sum assured, compliant
-        _quoteProtocol.quote.responseObj.period, // bridge epochs - weeks
+        _quoteProtocol.rawData.period, // bridge epochs - weeks
         1, //coverType
-        _quoteProtocol.quote.responseObj.amount, // token amount to cover
+        _quoteProtocol.rawData.amount, // token amount to cover
         global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500)) // random data
     )
 
@@ -157,12 +157,12 @@ export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
   const erc20Instance = _getIERC20Contract(NetConfig.netById(global.user.networkId).USDT);
   const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
-  if (Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.quote.responseObj.price)) {
+  if (Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.rawData.price)) {
     this.showModal = false;
     ERC20Helper.approveUSDTAndCall(
       erc20Instance,
-      _quoteProtocol.quote.protocol.bridgeProductAddress,
-      _quoteProtocol.quote.responseObj.price,
+      _quoteProtocol.protocol.bridgeProductAddress,
+      _quoteProtocol.rawData.price,
       () => {
         // EventBus.publish('SHOW_CONFIRMATION_WAITING', {msg: `(1/3) Resetting USDT allowance to 0`});
         console.log('Confirmation waiting');

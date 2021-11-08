@@ -24,8 +24,8 @@ export async function getQuotes(
 ): Promise<any[]> {
   const quotesPromiseArray = [];
 
-  // quotesPromiseArray.push(getQuoteFrom('nexus', _amount, _currency, _period, _protocol))
-  // quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol))
+  quotesPromiseArray.push(getQuoteFrom('nexus', _amount, _currency, _period, _protocol))
+  quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol))
   quotesPromiseArray.push(getQuoteFrom('bridge' , _amount, _currency, _period, _protocol))
 
   for (let net of global.user.web3Passive) {
@@ -82,19 +82,7 @@ export async function getQuoteFrom(
 
    if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeProductAddress) {
 
-
      let amountInWei:any = global.user.web3.utils.toWei(_amount.toString(), 'ether');
-
-     console.log(_amount, _period, amountInWei )
-
-     // let initialBridgeCurrency = 'USD';
-     // if (currency === 'ETH') {
-     //   amountInWei = getters.eth2usd(amountInWei);
-     //   initialBridgeCurrency = 'ETH';
-     // }
-     // currency = BRIDGE.fallbackQuotation;
-
-       // let _protocolTest:any = { bridgeProductAddress: '0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f'};
 
      const quote =  await getQuote(
        'bridge',

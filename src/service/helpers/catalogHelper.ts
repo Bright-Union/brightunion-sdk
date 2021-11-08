@@ -51,7 +51,7 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
     name: '0.exchange'
   },
   '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9': {
-    // logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9/logo.png',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9/logo.png',
     name: 'Aave'
   },
   '0x0000000000000000000000000000000000000001': {
@@ -63,27 +63,27 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
     name: 'Alchemix'
   },
   '0xa1faa113cbE53436Df28FF0aEe54275c13B40975': {
-    // logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xa1faa113cbE53436Df28FF0aEe54275c13B40975/logo.png',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xa1faa113cbE53436Df28FF0aEe54275c13B40975/logo.png',
     name: 'Alpha Token'
   },
   '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C': {
-    // logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C/logo.png',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C/logo.png',
     name: 'Bancor'
   },
   '0x0391D2021f89DC339F60Fff84546EA23E337750f': {
-    // logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x0391D2021f89DC339F60Fff84546EA23E337750f/logo.png',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x0391D2021f89DC339F60Fff84546EA23E337750f/logo.png',
     name: 'BarnBridge'
   },
   '0x3472A5A71965499acd81997a54BBA8D852C6E53d': {
-    // logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x3472A5A71965499acd81997a54BBA8D852C6E53d/logo.png',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x3472A5A71965499acd81997a54BBA8D852C6E53d/logo.png',
     name: 'BadgerDAO'
   },
   '0xf16e81dce15B08F326220742020379B855B87DF9': {
-    // logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xf16e81dce15B08F326220742020379B855B87DF9/logo.png',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xf16e81dce15B08F326220742020379B855B87DF9/logo.png',
     name: 'IceToken'
   },
   '0x903bef1736cddf2a537176cf3c64579c3867a881': {
-    // logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x903bef1736cddf2a537176cf3c64579c3867a881/logo.png',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x903bef1736cddf2a537176cf3c64579c3867a881/logo.png',
     name: 'ICHI'
   },
   '0xfA5047c9c78B8877af97BDcb85Db743fD7313d4a': {
@@ -91,11 +91,11 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
     name: 'Keeper DAO'
   },
   '0x808507121b80c02388fad14726482e061b8da827': {
-    // logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x808507121b80c02388fad14726482e061b8da827/logo.png',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x808507121b80c02388fad14726482e061b8da827/logo.png',
     name: 'Pendle'
   },
   '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2': {
-    // logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png',
     name: 'Sushi'
   },
   '0x618679dF9EfCd19694BB1daa8D00718Eacfa2883': {
@@ -103,41 +103,39 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
     name: 'Universe.XYZ'
   },
   '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984': {
-    // logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984/logo.png',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984/logo.png',
     name: 'Uniswap'
   },
   '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e': {
-    // logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e/logo.png',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e/logo.png',
     name: 'Yearn Finance (all vaults)'
   },
 }
 
 class CatalogHelper {
 
-  public static quoteFromCoverable (protocol:string, coverable:any, obj:any, stats:object) {
+  public static quoteFromCoverable (_distributorName:string, _coverable:any, obj:any, stats:object) {
     return {
-      distributorName: protocol,
-      quote: {
-        name: coverable.name,
-        logoSrc: coverable.logo,
-        rating: 4.5,
-        amount: obj.amount,
-        currency: obj.currency,
-        period: obj.period,
-        chain: obj.chain,
-        chainId: obj.chainId,
-        actualPeriod: obj.actualPeriod ? obj.actualPeriod : obj.period,
-        protocol: coverable,
-        price: obj.price,
-        pricePercent: obj.pricePercent,
-        responseObj: obj.response,
-        errorMsg: obj.errorMsg,
-        cashBack: obj.cashBack,
-        cashBackInWei: obj.cashBackInWei,
-        estimatedGasPrice: obj.estimatedGasPrice,
-        estimatedGasPriceCurrency: obj.estimatedGasPriceCurrency,
-        estimatedGasPriceDefault: obj.estimatedGasPriceDefault
-      },
+      distributorName: _distributorName,
+      name: _coverable.name,
+      logoSrc: _coverable.logo,
+      // rating: 4.5,
+      amount: obj.amount,
+      currency: obj.currency,
+      period: obj.period,
+      chain: obj.chain,
+      chainId: obj.chainId,
+      actualPeriod: obj.actualPeriod ? obj.actualPeriod : obj.period,
+      protocol: _coverable,
+      price: obj.price,
+      pricePercent: obj.pricePercent,
+      errorMsg: obj.errorMsg,
+      cashBack: obj.cashBack,
+      cashBackInWei: obj.cashBackInWei,
+      estimatedGasPrice: obj.estimatedGasPrice,
+      estimatedGasPriceCurrency: obj.estimatedGasPriceCurrency,
+      estimatedGasPriceDefault: obj.estimatedGasPriceDefault,
+      rawData: obj.response,
       stats: stats
     }
   }
