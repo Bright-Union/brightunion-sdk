@@ -27,7 +27,7 @@ import {_getDistributorContract} from "../helpers/getContract";
 export async function getQuote(
     _distributorName : string,
     _period : any,
-    _sumAssured : number,
+    _sumAssured : any,
     _contractAddress : string,
     _interfaceCompliant1 : string,
     _interfaceCompliant2 : string,

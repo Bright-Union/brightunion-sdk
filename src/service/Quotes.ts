@@ -80,13 +80,27 @@ export async function getQuoteFrom(
  */
  async function getBridgeQuote(_amount :any, _period :any, _protocol :any ) : Promise<object>{
 
-   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeCoverable) {
+   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeProductAddress) {
+
+
+     let amountInWei:any = global.user.web3.utils.toWei(_amount.toString(), 'ether');
+
+     console.log(_amount, _period, _protocol, amountInWei )
+
+     // let initialBridgeCurrency = 'USD';
+     // if (currency === 'ETH') {
+     //   amountInWei = getters.eth2usd(amountInWei);
+     //   initialBridgeCurrency = 'ETH';
+     // }
+     // currency = BRIDGE.fallbackQuotation;
+
+       // let _protocolTest:any = { bridgeProductAddress: '0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f'};
 
      const quote =  await getQuote(
        'bridge',
        _period,
-       _amount,
-      _protocol.bridgeCoverable,
+       amountInWei,
+      _protocol.bridgeProductAddress,
      '0x0000000000000000000000000000000000000000',
      '0x0000000000000000000000000000000000000000',
      global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500)),
@@ -105,17 +119,20 @@ export async function getQuoteFrom(
        prop7              : quote.prop7
      }
 
+     console.log('Quote - ' , quote, '//' , bridgeQuote );
+
      return CatalogHelper.quoteFromCoverable(
        'bridge',
        _protocol,
        {
          amount: _amount,
-         currency: '',
+         currency: 'ETH',
          period: _period,
          chain: '',
          chainId: global.user.networkId,
          // actualPeriod: actualPeriod,
-         // price: totalPrice,
+         price: bridgeQuote.totalPrice,
+         response: bridgeQuote,
          // pricePercent: new BigNumber(totalPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000, //%, annualize
          // estimatedGasPrice: estimatedGasPrice,
          // estimatedGasPriceCurrency: defaultCurrencySymbol,
@@ -130,7 +147,6 @@ export async function getQuoteFrom(
        }
      );
 
-     // return bridgeQuote;
 
    }
  }
