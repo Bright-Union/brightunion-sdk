@@ -78,7 +78,7 @@ export async function getQuoteFrom(
  * @param _protocol
  * @returns
  */
- async function getBridgeQuote( _period :any, _amount :any, _protocol :any ) : Promise<object>{
+ async function getBridgeQuote(_amount :any, _period :any, _protocol :any ) : Promise<object>{
 
    if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeCoverable) {
 
@@ -91,8 +91,6 @@ export async function getQuoteFrom(
      '0x0000000000000000000000000000000000000000',
      global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500)),
      );
-
-     console.log('getBridgeQuote QUOTE - '  , quote);
 
      // mapping to bridge object Or could be mapping to UI object
      // only reason of why we have diff get<provider>Quote methods

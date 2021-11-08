@@ -43,9 +43,9 @@ describe('BRIDGE QUOTE', () => {
     let protocol = { bridgeCoverable:'0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f'};
     const result = await brightClient.getQuoteFrom(
                                                     "bridge",
-                                                    26,
-                                                    'ETH',
                                                     web3.utils.toBN('1000000000000000000000'),
+                                                    'ETH',
+                                                    26,
                                                     protocol)
 
     console.log(result)
