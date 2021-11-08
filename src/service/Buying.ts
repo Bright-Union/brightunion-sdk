@@ -26,7 +26,7 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
 
 export async function buyOnInsurace (_quoteProtocol:any) {
 
-  
+
 
   const chainSymbol:string  = NetConfig.netById(global.user.networkId).symbol;
   const confirmCoverResult  : any = await InsuraceApi.confirmCoverPremium(chainSymbol, _quoteProtocol.rawData.params);
@@ -156,8 +156,6 @@ export async function callBridge(_quoteProtocol:any){
 
 
 export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
-
-  console.log('buyOnBridge - ' , _quoteProtocol );
 
   const erc20Instance = _getIERC20Contract(NetConfig.netById(global.user.networkId).USDT);
   const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();

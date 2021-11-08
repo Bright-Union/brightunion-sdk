@@ -20,7 +20,6 @@ import CurrencyHelper from './service/helpers/currencyHelper'
  * Returns a Bright Union Distributors service instance.
  *
  * @param _web3 - Name of distributor in lower case
- * @param _brightProtoAddress - The Blue Bright contract address
  * @returns Bright Union instance
  */
 

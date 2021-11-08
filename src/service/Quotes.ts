@@ -160,6 +160,8 @@ export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_
     _web3.networkId = global.user.networkId;
   }
 
+  console.log(_protocol , 'getInsuraceQuote' )
+
   if (CatalogHelper.availableOnNetwork(_web3.networkId, 'INSURACE') && _protocol.productId) {
     return await InsuraceApi.fetchInsuraceQuote(_web3, _amount , _currency, _period, _protocol);
   }
