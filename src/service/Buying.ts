@@ -157,12 +157,12 @@ export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
   const erc20Instance = _getIERC20Contract(NetConfig.netById(global.user.networkId).USDT);
   const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
-  if (Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.quote.reposnseObj.price)) {
+  if (Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.quote.responseObj.price)) {
     this.showModal = false;
     ERC20Helper.approveUSDTAndCall(
       erc20Instance,
       _quoteProtocol.quote.protocol.bridgeProductAddress,
-      _quoteProtocol.quote.reposnseObj.price,
+      _quoteProtocol.quote.responseObj.price,
       () => {
         // EventBus.publish('SHOW_CONFIRMATION_WAITING', {msg: `(1/3) Resetting USDT allowance to 0`});
         console.log('Confirmation waiting');

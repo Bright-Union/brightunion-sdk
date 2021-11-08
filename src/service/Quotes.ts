@@ -85,7 +85,7 @@ export async function getQuoteFrom(
 
      let amountInWei:any = global.user.web3.utils.toWei(_amount.toString(), 'ether');
 
-     console.log(_amount, _period, _protocol, amountInWei )
+     console.log(_amount, _period, amountInWei )
 
      // let initialBridgeCurrency = 'USD';
      // if (currency === 'ETH') {
@@ -118,8 +118,6 @@ export async function getQuoteFrom(
        prop6              : quote.prop6,
        prop7              : quote.prop7
      }
-
-     console.log('Quote - ' , quote, '//' , bridgeQuote );
 
      return CatalogHelper.quoteFromCoverable(
        'bridge',
