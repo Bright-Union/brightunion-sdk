@@ -136,7 +136,28 @@ class CatalogHelper {
       estimatedGasPriceCurrency: obj.estimatedGasPriceCurrency,
       estimatedGasPriceDefault: obj.estimatedGasPriceDefault,
       rawData: obj.response,
-      stats: stats
+      stats: stats,
+      quote: { // duplicate for test purposes
+        name: _coverable.name,
+        logoSrc: _coverable.logo,
+        rating: 4.5,
+        amount: obj.amount,
+        currency: obj.currency,
+        period: obj.period,
+        chain: obj.chain,
+        chainId: obj.chainId,
+        actualPeriod: obj.actualPeriod ? obj.actualPeriod : obj.period,
+        protocol: _coverable,
+        price: obj.price,
+        pricePercent: obj.pricePercent,
+        responseObj: obj.response,
+        errorMsg: obj.errorMsg,
+        cashBack: obj.cashBack,
+        cashBackInWei: obj.cashBackInWei,
+        estimatedGasPrice: obj.estimatedGasPrice,
+        estimatedGasPriceCurrency: obj.estimatedGasPriceCurrency,
+        estimatedGasPriceDefault: obj.estimatedGasPriceDefault
+      },
     }
   }
 
