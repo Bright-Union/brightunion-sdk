@@ -18,30 +18,35 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
 
   }else if(_quoteProtocol.distributorName == 'insurace'){
 
-    const chainSymbol:string  = NetConfig.netById(global.user.networkId).symbol;
-    const confirmCoverResult  : any = await InsuraceApi.confirmCoverPremium(chainSymbol, _quoteProtocol.rawData.params);
+    return await buyOnInsurace(_quoteProtocol);
 
-    return await buyCoverInsurace(
-      global.user.account,
-      'insurace',
-      confirmCoverResult[0],
-      confirmCoverResult[1],
-      confirmCoverResult[2],
-      confirmCoverResult[3],
-      confirmCoverResult[6],
-      confirmCoverResult[7],
-      confirmCoverResult[8],
-      confirmCoverResult[9],
-      confirmCoverResult[10],
-      confirmCoverResult[11],
-    )
   }
-
-  return ;
 
 }
 
+export async function buyOnInsurace (_quoteProtocol:any) {
 
+  
+
+  const chainSymbol:string  = NetConfig.netById(global.user.networkId).symbol;
+  const confirmCoverResult  : any = await InsuraceApi.confirmCoverPremium(chainSymbol, _quoteProtocol.rawData.params);
+
+  return await buyCoverInsurace(
+    global.user.account,
+    'insurace',
+    confirmCoverResult[0],
+    confirmCoverResult[1],
+    confirmCoverResult[2],
+    confirmCoverResult[3],
+    confirmCoverResult[6],
+    confirmCoverResult[7],
+    confirmCoverResult[8],
+    confirmCoverResult[9],
+    confirmCoverResult[10],
+    confirmCoverResult[11],
+  )
+
+}
 
 export async function callNexus(_quoteProtocol:any){
 
