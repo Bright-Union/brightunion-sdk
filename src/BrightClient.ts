@@ -10,6 +10,7 @@ import { getAllCovers } from "./service/Covers";
 import { buyQuote } from "./service/Buying";
 import { getQuoteFrom, getQuotes } from "./service/Quotes";
 import NetConfig from './service/config/NetConfig'
+import CurrencyHelper from './service/helpers/currencyHelper'
 
 /**
  * Main module class, entry point of the
@@ -64,6 +65,7 @@ async initialize(): Promise<object>{
       global.user.networkId = await global.user.web3.eth.net.getId();
       global.user.brightProtoAddress = NetConfig.netById(global.user.networkId).brightProtocol;
       global.user.web3Passive = NetConfig.createWeb3Passives();
+      await CurrencyHelper.getETHDAIPrice();
       return {status: true, message: 'Bright Union Initialized'};
   }
 

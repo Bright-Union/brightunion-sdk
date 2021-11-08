@@ -3,6 +3,9 @@ import InsuraceApi from './distributorsApi/InsuraceApi';
 import { getQuote } from "./dao/Quotes";
 import CatalogHelper from './helpers/catalogHelper';
 import NetConfig from '../service/config/NetConfig';
+import CurrencyHelper from './helpers/currencyHelper';
+import RiskCarriers from './config/RiskCarriers';
+
 
 /**
  *
@@ -60,7 +63,7 @@ export async function getQuoteFrom(
     ): Promise<object> {
 
   if(_distributorName == 'bridge'){
-     return await getBridgeQuote(_amount,_period,_protocol);
+     return await getBridgeQuote(_amount,_currency,_period,_protocol);
   }else if(_distributorName == 'nexus'){
     return await getNexusQuote(_amount,_currency,_period,_protocol );
   }else if(_distributorName == 'insurace'){
@@ -78,11 +81,16 @@ export async function getQuoteFrom(
  * @param _protocol
  * @returns
  */
- async function getBridgeQuote(_amount :any, _period :any, _protocol :any ) : Promise<object>{
+ async function getBridgeQuote(_amount :any, currency:any, _period :any, _protocol :any ) : Promise<object>{
 
    if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeProductAddress) {
 
      let amountInWei:any = global.user.web3.utils.toWei(_amount.toString(), 'ether');
+
+     if (currency === 'ETH') {
+       amountInWei = CurrencyHelper.eth2usd(amountInWei);
+     }
+     currency = RiskCarriers.BRIDGE.fallbackQuotation;
 
      const quote =  await getQuote(
        'bridge',

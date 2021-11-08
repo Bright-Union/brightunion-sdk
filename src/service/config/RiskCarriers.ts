@@ -32,7 +32,7 @@ const NEXUS:any = {
     fallbackQuotation: 'DAI',
 }
 
-const BRIDGE:object = {
+const BRIDGE:any = {
     description: {
         paymentIn: {
             ETH: ['USDT']
@@ -189,6 +189,7 @@ const PROTOCOL_TYPES:object = {
 export default class RiskCarriers {
   public static INSURACE = INSURACE;
   public static NEXUS = NEXUS;
+  public static BRIDGE = BRIDGE;
 }
 
 // export default { CUSTOM_BRIDGE_PROTOCOLS, NEXUS, BRIDGE, INSURACE }

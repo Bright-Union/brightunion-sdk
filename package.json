@@ -34,6 +34,7 @@
     "@types/mocha": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
+    "@uniswap/sdk": "^3.0.3",
     "babel-loader": "^8.2.3",
     "bignumber.js": "^9.0.1",
     "chai": "^4.3.4",
@@ -57,6 +58,9 @@
     "webpack-cli": "^4.9.1"
   },
   "dependencies": {
+    "@ethersproject/contracts": "^5.3.0",
+    "@ethersproject/providers": "^5.3.1",
+    "@ethersproject/solidity": "^5.3.0",
     "@ethereumjs/tx": "^3.3.2",
     "@types/lodash": "^4.14.176",
     "axios": "^0.23.0",
