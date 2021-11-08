@@ -6,6 +6,7 @@ import { getDistributorAddress } from "./service/dao/Distributors";
 import { getQuote } from "./service/dao/Quotes";
 import { buyCoverInsurace, buyCover } from "./service/dao/Buying";
 import { getCatalog } from "./service/Catalog";
+import { getAllCovers } from "./service/Covers";
 import { buyQuote } from "./service/Buying";
 import { getQuoteFrom, getQuotes } from "./service/Quotes";
 import NetConfig from './service/config/NetConfig'
@@ -81,6 +82,22 @@ async getDistributorAddress (
       _distributorName
     )
   }
+
+
+async getAllCovers(
+  // _distributorName : string,
+  // _ownerAddress : string,
+  // _activeCover : boolean,
+  // _limit : number,
+){
+  return await getAllCovers(
+    // _distributorName,
+    // _ownerAddress,
+    // _activeCover,
+    // _limit,
+  )
+
+}
 
 async getCoversCount(
     _distributorName : string,
