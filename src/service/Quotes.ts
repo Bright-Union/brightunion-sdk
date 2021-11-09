@@ -166,17 +166,20 @@ export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_
 }
 
 
-export async function getInsuraceQuoteWithConfirm( _amount:number, _currency:string, _period: number, _protocol:any ) {
-  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE') && _protocol.productId) {
+// export async function getInsuraceQuoteWithConfirm( _amount:number, _currency:string, _period: number, _protocol:any ) {
+//   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE') && _protocol.productId) {
+//
+//     const _owner        = global.user.account;
+//     const chainSymbol   = NetConfig.netById(global.user.networkId).symbol;
+//     const premium : any = await InsuraceApi.getCoverPremium( _amount, _currency, _period,_protocol, _owner);
+//     const quote   : any = await InsuraceApi.confirmCoverPremium(chainSymbol, premium.params);
+//
+//     return quote;
+//   }
+// }
 
-    const _owner        = global.user.account;
-    const chainSymbol   = NetConfig.netById(global.user.networkId).symbol;
-    const premium : any = await InsuraceApi.getCoverPremium( _amount, _currency, _period,_protocol, _owner);
-    const quote   : any = await InsuraceApi.confirmCoverPremium(chainSymbol, premium.params);
 
-    return quote;
-  }
-}
-
-
-export default {getQuoteFrom, getInsuraceQuoteWithConfirm};
+export default {
+  getQuoteFrom,
+  // getInsuraceQuoteWithConfirm
+};

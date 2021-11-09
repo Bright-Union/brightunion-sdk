@@ -33,23 +33,24 @@ class InsuraceApi {
     }
 
     static async getCoverPremium (
+        web3:any,
         amount : any,
         currency : any,
         period : any,
         protocolId : any,
         owner : any) {
 
-        let url = `${NetConfig.netById(global.user.networkId).insuraceAPI}/getCoverPremium?code=${encodeURIComponent(NetConfig.netById(global.user.networkId).insuraceAPIKey)}`;
+        let url = `${NetConfig.netById(web3.networkId).insuraceAPI}/getCoverPremium?code=${encodeURIComponent(NetConfig.netById(web3.networkId).insuraceAPIKey)}`;
 
         return  axios.post(
             url, {
-                    "chain": NetConfig.netById(global.user.networkId).symbol,
+                    "chain": NetConfig.netById(web3.networkId).symbol,
                     "coverCurrency": currency,
                     "productIds": [protocolId],
                     "coverDays": [period],
                     "coverAmounts": [amount],
                     "owner": owner,
-                    "referralCode": NetConfig.netById(global.user.networkId).insuraceReferral,
+                    "referralCode": NetConfig.netById(web3.networkId).insuraceReferral,
 
         }).then((response : any) => {
             return response.data;
@@ -97,6 +98,7 @@ class InsuraceApi {
         web3.symbol = NetConfig.netById(web3.networkId).symbol;
 
         return await this.getCoverPremium(
+          web3,
           amountInWei,
           selectedCurrency.address,
           period,

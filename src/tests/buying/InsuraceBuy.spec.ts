@@ -45,6 +45,7 @@ before(async () => {
 let premium : any;
 before( async () => {
     premium = await InsuraceApi.getCoverPremium(
+                                                web3,
                                                 "2000000000000000000",
                                                 netConfig.ETH,
                                                 180,
