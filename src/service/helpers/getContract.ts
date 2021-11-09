@@ -6,6 +6,20 @@ import BridgePolicyBookRegistryABI from '../abi/bridge/IPolicyBookRegistry.json'
 import BridgePolicyQuoteABI from '../abi/bridge/IPolicyQuote.json';
 import BridgePolicyBookABI from '../abi/bridge/IPolicyBook.json';
 import BridgePolicyRegistryABI from '../abi/bridge/IPolicyRegistry.json';
+import InsuraceCoverABI from '../abi/insurace/ICover.json';
+
+
+const getContract = (abi:any, address:any, web3:any) =>
+    new Promise((resolve, reject) => {
+        const contractInstance = new web3.eth.Contract(abi.abi, address);
+        if (contractInstance) {
+            resolve(contractInstance);
+        } else {
+            reject('Can\'t get contact');
+        }
+    });
+
+const getInsurAceCoverContract = (address:any, web3:any) => getContract(InsuraceCoverABI, address, web3);
 
 const _getBridgeRegistryContract           =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeRegistryContractABI.abi, address , web3);
 const _getBridgePolicyBookRegistryContract =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgePolicyBookRegistryABI.abi, address , web3);
@@ -34,4 +48,5 @@ export  {
     _getBridgePolicyQuoteContract,
     _getBridgePolicyBookContract,
     _getBridgePolicyRegistryContract,
+    getInsurAceCoverContract
 } ;

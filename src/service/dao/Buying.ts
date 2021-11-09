@@ -1,6 +1,7 @@
 
+import NetConfig from "../config/NetConfig";
 import BuyReceipt from "../domain/BuyReceipt";
-import {_getDistributorContract} from "../helpers/getContract";
+import {_getDistributorContract, getInsurAceCoverContract} from "../helpers/getContract";
 
 /**
  * Returns a transaction receipt.
@@ -115,7 +116,7 @@ export async function buyCoverInsurace (
         _r : Array<number>,
         _s: Array<number>,
 ){
-  console.log('calling: buyCoverInsurace')
+  console.log('calling: buyCoverInsurace - ' , _premiumAmount )
   return await _getDistributorContract()
               .methods
               .buyCoverInsurace(
@@ -133,8 +134,8 @@ export async function buyCoverInsurace (
               )
               .send({
                 from: _ownerAddress,
-                value: _premiumAmount+1,
-                gasLimit: 129913, // 7000000
+                value: _premiumAmount,
+                // gasLimit: 129913, // 7000000
               })
               .on('transactionHash', (x:any) => {
                 console.log('SHOW_CONFIRMATION_DONE', {msg: 'Thanks for using us!', tx: x});
@@ -172,6 +173,75 @@ export async function buyCoverInsurace (
 }
 
 
+export async function buyCoverInsuraceTest (
+    confirmCoverResult:any
+){
+
+  let insuraceCover:any;
+ getInsurAceCoverContract(NetConfig.netById(global.user.networkId).insuraceCover, global.user.web3 ).then((insuraceCoverInstance:any) => {
+   insuraceCover  = insuraceCoverInstance;
+  })
+
+  console.log('calling: buyCoverInsurace TEST - ' , confirmCoverResult )
+  return await insuraceCover()
+              .methods
+              .buyCover(
+                confirmCoverResult[0],
+                confirmCoverResult[1],
+                confirmCoverResult[2],
+                confirmCoverResult[3],
+                confirmCoverResult[4],
+                confirmCoverResult[5],
+                confirmCoverResult[6],
+                confirmCoverResult[7],
+                confirmCoverResult[8],
+                confirmCoverResult[9],
+                confirmCoverResult[10],
+                confirmCoverResult[11]
+              )
+              .send({
+                from: global.user.account,
+                value: confirmCoverResult[6],
+                // gasLimit: 129913, // 7000000
+              })
+              .on('transactionHash', (x:any) => {
+                console.log('SHOW_CONFIRMATION_DONE', {msg: 'Thanks for using us!', tx: x});
+                console.log('TX_CONFIRMING');
+                console.log('TRACK_EVENT', {
+                  action: 'buy-bridge-policy-hash',
+                  category: 'trxHash',
+                  label: 'Transaction Hash',
+                  value: 1
+                });
+              })
+              .on('confirmation', (confirmationNumber:any, receipt:any) => {
+                if (confirmationNumber === 0) {
+                  console.log('TRACK_PURCHASE', {
+                    tx: receipt.transactionHash,
+                    provider: 'bridge',
+                    value: this.readablePrice,
+                    currency: '0xcc54b12a18f2C575CA97991046090f43C3070aA0',
+                    name: this.quote.name,
+                    period: this.quote.actualPeriod,
+                  });
+                  console.log('TX_CONFIRMED');
+                }
+              })
+              .on('error', (err:any, receipt:any) => {
+                console.error(err, receipt)
+                console.log('TRACK_EVENT', {
+                  action: 'buy-bridge-policy-error',
+                  category: 'trxError',
+                  label: 'Transaction Error',
+                  value: 1
+                });
+                console.log('CLOSE_CONFIRMATION_WAITING',err.message);
+              });
+}
+
+
+
+
 export default {
-  buyCover, buyCoverInsurace
+  buyCover, buyCoverInsurace, buyCoverInsuraceTest
 }

@@ -1,5 +1,5 @@
 import {_getIERC20Contract} from './helpers/getContract';
-import { buyCoverInsurace, buyCover } from "./dao/Buying";
+import { buyCoverInsurace, buyCoverInsuraceTest, buyCover } from "./dao/Buying";
 import NetConfig from './config/NetConfig';
 import InsuraceApi from './distributorsApi/InsuraceApi';
 import ERC20Helper from './helpers/ERC20Helper';
@@ -56,20 +56,24 @@ export async function buyOnInsurace (_quoteProtocol:any) {
 }
 
 export async function callInsurace(confirmCoverResult:any){
-  return await buyCoverInsurace(
-    global.user.account,
-    'insurace',
-    confirmCoverResult[0],
-    confirmCoverResult[1],
-    confirmCoverResult[2],
-    confirmCoverResult[3],
-    confirmCoverResult[6],
-    confirmCoverResult[7],
-    confirmCoverResult[8],
-    confirmCoverResult[9],
-    confirmCoverResult[10],
-    confirmCoverResult[11],
+  // return await buyCoverInsurace(
+  return await buyCoverInsuraceTest(
+    confirmCoverResult
   )
+  // return await buyCoverInsurace(
+  //   global.user.account,
+  //   'insurace',
+  //   confirmCoverResult[0],
+  //   confirmCoverResult[1],
+  //   confirmCoverResult[2],
+  //   confirmCoverResult[3],
+  //   confirmCoverResult[6],
+  //   confirmCoverResult[7],
+  //   confirmCoverResult[8],
+  //   confirmCoverResult[9],
+  //   confirmCoverResult[10],
+  //   confirmCoverResult[11],
+  // )
 }
 
 
