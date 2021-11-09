@@ -177,10 +177,7 @@ export async function buyCoverInsuraceTest (
     confirmCoverResult:any
 ){
 
-  let insuraceCover:any;
- getInsurAceCoverContract(NetConfig.netById(global.user.networkId).insuraceCover, global.user.web3 ).then((insuraceCoverInstance:any) => {
-   insuraceCover  = insuraceCoverInstance;
-  })
+  let insuraceCover:any =  await getInsurAceCoverContract(NetConfig.netById(global.user.networkId).insuraceCover, global.user.web3 )
 
   console.log('calling: buyCoverInsurace TEST - ' , confirmCoverResult )
   return await insuraceCover()
