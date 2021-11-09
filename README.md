@@ -1,6 +1,7 @@
 <p align="center">
   <img src="https://img.api.cryptorank.io/coins/bright%20union%201628151410793.png" alt="Bright Union"/>
 </p>
+
 # Bright Union SDK 
 The Bright Union SDK is a set of javascript utilities that enables an easy integration of the Bright Union's multi-chain protocol into any web project. 
 
