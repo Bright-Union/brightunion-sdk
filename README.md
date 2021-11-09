@@ -33,7 +33,6 @@ const brightClient= new BrightClient({ <web3_instance> });
 // Get catalog of all risk covers available
 brightClient.getCatalog();
 
-
 ```
 
 
