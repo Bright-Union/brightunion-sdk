@@ -3,6 +3,8 @@ import axios from 'axios';
 import NetConfig from '../config/NetConfig'
 import RiskCarriers from '../config/RiskCarriers'
 import CatalogHelper from '../helpers/catalogHelper'
+import {toBN, toWei} from 'web3-utils'
+
 
 
 export default class NexusApi {
@@ -17,6 +19,8 @@ export default class NexusApi {
     }
 
     static fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<object[]> {
+
+      const amountInWei = toBN(toWei(amount.toString(), 'ether'));
 
        if (currency === 'USD') {
            currency = RiskCarriers.NEXUS.fallbackQuotation;
@@ -34,18 +38,20 @@ export default class NexusApi {
            }
          }
        )
-
       .then((response:any) => {
+
+        let basePrice = toBN(response.price);
 
         return CatalogHelper.quoteFromCoverable(
           'nexus',
           protocol,
           {
-            amount: amount,
+            amount: amountInWei,
             currency: currency,
             period: period,
             chain: 'ETH',
             chainId: global.user.networkId,
+            price: basePrice,
             // price: priceWithFee.toString(),
             // pricePercent: new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000), //%, annualize
             response: response.data,
@@ -65,15 +71,51 @@ export default class NexusApi {
           }
         );
 
-
-
-
         return response.data;
 
 
-      }).catch(error => {
-        console.log('ERROR Nexus fetchQuote:',error.response.data && error.response.data.message);
-      });
+      }).catch(function (error) {
+            if ((error.response && error.response.status === 400) || (error.response && error.response.status === 409)) {
+                //wrong parameters
+                if (error.response.data.message.details || error.response.data.message) {
+                    let errorMsg = '';
+                    if(!error.response.data.message.details) {
+                        errorMsg = error.response.data.message;
+                    } else {
+                        errorMsg = error.response.data.message.details[0].message;
+                    }
+
+                    if (errorMsg.toLowerCase().includes("\"period\" must be")) {
+                        errorMsg = "Minimum duration is 30 days. Maximum is 365";
+                    }
+                    return new Promise((resolve) => {
+                        resolve(CatalogHelper.quoteFromCoverable(
+                            'nexus',
+                            protocol,
+                            {
+                                amount: amountInWei,
+                                currency: currency,
+                                period: period,
+                                chain: 'ETH',
+                                chainId: global.user.networkId,
+                                price: 0,
+                                pricePercent: 0,
+                                estimatedGasPrice: 0,
+                                errorMsg: errorMsg,
+                            },
+                            {
+                                // capacityETH: capacityETH,
+                                // capacityDAI: capacityDAI,
+                            }
+                        ))
+                    });
+                }
+            } else {
+                return new Promise(() => {
+                    return
+                });
+            }
+        });
     }
 
     /*

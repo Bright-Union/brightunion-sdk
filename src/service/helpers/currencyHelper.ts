@@ -1,6 +1,8 @@
 import NetConfig from '../config/NetConfig';
 import CatalogHelper from './catalogHelper';
 import UniswapV2Api from './UniswapV2Api';
+import {toBN, fromWei} from 'web3-utils'
+
 
 class CurrencyHelper {
 
@@ -33,11 +35,11 @@ class CurrencyHelper {
     }
 
     public static  eth2usd(eth:any) {
-      return global.user.web3.utils.toBN(eth.toString().split('.')[0]).mul(global.user.web3.utils.toBN(this.eth_dai.toString().split('.')[0])).toString();
+      return toBN(eth.toString().split('.')[0]).mul(toBN(this.eth_dai.toString().split('.')[0])).toString();
     }
 
     public static usd2eth(dai:any) {
-      return global.user.web3.utils.toBN(dai.toString().split('.')[0]).div(global.user.web3.utils.toBN(this.eth_dai.toString().split('.')[0])).toString();
+      return toBN(dai.toString().split('.')[0]).div(toBN(this.eth_dai.toString().split('.')[0])).toString();
     }
 
     public static  insurPrice () {

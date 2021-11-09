@@ -67,7 +67,7 @@ export async function getQuoteFrom(
   }else if(_distributorName == 'nexus'){
     return await getNexusQuote(_amount,_currency,_period,_protocol );
   }else if(_distributorName == 'insurace'){
-    return await getInsuraceQuote(global.user.web3 , _amount,_currency,_period,_protocol);
+    return await getInsuraceQuote( global.user.web3 , _amount,_currency,_period,_protocol);
   }else {
     return  {error: 'supported distributor names are: bridge, insurace, nexus'}
   }
@@ -155,9 +155,17 @@ export async function getQuoteFrom(
 
 export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
 
+  console.log('_web3 - ' , _web3.networkId , _web3.symbol, _web3 );
+
   if(!_web3.networkId){ // if not passive net
-    _web3.web3Instance = _web3;
-    _web3.networkId = global.user.networkId;
+    const newWeb3Instance = {
+        account: global.user.account,
+        networkId: global.user.networkId,
+        symbol: NetConfig.netById(global.user.networkId).symbol,
+        web3Instance: _web3,
+        readOnly: false,
+      }
+      _web3 = newWeb3Instance;
   }
 
   if (CatalogHelper.availableOnNetwork(_web3.networkId, 'INSURACE') && _protocol.productId) {
