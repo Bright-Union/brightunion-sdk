@@ -26,11 +26,36 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
 
 export async function buyOnInsurace (_quoteProtocol:any) {
 
-
-
   const chainSymbol:string  = NetConfig.netById(global.user.networkId).symbol;
   const confirmCoverResult  : any = await InsuraceApi.confirmCoverPremium(chainSymbol, _quoteProtocol.rawData.params);
 
+  console.log('buyOnInsurace SDK - ' , confirmCoverResult , _quoteProtocol )
+
+  const netBalance = await global.user.web3.eth.getBalance(global.user.account);
+
+
+  if(NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency)){
+    if (Number(netBalance) >= (Number)(_quoteProtocol.price)) {
+      // this.showModal = false;
+      console.log('SHOW_CONFIRMATION_WAITING', {msg: 'Buying cover for ' + _quoteProtocol.price + ' ' + _quoteProtocol.currency});
+      callInsurace(confirmCoverResult);
+    } else {
+      console.log('You have insufficient funds to continue with this transaction');
+      // this.errorMessage = "You have insufficient funds to continue with this transaction";
+    }
+  }else{
+
+
+      console.log('ELSESSSEEEE');
+
+
+  }
+
+
+
+}
+
+export async function callInsurace(confirmCoverResult:any){
   return await buyCoverInsurace(
     global.user.account,
     'insurace',
@@ -45,8 +70,8 @@ export async function buyOnInsurace (_quoteProtocol:any) {
     confirmCoverResult[10],
     confirmCoverResult[11],
   )
-
 }
+
 
 export async function callNexus(_quoteProtocol:any){
 
