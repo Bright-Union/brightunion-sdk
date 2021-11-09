@@ -5,7 +5,7 @@ import ERC20Helper from '../helpers/ERC20Helper';
 import RiskCarriers from '../config/RiskCarriers'
 import CatalogHelper from '../helpers/catalogHelper'
 import CurrencyHelper from '../helpers/currencyHelper'
-import {toBN,fromWei} from 'web3-utils'
+import {toBN,fromWei, toWei} from 'web3-utils'
 
 
 class InsuraceApi {
@@ -22,10 +22,10 @@ class InsuraceApi {
         });
     }
 
-    static getCurrencyList () {
+    static getCurrencyList (_networkId:any) {
         return axios.post(
-            `${NetConfig.netById(global.user.networkId).insuraceAPI}/getCurrencyList?code=${encodeURIComponent(NetConfig.netById(global.user.networkId).insuraceAPIKey)}`, {
-            chain: NetConfig.netById(global.user.networkId).symbol
+            `${NetConfig.netById(_networkId).insuraceAPI}/getCurrencyList?code=${encodeURIComponent(NetConfig.netById(_networkId).insuraceAPIKey)}`, {
+            chain: NetConfig.netById(_networkId).symbol
         })
         .then((response:any) => {
             return response.data;
@@ -79,20 +79,20 @@ class InsuraceApi {
     static async fetchInsuraceQuote ( web3:any, amount:string | number, currency:string , period:number, protocol:any): Promise<object> {
         let quoteCurrency = currency;
 
-        let amountInWei = web3.web3Instance.utils.toWei(amount.toString(), 'ether');
+        let amountInWei = toWei(amount.toString(), 'ether');
 
         if (currency === 'USD') {
-          currency = RiskCarriers.INSURACE.fallbackQuotation[NetConfig.netById(global.user.networkId).symbol];
+          currency = RiskCarriers.INSURACE.fallbackQuotation[NetConfig.netById(web3.networkId).symbol];
         }
-        if (NetConfig.sixDecimalsCurrency(global.user.networkId, currency)) {
+        if (NetConfig.sixDecimalsCurrency(web3.networkId, currency)) {
           amountInWei = ERC20Helper.ERCtoUSDTDecimals(amountInWei);
         }
 
-        let currencies:object[] = await this.getCurrencyList()
+        let currencies:object[] = await this.getCurrencyList(web3.networkId);
         let selectedCurrency:any = currencies.find((curr:any) => {return curr.name == currency});
 
         if (!selectedCurrency) {
-          console.error(`Selected currency is not supported by InsurAce: ${currency} on net ${global.user.networkId}`)
+          console.error(`Selected currency is not supported by InsurAce: ${currency} on net ${web3.networkId}`)
           return;
         }
 
