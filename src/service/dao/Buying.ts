@@ -177,9 +177,11 @@ export async function buyCoverInsuraceTest (
     confirmCoverResult:any
 ){
 
-  let insuraceCover:any =  await getInsurAceCoverContract(NetConfig.netById(global.user.networkId).insuraceCover, global.user.web3 )
+  let insuraceCoverInstance:any = await getInsurAceCoverContract(NetConfig.netById(global.user.networkId).insuraceCover, global.user.web3 )
+  let insuraceCover:any = () => insuraceCoverInstance ;
 
-  console.log('calling: buyCoverInsurace TEST - ' , confirmCoverResult )
+  console.log('calling: buyCoverInsurace TEST - ' , insuraceCoverInstance, '//' , insuraceCover, '//',  confirmCoverResult )
+
   return await insuraceCover()
               .methods
               .buyCover(
