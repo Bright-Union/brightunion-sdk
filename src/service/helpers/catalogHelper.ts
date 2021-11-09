@@ -117,6 +117,7 @@ class CatalogHelper {
   public static quoteFromCoverable (_distributorName:string, _coverable:any, obj:any, stats:object) {
     return {
       distributorName: _distributorName,
+      risk_protocol: _distributorName,
       name: _coverable.name,
       logoSrc: _coverable.logo,
       // rating: 4.5,
