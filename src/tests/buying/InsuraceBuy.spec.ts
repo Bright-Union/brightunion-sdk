@@ -49,8 +49,7 @@ before( async () => {
                                                 "2000000000000000000",
                                                 netConfig.ETH,
                                                 180,
-                                                2,
-                                                owner)
+                                                2);
 
     console.log(premium)
     return premium;
