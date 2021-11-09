@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js'
 import ERC20Helper from '../helpers/ERC20Helper';
 import RiskCarriers from '../config/RiskCarriers'
 import CatalogHelper from '../helpers/catalogHelper'
+import CurrencyHelper from '../helpers/currencyHelper'
 
 class InsuraceApi {
 
@@ -93,9 +94,7 @@ class InsuraceApi {
 
         [currency, selectedCurrency] = NetConfig.insuraceDePegTestCurrency(protocol,currency,web3.symbol,selectedCurrency);
 
-        // let web3 : any = web3;
         web3.symbol = NetConfig.netById(web3.networkId).symbol;
-        // web3.coinbase = NetConfig.netById(web3.networkId);
 
         return await this.getCoverPremium(
           amountInWei,
@@ -105,14 +104,12 @@ class InsuraceApi {
           global.user.account,
         ).then( (response: any) => {
 
-                // const insurPrice = getters.insurPrice(state);
-                let premium = 1000//response.premiumAmount;
-                // if (sixDecimalsCurrency(web3.networkId, currency)) {
-                //     premium = ERC20Helper.USDTtoERCDecimals(premium);
-                // }
-                // const cashbackInStable = .05 *
-                //     parseFloat(toBN(premium)
-                //         .div(toBN(10 ** 18)).toNumber());
+                const insurPrice = CurrencyHelper.insurPrice();
+                let premium:number = response.premiumAmount;
+                if (NetConfig.sixDecimalsCurrency(web3.networkId, currency)) {
+                    premium = Number(ERC20Helper.USDTtoERCDecimals(premium));
+                }
+                // const cashbackInStable:number = .05 * parseFloat(global.user.web3.utils.toBN(premium).div(global.user.web3.utils.toBN(10 ** 18)));
 
                 // const {gasPrice, USDRate} = await getGasPrice(web3);
                 // let estimatedGasPrice = (RiskCarriers.INSURACE.description.estimatedGas * gasPrice) * USDRate / (10**9);
@@ -131,7 +128,7 @@ class InsuraceApi {
                         price: premium,
                         // cashBack: [(cashbackInStable / insurPrice), cashbackInStable],
                         // cashBackInWei: web3.web3Instance.utils.toWei(cashbackInStable.toString(), 'ether'),
-                        // pricePercent: new BigNumber(premium).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000), //%, annualize
+                        pricePercent: new BigNumber(premium).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000), //%, annualize
                         response: response,
                         // estimatedGasPrice: estimatedGasPrice,
                         estimatedGasPriceCurrency: defaultCurrencySymbol,
