@@ -155,8 +155,6 @@ export async function getQuoteFrom(
 
 export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
 
-  console.log('_web3 - ' , _web3.networkId , _web3.symbol, _web3 );
-
   if(!_web3.networkId){ // if not passive net
     const newWeb3Instance = {
         account: global.user.account,
