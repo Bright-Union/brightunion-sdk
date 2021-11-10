@@ -117,7 +117,7 @@ import Web3 from 'web3';
         modules: process.env.VUE_APP_BSC_TESTNET_MODULES.split(' '),
         nexusDistributor: '',
         nexusAPI: '',
-        brightProtocol:'',
+        brightProtocol:'0x9dfFb15A9E320801c9997d826533cc7960D21a46',
         brightContractRegistry: '',
         insuraceCover: '0x5f463Cc70f9706E63d4b927E25c28d5A709828b9',
         insuraceAPI: 'https://insurace-sl-microservice.azurewebsites.net',
