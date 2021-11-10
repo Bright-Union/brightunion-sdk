@@ -144,7 +144,7 @@ class InsuraceApi {
                         // estimatedGasPriceDefault: feeInDefaultCurrency
                     },
                     {
-                        remainingCapacity: protocol.stats.capacityRemaining
+                        remainingCapacity: protocol.stats ? protocol.stats.capacityRemaining : null
                     }
                 );
                 return quote;
@@ -165,10 +165,10 @@ class InsuraceApi {
                 } else if (errorMsg.match('GP: 4')) {
                     errorMsg = "Minimum duration is 1 day. Maximum is 365";
                 } else if (errorMsg.includes('amount exceeds the maximum capacity')) {
-                    let defaultCapacity = protocol.stats.capacityRemaining;
+                    let defaultCapacity = protocol.stats? protocol.stats.capacityRemaining : 0;
                     let currency = 'ETH';
                     if (quoteCurrency === 'USD') {
-                        defaultCapacity = CurrencyHelper.eth2usd(protocol.stats.capacityRemaining);
+                        defaultCapacity = CurrencyHelper.eth2usd(defaultCapacity);
                         currency = 'USD';
                     }
                     errorMsg = `MAX capacity is ${fromWei(defaultCapacity.toString())} ${currency}`
