@@ -177,20 +177,21 @@ export async function buyCoverInsuraceTest (
     confirmCoverResult:any
 ){
 
-  let insuraceCoverInstance:any = await getInsurAceCoverContract(NetConfig.netById(global.user.networkId).insuraceCover, global.user.web3 )
+  // let insuraceCoverInstance:any = await getInsurAceCoverContract(NetConfig.netById(global.user.networkId).insuraceCover, global.user.web3 )
+  let insuraceCoverInstance:any = await getInsurAceCoverContract( "0xC7F07402105eeE47E17cD5FB36Eee8d9FF2C8f7b" , global.user.web3 );
   let insuraceCover:any = () => insuraceCoverInstance ;
 
   console.log('calling: buyCoverInsurace TEST - ' , insuraceCoverInstance, '//' , insuraceCover, '//',  confirmCoverResult )
 
   return await insuraceCover()
               .methods
-              .buyCover(
+              .buyCoverDecode(
                 confirmCoverResult[0],
                 confirmCoverResult[1],
                 confirmCoverResult[2],
                 confirmCoverResult[3],
                 confirmCoverResult[4],
-                confirmCoverResult[5],
+                // confirmCoverResult[5],
                 confirmCoverResult[6],
                 confirmCoverResult[7],
                 confirmCoverResult[8],
