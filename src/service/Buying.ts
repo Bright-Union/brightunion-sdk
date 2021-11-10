@@ -45,15 +45,60 @@ export async function buyOnInsurace (_quoteProtocol:any) {
     }
   }else{
 
+    console.log( _quoteProtocol );
 
-      console.log('ELSESSSEEEE');
+    const erc20Instance = _getIERC20Contract(NetConfig.netById(global.user.networkId).USDT);
+    const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
+    const asset:any = NetConfig.netById(global.user.networkId);
 
-  }
+    //balance is enough?
+    if (NetConfig.sixDecimalsCurrency(this.activeNetworkId, this.paymentCurrency) &&       //6 digits currency?
+    Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.rawData.price)) {
+      //proceed with USDT
+      console.log('SHOW_CONFIRMATION_WAITING', {msg: `(1/2) Approve spending of ${_quoteProtocol.rawData.price} ${_quoteProtocol.currency}...`});
+      this.showModal = false;
+      ERC20Helper.approveUSDTAndCall(
+        erc20Instance,
+        _quoteProtocol.protocol.bridgeProductAddress,  // this.$store.state.insurAceCover().options.address,
+        _quoteProtocol.rawData.price,
+        () => {
+          console.log('SHOW_CONFIRMATION_WAITING', {msg: `(1/3) Resetting USDT allowance to 0`});
+        },
+        () => {
+          console.log('SHOW_CONFIRMATION_WAITING', {msg: `(2/2) Buying cover for ${_quoteProtocol.rawData.price}} ${_quoteProtocol.currency}`});
+          callInsurace(confirmCoverResult);
+        },
+        () => {
+          console.log('CLOSE_CONFIRMATION_WAITING');
+          // this.showModal = true;
+        })
 
+      } else if (Number(ercBalance) >= (Number)(_quoteProtocol.rawData.price)) {
+        //proceed with ERC
+        console.log('SHOW_CONFIRMATION_WAITING', {msg: `(1/2) Approve spending of ${_quoteProtocol.rawData.price} ${_quoteProtocol.currency}...`});
+        // this.showModal = false;
+        ERC20Helper.approveAndCall(
+          erc20Instance,
+          _quoteProtocol.protocol.bridgeProductAddress,  // this.$store.state.insurAceCover().options.address,
+          _quoteProtocol.rawData.price,
+          () => {
+            console.log('SHOW_CONFIRMATION_WAITING', {msg: `(2/2) Buying cover for ${_quoteProtocol.rawData.price} ${_quoteProtocol.currency}`});
+            callInsurace(confirmCoverResult);
+          },
+          (err:any) => {
+            console.log('CLOSE_CONFIRMATION_WAITING', err);
+            // this.errorMessage = err.message;
+            // this.showModal = true;
+          });
+        } else {
+          console.log('CLOSE_CONFIRMATION_WAITING - You have insufficient funds to continue with this transaction');
+          // this.errorMessage = "You have insufficient funds to continue with this transaction";
+        }
 
+      }
 
-}
+    }
 
 export async function callInsurace(confirmCoverResult:any){
   return await buyCoverInsurace(
@@ -111,7 +156,6 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
   if(!NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.rawData.currency)){
 
     const erc20Instance = await _getIERC20Contract(NetConfig.netById(global.user.networkId).ETH);
-
     const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
     if (Number(ercBalance) >= (Number)(_quoteProtocol.rawData.price)) {
