@@ -2,8 +2,8 @@
   <img src="https://img.api.cryptorank.io/coins/bright%20union%201628151410793.png" alt="Bright Union"/>
 </p>
 
-# Bright Union SDK 
-The Bright Union SDK is a set of javascript utilities that enables an easy integration of the Bright Union's multi-chain protocol into any web project. 
+# Bright Union SDK
+The Bright Union SDK is a set of javascript utilities that enables an easy integration of the Bright Union's multi-chain protocol into any web project.
 
 This SDK will give you access to the Bright Union aggregator contract that combines risk coverage services from:
 
@@ -31,9 +31,16 @@ const BrightClient = require('@Brightunion/SDK');B
 
 const brightClient= new BrightClient({ <web3_instance> });
 
+// Initialize the client
+await brightClient.initialize();
+
 // Get catalog of all risk covers available
-brightClient.getCatalog();
+const catalog = brightClient.getCatalog();
+
+// Get quotes for a catalog item from all risk providers available
+const quotes = brightClient.getQuotes( <amount> , <currency>, <period>, <catalog_item> )
+
+// Buy a quote
+brightClient.getQuotes( <quote> )
 
 ```
-
-
