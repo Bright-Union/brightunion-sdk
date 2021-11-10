@@ -95,7 +95,7 @@ import Web3 from 'web3';
         bridgeRegistry: '',
         nexusDistributor: '',
         nexusAPI: '',
-        brightProtocol:'',
+        brightProtocol:'0xf58174a5999Db42F56Fdf8010Fa024D8c88B6De7',
         brightContractRegistry: '',
         insuraceCover: '0xfBa24bdbb36001F1F88B3a552c77EC1c10f5E4C0',
         insuraceAPI: 'https://api.insurace.io/ops/v1',
