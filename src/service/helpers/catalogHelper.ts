@@ -15,7 +15,7 @@ const bridge_nexus_insurace = [
   ['1INCH Token', '1Inch (DEX & Liquidity Pools)', '1Inch', '1Inch'],
   ['Aave', 'Aave V2', 'Aave V2', 'Aave V2'],
   ['Aave', 'Aave V1', '', 'Aave V1'],
-  ['Anchor', 'Anchor Protocol', 'Anchor', 'Anchor'],
+  ['Anchor Protocol', 'Anchor Protocol', 'Anchor', 'Anchor'],
   ['Alchemix', 'Alchemix V1', '', 'Alchemix V1'],
   ['BadgerDAO', 'BadgerDAO', 'Badger Finance', 'BadgerDAO'],
   ['BarnBridge', 'Barnbridge Smart Yield V1', '', 'Barnbridge V1'],

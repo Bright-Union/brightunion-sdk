@@ -46,6 +46,8 @@ export async function getCatalog(): Promise<any> {
 }
 
 export async function getBridgeCoverables(): Promise<any[]> {
+  let trustWalletAssets: { [key: string]: any } = {};
+  trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
 
   const chainId = await global.user.web3.eth.getChainId();
   const bridgeRegistryAdd = NetConfig.netById( chainId ).bridgeRegistry;
@@ -66,18 +68,20 @@ export async function getBridgeCoverables(): Promise<any[]> {
           if (!_stats[i].whitelisted) {
             continue;
           }
-
-          // let asset = state.trustWalletAssets[Object.keys(state.trustWalletAssets)
-            // .find(key => key.toLowerCase() === _stats[i].insuredContract.toLowerCase())];
-            // let logo = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${_stats[i].insuredContract}/logo.png`;
-
-            let name = _stats[i][0]
+          let asset: any = undefined;
+          Object.keys(trustWalletAssets).find((key) => {
+            if (key === _stats[i].insuredContract) {
+              asset = trustWalletAssets[key];
+            }
+          });
+          const logo = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${_stats[i].insuredContract}/logo.png`;
+          const name = asset ? asset.name : _stats[i][0]
             policyBooksArray.push(CatalogHelper.createCoverable({
               bridgeProductAddress: _policyBooksArr[i],
               bridgeCoverable: _stats[i].insuredContract,
               protocolAddress: _stats[i].insuredContract,
               bridgeAPY: Number(_stats[i].APY) / (10 ** 5),
-              // logo: logo,
+              logo: logo,
               name: name,
               type: CatalogHelper.commonCategory(_stats[i].contractType, 'bridge'),
               source: 'bridge',
@@ -121,7 +125,8 @@ export async function getNexusCoverables(): Promise<any[]> {
   }
 
   export async function getInsuraceCoverables() : Promise<object[]> {
-    // const trustWalletAssets:object[] = await CatalogHelper.getTrustWalletAssets();
+  let trustWalletAssets: { [key: string]: any } = {};
+    trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
     // const NetID = await global.user.web3.eth.getChainId();
     return await InsuraceApi.fetchCoverables().then((data:object) => {
 
@@ -130,18 +135,18 @@ export async function getNexusCoverables(): Promise<any[]> {
         if (value.status !== 'Enabled') {
           continue;
         }
+        let assetIndex: any = undefined;
+        Object.keys(trustWalletAssets).find((k: string) => {
+          if (trustWalletAssets[k].name && value.coingecko && trustWalletAssets[k].name.toUpperCase() == value.coingecko.token_id.toUpperCase()) {
+            assetIndex = trustWalletAssets[k].logoURI;
+          }
+        });
 
-        // let assetIndex:object = Object.keys(trustWalletAssets).find((k:object) => {
-          //     console.log(typeof k , k)
-          //     return  trustWalletAssets[k].symbol && value.coingecko  && trustWalletAssets[k].symbol.toUpperCase() == value.coingecko.token_id.toUpperCase()
-          //   });
+        const logo: string = assetIndex ? assetIndex : `https://app.insurace.io/asset/product/${value.name.replace(/\s+/g, '')}.png`
 
-          // let asset:object = trustWalletAssets[0];
-          // let logo:string = asset ? asset.logoURI : `https://app.insurace.io/asset/product/${value.name.replace(/\s+/g, '')}.png`
-
-          coverablesArray.push(CatalogHelper.createCoverable({
+        coverablesArray.push(CatalogHelper.createCoverable({
             name: value.name.trim(),
-            logo: null,
+            logo: logo,
             type: CatalogHelper.commonCategory(value.risk_type, 'insurace'),
             coingecko: value.coingecko,
             source: 'insurace',
