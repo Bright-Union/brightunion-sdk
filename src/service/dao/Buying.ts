@@ -49,10 +49,8 @@ export async function buyCover(
                 gasLimit: 129913, // 7000000
               })
               .on('transactionHash', (x:any) => {
-                console.log('SHOW_CONFIRMATION_DONE', {msg: 'Thanks for using us!', tx: x});
-                console.log('TX_CONFIRMING');
                 console.log('TRACK_EVENT', {
-                  action: 'buy-bridge-policy-hash',
+                  action: 'buy-'+_distributorName+'-policy-hash',
                   category: 'trxHash',
                   label: 'Transaction Hash',
                   value: 1
@@ -62,24 +60,20 @@ export async function buyCover(
                 if (confirmationNumber === 0) {
                   console.log('TRACK_PURCHASE', {
                     tx: receipt.transactionHash,
-                    provider: 'bridge',
-                    value: this.readablePrice,
-                    currency: '0xcc54b12a18f2C575CA97991046090f43C3070aA0',
-                    name: this.quote.name,
-                    period: this.quote.actualPeriod,
+                    provider: _distributorName,
+                    res: {confirmationNumber , receipt}
                   });
-                  console.log('TX_CONFIRMED');
                 }
               })
               .on('error', (err:any, receipt:any) => {
-                console.error(err, receipt)
                 console.log('TRACK_EVENT', {
-                  action: 'buy-bridge-policy-error',
+                  action: 'buy-'+_distributorName+'-policy-error',
                   category: 'trxError',
                   label: 'Transaction Error',
-                  value: 1
+                  value: 1,
+                  error: err,
+                  receipt: receipt
                 });
-                console.log('CLOSE_CONFIRMATION_WAITING',err.message);
               });
 }
 /**
@@ -115,7 +109,7 @@ export async function buyCoverInsurace (
         _r : Array<number>,
         _s: Array<number>,
 ){
-  console.log('calling: buyCoverInsurace')
+
   return await _getDistributorContract()
               .methods
               .buyCoverInsurace(
@@ -133,41 +127,35 @@ export async function buyCoverInsurace (
               )
               .send({
                 from: _ownerAddress,
-                value: _premiumAmount+1,
-                gasLimit: 129913, // 7000000
+                value: _premiumAmount,
+                // gasLimit: 129913, // 7000000
               })
-              .on('transactionHash', (x:any) => {
-                console.log('SHOW_CONFIRMATION_DONE', {msg: 'Thanks for using us!', tx: x});
-                console.log('TX_CONFIRMING');
+              .on('transactionHash', (res:any) => {
                 console.log('TRACK_EVENT', {
-                  action: 'buy-bridge-policy-hash',
+                  action: 'buy-Insurace-policy-hash',
                   category: 'trxHash',
                   label: 'Transaction Hash',
-                  value: 1
+                  value: 1,
+                  res: res
                 });
               })
               .on('confirmation', (confirmationNumber:any, receipt:any) => {
                 if (confirmationNumber === 0) {
                   console.log('TRACK_PURCHASE', {
                     tx: receipt.transactionHash,
-                    provider: 'bridge',
-                    value: this.readablePrice,
-                    currency: '0xcc54b12a18f2C575CA97991046090f43C3070aA0',
-                    name: this.quote.name,
-                    period: this.quote.actualPeriod,
+                    provider: 'Insurace',
+                    res: {confirmationNumber , receipt}
                   });
-                  console.log('TX_CONFIRMED');
                 }
               })
               .on('error', (err:any, receipt:any) => {
-                console.error(err, receipt)
                 console.log('TRACK_EVENT', {
-                  action: 'buy-bridge-policy-error',
+                  action: 'buy-insurace-policy-error',
                   category: 'trxError',
                   label: 'Transaction Error',
-                  value: 1
+                  value: 1,
+                  res: {err, receipt}
                 });
-                console.log('CLOSE_CONFIRMATION_WAITING',err.message);
               });
 }
 

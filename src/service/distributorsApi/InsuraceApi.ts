@@ -65,14 +65,11 @@ class InsuraceApi {
 
     static confirmCoverPremium (chainSymbol :any, params : any) {
 
-      console.log('confirmCoverPremium SDK - ' , chainSymbol , params );
-
         return axios.post(
             `${NetConfig.netById(global.user.networkId).insuraceAPI}/confirmCoverPremium?code=${encodeURIComponent(NetConfig.netById(global.user.networkId).insuraceAPIKey)}`, {
             chain: chainSymbol,
             params: params
         }).then((response : any) => {
-          console.log('confirmCoverPremium SDK  RESPO - ' , response.data );
             return response.data;
         }).catch(error =>{
             console.log('ERROR on Insurace confirmCoverPremium : ', error.response.data && error.response.data.message);
