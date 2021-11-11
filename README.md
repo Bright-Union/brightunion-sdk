@@ -41,7 +41,7 @@ const catalog = brightClient.getCatalog();
 const quotes = brightClient.getQuotes( <amount> , <currency>, <period>, <catalog_item> )
 
 // Buy quoted cover
-brightClient.getQuotes( <quote> )
+brightClient.buyQuote( <quote> )
 
 ```
 
@@ -68,9 +68,11 @@ const catalogItemNexus = { nexusCoverable: <Nexus_product_address> };
 const quote = await state.brightClient.getQuoteFrom( <distributorName>, <amount> , <currency>, <period>, <catalog_item>);
 
 // Buy quoted cover
-brightClient.getQuotes( <quote> )
+brightClient.buyQuote( <quote> )
 
 ```
+
+
 
 
 
