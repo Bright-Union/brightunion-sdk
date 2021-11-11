@@ -20,7 +20,9 @@ const getContract = (abi:any, address:any, web3:any) =>
         }
     });
 
-const getInsurAceCoverContract = (address:any, web3:any) => getContract(InsuraceDistributor, address, web3);
+const getInsurAceCoverContract = (address:any, web3:any) => getContract(InsuraceCoverABI, address, web3);
+
+const getInsurAceCoverContractBright = (address:any, web3:any) => getContract(InsuraceDistributor, address, web3);
 
 const _getBridgeRegistryContract           =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeRegistryContractABI.abi, address , web3);
 const _getBridgePolicyBookRegistryContract =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgePolicyBookRegistryABI.abi, address , web3);
@@ -49,5 +51,6 @@ export  {
     _getBridgePolicyQuoteContract,
     _getBridgePolicyBookContract,
     _getBridgePolicyRegistryContract,
-    getInsurAceCoverContract
+    getInsurAceCoverContract,
+    getInsurAceCoverContractBright
 } ;
