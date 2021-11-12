@@ -42,8 +42,6 @@ export async function buyOnInsurace (_quoteProtocol:any) {
   // Check for user ETH balance
   const netBalance = await global.user.web3.eth.getBalance(global.user.account);
 
-  console.log('_quoteProtocol: Insur ',_quoteProtocol);
-
   if(NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency)){
     if (Number(netBalance) >= (Number)(_quoteProtocol.price)) {
       callInsurace(buyingObj);
