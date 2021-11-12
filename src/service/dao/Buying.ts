@@ -48,17 +48,17 @@ export function buyCover(
                 value: _maxPriceWithFee+1,
                 gasLimit: 129913, // 7000000
               })
-              // .on('transactionHash', (res:any) => {
-              //   txHash  = res;
-              // })
-              // .on('confirmation', (confirmationNumber:any, receipt:any) => {
-              //   console.log("confirmation - " , confirmationNumber, receipt);
-              //   return {confirmationNumber:confirmationNumber, receipt:receipt, txHash: txHash}
-              // })
-              // .on('error', (err:any, receipt:any) => {
-              //   console.log("error - " , err, receipt);
-              //   return {error: err, receipt:receipt,txHash:txHash}
-              // });
+              .on('transactionHash', (res:any) => {
+                txHash  = res;
+              })
+              .on('confirmation', (confirmationNumber:any, receipt:any) => {
+                console.log("confirmation - " , confirmationNumber, receipt);
+                return {confirmationNumber:confirmationNumber, receipt:receipt, txHash: txHash}
+              })
+              .on('error', (err:any, receipt:any) => {
+                console.log("error - " , err, receipt);
+                return {error: err, receipt:receipt,txHash:txHash}
+              });
 }
 /**
  * Returns a transaction receipt.
@@ -87,15 +87,15 @@ export  function buyCoverInsurace(distributorName : string, buyingObj:any){
                 from: buyingObj.owner,
                 value: buyingObj.premium,
               })
-              // .on('transactionHash', (res:any) => {
-              //   // return {success: res}
-              // })
-              // .on('confirmation', (confirmationNumber:any, receipt:any) => {
-              //   return {confirmationNumber:confirmationNumber, receipt:receipt}
-              // })
-              // .on('error', (err:any, receipt:any) => {
-              //   return {error: err, receipt : receipt}
-              // });
+              .on('transactionHash', (res:any) => {
+                return {success: res}
+              })
+              .on('confirmation', (confirmationNumber:any, receipt:any) => {
+                return {confirmationNumber:confirmationNumber, receipt:receipt}
+              })
+              .on('error', (err:any, receipt:any) => {
+                return {error: err, receipt : receipt}
+              });
 }
 
 

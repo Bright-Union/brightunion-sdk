@@ -62,6 +62,11 @@ export async function buyOnInsurace (_quoteProtocol:any) {
     if (NetConfig.sixDecimalsCurrency(global.user.networkId, _quoteProtocol.currency) &&       //6 digits currency?
     Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.quote.price)) {
 
+      console.log('1 - ' , buyingObj.premium)
+
+      buyingObj.premium = Number(ERC20Helper.USDTtoERCDecimals(buyingObj.premium))
+
+      console.log('2 - ' , buyingObj.premium)
       //proceed with USDT
       ERC20Helper.approveUSDTAndCall(
         erc20Instance,

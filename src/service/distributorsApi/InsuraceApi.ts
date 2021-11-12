@@ -85,6 +85,7 @@ class InsuraceApi {
         if (currency === 'USD') {
           currency = RiskCarriers.INSURACE.fallbackQuotation[NetConfig.netById(web3.networkId).symbol];
         }
+
         if (NetConfig.sixDecimalsCurrency(web3.networkId, currency)) {
           amountInWei = ERC20Helper.ERCtoUSDTDecimals(amountInWei);
         }
