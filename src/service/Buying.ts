@@ -225,24 +225,21 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
 export async function callBridge(_quoteProtocol:any){
 
-  // const data = global.user.web3.eth.abi.encodeParameters(
-  //   ['uint', 'uint', 'uint', 'uint', 'uint8', 'bytes32', 'bytes32'],
-  //   [_quoteProtocol.rawData.price, _quoteProtocol.rawData.priceInNXM, _quoteProtocol.rawData.expiresAt,
-  //     _quoteProtocol.rawData.generatedAt, _quoteProtocol.rawData.v, _quoteProtocol.rawData.r, _quoteProtocol.rawData.s],
-  //   );
-
     let bridgeProductAddress: any = '0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f';
 
-    await buyCover(
-        global.user.account,
-        'bridge',
-        bridgeProductAddress,
-        NetConfig.netById(global.user.networkId).USDT,  // payment asset
-        0, // sum assured, compliant
-        _quoteProtocol.rawData.period, // bridge epochs - weeks
-        1, //coverType
-        _quoteProtocol.rawData.amount, // token amount to cover
-        global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500)) // random data
+    let net:any = NetConfig.netById(global.user.networkId);
+    let asset = net[_quoteProtocol.rawData.currency]
+
+    return buyCover(
+      global.user.account,
+      'bridge',
+      _quoteProtocol.protocol.bridgeProductAddress, //bridge prod address
+      asset,  // payment asset
+      _quoteProtocol.amount.toString(), // sum assured, compliant
+      _quoteProtocol.actualPeriod, // period
+      0, //coverType
+      _quoteProtocol.rawData.price, // token amount to cover
+      global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500)) // random data
     )
 
 }

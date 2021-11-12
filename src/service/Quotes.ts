@@ -81,20 +81,22 @@ export async function getQuoteFrom(
  * @param _protocol
  * @returns
  */
- async function getBridgeQuote(_amount :any, currency:any, _period :any, _protocol :any ) : Promise<object>{
+ async function getBridgeQuote(_amount :any, _currency:any, _period :any, _protocol :any ) : Promise<object>{
 
    if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeProductAddress) {
 
      let amountInWei:any = global.user.web3.utils.toWei(_amount.toString(), 'ether');
 
-     if (currency === 'ETH') {
+     if (_currency === 'ETH') {
        amountInWei = CurrencyHelper.eth2usd(amountInWei);
      }
-     currency = RiskCarriers.BRIDGE.fallbackQuotation;
+     _currency = RiskCarriers.BRIDGE.fallbackQuotation;
+
+     const bridgeEpochs = Math.min(52, Math.ceil(Number(_period) / 7));
 
      const quote =  await getQuote(
        'bridge',
-       _period,
+       bridgeEpochs,
        amountInWei,
       _protocol.bridgeProductAddress,
      '0x0000000000000000000000000000000000000000',
@@ -112,19 +114,21 @@ export async function getQuoteFrom(
        totalCoverTokens   : quote.prop4,
        prop5              : quote.prop5,
        prop6              : quote.prop6,
-       prop7              : quote.prop7
+       prop7              : quote.prop7,
      }
+
+     const actualPeriod = Math.floor(Number(bridgeQuote.totalSeconds) / 3600 / 24);
 
      return CatalogHelper.quoteFromCoverable(
        'bridge',
        _protocol,
        {
-         amount: _amount,
-         currency: 'ETH',
+         amount: amountInWei,
+         currency: _currency,
          period: _period,
          chain: '',
          chainId: global.user.networkId,
-         // actualPeriod: actualPeriod,
+         actualPeriod: actualPeriod,
          price: bridgeQuote.totalPrice,
          response: bridgeQuote,
          // pricePercent: new BigNumber(totalPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000, //%, annualize
