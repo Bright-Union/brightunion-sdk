@@ -4,8 +4,8 @@ type User = {
   web3: Web3,
   web3Passive: any[],
   networkId: number,
-  brightProtoAddress: string,
-  account: string,
+  brightProtoAddress: any,
+  account: any,
 };
 
 export default User

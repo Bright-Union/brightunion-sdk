@@ -21,60 +21,78 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
     return await buyOnInsurace(_quoteProtocol);
 
   }
-
 }
 
+
+/**
+ *  Buy on Insurace multi-currency handler method
+ * 
+ * @param _quoteProtocol Quote to buy
+ */
 export async function buyOnInsurace (_quoteProtocol:any) {
 
   const chainSymbol:string  = NetConfig.netById(global.user.networkId).symbol;
-  const confirmCoverResult  : any = await InsuraceApi.confirmCoverPremium(chainSymbol, _quoteProtocol.rawData.params);
 
+  // Confirm insurace quoted premium & get security signature params to buy
+  const confirmCoverResult:any = await InsuraceApi.confirmCoverPremium(chainSymbol, _quoteProtocol.rawData.params);
+
+  // Map Quote confirmation to Insurace buying object
+  const buyingObj = setInsuraceBuyingObject(confirmCoverResult);
+
+  // Check for user ETH balance
   const netBalance = await global.user.web3.eth.getBalance(global.user.account);
+
+  console.log('_quoteProtocol: Insur ',_quoteProtocol);
 
   if(NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency)){
     if (Number(netBalance) >= (Number)(_quoteProtocol.price)) {
-      callInsurace(confirmCoverResult);
+      callInsurace(buyingObj);
     } else {
-      console.log('You have insufficient funds to continue with this transaction');
+      console.log('You have insufficient funds to continue with this transaction.. .');
       // this.errorMessage = "You have insufficient funds to continue with this transaction";
     }
   }else{
     const netConfig:any = NetConfig.netById(global.user.networkId);
     const erc20Address:string = netConfig[_quoteProtocol.currency]
+    
+    console.log('erc20Address: ', erc20Address);
+    
     const erc20Instance = _getIERC20Contract(erc20Address);
-    const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
-    const asset:any = NetConfig.netById(global.user.networkId);
-
-    //balance is enough?
+    let account = global.user.account;
+    let ercBalance  = await erc20Instance.methods.balanceOf(account).call();
+   
+  
+    console.log('ercBalance: ',ercBalance)
+    // balance is enough?
     if (NetConfig.sixDecimalsCurrency(global.user.networkId, _quoteProtocol.currency) &&       //6 digits currency?
-    Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.rawData.price)) {
+    Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.quote.price)) {
 
       //proceed with USDT
-      // this.showModal = false;
+      console.log('ERC20Helper.approveUSDTAndCall...')
       ERC20Helper.approveUSDTAndCall(
         erc20Instance,
-        _quoteProtocol.protocol.bridgeProductAddress,  // this.$store.state.insurAceCover().options.address,
-        _quoteProtocol.rawData.price,
+        '0x7e758e0D330B9B340A7282029e73dA448fb4BdB6',  // global.user.brightProtoAddress
+        buyingObj.premium,
         () => {
           console.log('SHOW_CONFIRMATION_WAITING', {msg: `(1/3) Resetting USDT allowance to 0`});
         },
         () => {
-          callInsurace(confirmCoverResult);
+          callInsurace(buyingObj);
         },
         () => {
           console.log('CLOSE_CONFIRMATION_WAITING');
         })
 
-      } else if (Number(ercBalance) >= (Number)(_quoteProtocol.rawData.price)) {
+      } else if (Number(ercBalance) >= (Number)(_quoteProtocol.quote.price)) {
 
         //proceed with ERC
         ERC20Helper.approveAndCall(
           erc20Instance,
           _quoteProtocol.protocol.bridgeProductAddress,  // this.$store.state.insurAceCover().options.address,
-          _quoteProtocol.rawData.price,
+          _quoteProtocol.quote.price,
           () => {
-            callInsurace(confirmCoverResult);
+            callInsurace(buyingObj);
           },
           (err:any) => {
             console.log('ERC20Helper approveAndCall Error - ', err);
@@ -87,24 +105,53 @@ export async function buyOnInsurace (_quoteProtocol:any) {
 
     }
 
-export async function callInsurace(confirmCoverResult:any){
-  return await buyCoverInsurace(
-    global.user.account,
-    'insurace',
-    confirmCoverResult[0],
-    confirmCoverResult[1],
-    confirmCoverResult[2],
-    confirmCoverResult[3],
-    confirmCoverResult[6],
-    confirmCoverResult[7],
-    confirmCoverResult[8],
-    confirmCoverResult[9],
-    confirmCoverResult[10],
-    confirmCoverResult[11],
-  )
+/**
+ * Contract Call to buy quote
+ * @param buyingObj 
+ * @returns 
+ */
+export async function callInsurace(buyingObj:any){
+  return await buyCoverInsurace('insurace', buyingObj);
 }
 
+/**
+ * Specific buying struct for Insurace Contract
+ * @param confirmCoverResult  
+ * 
+ * @prop _products
+ * @prop _durationInDays
+ * @prop _amounts
+ * @prop _currency
+ * @prop _premiumAmount
+ * @prop _helperParameters
+ * @prop _securityParameters
+ * @prop _v
+ * @prop _r
+ * @prop _s
+ * 
+ * @returns {Object} insurance buying struct
+ */
+function setInsuraceBuyingObject(confirmCoverResult:any){
+  return {
+    products:            confirmCoverResult[0],
+    durationInDays:      confirmCoverResult[1],
+    amounts:             confirmCoverResult[2],
+    currency:            confirmCoverResult[3],
+    owner:               confirmCoverResult[4],
+    refCode:             confirmCoverResult[5],
+    premium:             confirmCoverResult[6],
+    helperParameters:    confirmCoverResult[7],
+    securityParameters:  confirmCoverResult[8],
+    v:                   confirmCoverResult[9],
+    r:                   confirmCoverResult[10],
+    s:                   confirmCoverResult[11]
+  }
+}
 
+/**
+ *  Buy on Nexus Mutual
+ * @param _quoteProtocol Quote to buy
+ */
 export async function callNexus(_quoteProtocol:any){
 
   const data = global.user.web3.eth.abi.encodeParameters(
@@ -126,7 +173,6 @@ export async function callNexus(_quoteProtocol:any){
     )
 
 }
-
 
 export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
@@ -201,7 +247,6 @@ export async function callBridge(_quoteProtocol:any){
     )
 
 }
-
 
 export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
 

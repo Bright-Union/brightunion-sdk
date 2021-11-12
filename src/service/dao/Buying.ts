@@ -1,6 +1,5 @@
-
 import BuyReceipt from "../domain/BuyReceipt";
-import {_getDistributorContract} from "../helpers/getContract";
+import {_getDistributorContract,_getInsuraceDistributor} from "../helpers/getContract";
 
 /**
  * Returns a transaction receipt.
@@ -95,40 +94,13 @@ export async function buyCover(
  * @param _s
  * @returns  BuyReceipt Object
  */
-export async function buyCoverInsurace (
-        _ownerAddress:any,
-        _distributorName : string,
-        _products : Array<number>,
-        _durationInDays : Array<number>,
-        _amounts : Array<number>,
-        _currency : string,
-        _premiumAmount : number,
-        _helperParameters : Array<number>,
-        _securityParameters : Array<number>,
-        _v : Array<number>,
-        _r : Array<number>,
-        _s: Array<number>,
-){
-
-  return await _getDistributorContract()
+export async function buyCoverInsurace(distributorName : string, buyingObj:any){
+  return await _getInsuraceDistributor()
               .methods
-              .buyCoverInsurace(
-                _products,
-                _durationInDays,
-                _amounts,
-                _currency,
-                _ownerAddress,
-                _premiumAmount,
-                _helperParameters,
-                _securityParameters,
-                _v,
-                _r,
-                _s
-              )
+              .buyCoverInsurace(buyingObj)
               .send({
-                from: _ownerAddress,
-                value: _premiumAmount,
-                // gasLimit: 129913, // 7000000
+                from: buyingObj.owner,
+                value: buyingObj.premium,
               })
               .on('transactionHash', (res:any) => {
                 console.log('TRACK_EVENT', {

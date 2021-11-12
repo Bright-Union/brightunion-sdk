@@ -1,6 +1,6 @@
 import  DistributorsABI  from '../abi/Distributors.json';
-import IERC20ABI from '../abi/IERC20Metadata.json';
-import InsuraceDistributor from '../abi/InsuraceDistributor.json';
+import IERC20ABI from '../abi/IERC20.json';
+import InsuraceDistributorABI from '../abi/InsuraceDistributor.json';
 import BridgeRegistryContractABI from '../abi/bridge/IContractsRegistry.json';
 import BridgePolicyBookRegistryABI from '../abi/bridge/IPolicyBookRegistry.json';
 import BridgePolicyQuoteABI from '../abi/bridge/IPolicyQuote.json';
@@ -18,12 +18,22 @@ function _getDistributorContract() : any {
   const address: string = global.user.brightProtoAddress;
   const distAbi:any = DistributorsABI.abi;
 
-  return new web3.eth.Contract(distAbi, address , web3);
+  return new web3.eth.Contract(distAbi, address );
 }
 
-function _getIERC20Contract(address:any) : any {
+function _getInsuraceDistributor() : any {
+  const web3:any = global.user.web3;
+  const address: string = '0x7e758e0D330B9B340A7282029e73dA448fb4BdB6';
+  const distAbi:any = InsuraceDistributorABI.abi;
+
+  return new web3.eth.Contract(distAbi, address );
+}
+
+function _getIERC20Contract(address:any) {
     const web3:any = global.user.web3;
-    return new web3.eth.Contract(IERC20ABI.abi, address);
+    const distAbi:any = IERC20ABI.abi;
+
+    return new web3.eth.Contract(distAbi,address);
 }
 
 export  {
@@ -34,4 +44,5 @@ export  {
     _getBridgePolicyQuoteContract,
     _getBridgePolicyBookContract,
     _getBridgePolicyRegistryContract,
+    _getInsuraceDistributor
 } ;
