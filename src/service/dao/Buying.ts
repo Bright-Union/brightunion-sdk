@@ -19,7 +19,7 @@ import {_getDistributorContract,_getInsuraceDistributor} from "../helpers/getCon
  * @param _data
  * @returns BuyReceipt Object
  */
-export async function buyCover(
+export function buyCover(
         _ownerAddress : string,
         _distributorName : string,
         _contractAddress : string,
@@ -30,7 +30,8 @@ export async function buyCover(
         _maxPriceWithFee : number,
         _data : any,
 ){
-  return await _getDistributorContract()
+  let txHash:any = null;
+  return _getDistributorContract()
               .methods
               .buyCover(
                 _distributorName,
@@ -47,15 +48,17 @@ export async function buyCover(
                 value: _maxPriceWithFee+1,
                 gasLimit: 129913, // 7000000
               })
-              .on('transactionHash', (res:any) => {
-
-              })
-              .on('confirmation', (confirmationNumber:any, receipt:any) => {
-                return {confirmationNumber:confirmationNumber, receipt:receipt}
-              })
-              .on('error', (err:any, receipt:any) => {
-                return {error: err, receipt:receipt}
-              });
+              // .on('transactionHash', (res:any) => {
+              //   txHash  = res;
+              // })
+              // .on('confirmation', (confirmationNumber:any, receipt:any) => {
+              //   console.log("confirmation - " , confirmationNumber, receipt);
+              //   return {confirmationNumber:confirmationNumber, receipt:receipt, txHash: txHash}
+              // })
+              // .on('error', (err:any, receipt:any) => {
+              //   console.log("error - " , err, receipt);
+              //   return {error: err, receipt:receipt,txHash:txHash}
+              // });
 }
 /**
  * Returns a transaction receipt.
@@ -76,23 +79,23 @@ export async function buyCover(
  * @param _s
  * @returns  BuyReceipt Object
  */
-export async function buyCoverInsurace(distributorName : string, buyingObj:any){
-  return await _getInsuraceDistributor()
+export  function buyCoverInsurace(distributorName : string, buyingObj:any){
+  return  _getInsuraceDistributor()
               .methods
               .buyCoverInsurace(buyingObj)
               .send({
                 from: buyingObj.owner,
                 value: buyingObj.premium,
               })
-              .on('transactionHash', (res:any) => {
-                // return {success: res}
-              })
-              .on('confirmation', (confirmationNumber:any, receipt:any) => {
-                return {confirmationNumber:confirmationNumber, receipt:receipt}
-              })
-              .on('error', (err:any, receipt:any) => {
-                return {error: err, receipt : receipt}
-              });
+              // .on('transactionHash', (res:any) => {
+              //   // return {success: res}
+              // })
+              // .on('confirmation', (confirmationNumber:any, receipt:any) => {
+              //   return {confirmationNumber:confirmationNumber, receipt:receipt}
+              // })
+              // .on('error', (err:any, receipt:any) => {
+              //   return {error: err, receipt : receipt}
+              // });
 }
 
 
