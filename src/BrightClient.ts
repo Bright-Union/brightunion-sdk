@@ -3,8 +3,6 @@
 import User from './service/domain/User';
 import { getCoversCount, getCovers } from "./service/dao/Covers";
 import { getDistributorAddress } from "./service/dao/Distributors";
-import { getQuote } from "./service/dao/Quotes";
-import { buyCoverInsurace, buyCover } from "./service/dao/Buying";
 import { getCatalog } from "./service/Catalog";
 import { getAllCovers } from "./service/Covers";
 import { buyQuote } from "./service/Buying";
@@ -42,21 +40,22 @@ constructor(_config:any) {
     };
   }
 
-  covers: object = {
-    // owner: this,
-    async getCatalog() {
-      return await this.getCatalog();
-    },
-    async getCatalogUnsorted() {
-      return await this.catalogUnsorted;
-    },
-    async getQuotes() {
-      return await this.getQuotes();
-    },
-    async buyQuote() {
-      return await this.buyQuote();
-    },
-  }
+  // Future structure?
+  // covers: object = {
+  //   // owner: this,
+  //   async getCatalog() {
+  //     return await this.getCatalog();
+  //   },
+  //   async getCatalogUnsorted() {
+  //     return await this.catalogUnsorted;
+  //   },
+  //   async getQuotes() {
+  //     return await this.getQuotes();
+  //   },
+  //   async buyQuote() {
+  //     return await this.buyQuote();
+  //   },
+  // }
 
 async initialize(): Promise<object>{
       global.user.account = (await  global.user.web3.eth.getAccounts())[0];;
@@ -86,18 +85,9 @@ async getDistributorAddress (
 
 
 async getAllCovers(
-  // _distributorName : string,
-  // _ownerAddress : string,
-  // _activeCover : boolean,
-  // _limit : number,
 ){
   return await getAllCovers(
-    // _distributorName,
-    // _ownerAddress,
-    // _activeCover,
-    // _limit,
   )
-
 }
 
 async getCoversCount(
@@ -132,6 +122,9 @@ async getCovers(
   _period: number,
   _protocol: any
 ){
+  if(!_protocol){
+    return {error: "No protocol provided"};
+  }
  return await getQuotes(_amount, _currency, _period, _protocol);
 }
 
@@ -156,7 +149,9 @@ async getQuoteFrom(_distributorName:string,
  async buyQuote(
    _quote:any,
  ){
-   console.log("buyQuote - " , _quote )
+   if(!_quote){
+     return {error : "No quote provided"};
+   }
    return await buyQuote(
      _quote
    )
