@@ -44,10 +44,11 @@ export async function buyOnInsurace (_quoteProtocol:any) {
 
   if(NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency)){
     if (Number(netBalance) >= (Number)(_quoteProtocol.price)) {
-      callInsurace(buyingObj);
+      console.log('THISSSS XXX1...');
+      return callInsurace(buyingObj);
     } else {
-      console.log('You have insufficient funds to continue with this transaction.. .');
-      // this.errorMessage = "You have insufficient funds to continue with this transaction";
+      console.log('You have insufficient funds to continue with this transaction...');
+      return {error: "You have insufficient funds to continue with this transaction..." }
     }
   }else{
     const netConfig:any = NetConfig.netById(global.user.networkId);
@@ -71,7 +72,7 @@ export async function buyOnInsurace (_quoteProtocol:any) {
           console.log('SHOW_CONFIRMATION_WAITING', {msg: `(1/3) Resetting USDT allowance to 0`});
         },
         () => {
-          callInsurace(buyingObj);
+          return callInsurace(buyingObj);
         },
         () => {
           console.log('CLOSE_CONFIRMATION_WAITING');
@@ -85,7 +86,7 @@ export async function buyOnInsurace (_quoteProtocol:any) {
           _quoteProtocol.protocol.bridgeProductAddress,  // this.$store.state.insurAceCover().options.address,
           _quoteProtocol.quote.price,
           () => {
-            callInsurace(buyingObj);
+            return callInsurace(buyingObj);
           },
           (err:any) => {
             console.log('ERC20Helper approveAndCall Error - ', err);
@@ -192,7 +193,7 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
       // this.showModal = false;
 
       const onSuccess =  () => {
-        callNexus(_quoteProtocol);
+        return callNexus(_quoteProtocol);
         };
         const onError =  (err:any) => {
           console.log('CLOSE_CONFIRMATION_WAITING - ' , err);
@@ -213,7 +214,7 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
   const netBalance = await global.user.web3.eth.getBalance(global.user.account);
     if (Number(netBalance) >= (Number)(_quoteProtocol.rawData.price)) {
-      callNexus(_quoteProtocol);
+      return callNexus(_quoteProtocol);
     } else {
       console.log("You have insufficient funds to continue with this transaction");
     }

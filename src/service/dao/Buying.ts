@@ -47,32 +47,14 @@ export async function buyCover(
                 value: _maxPriceWithFee+1,
                 gasLimit: 129913, // 7000000
               })
-              .on('transactionHash', (x:any) => {
-                console.log('TRACK_EVENT', {
-                  action: 'buy-'+_distributorName+'-policy-hash',
-                  category: 'trxHash',
-                  label: 'Transaction Hash',
-                  value: 1
-                });
+              .on('transactionHash', (res:any) => {
+
               })
               .on('confirmation', (confirmationNumber:any, receipt:any) => {
-                if (confirmationNumber === 0) {
-                  console.log('TRACK_PURCHASE', {
-                    tx: receipt.transactionHash,
-                    provider: _distributorName,
-                    res: {confirmationNumber , receipt}
-                  });
-                }
+                return {confirmationNumber:confirmationNumber, receipt:receipt}
               })
               .on('error', (err:any, receipt:any) => {
-                console.log('TRACK_EVENT', {
-                  action: 'buy-'+_distributorName+'-policy-error',
-                  category: 'trxError',
-                  label: 'Transaction Error',
-                  value: 1,
-                  error: err,
-                  receipt: receipt
-                });
+                return {error: err, receipt:receipt}
               });
 }
 /**
@@ -103,31 +85,13 @@ export async function buyCoverInsurace(distributorName : string, buyingObj:any){
                 value: buyingObj.premium,
               })
               .on('transactionHash', (res:any) => {
-                console.log('TRACK_EVENT', {
-                  action: 'buy-Insurace-policy-hash',
-                  category: 'trxHash',
-                  label: 'Transaction Hash',
-                  value: 1,
-                  res: res
-                });
+                // return {success: res}
               })
               .on('confirmation', (confirmationNumber:any, receipt:any) => {
-                if (confirmationNumber === 0) {
-                  console.log('TRACK_PURCHASE', {
-                    tx: receipt.transactionHash,
-                    provider: 'Insurace',
-                    res: {confirmationNumber , receipt}
-                  });
-                }
+                return {confirmationNumber:confirmationNumber, receipt:receipt}
               })
               .on('error', (err:any, receipt:any) => {
-                console.log('TRACK_EVENT', {
-                  action: 'buy-insurace-policy-error',
-                  category: 'trxError',
-                  label: 'Transaction Error',
-                  value: 1,
-                  res: {err, receipt}
-                });
+                return {error: err, receipt : receipt}
               });
 }
 
