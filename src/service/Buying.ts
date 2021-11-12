@@ -26,7 +26,7 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
 
 /**
  *  Buy on Insurace multi-currency handler method
- * 
+ *
  * @param _quoteProtocol Quote to buy
  */
 export async function buyOnInsurace (_quoteProtocol:any) {
@@ -54,22 +54,17 @@ export async function buyOnInsurace (_quoteProtocol:any) {
   }else{
     const netConfig:any = NetConfig.netById(global.user.networkId);
     const erc20Address:string = netConfig[_quoteProtocol.currency]
-    
-    console.log('erc20Address: ', erc20Address);
-    
+
     const erc20Instance = _getIERC20Contract(erc20Address);
 
     let account = global.user.account;
     let ercBalance  = await erc20Instance.methods.balanceOf(account).call();
-   
-  
-    console.log('ercBalance: ',ercBalance)
+
     // balance is enough?
     if (NetConfig.sixDecimalsCurrency(global.user.networkId, _quoteProtocol.currency) &&       //6 digits currency?
     Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.quote.price)) {
 
       //proceed with USDT
-      console.log('ERC20Helper.approveUSDTAndCall...')
       ERC20Helper.approveUSDTAndCall(
         erc20Instance,
         '0x7e758e0D330B9B340A7282029e73dA448fb4BdB6',  // global.user.brightProtoAddress
@@ -107,8 +102,8 @@ export async function buyOnInsurace (_quoteProtocol:any) {
 
 /**
  * Contract Call to buy quote
- * @param buyingObj 
- * @returns 
+ * @param buyingObj
+ * @returns
  */
 export async function callInsurace(buyingObj:any){
   return await buyCoverInsurace('insurace', buyingObj);
@@ -116,8 +111,8 @@ export async function callInsurace(buyingObj:any){
 
 /**
  * Specific buying struct for Insurace Contract
- * @param confirmCoverResult  
- * 
+ * @param confirmCoverResult
+ *
  * @prop _products
  * @prop _durationInDays
  * @prop _amounts
@@ -128,7 +123,7 @@ export async function callInsurace(buyingObj:any){
  * @prop _v
  * @prop _r
  * @prop _s
- * 
+ *
  * @returns {Object} insurance buying struct
  */
 function setInsuraceBuyingObject(confirmCoverResult:any){
@@ -154,21 +149,25 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
  */
 export async function callNexus(_quoteProtocol:any){
 
-  const data = global.user.web3.eth.abi.encodeParameters(
-    ['uint', 'uint', 'uint', 'uint', 'uint8', 'bytes32', 'bytes32'],
-    [_quoteProtocol.rawData.price, _quoteProtocol.rawData.priceInNXM, _quoteProtocol.rawData.expiresAt,
-      _quoteProtocol.rawData.generatedAt, _quoteProtocol.rawData.v, _quoteProtocol.rawData.r, _quoteProtocol.rawData.s],
-    );
+    const data = global.user.web3.eth.abi.encodeParameters(
+      ['uint', 'uint', 'uint', 'uint', 'uint8', 'bytes32', 'bytes32'],
+      [_quoteProtocol.rawData.price, _quoteProtocol.rawData.priceInNXM, _quoteProtocol.rawData.expiresAt,
+        _quoteProtocol.rawData.generatedAt, _quoteProtocol.rawData.v, _quoteProtocol.rawData.r, _quoteProtocol.rawData.s],
+      );
 
-    buyCover(
+      // let bridgeProductAddress: any = '0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f';
+      let net:any = NetConfig.netById(global.user.networkId);
+      let asset = net[_quoteProtocol.rawData.currency]
+
+    return buyCover(
       global.user.account,
       'nexus',
       _quoteProtocol.rawData.contract,
-      NetConfig.netById(global.user.networkId).USDT,  // payment asset
-      0, // sum assured, compliant
+      asset,  // payment asset
+      _quoteProtocol.amount.toString(), // sum assured, compliant
       _quoteProtocol.rawData.period, // period
-      1, //coverType
-      _quoteProtocol.rawData.amount, // token amount to cover
+      0, //coverType
+      _quoteProtocol.rawData.price, // token amount to cover
       data// random data
     )
 
