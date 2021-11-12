@@ -10,7 +10,7 @@ import {toBN, toWei} from 'web3-utils'
 export default class NexusApi {
 
     static fetchCoverables () {
-        return axios.get(`https://api.nexusmutual.io/coverables/contracts.json`)
+        return axios.get(`${NetConfig.netById(global.user.networkId).nexusAPI}/coverables/contracts.json`)
             .then((response) => {
                 return response.data;
             }).catch(error => {
