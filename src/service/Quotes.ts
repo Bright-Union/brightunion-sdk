@@ -45,7 +45,7 @@ export async function getQuotes(
 
 /**
  *
- * Trying to normalize params since they are all very similar
+ * Get Quote from specific Distributor
  *
  * @param _distributorName
  * @param _amount

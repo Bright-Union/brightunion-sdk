@@ -21,58 +21,137 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
     return await buyOnInsurace(_quoteProtocol);
 
   }
-
 }
 
+
+/**
+ *  Buy on Insurace multi-currency handler method
+ * 
+ * @param _quoteProtocol Quote to buy
+ */
 export async function buyOnInsurace (_quoteProtocol:any) {
 
   const chainSymbol:string  = NetConfig.netById(global.user.networkId).symbol;
-  const confirmCoverResult  : any = await InsuraceApi.confirmCoverPremium(chainSymbol, _quoteProtocol.rawData.params);
 
-  console.log('buyOnInsurace SDK - ' , confirmCoverResult , _quoteProtocol )
+  // Confirm insurace quoted premium & get security signature params to buy
+  const confirmCoverResult:any = await InsuraceApi.confirmCoverPremium(chainSymbol, _quoteProtocol.rawData.params);
 
+  // Map Quote confirmation to Insurace buying object
+  const buyingObj = setInsuraceBuyingObject(confirmCoverResult);
+
+  // Check for user ETH balance
   const netBalance = await global.user.web3.eth.getBalance(global.user.account);
 
+  console.log('_quoteProtocol: Insur ',_quoteProtocol);
 
   if(NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency)){
     if (Number(netBalance) >= (Number)(_quoteProtocol.price)) {
-      // this.showModal = false;
-      console.log('SHOW_CONFIRMATION_WAITING', {msg: 'Buying cover for ' + _quoteProtocol.price + ' ' + _quoteProtocol.currency});
-      callInsurace(confirmCoverResult);
+      callInsurace(buyingObj);
     } else {
-      console.log('You have insufficient funds to continue with this transaction');
+      console.log('You have insufficient funds to continue with this transaction.. .');
       // this.errorMessage = "You have insufficient funds to continue with this transaction";
     }
   }else{
+    const netConfig:any = NetConfig.netById(global.user.networkId);
+    const erc20Address:string = netConfig[_quoteProtocol.currency]
+    
+    console.log('erc20Address: ', erc20Address);
+    
+    const erc20Instance = _getIERC20Contract(erc20Address);
 
+    let account = global.user.account;
+    let ercBalance  = await erc20Instance.methods.balanceOf(account).call();
+   
+  
+    console.log('ercBalance: ',ercBalance)
+    // balance is enough?
+    if (NetConfig.sixDecimalsCurrency(global.user.networkId, _quoteProtocol.currency) &&       //6 digits currency?
+    Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.quote.price)) {
 
-      console.log('ELSESSSEEEE');
+      //proceed with USDT
+      console.log('ERC20Helper.approveUSDTAndCall...')
+      ERC20Helper.approveUSDTAndCall(
+        erc20Instance,
+        '0x7e758e0D330B9B340A7282029e73dA448fb4BdB6',  // global.user.brightProtoAddress
+        buyingObj.premium,
+        () => {
+          console.log('SHOW_CONFIRMATION_WAITING', {msg: `(1/3) Resetting USDT allowance to 0`});
+        },
+        () => {
+          callInsurace(buyingObj);
+        },
+        () => {
+          console.log('CLOSE_CONFIRMATION_WAITING');
+        })
 
+      } else if (Number(ercBalance) >= (Number)(_quoteProtocol.quote.price)) {
 
+        //proceed with ERC
+        ERC20Helper.approveAndCall(
+          erc20Instance,
+          _quoteProtocol.protocol.bridgeProductAddress,  // this.$store.state.insurAceCover().options.address,
+          _quoteProtocol.quote.price,
+          () => {
+            callInsurace(buyingObj);
+          },
+          (err:any) => {
+            console.log('ERC20Helper approveAndCall Error - ', err);
+          });
+        } else {
+          console.log('You have insufficient funds to continue with this transaction');
+        }
+
+      }
+
+    }
+
+/**
+ * Contract Call to buy quote
+ * @param buyingObj 
+ * @returns 
+ */
+export async function callInsurace(buyingObj:any){
+  return await buyCoverInsurace('insurace', buyingObj);
+}
+
+/**
+ * Specific buying struct for Insurace Contract
+ * @param confirmCoverResult  
+ * 
+ * @prop _products
+ * @prop _durationInDays
+ * @prop _amounts
+ * @prop _currency
+ * @prop _premiumAmount
+ * @prop _helperParameters
+ * @prop _securityParameters
+ * @prop _v
+ * @prop _r
+ * @prop _s
+ * 
+ * @returns {Object} insurance buying struct
+ */
+function setInsuraceBuyingObject(confirmCoverResult:any){
+  return {
+    products:            confirmCoverResult[0],
+    durationInDays:      confirmCoverResult[1],
+    amounts:             confirmCoverResult[2],
+    currency:            confirmCoverResult[3],
+    owner:               confirmCoverResult[4],
+    refCode:             confirmCoverResult[5],
+    premium:             confirmCoverResult[6],
+    helperParameters:    confirmCoverResult[7],
+    securityParameters:  confirmCoverResult[8],
+    v:                   confirmCoverResult[9],
+    r:                   confirmCoverResult[10],
+    s:                   confirmCoverResult[11]
   }
-
-
-
 }
 
-export async function callInsurace(confirmCoverResult:any){
-  return await buyCoverInsurace(
-    global.user.account,
-    'insurace',
-    confirmCoverResult[0],
-    confirmCoverResult[1],
-    confirmCoverResult[2],
-    confirmCoverResult[3],
-    confirmCoverResult[6],
-    confirmCoverResult[7],
-    confirmCoverResult[8],
-    confirmCoverResult[9],
-    confirmCoverResult[10],
-    confirmCoverResult[11],
-  )
-}
-
-
+/**
+ *  Buy on Nexus Mutual
+ * @param _quoteProtocol Quote to buy
+ */
 export async function callNexus(_quoteProtocol:any){
 
   const data = global.user.web3.eth.abi.encodeParameters(
@@ -95,7 +174,6 @@ export async function callNexus(_quoteProtocol:any){
 
 }
 
-
 export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
   let asset:any;
@@ -111,21 +189,16 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
   if(!NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.rawData.currency)){
 
     const erc20Instance = await _getIERC20Contract(NetConfig.netById(global.user.networkId).ETH);
-
     const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
     if (Number(ercBalance) >= (Number)(_quoteProtocol.rawData.price)) {
-      this.showModal = false;
+      // this.showModal = false;
 
       const onSuccess =  () => {
-
-        console.log('SHOW_CONFIRMATION_WAITING', {msg: `(2/2) Buying cover for ${this.readablePrice} ${this.paymentCurrency}`});
         callNexus(_quoteProtocol);
-
         };
-
         const onError =  (err:any) => {
-          console.log('CLOSE_CONFIRMATION_WAITING');
+          console.log('CLOSE_CONFIRMATION_WAITING - ' , err);
         }
 
         ERC20Helper.approveAndCall( erc20Instance,  _quoteProtocol.rawData.contract,  _quoteProtocol.rawData.price, onSuccess, onError);
@@ -137,8 +210,6 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
           label: 'You have insufficient funds to continue with this transaction',
           value: 1
         });
-        console.log('CLOSE_CONFIRMATION_WAITING');
-        // this.errorMessage = "You have insufficient funds to continue with this transaction";
       }
 
   }else{
@@ -161,8 +232,6 @@ export async function callBridge(_quoteProtocol:any){
   //     _quoteProtocol.rawData.generatedAt, _quoteProtocol.rawData.v, _quoteProtocol.rawData.r, _quoteProtocol.rawData.s],
   //   );
 
-    console.log('callBridge - ' , _quoteProtocol );
-
     let bridgeProductAddress: any = '0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f';
 
     await buyCover(
@@ -179,14 +248,13 @@ export async function callBridge(_quoteProtocol:any){
 
 }
 
-
 export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
 
   const erc20Instance = _getIERC20Contract(NetConfig.netById(global.user.networkId).USDT);
   const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
   if (Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.rawData.price)) {
-    this.showModal = false;
+    // this.showModal = false;
     ERC20Helper.approveUSDTAndCall(
       erc20Instance,
       _quoteProtocol.protocol.bridgeProductAddress,
@@ -196,7 +264,7 @@ export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
         console.log('Confirmation waiting');
       },
       () => {
-        this.callBridge(_quoteProtocol);
+        callBridge(_quoteProtocol);
       },
       () => {
         console.log('Error')
@@ -205,7 +273,6 @@ export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
       })
 
     } else {
-      console.log('CLOSE_CONFIRMATION_WAITING');
       console.log('TRACK_EVENT', {
         action: 'buy-bridge-policy-error',
         category: 'trxError',

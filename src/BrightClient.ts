@@ -156,65 +156,12 @@ async getQuoteFrom(_distributorName:string,
  async buyQuote(
    _quote:any,
  ){
+   console.log("buyQuote - " , _quote )
    return await buyQuote(
      _quote
    )
 
  }
-
-async buyCover(
-  _ownerAddress : string,
-  _distributorName : string,
-  _contractAddress : string,
-  _coverAsset : string,
-  _sumAssured : number,
-  _coverPeriod : number,
-  _coverType : number,
-  _maxPriceWithFee : number,
-  _data : any,
-){
-  return await buyCover(
-                  _ownerAddress,
-                  _distributorName,
-                  _contractAddress,
-                  _coverAsset,
-                  _sumAssured,
-                  _coverPeriod,
-                  _coverType,
-                  _maxPriceWithFee,
-                  _data,
-   )
-}
-
-async buyCoverInsurace (
-  _ownerAddress:any,
-  _distributorName : string,
-  _products : Array<number>,
-  _durationInDays : Array<number>,
-  _amounts : Array<number>,
-  _currency : string,
-  _premiumAmount : number,
-  _helperParameters : Array<number>,
-  _securityParameters : Array<number>,
-  _v : Array<number>,
-  _r : Array<number>,
-  _s: Array<number>,
-){
-  return await buyCoverInsurace(
-                _ownerAddress,
-                _distributorName,
-                _products,
-                _durationInDays,
-                _amounts,
-                _currency,
-                _premiumAmount,
-                _helperParameters,
-                _securityParameters,
-                _v,
-                _r,
-                _s
-              );
-    }
 }
 
 export default BrightClient;
