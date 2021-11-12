@@ -30,8 +30,7 @@ export default class NexusApi {
        }
 
        return axios.get(
-         `${NetConfig.netById(global.user.networkId).nexusAPI}/v1/quote?coverAmount=${amount}&currency=${currency}&period=${period}&contractAddress=${protocol.nexusCoverable}`
-         ,
+         `${NetConfig.netById(global.user.networkId).nexusAPI}/v1/quote?coverAmount=${amount}&currency=${currency}&period=${period}&contractAddress=${protocol.nexusCoverable}`,
          {
            headers : {
              // Origin: process.env.API_REQUEST_ORIGIN,
@@ -40,7 +39,7 @@ export default class NexusApi {
        )
       .then((response:any) => {
 
-        let basePrice = toBN(response.price);
+        let basePrice = toBN(response.data.price);
 
         return CatalogHelper.quoteFromCoverable(
           'nexus',
