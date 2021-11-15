@@ -25,7 +25,7 @@ export function getCoversCount(
            _ownerAddress,
            _isActive)
          .call().then((_data:any) => {
-           console.log('COVERS COUNT SDK - ' , _data);
+           return _data;
          });
 }
 
@@ -47,7 +47,7 @@ export async function getCovers(
     _ownerAddress : string,
     _activeCover : boolean,
     _limit : number,
-) : Promise<Cover[]>  {
+) : Promise<any[]>  {
   return _getDistributorContract()
         .methods
         .getCovers(
@@ -56,7 +56,8 @@ export async function getCovers(
           _activeCover,
           _limit,
         ).call().then((_data:any) => {
-          console.log('COVERS FROM SDK - ' ,_distributorName, _data);
+          console.log('getCovers' ,_distributorName, _data);
+          return _data;
         });;
 }
 
