@@ -50,7 +50,7 @@ import Web3 from 'web3';
         explorer: 'https://rinkeby.etherscan.io',
         provider: 'https://rinkeby.infura.io/v3/98d7e501879243c5877bac07a57cde7e',
         nexusAPI: 'https://api.nexusmutual.io',                 //not used
-        brightProtocol:'0x902eaf0Df408a8c170bC1f389FB8D1bC4Fe22f2f',
+        brightProtocol:'0x55E9Fa92952F28C7cCA6C4B7935012ad3590dE06',
         brightContractRegistry: '',                             //not used
         insuraceCover: '0x0921f628b8463227615D2199D0D3860E4fBcD411',
         insuraceAPI: 'https://insurace-sl-microservice.azurewebsites.net',
@@ -73,7 +73,7 @@ import Web3 from 'web3';
         modules: process.env.VUE_APP_KOVAN_MODULES.split(' '),
         nexusDistributor: '0x95454264489114534dD39D81E03Cf4003F948cA6',
         nexusAPI: 'https://api.staging.nexusmutual.io',
-        brightProtocol:'0x4d968a79d76a42761620B64533718D56A9E978D2',
+        brightProtocol:'0x56E98086D570368Bc95e4fF089167E45c6fEfC64',
         brightContractRegistry: '0x269601a1825dB9194620477e2D251167Ae938117',
         insuraceCover: '',                                      //not used
         insuraceAPI: '',                                        //not used
@@ -95,9 +95,9 @@ import Web3 from 'web3';
         bridgeRegistry: '',
         nexusDistributor: '',
         nexusAPI: '',
-        brightProtocol:'0xf58174a5999Db42F56Fdf8010Fa024D8c88B6De7',
+        brightProtocol:' ',
         brightContractRegistry: '',
-        insuraceCover: '0xfBa24bdbb36001F1F88B3a552c77EC1c10f5E4C0',
+        insuraceCover: '0xB96eB892fc5fAC87ffE4f4F6eB509Eeaf6019243',
         insuraceAPI: 'https://api.insurace.io/ops/v1',
         insuraceAPIKey: 'H7C8k69Eiisz7AG1/6xcI5UWGluTtyAbizXrsfbfQIBDapQZEHAHFw==',
         insuraceReferral: '982107115070280393099561761653261738634756834311',
@@ -117,7 +117,7 @@ import Web3 from 'web3';
         modules: process.env.VUE_APP_BSC_TESTNET_MODULES.split(' '),
         nexusDistributor: '',
         nexusAPI: '',
-        brightProtocol:'0x9dfFb15A9E320801c9997d826533cc7960D21a46',
+        brightProtocol:'0x888F2aDC65C4e64A4A9B98f8b1261a232397B348',
         brightContractRegistry: '',
         insuraceCover: '0x5f463Cc70f9706E63d4b927E25c28d5A709828b9',
         insuraceAPI: 'https://insurace-sl-microservice.azurewebsites.net',
@@ -162,7 +162,7 @@ import Web3 from 'web3';
         modules: process.env.VUE_APP_MUMBAI_TESTNET_MODULES.split(' '),
         nexusDistributor: '',
         nexusAPI: '',
-        brightProtocol:'',
+        brightProtocol:'0x5C59A3A67eC553345cb384eC58FCf1a2b9159b15',
         brightContractRegistry: '',
         insuraceCover: '0xE2Edf233eDB3F971415FD76A7b447e4bfFfcd221',
         insuraceAPI: 'https://insurace-sl-microservice.azurewebsites.net',
