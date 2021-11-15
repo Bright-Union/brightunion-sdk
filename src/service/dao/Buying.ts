@@ -44,11 +44,12 @@ export function buyCover(
               )
               .send({
                 from: _ownerAddress,
-                value: _maxPriceWithFee+1,
-                gasLimit: 129913, // 7000000
+                value: _maxPriceWithFee,
+                // gasLimit: 129913, // 7000000
               })
               .on('transactionHash', (res:any) => {
-               return {res};
+                console.log("transactionHash - " , res);
+                return {success:res};
               })
               // .on('confirmation', (confirmationNumber:any, receipt:any) => {
               //   console.log("confirmation - " , confirmationNumber, receipt);
@@ -87,14 +88,15 @@ export  function buyCoverInsurace(distributorName : string, buyingObj:any){
                 value: buyingObj.premium,
               })
               .on('transactionHash', (res:any) => {
+                console.log("transactionHash - " , res);
                 return {success: res}
               })
-              .on('confirmation', (confirmationNumber:any, receipt:any) => {
-                return {confirmationNumber:confirmationNumber, receipt:receipt}
-              })
-              .on('error', (err:any, receipt:any) => {
-                return {error: err, receipt : receipt}
-              });
+              // .on('confirmation', (confirmationNumber:any, receipt:any) => {
+              //   return {confirmationNumber:confirmationNumber, receipt:receipt}
+              // })
+              // .on('error', (err:any, receipt:any) => {
+              //   return {error: err, receipt : receipt}
+              // });
 }
 
 

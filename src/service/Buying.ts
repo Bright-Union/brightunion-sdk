@@ -67,7 +67,7 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
       //proceed with USDT
       ERC20Helper.approveUSDTAndCall(
         erc20Instance,
-        '0x7e758e0D330B9B340A7282029e73dA448fb4BdB6',  // global.user.brightProtoAddress
+        global.user.brightProtoAddress ,  // global.user.brightProtoAddress //0x7e758e0D330B9B340A7282029e73dA448fb4BdB6
         buyingObj.premium,
         () => {
           console.log('SHOW_CONFIRMATION_WAITING', {msg: `(1/3) Resetting USDT allowance to 0`});
@@ -167,8 +167,8 @@ export async function callNexus(_quoteProtocol:any){
       asset,  // payment asset
       _quoteProtocol.amount.toString(), // sum assured, compliant
       _quoteProtocol.rawData.period, // period
-      0, //coverType
-      _quoteProtocol.rawData.price, // token amount to cover
+      1, //coverType
+      _quoteProtocol.price, // token amount to cover with FEE
       data// random data
     )
 

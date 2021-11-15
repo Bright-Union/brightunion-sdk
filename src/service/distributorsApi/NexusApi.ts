@@ -62,19 +62,20 @@ export default class NexusApi {
             price: priceWithFee.toString(),
             pricePercent: new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000), //%, annualize
             response: response.data,
-            estimatedGasPrice: 0,//estimatedGasPrice,
-            // estimatedGasPriceCurrency: defaultCurrencySymbol,
-            // estimatedGasPriceDefault: feeInDefaultCurrency,
+            estimatedGasPrice: 123,//estimatedGasPrice,
+            estimatedGasPriceCurrency: 123, //defaultCurrencySymbol,
+            estimatedGasPriceDefault: 123, //feeInDefaultCurrency,
           },
           {
-            // activeCoversETH: activeCoversETH,
-            // activeCoversDAI: activeCoversDAI,
-            // capacityETH: capacityETH,
-            // capacityDAI: capacityDAI,
-            // totalCovers: totalCovers,
-            // totalActiveCoversDAI: totalActiveCoversDAI,
-            // totalActiveCoversETH: totalActiveCoversETH,
-            // nexusMaxCapacityError: nexusMaxCapacityError
+            remainingCapacity: 123,
+            activeCoversETH: 1, //activeCoversETH,
+            activeCoversDAI: 1,//activeCoversDAI,
+            capacityETH: 1,//capacityETH,
+            capacityDAI: 1,//capacityDAI,
+            totalCovers: 1, //totalCovers,
+            totalActiveCoversDAI: 1,//totalActiveCoversDAI,
+            totalActiveCoversETH: 1, //totalActiveCoversETH,
+            nexusMaxCapacityError: null //nexusMaxCapacityError
           }
         );
 
