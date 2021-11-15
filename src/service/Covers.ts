@@ -3,6 +3,7 @@
 
 import NetConfig from './config/NetConfig';
 import {getCovers, getCoversCount} from './dao/Covers'
+import CatalogHelper from './helpers/catalogHelper'
 
 export async function getAllCovers(
 
@@ -12,7 +13,7 @@ export async function getAllCovers(
 
   coversPromiseArray.push(getInsuraceCovers())
   coversPromiseArray.push(getBridgeCovers())
-  // coversPromiseArray.push(getNexusCovers())
+  coversPromiseArray.push(getNexusCovers())
 
   return Promise.all(coversPromiseArray)
   .then((_data: any) => {
@@ -30,15 +31,21 @@ export async function getAllCovers(
 }
 
 export  function getBridgeCovers(): Promise<any[]> {
+  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL')) {
     return  getCovers('bridge' , global.user.account , false, 50);
+  }
 }
 
 export  function getNexusCovers(): Promise<any[]> {
-  return  getCovers('nexus' , global.user.account , false, 50);
+  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL')) {
+    return  getCovers('nexus' , global.user.account , false, 50);
   }
+}
 
-  export  function getInsuraceCovers() : Promise<any[]> {
+export  function getInsuraceCovers() : Promise<any[]> {
+  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE')) {
     return  getCovers('insurace' , global.user.account , false, 50);
+  }
 }
 
 export async function getAllCoversCount(
@@ -47,9 +54,15 @@ export async function getAllCoversCount(
 
   const coversPromiseArray:any[] = [];
 
-  coversPromiseArray.push(getCoversCount('insurace', global.user.account, false))
-  coversPromiseArray.push(getCoversCount('bridge', global.user.account, false))
-  // coversPromiseArray.push(getCoversCount('nexus', global.user.account, false))
+  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL')) {
+    coversPromiseArray.push(getCoversCount('bridge', global.user.account, false))
+  }
+  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL')) {
+    coversPromiseArray.push(getCoversCount('nexus', global.user.account, false))
+  }
+  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE')) {
+    coversPromiseArray.push(getCoversCount('insurace', global.user.account, false))
+  }
 
   return Promise.all(coversPromiseArray)
   .then((_data: any) => {

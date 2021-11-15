@@ -197,7 +197,8 @@ class CatalogHelper {
       coverAsset: obj.coverAsset,
       endTime: obj.endTime,
       status: obj.status,
-      net: obj.net
+      net: obj.net,
+      rawData: obj.response,
     };
   }
 
