@@ -6,12 +6,23 @@ import BridgePolicyBookRegistryABI from '../abi/bridge/IPolicyBookRegistry.json'
 import BridgePolicyQuoteABI from '../abi/bridge/IPolicyQuote.json';
 import BridgePolicyBookABI from '../abi/bridge/IPolicyBook.json';
 import BridgePolicyRegistryABI from '../abi/bridge/IPolicyRegistry.json';
+import NexusDistributorABI from '../abi/nexus/Distributor.json';
+
 
 const _getBridgeRegistryContract           =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeRegistryContractABI.abi, address , web3);
 const _getBridgePolicyBookRegistryContract =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgePolicyBookRegistryABI.abi, address , web3);
 const _getBridgePolicyQuoteContract        =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgePolicyQuoteABI.abi, address , web3);
 const _getBridgePolicyBookContract         =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgePolicyBookABI.abi, address , web3);
 const _getBridgePolicyRegistryContract     =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgePolicyRegistryABI.abi, address , web3);
+
+function _getNexusDistributorContract(address:any) : any {
+
+  const web3:any = global.user.web3;
+  const distAbi:any = NexusDistributorABI.abi;
+
+  return new web3.eth.Contract(distAbi, address );
+}
+
 
 function _getDistributorContract() : any {
   const web3:any = global.user.web3;
@@ -44,5 +55,6 @@ export  {
     _getBridgePolicyQuoteContract,
     _getBridgePolicyBookContract,
     _getBridgePolicyRegistryContract,
-    _getInsuraceDistributor
+    _getInsuraceDistributor,
+    _getNexusDistributorContract
 } ;

@@ -29,8 +29,7 @@ export function buyCover(
         _coverType : any,
         _maxPriceWithFee : number,
         _data : any,
-){
-  let txHash:any = null;
+):Promise<any>{
   return _getDistributorContract()
               .methods
               .buyCover(
@@ -49,16 +48,16 @@ export function buyCover(
                 gasLimit: 129913, // 7000000
               })
               .on('transactionHash', (res:any) => {
-                txHash  = res;
+               return {res};
               })
-              .on('confirmation', (confirmationNumber:any, receipt:any) => {
-                console.log("confirmation - " , confirmationNumber, receipt);
-                return {confirmationNumber:confirmationNumber, receipt:receipt, txHash: txHash}
-              })
-              .on('error', (err:any, receipt:any) => {
-                console.log("error - " , err, receipt);
-                return {error: err, receipt:receipt,txHash:txHash}
-              });
+              // .on('confirmation', (confirmationNumber:any, receipt:any) => {
+              //   console.log("confirmation - " , confirmationNumber, receipt);
+              //   return {confirmationNumber:confirmationNumber, receipt:receipt, txHash: txHash}
+              // })
+              // .on('error', (err:any, receipt:any) => {
+              //   console.log("error - " , err, receipt);
+              //   return {error: err, receipt:receipt,txHash:txHash}
+              // });
 }
 /**
  * Returns a transaction receipt.

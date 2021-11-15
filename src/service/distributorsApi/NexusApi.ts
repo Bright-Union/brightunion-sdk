@@ -3,7 +3,10 @@ import axios from 'axios';
 import NetConfig from '../config/NetConfig'
 import RiskCarriers from '../config/RiskCarriers'
 import CatalogHelper from '../helpers/catalogHelper'
+import BigNumber from 'bignumber.js'
 import {toBN, toWei} from 'web3-utils'
+import {_getNexusDistributorContract} from '../helpers/getContract'
+
 
 
 
@@ -18,9 +21,9 @@ export default class NexusApi {
             });
     }
 
-    static fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<object[]> {
+    static fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<any> {
 
-      const amountInWei = toBN(toWei(amount.toString(), 'ether'));
+      const amountInWei:any = toBN(toWei(amount.toString(), 'ether'));
 
        if (currency === 'USD') {
            currency = RiskCarriers.NEXUS.fallbackQuotation;
@@ -37,9 +40,14 @@ export default class NexusApi {
            }
          }
        )
-      .then((response:any) => {
+      .then(async (response:any) => {
 
         let basePrice = toBN(response.data.price);
+
+        const distributor =  await _getNexusDistributorContract(NetConfig.netById(global.user.networkId).nexusDistributor)
+        let fee:any = await distributor.methods.feePercentage().call();
+        fee = toBN(fee);
+        let priceWithFee:any = basePrice.mul(fee).div(toBN(10000)).add(basePrice);
 
         return CatalogHelper.quoteFromCoverable(
           'nexus',
@@ -50,11 +58,11 @@ export default class NexusApi {
             period: period,
             chain: 'ETH',
             chainId: global.user.networkId,
-            price: basePrice,
-            // price: priceWithFee.toString(),
-            // pricePercent: new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000), //%, annualize
+            // price: basePrice,
+            price: priceWithFee.toString(),
+            pricePercent: new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000), //%, annualize
             response: response.data,
-            // estimatedGasPrice: estimatedGasPrice,
+            estimatedGasPrice: 0,//estimatedGasPrice,
             // estimatedGasPriceCurrency: defaultCurrencySymbol,
             // estimatedGasPriceDefault: feeInDefaultCurrency,
           },
@@ -70,7 +78,7 @@ export default class NexusApi {
           }
         );
 
-        return response.data;
+        // return response.data;
 
 
       }).catch(function (error) {

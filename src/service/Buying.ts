@@ -46,7 +46,7 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
     if (Number(netBalance) >= (Number)(_quoteProtocol.price)) {
       return callInsurace(buyingObj);
     } else {
-      console.log(' 1 You have insufficient funds to continue with this transaction...');
+      console.log('You have insufficient funds to continue with this transaction...');
       return { error: "You have insufficient funds to continue with this transaction..." };
     }
   }else{
