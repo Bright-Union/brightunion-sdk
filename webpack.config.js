@@ -66,6 +66,9 @@ var config = {
   //   },
   // ]),
 ],
+stats: {
+   builtAt: true,
+},
 }
 
 module.exports  = (env, argv) => {
