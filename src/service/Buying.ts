@@ -167,8 +167,8 @@ export async function callNexus(_quoteProtocol:any){
       asset,  // payment asset
       _quoteProtocol.amount.toString(), // sum assured, compliant
       _quoteProtocol.rawData.period, // period
-      1, //coverType
-      _quoteProtocol.price, // token amount to cover with FEE
+      0, //coverType
+      _quoteProtocol.price.toString(), // token amount to cover with FEE
       data// random data
     )
 

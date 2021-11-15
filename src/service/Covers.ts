@@ -2,7 +2,7 @@
 // import NexusApi  from '@/service/distributorsApi/NexusApi';
 
 import NetConfig from './config/NetConfig';
-
+import {getCovers} from './dao/Covers'
 
 export async function getAllCovers(
   // _distributorName : string,
@@ -34,17 +34,15 @@ export async function getAllCovers(
 }
 
 export async function getBridgeCovers(): Promise<any[]> {
-
-  return;
-  }
+    return await getCovers('bridge' , global.user.account , false, 20);
+}
 
 export async function getNexusCovers(): Promise<any[]> {
-
-    return ;
+  return await getCovers('nexus' , global.user.account , false, 20);
   }
 
   export async function getInsuraceCovers() : Promise<object[]> {
-    return;
+    return await getCovers('insurace' , global.user.account , false, 20);
 }
 
 

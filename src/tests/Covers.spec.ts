@@ -32,7 +32,7 @@ describe('Get Owners Cover count', () => {
   it('should return number of covers owned by address',async () => {
     const result = await instance.getCoversCount(
         'insurace',
-        '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2',
+        // '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2',
         true
     );
     console.log('COUNT - ' , result)
@@ -43,9 +43,9 @@ describe('Get Owners Cover count', () => {
 describe('Get Owners Covers', () => {
   let distributorName = 'bridge';
     it('should return owners\'s covers by distributor', async () => {
-    const result = await instance.getCovers(
+    const result = await instance.getCoversFrom(
         distributorName,
-        '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2',
+        // '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2',
         false,
         20
     );

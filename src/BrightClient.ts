@@ -86,31 +86,29 @@ async getDistributorAddress (
 
 async getAllCovers(
 ){
-  return await getAllCovers(
-  )
+  return await getAllCovers()
 }
 
 async getCoversCount(
     _distributorName : string,
-    _owner: string ,
+    // _owner: string ,
     _isActive : boolean
-  ) {
+  ):Promise<any> {
    return await getCoversCount(
       _distributorName,
-      _owner,
+      global.user.account,
       _isActive
     )
   }
 
-async getCovers(
+async getCoversFrom(
     _distributorName : string,
-    _ownerAddress : string,
     _activeCover : boolean,
     _limit : number,
   ) {
    return await getCovers(
         _distributorName,
-        _ownerAddress,
+        global.user.account,
         _activeCover,
         _limit
      );
