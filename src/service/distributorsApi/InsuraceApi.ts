@@ -6,6 +6,7 @@ import RiskCarriers from '../config/RiskCarriers'
 import CatalogHelper from '../helpers/catalogHelper'
 import CurrencyHelper from '../helpers/currencyHelper'
 import {toBN,fromWei, toWei} from 'web3-utils'
+import GasHelper from "@/service/helpers/gasHelper";
 
 
 class InsuraceApi {
@@ -109,44 +110,55 @@ class InsuraceApi {
           period,
           parseInt(protocol.productId),
           global.user.account,
-        ).then( (response: any) => {
+        ).then( async (response: any) => {
 
-                const insurPrice = CurrencyHelper.insurPrice();
-                let premium:number = response.premiumAmount;
-                if (NetConfig.sixDecimalsCurrency(web3.networkId, currency)) {
-                    premium = Number(ERC20Helper.USDTtoERCDecimals(premium));
+            const insurPrice = CurrencyHelper.insurPrice();
+            let premium: number = response.premiumAmount;
+            if (NetConfig.sixDecimalsCurrency(web3.networkId, currency)) {
+                premium = Number(ERC20Helper.USDTtoERCDecimals(premium));
+            }
+            const cashbackInStable = .075 *
+                parseFloat(toBN(premium)
+                    .div(toBN(10 ** 18)).toNumber().toString());
+            const {gasPrice, USDRate} = await GasHelper.getGasPrice(web3);
+
+            let estimatedGasPrice;
+            let feeInDefaultCurrency;
+
+            if(gasPrice) {
+                 estimatedGasPrice = (RiskCarriers.INSURACE.description.estimatedGas * gasPrice) * USDRate / (10 ** 9);
+                 feeInDefaultCurrency = (RiskCarriers.INSURACE.description.estimatedGas * gasPrice) / 10 ** 9;
+            } else {
+                estimatedGasPrice = 0;
+                feeInDefaultCurrency = 0;
+            }
+
+            const defaultCurrencySymbol = web3.symbol === 'POLYGON' ? 'MATIC' : web3.symbol === 'BSC' ? 'BNB' : 'ETH';
+
+            const quote = CatalogHelper.quoteFromCoverable(
+                'insurace',
+                protocol,
+                {
+                    amount: amountInWei,
+                    currency: currency,
+                    period: period,
+                    chain: web3.symbol,
+                    chainId: web3.networkId,
+                    price: premium,
+                    cashBack: [(cashbackInStable / insurPrice), cashbackInStable],
+                    cashBackInWei: web3.web3Instance.utils.toWei(cashbackInStable.toString(), 'ether'),
+                    pricePercent: new BigNumber(premium).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000), //%, annualize
+                    response: response,
+                    estimatedGasPrice: estimatedGasPrice,
+                    estimatedGasPriceCurrency: defaultCurrencySymbol,
+                    estimatedGasPriceDefault: feeInDefaultCurrency
+                },
+                {
+                    remainingCapacity: protocol.stats ? protocol.stats.capacityRemaining : null
                 }
-                // const cashbackInStable:number = .05 * parseFloat(global.user.web3.utils.toBN(premium).div(global.user.web3.utils.toBN(10 ** 18)));
-
-                // const {gasPrice, USDRate} = await getGasPrice(web3);
-                // let estimatedGasPrice = (RiskCarriers.INSURACE.description.estimatedGas * gasPrice) * USDRate / (10**9);
-                // let feeInDefaultCurrency = (RiskCarriers.INSURACE.description.estimatedGas * gasPrice) / 10**9;
-                let defaultCurrencySymbol = web3.symbol === 'POLYGON'? 'MATIC': web3.symbol === 'BSC' ? 'BNB' : 'ETH';
-
-                const quote = CatalogHelper.quoteFromCoverable(
-                    'insurace',
-                    protocol,
-                    {
-                        amount: amountInWei,
-                        currency: currency,
-                        period: period,
-                        chain: web3.symbol,
-                        chainId: web3.networkId,
-                        price: premium,
-                        // cashBack: [(cashbackInStable / insurPrice), cashbackInStable],
-                        // cashBackInWei: web3.web3Instance.utils.toWei(cashbackInStable.toString(), 'ether'),
-                        pricePercent: new BigNumber(premium).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000), //%, annualize
-                        response: response,
-                        // estimatedGasPrice: estimatedGasPrice,
-                        estimatedGasPriceCurrency: defaultCurrencySymbol,
-                        // estimatedGasPriceDefault: feeInDefaultCurrency
-                    },
-                    {
-                        remainingCapacity: protocol.stats ? protocol.stats.capacityRemaining : null
-                    }
-                );
-                return quote;
-            })
+            );
+            return quote;
+        })
             .catch((e) => {
                 let errorMsg = e.response && e.response.data ? e.response.data.message : e.message;
 

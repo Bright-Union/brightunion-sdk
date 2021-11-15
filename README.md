@@ -27,7 +27,7 @@ npm install @brightunion/sdk
 ## Basic Use
 
 ```javascript
-const BrightClient = require('@Brightunion/SDK');B
+const BrightClient = require('@Brightunion/SDK');
 
 const brightClient= new BrightClient({ <web3_instance> });
 
