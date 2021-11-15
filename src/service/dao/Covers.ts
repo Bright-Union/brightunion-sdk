@@ -18,8 +18,6 @@ export function getCoversCount(
     _isActive : boolean
 ): Promise<number>  {
 
-  console.log("getCoversCount 1 - " , _distributorName);
-
   return _getDistributorContract()
          .methods
          .getCoversCount(
@@ -27,7 +25,6 @@ export function getCoversCount(
            _ownerAddress,
            _isActive)
          .call().then((_data:any) => {
-           console.log("getCoversCount 2 - " , _distributorName,  _data);
            return _data;
          });
 }
