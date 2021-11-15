@@ -29,7 +29,7 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
  *
  * @param _quoteProtocol Quote to buy
  */
-export async function buyOnInsurace (_quoteProtocol:any) {
+export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
 
   const chainSymbol:string  = NetConfig.netById(global.user.networkId).symbol;
 
@@ -46,8 +46,8 @@ export async function buyOnInsurace (_quoteProtocol:any) {
     if (Number(netBalance) >= (Number)(_quoteProtocol.price)) {
       return callInsurace(buyingObj);
     } else {
-      console.log('You have insufficient funds to continue with this transaction...');
-      return {error: "You have insufficient funds to continue with this transaction..." }
+      console.log(' 1 You have insufficient funds to continue with this transaction...');
+      return { error: "You have insufficient funds to continue with this transaction..." };
     }
   }else{
     const netConfig:any = NetConfig.netById(global.user.networkId);

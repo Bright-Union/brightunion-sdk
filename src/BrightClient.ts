@@ -148,7 +148,7 @@ async getQuoteFrom(_distributorName:string,
 
  async buyQuote(
    _quote:any,
- ){
+ ): Promise<any>{
    if(!_quote){
      return {error : "No quote provided"};
    }
