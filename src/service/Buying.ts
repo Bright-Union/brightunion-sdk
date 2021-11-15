@@ -38,6 +38,13 @@ export async function buyOnInsurace (_quoteProtocol:any) {
 
   // Map Quote confirmation to Insurace buying object
   const buyingObj = setInsuraceBuyingObject(confirmCoverResult);
+  const netConfig:any = NetConfig.netById(global.user.networkId);
+  const erc20Address:string = netConfig[_quoteProtocol.currency]
+ 
+  console.log('erc20Address: ',erc20Address);
+
+  const erc20Instance = _getIERC20Contract(erc20Address);
+  buyingObj.currency = erc20Address
 
   // Check for user ETH balance
   const netBalance = await global.user.web3.eth.getBalance(global.user.account);
@@ -50,13 +57,12 @@ export async function buyOnInsurace (_quoteProtocol:any) {
       return {error: "You have insufficient funds to continue with this transaction..." }
     }
   }else{
-    const netConfig:any = NetConfig.netById(global.user.networkId);
-    const erc20Address:string = netConfig[_quoteProtocol.currency]
 
-    const erc20Instance = _getIERC20Contract(erc20Address);
 
     let account = global.user.account;
     let ercBalance  = await erc20Instance.methods.balanceOf(account).call();
+
+
 
     // balance is enough?
     if (NetConfig.sixDecimalsCurrency(global.user.networkId, _quoteProtocol.currency) &&       //6 digits currency?
@@ -64,10 +70,10 @@ export async function buyOnInsurace (_quoteProtocol:any) {
 
       buyingObj.premium = Number(ERC20Helper.USDTtoERCDecimals(buyingObj.premium))
       
-      //proceed with USDT
+      console.log('proceed with USDT');
       ERC20Helper.approveUSDTAndCall(
         erc20Instance,
-        '0x7e758e0D330B9B340A7282029e73dA448fb4BdB6',  // global.user.brightProtoAddress
+        '0x1D2ba34121C4b8C92d3b78953143A283d65d7d47',  // global.user.brightProtoAddress
         buyingObj.premium,
         () => {
           console.log('SHOW_CONFIRMATION_WAITING', {msg: `(1/3) Resetting USDT allowance to 0`});
@@ -84,8 +90,8 @@ export async function buyOnInsurace (_quoteProtocol:any) {
         //proceed with ERC
         ERC20Helper.approveAndCall(
           erc20Instance,
-          _quoteProtocol.protocol.bridgeProductAddress,  // this.$store.state.insurAceCover().options.address,
-          _quoteProtocol.quote.price,
+          '0x1D2ba34121C4b8C92d3b78953143A283d65d7d47',  // this.$store.state.insurAceCover().options.address,
+          buyingObj.premium,
           () => {
             return callInsurace(buyingObj);
           },

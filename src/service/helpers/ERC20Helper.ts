@@ -11,6 +11,10 @@ export default class ERC20Helper {
     }
 
     static approveAndCall ( erc20Instance:any, spender:any, amount:any, onConfirmation:any, onError:any) {
+       
+        erc20Instance.methods.allowance(global.user.account, spender).call().then((currentAllowance:any) => {
+            console.log('approveAndCall : currentAllowance  ',currentAllowance);
+        })
         return erc20Instance.methods
             .approve(spender, amount)
             .send({from: global.user.account})
@@ -19,6 +23,9 @@ export default class ERC20Helper {
             })
             .on('confirmation', (confirmationNumber:any) => {
                 if (confirmationNumber === 0) {
+                    erc20Instance.methods.allowance(global.user.account, spender).call().then((currentAllowance:any) => {
+                        console.log('approveAndCall : confirmation  ',currentAllowance)
+                    })
                     onConfirmation();
                 }
             })
@@ -33,7 +40,7 @@ export default class ERC20Helper {
     static approveUSDTAndCall (erc20Instance:any, spender:any, amount:any, onAllowanceReset:any, onConfirmation:any, onError:any) {
 
         erc20Instance.methods.allowance(global.user.account, spender).call().then((currentAllowance:any) => {
-
+                console.log('approveUSDTAndCall: currentAllowance ',currentAllowance)
             if (toBN(ERC20Helper.USDTtoERCDecimals(currentAllowance)).gte(toBN(amount))) {
                 //current allowance is sufficient
                 console.log('approveUSDTAndCall: calling onConfirmation() ')

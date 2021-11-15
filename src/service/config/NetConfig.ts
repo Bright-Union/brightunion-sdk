@@ -60,7 +60,7 @@ import Web3 from 'web3';
         bridgeRegistry: '0x0Ac28BcDcef8D8C95c4a079418dbC34e4AD4DF1D',
         ETH: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
         DAI: '0x69dDdb0F010D9Cac595F75d8b0fff59CDCD1D44f',      //not used
-        USDT: '0xcc54b12a18f2c575ca97991046090f43c3070aa0',
+        USDT: '0xD92E713d051C37EbB2561803a3b5FBAbc4962431',
         USDC: '0x4dbcdf9b62e891a7cec5a2568c3f4faf9e8abe2b',
         INSUR: '',                                               //not used
     },

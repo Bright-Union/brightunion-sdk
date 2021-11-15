@@ -23,7 +23,7 @@ function _getDistributorContract() : any {
 
 function _getInsuraceDistributor() : any {
   const web3:any = global.user.web3;
-  const address: string = '0x7e758e0D330B9B340A7282029e73dA448fb4BdB6';
+  const address: string = '0x1D2ba34121C4b8C92d3b78953143A283d65d7d47';
   const distAbi:any = InsuraceDistributorABI.abi;
 
   return new web3.eth.Contract(distAbi, address );

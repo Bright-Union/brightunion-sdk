@@ -1,5 +1,6 @@
 import BuyReceipt from "../domain/BuyReceipt";
 import {_getDistributorContract,_getInsuraceDistributor} from "../helpers/getContract";
+import ERC20Helper from '../helpers/ERC20Helper';
 
 /**
  * Returns a transaction receipt.
@@ -80,6 +81,10 @@ export function buyCover(
  * @returns  BuyReceipt Object
  */
 export  function buyCoverInsurace(distributorName : string, buyingObj:any){
+
+  console.log('insur buy obj:', buyingObj);
+  buyingObj.premium = Number(ERC20Helper.ERCtoUSDTDecimals(buyingObj.premium));
+
   return  _getInsuraceDistributor()
               .methods
               .buyCoverInsurace(buyingObj)
