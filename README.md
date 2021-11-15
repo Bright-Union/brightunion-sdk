@@ -42,14 +42,14 @@ const quotes = brightClient.getQuotes( <amount> , <currency>, <period>, <catalog
 
 // Buy quoted cover
 brightClient.buyQuote( <quote> ).then(data => {
-  console.log( 'success: ' , data.status, 'txHash: ' , data.transactionHash );
+  // transaction done
 })
 
-// GET PURCHASED COVER COUNT FROM ALL DISTRIBUTORS
+// Get purchased cover count from all distributors
 const coversCount = await brightClient.getAllCoversCount();
 
-// GET PURCHASED COVERS FROM ALL DISTRIBUTORS
-let coversAll = await brightClient.getAllCovers();
+// Get purchased covers from all distributors
+const coversAll = await brightClient.getAllCovers();
 
 ```
 
@@ -73,11 +73,11 @@ const catalogItemBridge = { bridgeProductAddress: <Bridge_product_address> };
 const catalogItemNexus = { nexusCoverable: <Nexus_product_address> };
 
 // Get quote from specific distributor on a catalog item
-const quote = await state.brightClient.getQuoteFrom( <distributorName>, <amount> , <currency>, <period>, <catalog_item>);
+const quote = await brightClient.getQuoteFrom( <distributorName>, <amount> , <currency>, <period>, <catalog_item>);
 
 // Buy quoted cover
 brightClient.buyQuote( <quote> ).then(data => {
-  console.log( 'success: ' , data.status, 'txHash: ' , data.transactionHash );
+  // transaction done
 })
 
 ```
