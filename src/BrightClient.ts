@@ -34,6 +34,7 @@ constructor(_config:any) {
     global.user = {
       web3: _config.web3,
       networkId: _config.networkId,
+      symbol: _config.symbol,
       web3Passive: [],
       brightProtoAddress: _config.brightProtoAddress,
       account: _config.account,
@@ -60,6 +61,7 @@ constructor(_config:any) {
 async initialize(): Promise<object>{
       global.user.account = (await  global.user.web3.eth.getAccounts())[0];;
       global.user.networkId = await global.user.web3.eth.net.getId();
+      global.user.symbol = NetConfig.netById(global.user.networkId).symbol;
       global.user.brightProtoAddress = NetConfig.netById(global.user.networkId).brightProtocol;
       global.user.web3Passive = NetConfig.createWeb3Passives();
       await CurrencyHelper.getETHDAIPrice();

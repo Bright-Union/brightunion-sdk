@@ -62,6 +62,12 @@ export async function getQuoteFrom(
                                     _protocol:any
     ): Promise<object> {
 
+      //prepare Multichain Quote logc from UI
+      // let ethereum = [global.user.web3, ...global.user.web3Passive].find(net => {
+        //   console.log(net);
+        //   return net.symbol === 'ETH'
+        // });
+
   if(_distributorName == 'bridge'){
      return await getBridgeQuote(_amount,_currency,_period,_protocol);
   }else if(_distributorName == 'nexus'){
