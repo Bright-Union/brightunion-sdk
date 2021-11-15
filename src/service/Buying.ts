@@ -63,7 +63,7 @@ export async function buyOnInsurace (_quoteProtocol:any) {
     Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.quote.price)) {
 
       buyingObj.premium = Number(ERC20Helper.USDTtoERCDecimals(buyingObj.premium))
-      
+
       //proceed with USDT
       ERC20Helper.approveUSDTAndCall(
         erc20Instance,
