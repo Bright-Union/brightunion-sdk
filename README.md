@@ -45,6 +45,12 @@ brightClient.buyQuote( <quote> ).then(data => {
   console.log( 'success: ' , data.status, 'txHash: ' , data.transactionHash );
 })
 
+// GET PURCHASED COVER COUNT FROM ALL DISTRIBUTORS
+const coversCount = await brightClient.getAllCoversCount();
+
+// GET PURCHASED COVERS FROM ALL DISTRIBUTORS
+let coversAll = await brightClient.getAllCovers();
+
 ```
 
 ## Quote and buy a specific cover product
@@ -75,6 +81,8 @@ brightClient.buyQuote( <quote> ).then(data => {
 })
 
 ```
+
+
 
 <!-- ## Currently supported distributors
 - InsurAce
