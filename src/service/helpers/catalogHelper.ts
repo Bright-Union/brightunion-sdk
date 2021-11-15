@@ -8,6 +8,7 @@ import * as _ from  "lodash";
 //   _getBridgePolicyRegistryContract,
 // } from '../helpers/getContract';
 import NetConfig from '../config/NetConfig';
+import {hexToUtf8} from 'web3-utils';
 
 const bridge_nexus_insurace = [
   // BRIDGE NAME, NEXUS NAME, INSURACE NAME, COMMON NAME
@@ -182,6 +183,21 @@ class CatalogHelper {
       name: obj.name,
       type: obj.type,
       availableCounter: 1,                                                 //field will be increased if similar products found
+    };
+  }
+
+  public static createCoverItem(obj:any) {
+    return {
+      distributorName: obj.distributorName,
+      contractName: obj.contractName,
+      name: obj.name,
+      logo: obj.logo,
+      coverType: obj.coverType,
+      coverAmount: obj.coverAmount,
+      coverAsset: obj.coverAsset,
+      endTime: obj.endTime,
+      status: obj.status,
+      net: obj.net
     };
   }
 

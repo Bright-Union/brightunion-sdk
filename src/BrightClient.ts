@@ -4,7 +4,7 @@ import User from './service/domain/User';
 import { getCoversCount, getCovers } from "./service/dao/Covers";
 import { getDistributorAddress } from "./service/dao/Distributors";
 import { getCatalog } from "./service/Catalog";
-import { getAllCovers } from "./service/Covers";
+import { getAllCovers, getAllCoversCount } from "./service/Covers";
 import { buyQuote } from "./service/Buying";
 import { getQuoteFrom, getQuotes } from "./service/Quotes";
 import NetConfig from './service/config/NetConfig'
@@ -89,7 +89,7 @@ async getAllCovers(
   return await getAllCovers()
 }
 
-async getCoversCount(
+async getCoversCountFrom(
     _distributorName : string,
     // _owner: string ,
     _isActive : boolean
@@ -99,6 +99,11 @@ async getCoversCount(
       global.user.account,
       _isActive
     )
+  }
+
+async getAllCoversCount(
+  ):Promise<any> {
+   return await getAllCoversCount()
   }
 
 async getCoversFrom(

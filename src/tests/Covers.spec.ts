@@ -30,7 +30,7 @@ before(async () => {
 
 describe('Get Owners Cover count', () => {
   it('should return number of covers owned by address',async () => {
-    const result = await instance.getCoversCount(
+    const result = await instance.getCoversCountFrom(
         'insurace',
         // '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2',
         true

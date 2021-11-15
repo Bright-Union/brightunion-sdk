@@ -48,6 +48,7 @@ export async function getCovers(
     _activeCover : boolean,
     _limit : number,
 ) : Promise<any[]>  {
+
   return _getDistributorContract()
         .methods
         .getCovers(
@@ -56,7 +57,6 @@ export async function getCovers(
           _activeCover,
           _limit,
         ).call().then((_data:any) => {
-          console.log('getCovers' ,_distributorName, _data);
           return _data;
         });;
 }
