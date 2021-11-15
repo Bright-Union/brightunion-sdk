@@ -106,7 +106,7 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
  * @param buyingObj
  * @returns
  */
-export async function callInsurace(buyingObj:any){
+export async function callInsurace(buyingObj:any):Promise<any>{
   return await buyCoverInsurace('insurace', buyingObj);
 }
 
