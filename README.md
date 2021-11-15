@@ -76,7 +76,12 @@ brightClient.buyQuote( <quote> ).then(data => {
 
 ```
 
-
+<!-- ## Currently supported distributors
+- InsurAce
+- Ethereum - ETH
+- Binance smart chain -
+- Polygon
+- Nexus -->
 
 
 
