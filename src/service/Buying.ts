@@ -87,11 +87,9 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
           insuraceAddress,  // global.user.brightProtoAddress //0x7e758e0D330B9B340A7282029e73dA448fb4BdB6
           buyingObj.premium,
           () => {
-            // buyingObj.premium = Number(ERC20Helper.ERCtoUSDTDecimals(buyingObj.premium))
             return callInsurace(buyingObj , false);
           },
           (err:any) => {
-            console.log('ERC20Helper approveAndCall Error - ', err);
             return {error: err , message: 'ERC20Helper approveAndCall Error'};
           });
         } else {

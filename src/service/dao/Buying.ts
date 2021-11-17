@@ -116,13 +116,9 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
       value: sendValue,
     })
     .on('transactionHash', (res:any) => {
-      console.log(res)
       resolve({success: res});
     })
     .on('error', (err:any, receipt:any) => {
-      console.log(err)
-      console.log(receipt)
-
       reject({error: err , receipt:receipt})
     });
   });
