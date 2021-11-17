@@ -1,4 +1,4 @@
-import {_getIERC20Contract} from './helpers/getContract';
+import {_getIERC20Contract,_getInsuraceDistributor,_getDistributorContract} from './helpers/getContract';
 import { buyCoverInsurace, buyCover } from "./dao/Buying";
 import NetConfig from './config/NetConfig';
 import InsuraceApi from './distributorsApi/InsuraceApi';
@@ -41,6 +41,8 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
 
   // Check for user ETH balance
   const netBalance = await global.user.web3.eth.getBalance(global.user.account);
+  const insuraceAddress =  await _getDistributorContract().methods.getDistributorAddress('insurace').call();
+  console.log('Calling insurace contract at: ',insuraceAddress)
 
   if(NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency)){
     if (Number(netBalance) >= (Number)(_quoteProtocol.price)) {
@@ -63,11 +65,10 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
     Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.quote.price)) {
 
       buyingObj.premium = Number(ERC20Helper.USDTtoERCDecimals(buyingObj.premium))
-
       //proceed with USDT
       ERC20Helper.approveUSDTAndCall(
         erc20Instance,
-        global.user.brightProtoAddress ,  // global.user.brightProtoAddress //0x7e758e0D330B9B340A7282029e73dA448fb4BdB6
+        insuraceAddress,  // global.user.brightProtoAddress //0x7e758e0D330B9B340A7282029e73dA448fb4BdB6
         buyingObj.premium,
         () => {
           console.log('SHOW_CONFIRMATION_WAITING', {msg: `(1/3) Resetting USDT allowance to 0`});
@@ -84,8 +85,8 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
         //proceed with ERC
         ERC20Helper.approveAndCall(
           erc20Instance,
-          _quoteProtocol.protocol.bridgeProductAddress,  // this.$store.state.insurAceCover().options.address,
-          _quoteProtocol.quote.price,
+          insuraceAddress,  // global.user.brightProtoAddress //0x7e758e0D330B9B340A7282029e73dA448fb4BdB6
+          buyingObj.premium,
           () => {
             return callInsurace(buyingObj);
           },

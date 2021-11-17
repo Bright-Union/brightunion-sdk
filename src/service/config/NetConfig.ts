@@ -50,7 +50,7 @@ import Web3 from 'web3';
         explorer: 'https://rinkeby.etherscan.io',
         provider: 'https://rinkeby.infura.io/v3/98d7e501879243c5877bac07a57cde7e',
         nexusAPI: 'https://api.nexusmutual.io',                 //not used
-        brightProtocol:'0x55E9Fa92952F28C7cCA6C4B7935012ad3590dE06',
+        brightProtocol:'0xD5E3f3F3d105C14C83Bd18D15b8301B3520EE40f',
         brightContractRegistry: '',                             //not used
         insuraceCover: '0x0921f628b8463227615D2199D0D3860E4fBcD411',
         insuraceAPI: 'https://insurace-sl-microservice.azurewebsites.net',
@@ -59,9 +59,9 @@ import Web3 from 'web3';
         modules: process.env.VUE_APP_RINKEBY_MODULES.split(' '),
         bridgeRegistry: '0x0Ac28BcDcef8D8C95c4a079418dbC34e4AD4DF1D',
         ETH: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-        DAI: '0x69dDdb0F010D9Cac595F75d8b0fff59CDCD1D44f',      //not used
-        USDT: '0xcc54b12a18f2c575ca97991046090f43c3070aa0',
-        USDC: '0x4dbcdf9b62e891a7cec5a2568c3f4faf9e8abe2b',
+        DAI: '0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa',      //not used
+        USDT: '0xD92E713d051C37EbB2561803a3b5FBAbc4962431',
+        USDC: '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b',
         INSUR: '',                                               //not used
     },
     {
@@ -73,7 +73,7 @@ import Web3 from 'web3';
         modules: process.env.VUE_APP_KOVAN_MODULES.split(' '),
         nexusDistributor: '0x95454264489114534dD39D81E03Cf4003F948cA6',
         nexusAPI: 'https://api.staging.nexusmutual.io',
-        brightProtocol:'0x56E98086D570368Bc95e4fF089167E45c6fEfC64',
+        brightProtocol:'0x15E83c77857859C0Ab3E36c144c3225C4BacD7f7',
         brightContractRegistry: '0x269601a1825dB9194620477e2D251167Ae938117',
         insuraceCover: '',                                      //not used
         insuraceAPI: '',                                        //not used

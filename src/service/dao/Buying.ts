@@ -1,6 +1,6 @@
 import BuyReceipt from "../domain/BuyReceipt";
-import {_getDistributorContract,_getInsuraceDistributor} from "../helpers/getContract";
-
+import {_getDistributorContract,_getInsuraceDistributor, _getNexusDistributor} from "../helpers/getContract";
+import ERC20Helper from '../helpers/ERC20Helper'
 /**
 * Returns a transaction receipt.
 * (Emits a boughtCover event at contract level)
@@ -31,32 +31,32 @@ export async function buyCover(
   _data : any,
 ):Promise<any>{
 
-  return await new Promise((resolve, reject) => {
+  if(_distributorName == 'nexus'){
+    console.log('using brighPrptocol at ', _getDistributorContract().address);
+    const nexusAddress =  await _getDistributorContract().methods.getDistributorAddress('nexus').call();
+    console.log('Calling nexusAddress at ', nexusAddress);
+          return await new Promise((resolve, reject) => {
+            _getNexusDistributor(nexusAddress)
+            .methods
+            .buyCover(
+              _contractAddress,
+              _coverAsset,
+              _sumAssured,
+              _coverPeriod,
+              _coverType,
+              _maxPriceWithFee,
+              _data,
+            )
+            .send({ from: _ownerAddress, value: _maxPriceWithFee })
+            .on('transactionHash', (res:any) => { resolve({success:res}); })
+            .on('error', (err:any, receipt:any) => { reject( {error: err, receipt:receipt}) });
+          });
 
-    _getDistributorContract()
-    .methods
-    .buyCover(
-      _distributorName,
-      _contractAddress,
-      _coverAsset,
-      _sumAssured,
-      _coverPeriod,
-      _coverType,
-      _maxPriceWithFee,
-      _data,
-    )
-    .send({
-      from: _ownerAddress,
-      value: _maxPriceWithFee,
-      // gasLimit: 129913, // 7000000
-    })
-    .on('transactionHash', (res:any) => {
-      resolve({success:res});
-    })
-    .on('error', (err:any, receipt:any) => {
-      reject( {error: err, receipt:receipt})
-    });
-  });
+  }else if(_distributorName == 'bridge'){
+
+      // call buy bridge as on UI
+  }
+
 
 
 }
@@ -83,9 +83,14 @@ export async function buyCover(
 */
 
 export async function buyCoverInsurace(distributorName : string, buyingObj:any){
+  const insuraceAddress =  await _getDistributorContract().methods.getDistributorAddress('insurace').call();
+
+  console.info('Calling insurace at ', insuraceAddress,' with obj; ', buyingObj);
+  
+  buyingObj.premium = Number(ERC20Helper.ERCtoUSDTDecimals(buyingObj.premium))
 
   return await new Promise((resolve, reject) => {
-    _getInsuraceDistributor()
+    _getInsuraceDistributor(insuraceAddress)
     .methods
     .buyCoverInsurace(buyingObj)
     .send({
@@ -93,9 +98,13 @@ export async function buyCoverInsurace(distributorName : string, buyingObj:any){
       value: buyingObj.premium,
     })
     .on('transactionHash', (res:any) => {
+      console.log(res)
       resolve({success: res});
     })
     .on('error', (err:any, receipt:any) => {
+      console.log(err)
+      console.log(receipt)
+
       reject({error: err , receipt:receipt})
     });
   });

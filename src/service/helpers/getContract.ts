@@ -1,12 +1,13 @@
 import  DistributorsABI  from '../abi/Distributors.json';
 import IERC20ABI from '../abi/IERC20.json';
 import InsuraceDistributorABI from '../abi/InsuraceDistributor.json';
+import NexusDistributorABI from '../abi/nexus/NexusDistributor.json';
 import BridgeRegistryContractABI from '../abi/bridge/IContractsRegistry.json';
 import BridgePolicyBookRegistryABI from '../abi/bridge/IPolicyBookRegistry.json';
 import BridgePolicyQuoteABI from '../abi/bridge/IPolicyQuote.json';
 import BridgePolicyBookABI from '../abi/bridge/IPolicyBook.json';
 import BridgePolicyRegistryABI from '../abi/bridge/IPolicyRegistry.json';
-import NexusDistributorABI from '../abi/nexus/Distributor.json';
+import { StringChain } from 'lodash';
 
 
 const _getBridgeRegistryContract           =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeRegistryContractABI.abi, address , web3);
@@ -32,11 +33,16 @@ function _getDistributorContract() : any {
   return new web3.eth.Contract(distAbi, address );
 }
 
-function _getInsuraceDistributor() : any {
+function _getInsuraceDistributor(address:string) : any {
   const web3:any = global.user.web3;
-  const address: string = '0x7e758e0D330B9B340A7282029e73dA448fb4BdB6';
   const distAbi:any = InsuraceDistributorABI.abi;
 
+  return new web3.eth.Contract(distAbi, address );
+}
+
+function _getNexusDistributor(address:string) : any {
+  const web3:any = global.user.web3;
+  const distAbi:any = NexusDistributorABI.abi;
   return new web3.eth.Contract(distAbi, address );
 }
 
@@ -56,5 +62,6 @@ export  {
     _getBridgePolicyBookContract,
     _getBridgePolicyRegistryContract,
     _getInsuraceDistributor,
-    _getNexusDistributorContract
+    _getNexusDistributorContract,
+    _getNexusDistributor
 } ;
