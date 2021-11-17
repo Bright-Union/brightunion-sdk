@@ -178,7 +178,7 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
   let asset:any;
   if (NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.rawData.currency)) {
-    asset = NetConfig.netById(global.user.networkId).ETH;
+    asset = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
   } else if (_quoteProtocol.currency === 'DAI') {
     asset = NetConfig.netById(global.user.networkId).DAI;
   } else {
@@ -188,13 +188,13 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
   if(!NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.rawData.currency)){
 
-    const erc20Instance = await _getIERC20Contract(NetConfig.netById(global.user.networkId).ETH);
+    const erc20Instance = await _getIERC20Contract(asset);
     const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
     if (Number(ercBalance) >= (Number)(_quoteProtocol.rawData.price)) {
 
       const onSuccess =  () => {
-        return callNexus(_quoteProtocol, true);
+        return callNexus(_quoteProtocol, false);
       };
       const onError =  (err:any) => {
         return {error : "Confirmation rejected"};
@@ -210,7 +210,7 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
   const netBalance = await global.user.web3.eth.getBalance(global.user.account);
     if (Number(netBalance) >= (Number)(_quoteProtocol.rawData.price)) {
-      return callNexus(_quoteProtocol, false);
+      return callNexus(_quoteProtocol, true);
     } else {
       return {error: 'You have insufficient funds to continue with this transaction' }
     }
