@@ -59,7 +59,8 @@ import Web3 from 'web3';
         modules: process.env.VUE_APP_RINKEBY_MODULES.split(' '),
         bridgeRegistry: '0x0Ac28BcDcef8D8C95c4a079418dbC34e4AD4DF1D',
         ETH: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-        DAI: '0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa',      //not used
+        DAI: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',      //not used
+        // DAI: '0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa',      //not used
         USDT: '0xD92E713d051C37EbB2561803a3b5FBAbc4962431',
         USDC: '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b',
         INSUR: '',                                               //not used
