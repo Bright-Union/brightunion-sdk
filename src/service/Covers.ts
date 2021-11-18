@@ -32,7 +32,8 @@ export async function getAllCovers(
 
 export  function getBridgeCovers(): Promise<any[]> {
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL')) {
-    return  getCoversBridge();
+    return  getCovers('bridge' , global.user.account , false, 50);
+    // return  getCoversBridge();
   }
 }
 
@@ -61,7 +62,8 @@ export async function getAllCoversCount(
     coversPromiseArray.push(getCoversCount('insurace', global.user.account, false))
   }
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL')) {
-    coversPromiseArray.push(getCoversCountBridge())
+    coversPromiseArray.push(getCoversCount('bridge', global.user.account, false))
+    // coversPromiseArray.push(getCoversCountBridge())
   }
 
   return Promise.all(coversPromiseArray)

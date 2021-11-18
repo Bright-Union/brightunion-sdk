@@ -52,7 +52,7 @@ import Web3 from 'web3';
         nexusAPI: 'https://api.nexusmutual.io',                 //not used
         brightProtocol:'0xD5E3f3F3d105C14C83Bd18D15b8301B3520EE40f',
         brightContractRegistry: '',                             //not used
-        insuraceCover: '0x0921f628b8463227615D2199D0D3860E4fBcD411',
+        insuraceCover: "0x908DDB24Ea9f1abc9B2cD2be8114b01EE5Ff76b2" , //'0x0921f628b8463227615D2199D0D3860E4fBcD411',
         insuraceAPI: 'https://insurace-sl-microservice.azurewebsites.net',
         insuraceAPIKey: 'OmgwnM39a/M9/9Q856wbRkILcYh2ZmlJPpG9cVxT5Vy6aR8eNl3/jw==',
         insuraceReferral: '',
@@ -141,7 +141,7 @@ import Web3 from 'web3';
         bridgeRegistry: '',
         nexusDistributor: '',
         nexusAPI: '',
-        brightProtocol:'',
+        brightProtocol:'0x2c3783aac396bacb02559a2bb209986f0e5ebf94',
         brightContractRegistry: '',
         insuraceCover: '0x3e00FE643337A0f4E345539096cA01e6B8d4374A',
         insuraceAPI: 'https://api.insurace.io/ops/v1',
