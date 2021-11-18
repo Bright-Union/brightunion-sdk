@@ -2,7 +2,7 @@
 // import NexusApi  from '@/service/distributorsApi/NexusApi';
 
 import NetConfig from './config/NetConfig';
-import {getCovers, getCoversCount} from './dao/Covers'
+import {getCovers, getCoversCount, getCoversCountBridge, getCoversBridge} from './dao/Covers'
 import CatalogHelper from './helpers/catalogHelper'
 
 export async function getAllCovers(
@@ -12,8 +12,8 @@ export async function getAllCovers(
   const coversPromiseArray:any[] = [];
 
   coversPromiseArray.push(getInsuraceCovers())
-  coversPromiseArray.push(getBridgeCovers())
   coversPromiseArray.push(getNexusCovers())
+  coversPromiseArray.push(getBridgeCovers())
 
   return Promise.all(coversPromiseArray)
   .then((_data: any) => {
@@ -33,6 +33,7 @@ export async function getAllCovers(
 export  function getBridgeCovers(): Promise<any[]> {
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL')) {
     return  getCovers('bridge' , global.user.account , false, 50);
+    // return  getCoversBridge();
   }
 }
 
@@ -54,14 +55,15 @@ export async function getAllCoversCount(
 
   const coversPromiseArray:any[] = [];
 
-  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL')) {
-    coversPromiseArray.push(getCoversCount('bridge', global.user.account, false))
-  }
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL')) {
     coversPromiseArray.push(getCoversCount('nexus', global.user.account, false))
   }
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE')) {
     coversPromiseArray.push(getCoversCount('insurace', global.user.account, false))
+  }
+  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL')) {
+    coversPromiseArray.push(getCoversCount('bridge', global.user.account, false))
+    // coversPromiseArray.push(getCoversCountBridge())
   }
 
   return Promise.all(coversPromiseArray)

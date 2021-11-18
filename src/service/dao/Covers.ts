@@ -12,13 +12,13 @@ import {_getDistributorContract} from "../helpers/getContract";
  * @param _isActive
  * @returns Number of total covers
  */
-export function getCoversCount(
+export async function getCoversCount(
     _distributorName : string,
     _ownerAddress: string ,
     _isActive : boolean
 ): Promise<number>  {
 
-  return _getDistributorContract()
+  return await _getDistributorContract()
          .methods
          .getCoversCount(
            _distributorName,
@@ -49,7 +49,7 @@ export async function getCovers(
     _limit : number,
 ) : Promise<any[]>  {
 
-  return _getDistributorContract()
+  return await _getDistributorContract()
         .methods
         .getCovers(
           _distributorName,
@@ -58,10 +58,21 @@ export async function getCovers(
           _limit,
         ).call().then((_data:any) => {
           return _data;
-        });;
+        });
+}
+
+export async function getCoversBridge():Promise<any>{
+  return [];
+}
+
+
+export async function getCoversCountBridge():Promise<any>{
+  return [];
 }
 
 export default {
    getCovers,
-   getCoversCount
+   getCoversCount,
+   getCoversCountBridge,
+   getCoversBridge
 }
