@@ -1,6 +1,15 @@
 import BuyReceipt from "../domain/BuyReceipt";
-import {_getDistributorContract,_getInsuraceDistributor, _getNexusDistributor, _getBridgePolicyBookContract} from "../helpers/getContract";
-import ERC20Helper from '../helpers/ERC20Helper'
+import {
+  _getDistributorsContract,
+  _getInsuraceDistributor,
+  _getInsuraceDistributorsContract,
+  _getNexusDistributor,
+  _getNexusDistributorsContract,
+  _getBridgePolicyBookContract
+} from "../helpers/getContract";
+
+import ERC20Helper from '../helpers/ERC20Helper';
+import NetConfig from '../config/NetConfig';
 
 /**
 * Returns a transaction receipt.
@@ -34,32 +43,49 @@ export async function buyCover(
 ):Promise<any>{
 
   if(_distributorName == 'nexus'){
-    const nexusAddress =  await _getDistributorContract().methods.getDistributorAddress('nexus').call();
-
     const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
 
-    return await new Promise((resolve, reject) => {
-      _getNexusDistributor(nexusAddress)
-      .methods
-      .buyCover(
-        _contractAddress,
-        _coverAsset,
-        _sumAssured,
-        _coverPeriod,
-        _coverType,
-        _maxPriceWithFee,
-        _data,
-      )
-      .send({
-        from: _ownerAddress,
-        value: sendValue,
-        // value: _maxPriceWithFee ,
-      })
-      .on('transactionHash', (res:any) => { resolve({success:res}); })
-      .on('error', (err:any, receipt:any) => { reject( {error: err, receipt:receipt}) });
-    });
+        if(global.user.networkId === 1 ){ 
+          return await new Promise((resolve, reject) => {
+            const nexusAddress = NetConfig.netById(1).nexusDistributor;
 
-  }else if(_distributorName == 'bridge'){
+            console.log('calling nexus to', nexusAddress);
+
+            _getNexusDistributor(nexusAddress) // Direct Call to Nexus Contract
+            .methods.buyCover(
+              _contractAddress,
+              _coverAsset,
+              _sumAssured,
+              _coverPeriod,
+              _coverType,
+              _maxPriceWithFee,
+              _data,
+            ).send({ from: _ownerAddress, value: sendValue })
+            .on('transactionHash', (res:any) => { resolve({success:res}); })
+            .on('error', (err:any, receipt:any) => { reject( {error: err, receipt:receipt}) });
+          });
+        } else { // if not Ethereum Mainnet
+          return await new Promise( async (resolve, reject) => {
+            const nexusAddress = await _getDistributorsContract().methods.getDistributorAddress('nexus').call();
+
+            console.log('calling nexus to', nexusAddress);
+
+            _getNexusDistributorsContract(nexusAddress) // Nexus Call through Bright Protocol Distributors Layer
+            .methods.buyCover(
+              _contractAddress,
+              _coverAsset,
+              _sumAssured,
+              _coverPeriod,
+              _coverType,
+              _maxPriceWithFee,
+              _data,
+            ).send({ from: _ownerAddress, value: sendValue })
+            .on('transactionHash', (res:any) => { resolve({success:res}); })
+            .on('error', (err:any, receipt:any) => { reject( {error: err, receipt:receipt}) });
+          });
+        }
+        
+  } else if(_distributorName == 'bridge'){
 
     const  bookContract = _getBridgePolicyBookContract(_contractAddress, global.user.web3 );
 
@@ -102,27 +128,62 @@ export async function buyCover(
 * @returns  BuyReceipt Object
 */
 
-export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency:boolean){
-  const insuraceAddress =  await _getDistributorContract().methods.getDistributorAddress('insurace').call();
+export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency:boolean) {
+  console.log('calling buyCoverInsurace...');
 
+  let insuraceAddress :any;
   const sendValue = buyingWithNetworkCurrency ? buyingObj.premium : 0;
 
-  return await new Promise((resolve, reject) => {
-    _getInsuraceDistributor(insuraceAddress)
-    .methods
-    .buyCoverInsurace(buyingObj)
-    .send({
-      from: buyingObj.owner,
-      // value: 0,
-      value: sendValue,
-    })
-    .on('transactionHash', (res:any) => {
-      resolve({success: res});
-    })
-    .on('error', (err:any, receipt:any) => {
-      reject({error: err , receipt:receipt})
+  // If mainnet call Distributor Directly
+  if(global.user.networkId === 1 ){ 
+    insuraceAddress = NetConfig.netById(1).insuraceCover;
+    console.log('calling insurace to', insuraceAddress);
+
+    return await new Promise((resolve, reject) => {
+      _getInsuraceDistributor(insuraceAddress)
+      .methods
+      .buyCover(
+                  buyingObj.products,
+                  buyingObj.durationInDays,
+                  buyingObj.amounts,
+                  buyingObj.currency,
+                  buyingObj.owner,
+                  buyingObj.refCode,
+                  buyingObj.premium,
+                  buyingObj.helperParameters,
+                  buyingObj.securityParameters,
+                  buyingObj.v,
+                  buyingObj.r,
+                  buyingObj.s
+      )
+      .send({ from: buyingObj.owner, value: sendValue})
+      .on('transactionHash', (res:any) => {
+        resolve({success: res});
+      })
+      .on('error', (err:any, receipt:any) => {
+        reject({error: err , receipt:receipt})
+      });
     });
-  });
+ 
+ // Else call through Bright Union protocol
+  } else {
+    insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();
+    console.log('calling insurace to', insuraceAddress);
+
+    return await new Promise((resolve, reject) => {
+      _getInsuraceDistributorsContract(insuraceAddress)
+      .methods
+      .buyCoverInsurace(buyingObj)
+      .send({ from: buyingObj.owner, value: sendValue })
+      .on('transactionHash', (res:any) => {
+        resolve({success: res});
+      })
+      .on('error', (err:any, receipt:any) => {
+        reject({error: err , receipt:receipt})
+      });
+    });
+  }
+
 }
 
 export default {

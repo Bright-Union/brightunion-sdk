@@ -5,7 +5,9 @@ import RiskCarriers from '../config/RiskCarriers'
 import CatalogHelper from '../helpers/catalogHelper'
 import BigNumber from 'bignumber.js'
 import {toBN, toWei} from 'web3-utils'
-import {_getNexusDistributorContract} from '../helpers/getContract'
+import {  _getNexusDistributor,
+          _getNexusDistributorsContract,
+          _getDistributorsContract } from '../helpers/getContract'
 
 
 
@@ -43,8 +45,14 @@ export default class NexusApi {
       .then(async (response:any) => {
 
         let basePrice = toBN(response.data.price);
-
-        const distributor =  await _getNexusDistributorContract(NetConfig.netById(global.user.networkId).nexusDistributor)
+        let distributor:any;
+        
+        if(global.user.networkId === 1 ){ 
+          distributor =  await _getNexusDistributor(NetConfig.netById(global.user.networkId).nexusDistributor)
+        }else{
+          const sideChainAddress = await _getDistributorsContract().methods.getDistributorAddress('nexus').call();
+          distributor = await _getNexusDistributorsContract(sideChainAddress);
+        }
         let fee:any = await distributor.methods.feePercentage().call();
         fee = toBN(fee);
         let priceWithFee:any = basePrice.mul(fee).div(toBN(10000)).add(basePrice);

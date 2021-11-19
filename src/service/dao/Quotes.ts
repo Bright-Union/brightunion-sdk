@@ -2,7 +2,7 @@ import CoverQuote from "../domain/CoverQuote";
 import NetConfig from "../config/NetConfig";
 import GasHelper from "../helpers/gasHelper";
 import RiskCarriers from "../config/RiskCarriers";
-import {_getDistributorContract, _getBridgeRegistryContract, _getBridgePolicyBookRegistryContract, _getBridgePolicyBookContract} from "../helpers/getContract";
+import {_getDistributorsContract, _getBridgeRegistryContract, _getBridgePolicyBookRegistryContract, _getBridgePolicyBookContract} from "../helpers/getContract";
 import BigNumber from 'bignumber.js'
 import {toBN} from 'web3-utils'
 
@@ -38,7 +38,7 @@ export async function getQuote(
     _interfaceCompliant2 : string,
     _data : any,
 ) : Promise<any>  {
-  return await _getDistributorContract() // SDK
+  return await _getDistributorsContract() // SDK
                       .methods
                       .getQuote(
                         _distributorName,

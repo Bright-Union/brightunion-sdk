@@ -1,4 +1,4 @@
-import {_getDistributorContract} from "../helpers/getContract";
+import {_getDistributorsContract} from "../helpers/getContract";
 
 /**
  * Returns the contract implementation address of the intended distributor
@@ -12,7 +12,7 @@ import {_getDistributorContract} from "../helpers/getContract";
 export async function getDistributorAddress(
   _distributorName : string
   ) : Promise<string>  {
-  return await _getDistributorContract()
+  return await _getDistributorsContract()
               .methods
               .getDistributorAddress(_distributorName)
               .call();
