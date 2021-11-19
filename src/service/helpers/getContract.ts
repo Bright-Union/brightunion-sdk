@@ -65,7 +65,6 @@ const _getBridgePolicyBookContract         =  (address:string,web3:any)  : any =
 const _getBridgePolicyRegistryContract     =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgePolicyRegistryABI.abi, address , web3);
 
 
-
 function _getIERC20Contract(address:any) {
     const web3:any = global.user.web3;
     const distAbi:any = IERC20ABI.abi;

@@ -128,31 +128,62 @@ export async function buyCover(
 * @returns  BuyReceipt Object
 */
 
-export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency:boolean){
+export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency:boolean) {
+  console.log('calling buyCoverInsurace...');
 
   let insuraceAddress :any;
-  if(global.user.networkId === 1 ){ insuraceAddress = NetConfig.netById(1).insuraceCover; }
-  else { insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();}
-
-  
   const sendValue = buyingWithNetworkCurrency ? buyingObj.premium : 0;
 
-  return await new Promise((resolve, reject) => {
-    _getInsuraceDistributor(insuraceAddress)
-    .methods
-    .buyCoverInsurace(buyingObj)
-    .send({
-      from: buyingObj.owner,
-      // value: 0,
-      value: sendValue,
-    })
-    .on('transactionHash', (res:any) => {
-      resolve({success: res});
-    })
-    .on('error', (err:any, receipt:any) => {
-      reject({error: err , receipt:receipt})
+  // If mainnet call Distributor Directly
+  if(global.user.networkId === 1 ){ 
+    insuraceAddress = NetConfig.netById(1).insuraceCover;
+    console.log('calling insurace to', insuraceAddress);
+
+    return await new Promise((resolve, reject) => {
+      _getInsuraceDistributor(insuraceAddress)
+      .methods
+      .buyCover(
+                  buyingObj.products,
+                  buyingObj.durationInDays,
+                  buyingObj.amounts,
+                  buyingObj.currency,
+                  buyingObj.owner,
+                  buyingObj.refCode,
+                  buyingObj.premium,
+                  buyingObj.helperParameters,
+                  buyingObj.securityParameters,
+                  buyingObj.v,
+                  buyingObj.r,
+                  buyingObj.s
+      )
+      .send({ from: buyingObj.owner, value: sendValue})
+      .on('transactionHash', (res:any) => {
+        resolve({success: res});
+      })
+      .on('error', (err:any, receipt:any) => {
+        reject({error: err , receipt:receipt})
+      });
     });
-  });
+ 
+ // Else call through Bright Union protocol
+  } else {
+    insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();
+    console.log('calling insurace to', insuraceAddress);
+
+    return await new Promise((resolve, reject) => {
+      _getInsuraceDistributorsContract(insuraceAddress)
+      .methods
+      .buyCoverInsurace(buyingObj)
+      .send({ from: buyingObj.owner, value: sendValue })
+      .on('transactionHash', (res:any) => {
+        resolve({success: res});
+      })
+      .on('error', (err:any, receipt:any) => {
+        reject({error: err , receipt:receipt})
+      });
+    });
+  }
+
 }
 
 export default {
