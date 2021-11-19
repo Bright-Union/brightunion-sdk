@@ -1,6 +1,6 @@
 import NexusApi from './distributorsApi/NexusApi';
 import InsuraceApi from './distributorsApi/InsuraceApi';
-import { getQuote } from "./dao/Quotes";
+import { getQuote, getQuoteFromBridge } from "./dao/Quotes";
 import CatalogHelper from './helpers/catalogHelper';
 import NetConfig from '../service/config/NetConfig';
 import CurrencyHelper from './helpers/currencyHelper';
@@ -93,6 +93,7 @@ export async function getQuoteFrom(
 
    if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeProductAddress) {
 
+
      let amountInWei:any = global.user.web3.utils.toWei(_amount.toString(), 'ether');
 
      if (_currency === 'ETH') {
@@ -102,56 +103,88 @@ export async function getQuoteFrom(
 
      const bridgeEpochs = Math.min(52, Math.ceil(Number(_period) / 7));
 
-     const quote =  await getQuote(
-       'bridge',
-       bridgeEpochs,
-       amountInWei,
-      _protocol.bridgeProductAddress,
-     '0x0000000000000000000000000000000000000000',
-     '0x0000000000000000000000000000000000000000',
-     global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500)),
-     );
+     let quote:any = {}
+     // let bridgeQuote:any = {}
 
-     // mapping to bridge object Or could be mapping to UI object
-     // only reason of why we have diff get<provider>Quote methods
+     if(global.user.networkId = 1 ){
 
-     const bridgeQuote = {
-       totalSeconds       : quote.prop1,
-       totalPrice         : quote.prop2,
-       totalLiquidity     : quote.prop3,
-       totalCoverTokens   : quote.prop4,
-       prop5              : quote.prop5,
-       prop6              : quote.prop6,
-       prop7              : quote.prop7,
+       quote = await getQuoteFromBridge(
+         _protocol.bridgeProductAddress,
+         _period,
+         amountInWei,
+       );
+
+       return CatalogHelper.quoteFromCoverable(
+         'bridge',
+         _protocol,
+         {
+           amount: amountInWei,
+           currency: _currency,
+           period: _period,
+           chain: quote.chain,
+           chainId: quote.chainId,
+           actualPeriod: quote.actualPeriod,
+           price: quote.price,
+           response: quote._stats,
+           pricePercent: quote.pricePercent, //%, annualize
+           // estimatedGasPrice: quote.estimatedGasPrice,
+           // estimatedGasPriceCurrency: quote.defaultCurrencySymbol,
+           // estimatedGasPriceDefault: quote.feeInDefaultCurrency
+         },
+         {
+           // totalUSDTLiquidity: quote.totalUSDTLiquidity,
+           // maxCapacity: quote.maxCapacity,
+           // stakedSTBL: quote.stakedSTBL,
+           // activeCovers: quote.activeCovers,
+           // utilizationRatio: quote.utilizationRatio,
+         }
+       );
+
+     }else{
+
+       quote =  await getQuote(
+         'bridge',
+         bridgeEpochs,
+         amountInWei,
+         _protocol.bridgeProductAddress,
+         '0x0000000000000000000000000000000000000000',
+         '0x0000000000000000000000000000000000000000',
+         global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500)),
+       );
+
+       const bridgeQuote = {
+         totalSeconds       : quote.prop1,
+         totalPrice         : quote.prop2,
+         totalLiquidity     : quote.prop3,
+         totalCoverTokens   : quote.prop4,
+         prop5              : quote.prop5,
+         prop6              : quote.prop6,
+         prop7              : quote.prop7,
+       }
+       // mapping to bridge object Or could be mapping to UI object
+       // only reason of why we have diff get<provider>Quote methods
+
+       const actualPeriod = Math.floor(Number(bridgeQuote.totalSeconds) / 3600 / 24);
+
+       return CatalogHelper.quoteFromCoverable(
+         'bridge',
+         _protocol,
+         {
+           amount: amountInWei,
+           currency: _currency,
+           period: _period,
+           chain: 'ETH',
+           chainId: global.user.networkId,
+           actualPeriod: actualPeriod,
+           price: bridgeQuote.totalPrice,
+           response: bridgeQuote,
+           pricePercent: new BigNumber(bridgeQuote.totalPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000, //%, annualize
+         },
+         {}
+       );
+
      }
 
-     const actualPeriod = Math.floor(Number(bridgeQuote.totalSeconds) / 3600 / 24);
-
-     return CatalogHelper.quoteFromCoverable(
-       'bridge',
-       _protocol,
-       {
-         amount: amountInWei,
-         currency: _currency,
-         period: _period,
-         chain: 'ETH',
-         chainId: global.user.networkId,
-         actualPeriod: actualPeriod,
-         price: bridgeQuote.totalPrice,
-         response: bridgeQuote,
-         pricePercent: new BigNumber(bridgeQuote.totalPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000, //%, annualize
-         // estimatedGasPrice: estimatedGasPrice,
-         // estimatedGasPriceCurrency: defaultCurrencySymbol,
-         // estimatedGasPriceDefault: feeInDefaultCurrency
-       },
-       {
-         // totalUSDTLiquidity: toBN(totalLiquidity),
-         // maxCapacity: _stats[0].maxCapacity,
-         // stakedSTBL: _stats[0].stakedSTBL,
-         // activeCovers: toBN(coverTokens),
-         // utilizationRatio: toBN(coverTokens).mul(toBN(10000)).div(toBN(totalLiquidity)).toNumber() / 100,
-       }
-     );
 
 
    }
