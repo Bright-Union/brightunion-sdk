@@ -1,5 +1,5 @@
 import CoverQuote from "../domain/CoverQuote";
-import {_getDistributorContract} from "../helpers/getContract";
+import {_getDistributorsContract} from "../helpers/getContract";
 
 
 /**
@@ -33,7 +33,7 @@ export async function getQuote(
     _interfaceCompliant2 : string,
     _data : any,
 ) : Promise<any>  {
-  return await _getDistributorContract() // SDK
+  return await _getDistributorsContract() // SDK
                       .methods
                       .getQuote(
                         _distributorName,

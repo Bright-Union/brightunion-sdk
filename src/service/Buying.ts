@@ -1,4 +1,4 @@
-import {_getIERC20Contract,_getInsuraceDistributor,_getDistributorContract, _getBridgeRegistryContract} from './helpers/getContract';
+import {_getIERC20Contract,_getInsuraceDistributor,_getDistributorsContract, _getBridgeRegistryContract} from './helpers/getContract';
 import { buyCoverInsurace, buyCover } from "./dao/Buying";
 import NetConfig from './config/NetConfig';
 import InsuraceApi from './distributorsApi/InsuraceApi';
@@ -41,7 +41,10 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
 
   // Check for user ETH balance
   const netBalance = await global.user.web3.eth.getBalance(global.user.account);
-  const insuraceAddress =  await _getDistributorContract().methods.getDistributorAddress('insurace').call();
+  
+  let insuraceAddress :any;
+  if(global.user.networkId === 1 ){ insuraceAddress = NetConfig.netById(1).insuraceCover; }
+  else { insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();}
 
   if(NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency)){
     if (Number(netBalance) >= (Number)(_quoteProtocol.price)) {
