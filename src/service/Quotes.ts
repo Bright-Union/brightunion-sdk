@@ -5,6 +5,8 @@ import CatalogHelper from './helpers/catalogHelper';
 import NetConfig from '../service/config/NetConfig';
 import CurrencyHelper from './helpers/currencyHelper';
 import RiskCarriers from './config/RiskCarriers';
+import BigNumber from 'bignumber.js'
+
 
 
 /**
@@ -132,12 +134,12 @@ export async function getQuoteFrom(
          amount: amountInWei,
          currency: _currency,
          period: _period,
-         chain: '',
+         chain: 'ETH',
          chainId: global.user.networkId,
          actualPeriod: actualPeriod,
          price: bridgeQuote.totalPrice,
          response: bridgeQuote,
-         // pricePercent: new BigNumber(totalPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000, //%, annualize
+         pricePercent: new BigNumber(bridgeQuote.totalPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000, //%, annualize
          // estimatedGasPrice: estimatedGasPrice,
          // estimatedGasPriceCurrency: defaultCurrencySymbol,
          // estimatedGasPriceDefault: feeInDefaultCurrency

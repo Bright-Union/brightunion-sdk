@@ -1,4 +1,4 @@
-import {_getIERC20Contract,_getInsuraceDistributor,_getDistributorContract} from './helpers/getContract';
+import {_getIERC20Contract,_getInsuraceDistributor,_getDistributorContract, _getBridgeRegistryContract} from './helpers/getContract';
 import { buyCoverInsurace, buyCover } from "./dao/Buying";
 import NetConfig from './config/NetConfig';
 import InsuraceApi from './distributorsApi/InsuraceApi';
@@ -218,43 +218,51 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
 }
 
-export async function callBridge(_quoteProtocol:any, buyingWithNetworkCurrency:boolean){
+export async function callBridge(_quoteProtocol:any){
 
-    let net:any = NetConfig.netById(global.user.networkId);
-    let asset = net[_quoteProtocol.rawData.currency]
+    // let net:any = NetConfig.netById(global.user.networkId);
+    // let asset = net[_quoteProtocol.rawData.currency]
+
+
 
     return buyCover(
       global.user.account,
       'bridge',
       _quoteProtocol.protocol.bridgeProductAddress, //bridge prod address
-      asset,  // payment asset
+      null,  // payment asset
       _quoteProtocol.amount.toString(), // sum assured, compliant
       _quoteProtocol.actualPeriod, // period
-      0, //coverType
-      _quoteProtocol.rawData.price, // token amount to cover
-      global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500)), // random data
-      buyingWithNetworkCurrency
+      null, //coverType
+      null, // token amount to cover
+      null, // random data
+      null
     )
 
 }
 
 export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
 
-  const erc20Instance = _getIERC20Contract(NetConfig.netById(global.user.networkId).USDT);
+  const registry:any = await _getBridgeRegistryContract(NetConfig.netById(global.user.networkId).bridgeRegistry, global.user.web3 )
+
+  let asset: any = await  registry.methods.getUSDTContract().call().then((stableTokenAddr:any) => {
+    return  _getIERC20Contract(stableTokenAddr).options.address
+  });
+
+  const erc20Instance = _getIERC20Contract(asset);
   const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
-  if (Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.rawData.price)) {
+  if (Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.price)) {
     // this.showModal = false;
     return  ERC20Helper.approveUSDTAndCall(
       erc20Instance,
       _quoteProtocol.protocol.bridgeProductAddress,
-      _quoteProtocol.rawData.price,
+      _quoteProtocol.price,
       () => {
         // EventBus.publish('SHOW_CONFIRMATION_WAITING', {msg: `(1/3) Resetting USDT allowance to 0`});
         console.log('Confirmation waiting');
       },
       () => {
-        return callBridge(_quoteProtocol, false);
+        return callBridge(_quoteProtocol);
       },
       () => {
         return {error: "Rejected confirmation"};

@@ -60,20 +60,21 @@ export async function buyCover(
     });
 
   }else if(_distributorName == 'bridge'){
+
     const  bookContract = _getBridgePolicyBookContract(_contractAddress, global.user.web3 );
 
     // convert period from days to bridge epochs (weeks)
     let epochs = Math.min(52, Math.ceil(_coverPeriod / 7));
 
-    bookContract.methods.buyPolicy( epochs, _sumAssured )
-    .send({from: global.user.account})
-    .on('transactionHash', (transactionHash:any) => {
-      // this.referringConfirming();
-    })
-    .on('confirmation', (confirmationNumber:any) => {
-    })
-    .on('error', (err:any, receipt:any) => {
-
+    return await new Promise((resolve, reject) => {
+      bookContract.methods.buyPolicy( epochs, _sumAssured )
+      .send({from: global.user.account})
+      .on('transactionHash', (transactionHash:any) => {
+        resolve({success: transactionHash});
+      })
+      .on('error', (err:any, receipt:any) => {
+        reject( {error: err, receipt:receipt})
+      })
     })
 
   }
