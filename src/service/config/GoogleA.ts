@@ -23,7 +23,7 @@ static onTxHash = (tx:any) => {
             return error;
         });
    };
-
+   
 static onTxConfirmation = (tx:any) => {
         axios.post(
             `https://analytics.google.com/g/collect?
