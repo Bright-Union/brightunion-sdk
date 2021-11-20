@@ -1,3 +1,4 @@
+import TxEvents from '../config/GoogleA';
 import BuyReceipt from "../domain/BuyReceipt";
 import {
   _getDistributorsContract,
@@ -41,16 +42,12 @@ export async function buyCover(
   _data : any,
   buyingWithNetworkCurrency:boolean,
 ):Promise<any>{
-
+  let txHash : any;
   if(_distributorName == 'nexus'){
     const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
-
         if(global.user.networkId === 1 ){ 
           return await new Promise((resolve, reject) => {
             const nexusAddress = NetConfig.netById(1).nexusDistributor;
-
-            console.log('calling nexus to', nexusAddress);
-
             _getNexusDistributor(nexusAddress) // Direct Call to Nexus Contract
             .methods.buyCover(
               _contractAddress,
@@ -61,15 +58,33 @@ export async function buyCover(
               _maxPriceWithFee,
               _data,
             ).send({ from: _ownerAddress, value: sendValue })
-            .on('transactionHash', (res:any) => { resolve({success:res}); })
-            .on('error', (err:any, receipt:any) => { reject( {error: err, receipt:receipt}) });
+            .on('transactionHash', (res:any) => { 
+              txHash = res;
+
+              const tx ={
+                'hash': txHash ,
+                'distributor': 'nexus',
+                'premium': _maxPriceWithFee,
+                'productId': _contractAddress,
+                'amount': _sumAssured,
+                'currency': _coverAsset,
+                'period': _coverPeriod
+              }
+    
+              isProdNet(global.user.networkId) ? TxEvents.onTxHash(tx) : null;
+              resolve({success:res});
+             })
+            .on('error', (err:any, receipt:any) => { reject( {error: err, receipt:receipt}) })
+            .on('confirmation', (confirmationNumber:any) => {
+              if (confirmationNumber === 0) {
+                isProdNet(global.user.networkId) ? TxEvents.onTxHash(txHash) : null;
+                console.info('TX_CONFIRMED')
+              }
+            });
           });
         } else { // if not Ethereum Mainnet
           return await new Promise( async (resolve, reject) => {
             const nexusAddress = await _getDistributorsContract().methods.getDistributorAddress('nexus').call();
-
-            console.log('calling nexus to', nexusAddress);
-
             _getNexusDistributorsContract(nexusAddress) // Nexus Call through Bright Protocol Distributors Layer
             .methods.buyCover(
               _contractAddress,
@@ -80,15 +95,34 @@ export async function buyCover(
               _maxPriceWithFee,
               _data,
             ).send({ from: _ownerAddress, value: sendValue })
-            .on('transactionHash', (res:any) => { resolve({success:res}); })
-            .on('error', (err:any, receipt:any) => { reject( {error: err, receipt:receipt}) });
+            .on('transactionHash', (res:any) => { 
+              txHash = res;
+
+                const tx ={
+                  'hash': txHash ,
+                  'distributor': 'nexus',
+                  'premium': _maxPriceWithFee,
+                  'productId': _contractAddress,
+                  'amount': _sumAssured,
+                  'currency': _coverAsset,
+                  'period': _coverPeriod
+                }
+      
+                isProdNet(global.user.networkId) ? TxEvents.onTxHash(tx) : null;
+                resolve({success:res}); 
+            })
+            .on('error', (err:any, receipt:any) => { reject( {error: err, receipt:receipt}) })
+            .on('confirmation', (confirmationNumber:any) => {
+              if (confirmationNumber === 0) {
+                isProdNet(global.user.networkId) ? TxEvents.onTxHash(txHash) : null;
+                console.info('TX_CONFIRMED')
+              }
+            });
           });
         }
         
   } else if(_distributorName == 'bridge'){
-
     const  bookContract = _getBridgePolicyBookContract(_contractAddress, global.user.web3 );
-
     // convert period from days to bridge epochs (weeks)
     let epochs = Math.min(52, Math.ceil(_coverPeriod / 7));
 
@@ -96,15 +130,31 @@ export async function buyCover(
       bookContract.methods.buyPolicy( epochs, _sumAssured )
       .send({from: global.user.account})
       .on('transactionHash', (transactionHash:any) => {
+
+        txHash = transactionHash;
+        const tx ={
+          'hash': txHash ,
+          'distributor': 'bridge',
+          'amount': _sumAssured,
+          'productId': _contractAddress,
+          'period': epochs,
+          'currency':'USDT'
+        }
+
+        isProdNet(global.user.networkId) ? TxEvents.onTxHash(tx) : null;
         resolve({success: transactionHash});
       })
       .on('error', (err:any, receipt:any) => {
         reject( {error: err, receipt:receipt})
       })
-    })
-
+      .on('confirmation', (confirmationNumber:any) => {
+        if (confirmationNumber === 0) {
+          isProdNet(global.user.networkId) ? TxEvents.onTxHash(txHash) : null;
+          console.info('TX_CONFIRMED')
+        }
+      });
+    });
   }
-
 }
 
 
@@ -129,16 +179,14 @@ export async function buyCover(
 */
 
 export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency:boolean) {
-  console.log('calling buyCoverInsurace...');
 
   let insuraceAddress :any;
   const sendValue = buyingWithNetworkCurrency ? buyingObj.premium : 0;
+  let txHash : any;
 
   // If mainnet call Distributor Directly
   if(global.user.networkId === 1 ){ 
     insuraceAddress = NetConfig.netById(1).insuraceCover;
-    console.log('calling insurace to', insuraceAddress);
-
     return await new Promise((resolve, reject) => {
       _getInsuraceDistributor(insuraceAddress)
       .methods
@@ -155,13 +203,31 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
                   buyingObj.v,
                   buyingObj.r,
                   buyingObj.s
-      )
+               )
       .send({ from: buyingObj.owner, value: sendValue})
       .on('transactionHash', (res:any) => {
+        txHash = res;
+        const tx ={
+          'hash': txHash ,
+          'distributor': 'insurace',
+          'premium': buyingObj.premium ,
+          'productId': buyingObj.products[0],
+          'amount': buyingObj.amounts[0],
+          'currency': buyingObj.currency,
+          'period':buyingObj.durationInDays
+        }
+
+        isProdNet(global.user.networkId) ? TxEvents.onTxHash(tx) : null;
         resolve({success: res});
       })
       .on('error', (err:any, receipt:any) => {
         reject({error: err , receipt:receipt})
+      })
+      .on('confirmation', (confirmationNumber:any) => {
+        if (confirmationNumber === 0) {
+          isProdNet(global.user.networkId) ? TxEvents.onTxHash(txHash) : null;
+          console.info('TX_CONFIRMED')
+        }
       });
     });
  
@@ -169,21 +235,46 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
   } else {
     insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();
     console.log('calling insurace to', insuraceAddress);
-
     return await new Promise((resolve, reject) => {
       _getInsuraceDistributorsContract(insuraceAddress)
       .methods
       .buyCoverInsurace(buyingObj)
       .send({ from: buyingObj.owner, value: sendValue })
       .on('transactionHash', (res:any) => {
+
+        txHash = res;
+
+        const tx ={
+          'hash': txHash ,
+          'distributor': 'insurace',
+          'premium': buyingObj.premium ,
+          'productId': buyingObj.products[0],
+          'amount': buyingObj.amounts[0],
+          'currency': buyingObj.currency,
+          'period':buyingObj.durationInDays
+        }
+
+        isProdNet(global.user.networkId) ? TxEvents.onTxHash(tx) : null;
         resolve({success: res});
       })
       .on('error', (err:any, receipt:any) => {
         reject({error: err , receipt:receipt})
+      }) 
+      .on('confirmation', (confirmationNumber:any) => {
+        if (confirmationNumber === 0) {
+          isProdNet(global.user.networkId)?TxEvents.onTxConfirmation(txHash) :null;
+          console.info('TX_CONFIRMED')
+        }
       });
     });
   }
 
+}
+
+
+const isProdNet = (net:number)  =>{
+  if ([1,56,137].includes(net)) return true;
+  return false;
 }
 
 export default {
