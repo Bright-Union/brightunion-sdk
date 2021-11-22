@@ -23,6 +23,40 @@ A swagger API documentation can be found [here](http://api.brightunion.io/protoc
 ```javascript
 npm install @brightunion/sdk
 ```
+# Available methods
+
+### Get the full catalog from all out distributors
+```
+getCatalog()
+```
+
+### Get total cover count from address around all our distributors
+````
+getCoverCountFrom(< walletAddress >)
+````
+
+
+### Get all the covers details from account around all distributors
+```
+getCoversFrom(< WalletAddress >)
+```
+
+### Get quotes from distributor
+```
+getQuotes( amount, currency, period, productId)
+```
+
+
+
+### Get specific quote from distributor 
+```
+getQuoteFrom( distributorName, amount, currency, period, productId)
+```
+
+### Buy previously queried quote
+```
+buyQuote(< preExistingQuote>)
+```
 
 ## Basic Use
 
