@@ -25,7 +25,7 @@ npm install @brightunion/sdk
 ```
 # Available methods
 
-### Get the full catalog from all out distributors
+### Get the full catalog from all our distributors
 ```
 getCatalog()
 ```
