@@ -10,7 +10,7 @@
     
     const web3 = new Web3(provider);
 
-    const brightClient = new BrightClient({web3: web3.web3Active.web3Instance});
+    const brightClient = new BrightClient({web3: web3});
 
      await brightClient.initialize();
 
