@@ -7,6 +7,7 @@
     * Init web3 BSC
     */
     const provider = await detectEthereumProvider();
+    await  provider.request({ method: 'eth_requestAccounts' })
     
     const web3 = new Web3(provider);
 
