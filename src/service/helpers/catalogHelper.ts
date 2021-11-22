@@ -115,6 +115,21 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
 
 class CatalogHelper {
 
+
+  public static coverFromData (_distributorName:string, _rawData:any ) {
+    return{
+      // contractName: web3.web3Instance.utils.hexToUtf8(prodDetails['0']),
+      // risk_protocol: 'insurace',
+      // logo: require('@/assets/img/insurace.svg'),
+      // coverType: web3.web3Instance.utils.hexToUtf8(prodDetails['1']),
+      // coverAmount: amount,
+      // coverAsset: currency,
+      // endTime: expiration,
+      // status: status,
+      // net: web3.networkId
+    }
+  }
+
   public static quoteFromCoverable (_distributorName:string, _coverable:any, obj:any, stats:object) {
     return {
       distributorName: _distributorName,

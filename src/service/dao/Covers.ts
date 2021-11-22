@@ -1,5 +1,7 @@
+import NetConfig from "../config/NetConfig";
 import Cover from "../domain/Cover";
-import {_getDistributorsContract} from "../helpers/getContract";
+import {_getDistributorsContract, _getInsuraceDistributor, _getInsurAceCoverDataContract, _getInsurAceProductContract} from "../helpers/getContract";
+import {hexToUtf8} from 'web3-utils';
 
 /**
  * Returns the total cover count owned by an address
@@ -49,19 +51,93 @@ export async function getCovers(
     _limit : number,
 ) : Promise<any[]>  {
 
-  return await _getDistributorsContract()
-        .methods
-        .getCovers(
-          _distributorName,
-          _ownerAddress,
-          _activeCover,
-          _limit,
-        ).call().then((_data:any) => {
-          return _data;
-        });
+  if(!global.user.networkId){//block for now
+
+    if(_distributorName == "insurace"){
+      return await getCoversInsurace();
+    }else if(_distributorName == 'bridge'){
+      return await getCoversBridge();
+    }else if(_distributorName == 'nexus'){
+      return await getCoversNexus();
+    }
+
+  }else{
+
+    return await _getDistributorsContract()
+    .methods
+    .getCovers(
+      _distributorName,
+      _ownerAddress,
+      _activeCover,
+      _limit,
+    ).call().then((_data:any) => {
+      return _data;
+    });
+
+  }
+
+}
+
+export async function getCoversNexus():Promise<any>{
+
+  console.log("getCoversNexus");
+
+  return [];
+}
+
+export async function getCoversInsurace():Promise<any>{
+
+  console.log("getCoversInsurace");
+
+  const insuraceCoverInstance = await  _getInsuraceDistributor(NetConfig.netById(global.user.networkId).insuraceCover);
+  const coverDataAddress = await insuraceCoverInstance.methods.data().call();
+  const coverDataInstance = await _getInsurAceCoverDataContract(coverDataAddress);
+  const count =  await coverDataInstance.methods.getCoverCount(global.user.account).call();
+
+  let allCovers:any = [];
+
+  for (let coverId = 1; coverId <= Number(count); coverId++) {
+
+    const expirationP = coverDataInstance.methods.getCoverEndTimestamp(global.user.account, coverId.toString()).call();
+    const amountP =  coverDataInstance.methods.getCoverAmount(global.user.account, coverId.toString());
+    const currencyP =   coverDataInstance.methods.getCoverCurrency(global.user.account, coverId.toString()).call();
+    const statusP =  coverDataInstance.methods.getAdjustedCoverStatus(global.user.account, coverId.toString()).call();
+
+    const productId = await coverDataInstance.methods.getCoverProductId(global.user.account, coverId.toString()).call();
+    const productAddress =  await insuraceCoverInstance.methods.product().call();
+    const product =  await  _getInsurAceProductContract(productAddress);
+    const prodDetailsP =  product.methods.getProductDetails(productId).call()
+
+    let coverDataPromises = [expirationP, amountP, currencyP, statusP, prodDetailsP];
+
+    Promise.all(coverDataPromises).then((_data:any) => {
+
+      const [expiration, amount, currency, status, prodDetails] = _data;
+
+      allCovers.push(
+        {
+          risk_protocol: 'insurace',
+          contractName: hexToUtf8(prodDetails['0']),
+          logo: '',
+          coverType: hexToUtf8(prodDetails['1']),
+          coverAmount: amount,
+          coverAsset: currency,
+          endTime: expiration,
+          status: status,
+          net: global.user.networkId,
+          rawData: prodDetails,
+        }
+      )
+
+    });
+
+  }
+
+  return allCovers;
 }
 
 export async function getCoversBridge():Promise<any>{
+  console.log("getCoversBridge");
   return [];
 }
 

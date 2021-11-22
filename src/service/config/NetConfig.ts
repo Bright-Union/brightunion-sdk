@@ -249,6 +249,8 @@ class NetConfig{
   public static sixDecimalsCurrency(networkId : any, symbol : any) {
     if (this.netById(networkId).symbol === 'ETH' && symbol === 'USDT') {
       return true;
+    } else if (this.netById(networkId).symbol === 'ETH' && symbol === 'USDC') {
+      return true;
     } else if (this.netById(networkId).symbol === 'POLYGON' && symbol === 'USDT') {
       return true;
     } else if (this.netById(networkId).symbol === 'POLYGON' && symbol === 'USDC') {

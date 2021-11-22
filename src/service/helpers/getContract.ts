@@ -3,6 +3,8 @@ import IERC20ABI from '../abi/IERC20.json';
 
 import InsuraceDistributorABI from '../abi/insurace/InsuraceDistributor.json';
 import ICoverABI from '../abi/insurace/ICover.json';
+import InsuraceCoverDataABI from '../abi/insurace/ICoverData.json';
+import InsuraceProductABI from '../abi/insurace/IProduct.json';
 
 import NexusDistributorABI from '../abi/nexus/NexusDistributor.json';
 import DistributorNexusABI from '../abi/nexus/Distributor.json';
@@ -17,7 +19,7 @@ import { StringChain } from 'lodash';
 
 
 /**
- *    "Distributors" 
+ *    "Distributors"
  *    Get Contracts from Bright Union Protocol
  *  */
 function _getDistributorsContract() : any {
@@ -40,10 +42,16 @@ function _getInsuraceDistributorsContract(address:string) : any {
   return new web3.eth.Contract(distAbi, address );
 }
 
+function _getInsurAceProductContract(address:string) : any {
+  const web3:any = global.user.web3;
+  const distAbi:any = InsuraceProductABI.abi;
+
+  return new web3.eth.Contract(distAbi, address );
+}
 
 /**
- * 
- *  Direct Call to Distributors Contracts 
+ *
+ *  Direct Call to Distributors Contracts
  *  "without BU protocol Layer"
  */
 function _getNexusDistributor(address:string) : any {
@@ -55,6 +63,12 @@ function _getNexusDistributor(address:string) : any {
 function _getInsuraceDistributor(address:string) : any {
   const web3:any = global.user.web3;
   const distAbi:any = ICoverABI.abi;
+  return new web3.eth.Contract(distAbi, address );
+}
+
+function _getInsurAceCoverDataContract(address:string) : any {
+  const web3:any = global.user.web3;
+  const distAbi:any = InsuraceCoverDataABI.abi;
   return new web3.eth.Contract(distAbi, address );
 }
 
@@ -82,6 +96,8 @@ export  {
     _getBridgePolicyRegistryContract,
     _getInsuraceDistributorsContract,
     _getInsuraceDistributor,
+    _getInsurAceCoverDataContract,
+    _getInsurAceProductContract,
     _getNexusDistributorsContract,
     _getNexusDistributor
 } ;
