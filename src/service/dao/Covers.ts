@@ -99,14 +99,14 @@ export async function getCoversInsurace():Promise<any>{
   for (let coverId = 1; coverId <= Number(count); coverId++) {
 
     const expirationP = coverDataInstance.methods.getCoverEndTimestamp(global.user.account, coverId.toString()).call();
-    const amountP =  coverDataInstance.methods.getCoverAmount(global.user.account, coverId.toString());
+    const amountP =  coverDataInstance.methods.getCoverAmount(global.user.account, coverId.toString()).call();
     const currencyP =   coverDataInstance.methods.getCoverCurrency(global.user.account, coverId.toString()).call();
     const statusP =  coverDataInstance.methods.getAdjustedCoverStatus(global.user.account, coverId.toString()).call();
 
     const productId = await coverDataInstance.methods.getCoverProductId(global.user.account, coverId.toString()).call();
     const productAddress =  await insuraceCoverInstance.methods.product().call();
     const product =  await  _getInsurAceProductContract(productAddress);
-    const prodDetailsP =  product.methods.getProductDetails(productId).call()
+    const prodDetailsP =  product.methods.getProductDetails(productId).call();
 
     let coverDataPromises = [expirationP, amountP, currencyP, statusP, prodDetailsP];
 
