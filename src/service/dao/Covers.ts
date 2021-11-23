@@ -20,15 +20,23 @@ export async function getCoversCount(
     _isActive : boolean
 ): Promise<number>  {
 
-  return await _getDistributorsContract()
-         .methods
-         .getCoversCount(
-           _distributorName,
-           _ownerAddress,
-           _isActive)
-         .call().then((_data:any) => {
-           return _data;
-         });
+  if(global.user.networkId == 1){
+
+    console.log("getCount COVERS on MAIN NET - SDK");
+
+  }else{
+
+    return await _getDistributorsContract()
+    .methods
+    .getCoversCount(
+      _distributorName,
+      _ownerAddress,
+      _isActive)
+      .call().then((_data:any) => {
+        return _data;
+      });
+  }
+
 }
 
 /**
@@ -45,16 +53,17 @@ export async function getCoversCount(
  * @returns Cover Object
  */
 export async function getCovers(
-    _distributorName : string,
-    _ownerAddress : string,
-    _activeCover : boolean,
-    _limit : number,
+  _web3 : any,
+  _distributorName : string,
+  _ownerAddress : string,
+  _activeCover : boolean,
+  _limit : number,
 ) : Promise<any[]>  {
 
-  if(global.user.networkId){
+  if( _web3 || global.user.networkId ){ // global.user.networkId == 1
 
     if(_distributorName == "insurace"){
-      return await getCoversInsurace();
+      return await getCoversInsurace(_web3);
     }else if(_distributorName == 'bridge'){
       return await getCoversBridge();
     }else if(_distributorName == 'nexus'){
@@ -80,28 +89,78 @@ export async function getCovers(
 
 export async function getCoversNexus():Promise<any>{
 
+  // state.nexusDistributorContract().methods.balanceOf(ethereum.coinbase).call().then(async (count) => {
+  //       let covers = [];
+  //       //fetch covers bought from Nexus Distributor
+  //       for (let i = 0; i < Number(count); i++) {
+  //         const tokenId = await state.nexusDistributorContract().methods.tokenOfOwnerByIndex(ethereum.coinbase, i).call();
+  //         const cover = await state.nexusDistributorContract().methods.getCover(tokenId).call();
+  //         cover.id = tokenId;
+  //         cover.source = 'distributor';
+  //         cover.risk_protocol = 'nexus';
+  //         cover.logo = cover.logo || require('@/assets/img/nexus.png');
+  //         cover.net = ethereum.networkId;
+  //         covers.push(cover)
+  //       }
+  //
+  //       //fetch covers bought from Nexus directly
+  //       const coverIds = await state.nexusQuotationContract().methods.getAllCoversOfUser(ethereum.coinbase).call();
+  //       for (const coverId of coverIds) {
+  //         try {
+  //           const cover = await state.nexusGatewayContract().methods.getCover(coverId).call();
+  //           cover.id = coverId;
+  //           cover.source = 'nexus';
+  //           cover.risk_protocol = 'nexus';
+  //           cover.logo = cover.logo || require('@/assets/img/nexus.png')
+  //           cover.net = ethereum.networkId;
+  //           covers.push(cover)
+  //         } catch (e) {
+  //           //ignore this cover
+  //         }
+  //       }
+  //
+  //       const coverToClaim = {};
+  //       if (covers.length > 0) {
+  //         //collect all claims for distributor AND user
+  //         const claimsByDistributor = await state.nexusClaimsDataContract().methods.getAllClaimsByAddress(state.nexusDistributorContract().options.address).call();
+  //         const claimsByUser = await state.nexusClaimsDataContract().methods.getAllClaimsByAddress(ethereum.coinbase).call();
+  //         const claims = claimsByDistributor.concat(claimsByUser);
+  //         for (let i = 0; i < claims.length; i++) {
+  //           let coverId = await state.nexusGatewayContract().methods.getClaimCoverId(claims[i]).call();
+  //           coverToClaim[coverId] = claims[i];
+  //         }
+  //       }
+  //       //update each with own claim (if any)
+  //       for (let i = 0; i < covers.length; i++) {
+  //         if (coverToClaim[covers[i].id]) {
+  //           covers[i].claimId = coverToClaim[covers[i].id];
+  //         }
+  //       }
+  //       commit('activeCovers', {provider: 'nexus', covers: covers});
+  //     });
+
   console.log("getCoversNexus");
 
   return [];
 }
 
-export async function getCoversInsurace():Promise<any>{
+export async function getCoversInsurace(_web3:any):Promise<any>{
 
-  const insuraceCoverInstance = await  _getInsuraceDistributor(NetConfig.netById(global.user.networkId).insuraceCover);
+  const insuraceCoverInstance = await  _getInsuraceDistributor(NetConfig.netById(_web3.networkId).insuraceCover);
   const coverDataAddress = await insuraceCoverInstance.methods.data().call();
   const coverDataInstance = await _getInsurAceCoverDataContract(coverDataAddress);
-  const count =  await coverDataInstance.methods.getCoverCount(global.user.account).call();
+  const count =  await coverDataInstance.methods.getCoverCount(_web3.account).call();
 
   let allCovers:any = [];
 
   for (let coverId = 1; coverId <= Number(count); coverId++) {
 
-    const expirationP = coverDataInstance.methods.getCoverEndTimestamp(global.user.account, coverId.toString()).call();
-    const amountP =  coverDataInstance.methods.getCoverAmount(global.user.account, coverId.toString()).call();
-    const currencyP =   coverDataInstance.methods.getCoverCurrency(global.user.account, coverId.toString()).call();
-    const statusP =  coverDataInstance.methods.getAdjustedCoverStatus(global.user.account, coverId.toString()).call();
+    const expirationP = coverDataInstance.methods.getCoverEndTimestamp(_web3.account, coverId.toString()).call();
+    const amountP =  coverDataInstance.methods.getCoverAmount(_web3.account, coverId.toString()).call();
+    const currencyP =   coverDataInstance.methods.getCoverCurrency(_web3.account, coverId.toString()).call();
+    const statusP =  coverDataInstance.methods.getAdjustedCoverStatus(_web3.account, coverId.toString()).call();
 
-    const productId = await coverDataInstance.methods.getCoverProductId(global.user.account, coverId.toString()).call();
+    const productId = await coverDataInstance.methods.getCoverProductId(_web3.account, coverId.toString()).call();
     const productAddress =  await insuraceCoverInstance.methods.product().call();
     const product =  await  _getInsurAceProductContract(productAddress);
     const prodDetailsP =  product.methods.getProductDetails(productId).call();
@@ -122,7 +181,7 @@ export async function getCoversInsurace():Promise<any>{
           coverAsset: currency,
           endTime: expiration,
           status: status,
-          net: global.user.networkId,
+          net: _web3.networkId,
           rawData: prodDetails,
         }
       )
@@ -135,12 +194,69 @@ export async function getCoversInsurace():Promise<any>{
 }
 
 export async function getCoversBridge():Promise<any>{
+
+
+  // state.bridgeRegistryContract().methods.getPolicyRegistryContract().call().then(policyRegistryAddr => {
+  //       getBridgePolicyRegistryContract(policyRegistryAddr, ethereum.web3Instance).then(policyRegistry => {
+  //         policyRegistry.methods.getPoliciesLength(ethereum.coinbase).call().then(nPolicies => {
+  //           policyRegistry.methods.getPoliciesInfo(ethereum.coinbase, true, 0, nPolicies).call().then(async activeInfos => {
+  //             policyRegistry.methods.getPoliciesInfo(ethereum.coinbase, false, 0, nPolicies).call().then(async expiredInfos => {
+  //               // merge the arrays from both sets
+  //               let mergedPolicyInfos = activeInfos._policies.concat(expiredInfos._policies);
+  //               let mergedPolicyBooks = activeInfos._policyBooksArr.concat(expiredInfos._policyBooksArr);
+  //               let mergedPolicyStatuses = activeInfos._policyStatuses.concat(expiredInfos._policyStatuses);
+  //               let policies = []
+  //
+  //               let limit = parseInt(nPolicies);
+  //               for (let i = 0; i < limit; i++) {
+  //                 let info = mergedPolicyInfos[i];
+  //                 let policyBookAddress = mergedPolicyBooks[i];
+  //                 if (policyBookAddress === zeroAddress) {
+  //                   //Bridge BUG, means no actual policy info
+  //                   limit++;
+  //                   continue;
+  //                 }
+  //                 let policyBook = await getBridgePolicyBookContract(policyBookAddress, ethereum.web3Instance);
+  //                 let policyBookinfo = await policyBook.methods.info().call();
+  //                 let claimStatus = mergedPolicyStatuses[i];
+  //
+  //                 let asset = state.trustWalletAssets[Object.keys(state.trustWalletAssets)
+  //                     .find(key => key.toLowerCase() === policyBookinfo._insuredContract.toLowerCase())];
+  //                 let logo = asset ? asset.logoURI : require('@/assets/img/bridge.svg')
+  //                 let name = asset ? asset.name : policyBookinfo._symbol
+  //
+  //                 let cover = {
+  //                   risk_protocol: 'bridge',
+  //                   policyBookAddr: policyBookAddress,
+  //                   status: claimStatus,
+  //                   coverAmount: info.coverAmount,
+  //                   endTime: info.endTime,
+  //                   premium: info.premium,
+  //                   startTime: info.startTime,
+  //                   name: name,
+  //                   logo: logo,
+  //                   net: ethereum.networkId
+  //                 }
+  //
+  //                 policies.push(cover)
+  //               }
+  //               commit('activeCovers', {provider: 'bridge', covers: policies});
+  //             });
+  //           });
+  //         });
+  //       });
+  //     });
+
   console.log("getCoversBridge");
+
+
   return [];
 }
 
 
 export async function getCoversCountBridge():Promise<any>{
+
+
   return [];
 }
 

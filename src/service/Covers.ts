@@ -11,7 +11,7 @@ export async function getCoversFrom(
     if(_distributorName == 'bridge'){
       return getBridgeCovers();
     }else if(_distributorName == "insurace"){
-      return getInsuraceCovers();
+      return getInsuraceCovers(global.user.web3);
     }else if(_distributorName == "nexus"){
       return getNexusCovers();
     }else{
@@ -27,9 +27,14 @@ export async function getAllCovers(
 
   const coversPromiseArray:any[] = [];
 
-  coversPromiseArray.push(getInsuraceCovers())
+  coversPromiseArray.push(getInsuraceCovers(global.user.web3))
   coversPromiseArray.push(getNexusCovers())
   coversPromiseArray.push(getBridgeCovers())
+
+
+  for (let net of global.user.web3Passive) {
+    coversPromiseArray.push( getInsuraceCovers(net))
+  }
 
   return Promise.all(coversPromiseArray)
   .then((_data: any) => {
@@ -48,19 +53,32 @@ export async function getAllCovers(
 
 export  function getBridgeCovers(): Promise<any[]> {
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL')) {
-    return  getCovers('bridge' , global.user.account , false, 50);
+    return  getCovers(null, 'bridge' , global.user.account , false, 50);
   }
 }
 
 export  function getNexusCovers(): Promise<any[]> {
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL')) {
-    return  getCovers('nexus' , global.user.account , false, 50);
+    return  getCovers( null, 'nexus' , global.user.account , false, 50);
   }
 }
 
-export  function getInsuraceCovers() : Promise<any[]> {
-  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE')) {
-    return  getCovers('insurace' , global.user.account , false, 50);
+export  function getInsuraceCovers(_web3:any) : Promise<any[]> {
+
+  if(!_web3.networkId){ // if not passive net
+    const newWeb3Instance = {
+        account: global.user.account,
+        networkId: global.user.networkId,
+        symbol: NetConfig.netById(global.user.networkId).symbol,
+        web3Instance: _web3,
+        readOnly: false,
+      }
+      _web3 = newWeb3Instance;
+  }
+
+  if (CatalogHelper.availableOnNetwork(_web3.networkId, 'INSURACE')) {
+    console.log("getCovers Insurace - " , _web3.networkId);
+    return  getCovers(_web3, 'insurace' , _web3.account , false, 50);
   }
 }
 
@@ -70,7 +88,7 @@ export async function getAllCoversCount(
 
   const coversPromiseArray:any[] = [];
 
-  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL')) {
+  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL' )) {
     coversPromiseArray.push(getCoversCount('nexus', global.user.account, false))
   }
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE')) {
