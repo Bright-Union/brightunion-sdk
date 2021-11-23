@@ -31,10 +31,11 @@ export async function getAllCovers(
   coversPromiseArray.push(getNexusCovers())
   coversPromiseArray.push(getBridgeCovers())
 
-
-  for (let net of global.user.web3Passive) {
-    coversPromiseArray.push( getInsuraceCovers(net))
-  }
+  // console.log("global.user.web3Passive - " , global.user.web3Passive);
+  // for (let net of global.user.web3Passive) {
+  //   console.log("net");
+  //   coversPromiseArray.push( getInsuraceCovers(net))
+  // }
 
   return Promise.all(coversPromiseArray)
   .then((_data: any) => {
@@ -77,7 +78,6 @@ export  function getInsuraceCovers(_web3:any) : Promise<any[]> {
   }
 
   if (CatalogHelper.availableOnNetwork(_web3.networkId, 'INSURACE')) {
-    console.log("getCovers Insurace - " , _web3.networkId);
     return  getCovers(_web3, 'insurace' , _web3.account , false, 50);
   }
 }
