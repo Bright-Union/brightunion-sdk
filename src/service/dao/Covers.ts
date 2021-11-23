@@ -51,8 +51,6 @@ export async function getCovers(
     _limit : number,
 ) : Promise<any[]>  {
 
-  console.log("global.user.networkId - - - " , global.user.networkId);
-
   if(global.user.networkId){
 
     if(_distributorName == "insurace"){
