@@ -2,8 +2,24 @@
 // import NexusApi  from '@/service/distributorsApi/NexusApi';
 
 import NetConfig from './config/NetConfig';
-import {getCovers, getCoversCount, getCoversCountBridge, getCoversBridge} from './dao/Covers'
+import {getCovers, getCoversCount} from './dao/Covers'
 import CatalogHelper from './helpers/catalogHelper'
+
+export async function getCoversFrom(
+  _distributorName:string
+): Promise<any> {
+    if(_distributorName == 'bridge'){
+      return getBridgeCovers();
+    }else if(_distributorName == "insurace"){
+      return getInsuraceCovers();
+    }else if(_distributorName == "nexus"){
+      return getNexusCovers();
+    }else{
+      return { error: "Wrong distributor name" }
+    }
+
+}
+
 
 export async function getAllCovers(
 
@@ -33,7 +49,6 @@ export async function getAllCovers(
 export  function getBridgeCovers(): Promise<any[]> {
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL')) {
     return  getCovers('bridge' , global.user.account , false, 50);
-    // return  getCoversBridge();
   }
 }
 
@@ -86,5 +101,6 @@ export async function getAllCoversCount(
 
 export default {
   getAllCovers,
-  getAllCoversCount
+  getAllCoversCount,
+  getCoversFrom
 }

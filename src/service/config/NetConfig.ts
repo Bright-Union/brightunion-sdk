@@ -71,7 +71,8 @@ const VUE_APP_MUMBAI_TESTNET_MODULES='INSURACE'
         nexusAPI: 'https://api.nexusmutual.io',                 //not used
         brightProtocol:'0x908DDB24Ea9f1abc9B2cD2be8114b01EE5Ff76b2',
         brightContractRegistry: '',                             //not used
-        insuraceCover: "0x908DDB24Ea9f1abc9B2cD2be8114b01EE5Ff76b2" , //'0x0921f628b8463227615D2199D0D3860E4fBcD411',
+        insuraceCover: "0x0921f628b8463227615D2199D0D3860E4fBcD411" ,
+        // insuraceCover: "0x908DDB24Ea9f1abc9B2cD2be8114b01EE5Ff76b2" ,
         insuraceAPI: 'https://insurace-sl-microservice.azurewebsites.net',
         insuraceAPIKey: 'OmgwnM39a/M9/9Q856wbRkILcYh2ZmlJPpG9cVxT5Vy6aR8eNl3/jw==',
         insuraceReferral: '',
@@ -117,7 +118,8 @@ const VUE_APP_MUMBAI_TESTNET_MODULES='INSURACE'
         nexusAPI: '',
         brightProtocol:'0xe457d4be112ca8b14bd9fedebae48037c11366ea',
         brightContractRegistry: '',
-        insuraceCover: '0xB96eB892fc5fAC87ffE4f4F6eB509Eeaf6019243',
+        insuraceCover: '0xfBa24bdbb36001F1F88B3a552c77EC1c10f5E4C0',
+        // insuraceCover: '0xB96eB892fc5fAC87ffE4f4F6eB509Eeaf6019243',
         insuraceAPI: 'https://api.insurace.io/ops/v1',
         insuraceAPIKey: 'H7C8k69Eiisz7AG1/6xcI5UWGluTtyAbizXrsfbfQIBDapQZEHAHFw==',
         insuraceReferral: '982107115070280393099561761653261738634756834311',

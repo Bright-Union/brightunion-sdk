@@ -46,8 +46,8 @@ describe('Get Owners Covers', () => {
     const result = await instance.getCoversFrom(
         distributorName,
         // '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2',
-        false,
-        20
+        // false,
+        // 20
     );
     console.log('COVERS - ' , result)
     expect(result).to.be.a('array');

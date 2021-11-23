@@ -51,7 +51,9 @@ export async function getCovers(
     _limit : number,
 ) : Promise<any[]>  {
 
-  if(!global.user.networkId){//block for now
+  console.log("global.user.networkId - - - " , global.user.networkId);
+
+  if(global.user.networkId){
 
     if(_distributorName == "insurace"){
       return await getCoversInsurace();
@@ -87,8 +89,6 @@ export async function getCoversNexus():Promise<any>{
 
 export async function getCoversInsurace():Promise<any>{
 
-  console.log("getCoversInsurace");
-
   const insuraceCoverInstance = await  _getInsuraceDistributor(NetConfig.netById(global.user.networkId).insuraceCover);
   const coverDataAddress = await insuraceCoverInstance.methods.data().call();
   const coverDataInstance = await _getInsurAceCoverDataContract(coverDataAddress);
@@ -110,7 +110,7 @@ export async function getCoversInsurace():Promise<any>{
 
     let coverDataPromises = [expirationP, amountP, currencyP, statusP, prodDetailsP];
 
-    Promise.all(coverDataPromises).then((_data:any) => {
+    await  Promise.all(coverDataPromises).then((_data:any) => {
 
       const [expiration, amount, currency, status, prodDetails] = _data;
 
@@ -149,6 +149,4 @@ export async function getCoversCountBridge():Promise<any>{
 export default {
    getCovers,
    getCoversCount,
-   getCoversCountBridge,
-   getCoversBridge
 }
