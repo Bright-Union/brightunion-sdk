@@ -29,6 +29,7 @@ class BrightClient {
 
 catalog: object[];
 catalogUnsorted: object[];
+initialized:boolean;
 
 constructor(_config:any) {
     global.user = {
@@ -38,6 +39,7 @@ constructor(_config:any) {
       brightProtoAddress: _config.brightProtoAddress,
       account: _config.account,
     };
+    this.initialized = false;
   }
 
   // Future structure?
@@ -64,10 +66,20 @@ async initialize(): Promise<object>{
       global.user.web3Passive = NetConfig.createWeb3Passives();
       await CurrencyHelper.getETHDAIPrice();
       await CurrencyHelper.getInsureUSDCPrice();
-      return {status: true, message: 'Bright Union Initialized'};
+      this.initialized = true;
+      return {initialized: this.initialized, message: 'Bright Union Initialized'};
+  }
+
+  initErrorResponse () {
+    return {error: "Await Initialization of BrightClient before calling other methods."}
   }
 
 async getCatalog () {
+
+  if(!this.initialized){
+    return this.initErrorResponse();
+  }
+
      return await getCatalog().then(data => {
       this.catalog = data.sorted;
       this.catalogUnsorted = data.unSorted;
@@ -86,6 +98,9 @@ async getDistributorAddress (
 
 async getAllCovers(
 ){
+  if(!this.initialized){
+    return this.initErrorResponse();
+  }
   return await getAllCovers()
 }
 

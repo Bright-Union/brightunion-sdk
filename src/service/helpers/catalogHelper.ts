@@ -337,7 +337,10 @@ class CatalogHelper {
         }
 
         static availableOnNetwork(networkId:number, module:string) {
-
+          // console.log("availableOnNetwork - " , networkId)
+          if(!networkId){
+            return '';
+          }
           return NetConfig.netById(networkId).modules.find(mod => mod === module);
         }
 
