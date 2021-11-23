@@ -279,6 +279,9 @@ class NetConfig{
 
   // Cannot buy De-peg bundles with testnet tokens
   public static insuraceDePegTestCurrency(protocol:any,currency:any,web3Symbol:any,selectedCurrency:any) : any {
+    if(!protocol.name){
+      return [currency,selectedCurrency]
+    }
     if(currency !== 'ETH' && protocol.name.includes('De-Peg')){
       switch(web3Symbol){
         case "ETH": selectedCurrency.address = this.netById(1)['USDC']; break;
