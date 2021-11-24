@@ -31,6 +31,8 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
  */
 export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
 
+  global.events.emit("buy_quote" , { status: "INIT" } );
+
   const chainSymbol:string  = NetConfig.netById(global.user.networkId).symbol;
 
   // Confirm insurace quoted premium & get security signature params to buy
@@ -41,7 +43,7 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
 
   // Check for user ETH balance
   const netBalance = await global.user.web3.eth.getBalance(global.user.account);
-  
+
   let insuraceAddress :any;
   if(global.user.networkId === 1 ){ insuraceAddress = NetConfig.netById(1).insuraceCover; }
   else { insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();}
@@ -74,6 +76,7 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
         buyingObj.premium,
         () => {
           console.log('SHOW_CONFIRMATION_WAITING', {msg: `(1/3) Resetting USDT allowance to 0`});
+          global.events.emit("buy_quote" , { status: "SHOW_CONFIRMATION_WAITING" } );
         },
         () => {
           buyingObj.premium = Number(ERC20Helper.ERCtoUSDTDecimals(buyingObj.premium))

@@ -45,7 +45,7 @@ export async function buyCover(
   let txHash : any;
   if(_distributorName == 'nexus'){
     const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
-        if(global.user.networkId === 1 ){ 
+        if(global.user.networkId === 1 ){
           return await new Promise((resolve, reject) => {
             const nexusAddress = NetConfig.netById(1).nexusDistributor;
             _getNexusDistributor(nexusAddress) // Direct Call to Nexus Contract
@@ -58,7 +58,7 @@ export async function buyCover(
               _maxPriceWithFee,
               _data,
             ).send({ from: _ownerAddress, value: sendValue })
-            .on('transactionHash', (res:any) => { 
+            .on('transactionHash', (res:any) => {
               txHash = res;
 
               const tx ={
@@ -70,7 +70,7 @@ export async function buyCover(
                 'currency': _coverAsset,
                 'period': _coverPeriod
               }
-    
+
               isProdNet(global.user.networkId) ? TxEvents.onTxHash(tx) : null;
               resolve({success:res});
              })
@@ -95,7 +95,7 @@ export async function buyCover(
               _maxPriceWithFee,
               _data,
             ).send({ from: _ownerAddress, value: sendValue })
-            .on('transactionHash', (res:any) => { 
+            .on('transactionHash', (res:any) => {
               txHash = res;
 
                 const tx ={
@@ -107,9 +107,9 @@ export async function buyCover(
                   'currency': _coverAsset,
                   'period': _coverPeriod
                 }
-      
+
                 isProdNet(global.user.networkId) ? TxEvents.onTxHash(tx) : null;
-                resolve({success:res}); 
+                resolve({success:res});
             })
             .on('error', (err:any, receipt:any) => { reject( {error: err, receipt:receipt}) })
             .on('confirmation', (confirmationNumber:any) => {
@@ -120,7 +120,7 @@ export async function buyCover(
             });
           });
         }
-        
+
   } else if(_distributorName == 'bridge'){
     const  bookContract = _getBridgePolicyBookContract(_contractAddress, global.user.web3 );
     // convert period from days to bridge epochs (weeks)
@@ -185,7 +185,7 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
   let txHash : any;
 
   // If mainnet call Distributor Directly
-  if(global.user.networkId === 1 ){ 
+  if(global.user.networkId === 1 ){
     insuraceAddress = NetConfig.netById(1).insuraceCover;
     return await new Promise((resolve, reject) => {
       _getInsuraceDistributor(insuraceAddress)
@@ -230,7 +230,7 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
         }
       });
     });
- 
+
  // Else call through Bright Union protocol
   } else {
     insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();
@@ -259,7 +259,7 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
       })
       .on('error', (err:any, receipt:any) => {
         reject({error: err , receipt:receipt})
-      }) 
+      })
       .on('confirmation', (confirmationNumber:any) => {
         if (confirmationNumber === 0) {
           isProdNet(global.user.networkId)?TxEvents.onTxConfirmation(txHash) :null;

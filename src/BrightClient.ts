@@ -9,6 +9,8 @@ import { buyQuote } from "./service/Buying";
 import { getQuoteFrom, getQuotes } from "./service/Quotes";
 import NetConfig from './service/config/NetConfig'
 import CurrencyHelper from './service/helpers/currencyHelper'
+import EventEmitter from 'events'
+
 // import {_loadAllABIs} from "./service/helpers/getContract"
 
 /**
@@ -24,13 +26,22 @@ import CurrencyHelper from './service/helpers/currencyHelper'
 
  declare global {
    var user:User;
+   var events:any;
  }
+
+ // *********NOTES events: ***********START
+ // catalog
+ // quote_cover
+ // buy_quote -
+ // ************************************END
+
 
 class BrightClient {
 
 catalog: object[];
 catalogUnsorted: object[];
 initialized:boolean;
+events:any
 
 constructor(_config:any) {
     global.user = {
@@ -41,24 +52,9 @@ constructor(_config:any) {
       account: _config.account,
     };
     this.initialized = false;
+    global.events = this.events = new EventEmitter();
   }
 
-  // Future structure?
-  // covers: object = {
-  //   // owner: this,
-  //   async getCatalog() {
-  //     return await this.getCatalog();
-  //   },
-  //   async getCatalogUnsorted() {
-  //     return await this.catalogUnsorted;
-  //   },
-  //   async getQuotes() {
-  //     return await this.getQuotes();
-  //   },
-  //   async buyQuote() {
-  //     return await this.buyQuote();
-  //   },
-  // }
 
 async initialize(): Promise<object>{
       global.user.account = (await  global.user.web3.eth.getAccounts())[0];;
@@ -66,10 +62,11 @@ async initialize(): Promise<object>{
       global.user.brightProtoAddress = NetConfig.netById(global.user.networkId).brightProtocol;
       global.user.web3Passive = NetConfig.createWeb3Passives();
       await CurrencyHelper.getETHDAIPrice();
-      await CurrencyHelper.getInsureUSDCPrice();
+      CurrencyHelper.getInsureUSDCPrice();
       this.initialized = true;
+      global.events.emit("initialized" , { user: global.user } );
       // await _loadAllABIs();
-      return {initialized: this.initialized, message: 'Bright Union Initialized'};
+      return {initialized: this.initialized, message: 'Bright Union Initialized', user:global.user };
   }
 
   initErrorResponse () {
@@ -179,3 +176,21 @@ async getQuoteFrom(_distributorName:string,
 }
 
 export default BrightClient;
+
+
+// Future structure?
+// covers: object = {
+//   // owner: this,
+//   async getCatalog() {
+//     return await this.getCatalog();
+//   },
+//   async getCatalogUnsorted() {
+//     return await this.catalogUnsorted;
+//   },
+//   async getQuotes() {
+//     return await this.getQuotes();
+//   },
+//   async buyQuote() {
+//     return await this.buyQuote();
+//   },
+// }
