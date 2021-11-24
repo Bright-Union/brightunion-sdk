@@ -142,7 +142,26 @@ export async function getNexusCoverables(): Promise<any[]> {
           }
         });
 
-        const logo: string = assetIndex ? assetIndex : `https://app.insurace.io/asset/product/${value.name.replace(/\s+/g, '')}.png`
+        let logo: string = null;
+
+        if(assetIndex){
+          logo = assetIndex;
+        }else{
+
+          let specialLogo:any = CatalogHelper.getSpecialLogoName(value.name);
+            if(specialLogo){
+              logo = specialLogo;
+            }else{
+              let name = value.name + ' '; // needed for V1 regex to match
+              name = name.replace( '.' , "");
+              name = name.replace( "(", "");
+              name = name.replace( ")", "");
+              name = name.replace(/V.[^0-9]/g, "");
+              name = name.replace(/\s+/g, '')
+
+              logo = `https://app.insurace.io/asset/product/${name}.png`
+            }
+        }
 
         coverablesArray.push(CatalogHelper.createCoverable({
             name: value.name.trim(),

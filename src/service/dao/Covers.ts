@@ -1,7 +1,22 @@
 import NetConfig from "../config/NetConfig";
 import Cover from "../domain/Cover";
-import {_getDistributorsContract, _getInsuraceDistributor, _getInsurAceCoverDataContract, _getInsurAceProductContract} from "../helpers/getContract";
-import {hexToUtf8} from 'web3-utils';
+import CatalogHelper from "../helpers/catalogHelper"
+import {
+  _getDistributorsContract,
+  _getInsuraceDistributor,
+  _getInsurAceCoverDataContract,
+  _getInsurAceProductContract,
+  _getBridgeRegistryContract,
+  _getBridgePolicyRegistryContract,
+  _getBridgePolicyBookContract,
+  _getNexusDistributorsContract,
+  _getNexusQuotationContract,
+  _getNexusGatewayContract,
+  _getNexusClaimsDataContract,
+  _getNexusDistributor,
+  _getNexusMasterContract,
+} from "../helpers/getContract";
+import {hexToUtf8, asciiToHex} from 'web3-utils';
 
 /**
  * Returns the total cover count owned by an address
@@ -14,6 +29,7 @@ import {hexToUtf8} from 'web3-utils';
  * @param _isActive
  * @returns Number of total covers
  */
+
 export async function getCoversCount(
     _distributorName : string,
     _ownerAddress: string ,
@@ -80,6 +96,7 @@ export async function getCovers(
       _activeCover,
       _limit,
     ).call().then((_data:any) => {
+      console.log("getCovers SDK " , _distributorName ,  _data)
       return _data;
     });
 
@@ -89,59 +106,69 @@ export async function getCovers(
 
 export async function getCoversNexus():Promise<any>{
 
-  // state.nexusDistributorContract().methods.balanceOf(ethereum.coinbase).call().then(async (count) => {
-  //       let covers = [];
-  //       //fetch covers bought from Nexus Distributor
-  //       for (let i = 0; i < Number(count); i++) {
-  //         const tokenId = await state.nexusDistributorContract().methods.tokenOfOwnerByIndex(ethereum.coinbase, i).call();
-  //         const cover = await state.nexusDistributorContract().methods.getCover(tokenId).call();
-  //         cover.id = tokenId;
-  //         cover.source = 'distributor';
-  //         cover.risk_protocol = 'nexus';
-  //         cover.logo = cover.logo || require('@/assets/img/nexus.png');
-  //         cover.net = ethereum.networkId;
-  //         covers.push(cover)
-  //       }
-  //
-  //       //fetch covers bought from Nexus directly
-  //       const coverIds = await state.nexusQuotationContract().methods.getAllCoversOfUser(ethereum.coinbase).call();
-  //       for (const coverId of coverIds) {
-  //         try {
-  //           const cover = await state.nexusGatewayContract().methods.getCover(coverId).call();
-  //           cover.id = coverId;
-  //           cover.source = 'nexus';
-  //           cover.risk_protocol = 'nexus';
-  //           cover.logo = cover.logo || require('@/assets/img/nexus.png')
-  //           cover.net = ethereum.networkId;
-  //           covers.push(cover)
-  //         } catch (e) {
-  //           //ignore this cover
-  //         }
-  //       }
-  //
-  //       const coverToClaim = {};
-  //       if (covers.length > 0) {
-  //         //collect all claims for distributor AND user
-  //         const claimsByDistributor = await state.nexusClaimsDataContract().methods.getAllClaimsByAddress(state.nexusDistributorContract().options.address).call();
-  //         const claimsByUser = await state.nexusClaimsDataContract().methods.getAllClaimsByAddress(ethereum.coinbase).call();
-  //         const claims = claimsByDistributor.concat(claimsByUser);
-  //         for (let i = 0; i < claims.length; i++) {
-  //           let coverId = await state.nexusGatewayContract().methods.getClaimCoverId(claims[i]).call();
-  //           coverToClaim[coverId] = claims[i];
-  //         }
-  //       }
-  //       //update each with own claim (if any)
-  //       for (let i = 0; i < covers.length; i++) {
-  //         if (coverToClaim[covers[i].id]) {
-  //           covers[i].claimId = coverToClaim[covers[i].id];
-  //         }
-  //       }
-  //       commit('activeCovers', {provider: 'nexus', covers: covers});
-  //     });
+  const distributor = await _getNexusDistributor(NetConfig.netById(global.user.networkId).nexusDistributor );
+  const count = await distributor.methods.balanceOf(global.user.account).call();
 
-  console.log("getCoversNexus");
+  let covers = [];
+  //fetch covers bought from Nexus Distributor
+  for (let i = 0; i < Number(count); i++) {
+    const tokenId = await distributor.methods.tokenOfOwnerByIndex(global.user.account, i).call();
+    const cover = await distributor.methods.getCover(tokenId).call();
+    cover.id = tokenId;
+    cover.source = 'distributor';
+    cover.risk_protocol = 'nexus';
+    // cover.logo = cover.logo || require('@/assets/img/nexus.png');
+    cover.net = global.user.networkId;
+    covers.push(cover)
+  }
 
-  return [];
+
+  const gatewayAddress = await  distributor.methods.gateway().call()
+  const nexusGatewayContract = await _getNexusGatewayContract(gatewayAddress);
+  const masterAddress = await distributor.methods.master().call();
+  const masterContract = await _getNexusMasterContract(masterAddress);
+  const quotationAddress = await masterContract.methods.getLatestAddress(asciiToHex('QD')).call()
+  const nexusQuotationContract = await  _getNexusQuotationContract(quotationAddress);
+
+  //fetch covers bought from Nexus directly
+  const coverIds = await nexusQuotationContract.methods.getAllCoversOfUser(global.user.account).call();
+  for (const coverId of coverIds) {
+    try {
+      const cover = await nexusGatewayContract.methods.getCover(coverId).call();
+      cover.id = coverId;
+      cover.source = 'nexus';
+      cover.risk_protocol = 'nexus';
+      // cover.logo = cover.logo || require('@/assets/img/nexus.png')
+      cover.net = global.user.networkId;
+      covers.push(cover)
+    } catch (e) {
+      //ignore this cover
+    }
+  }
+
+  const claimsDataAddress = await nexusGatewayContract.methods.claimsData().call();
+  const nexusClaimsDataContract = await _getNexusClaimsDataContract(claimsDataAddress);
+  const coverToClaim:any = {};
+  if (covers.length > 0) {
+    //collect all claims for distributor AND user
+    const claimsByDistributor = await nexusClaimsDataContract.methods.getAllClaimsByAddress(distributor.options.address).call();
+    const claimsByUser = await nexusClaimsDataContract.methods.getAllClaimsByAddress(global.user.account).call();
+    const claims = claimsByDistributor.concat(claimsByUser);
+    for (let i = 0; i < claims.length; i++) {
+      let coverId = await nexusGatewayContract.methods.getClaimCoverId(claims[i]).call();
+      coverToClaim[coverId] = claims[i];
+    }
+  }
+
+  //update each with own claim (if any)
+  for (let i = 0; i < covers.length; i++) {
+    if (coverToClaim[covers[i].id]) {
+      covers[i].claimId = coverToClaim[covers[i].id];
+    }
+  }
+
+  return covers;
+
 }
 
 export async function getCoversInsurace(_web3:any):Promise<any>{
@@ -196,61 +223,61 @@ export async function getCoversInsurace(_web3:any):Promise<any>{
 export async function getCoversBridge():Promise<any>{
 
 
-  // state.bridgeRegistryContract().methods.getPolicyRegistryContract().call().then(policyRegistryAddr => {
-  //       getBridgePolicyRegistryContract(policyRegistryAddr, ethereum.web3Instance).then(policyRegistry => {
-  //         policyRegistry.methods.getPoliciesLength(ethereum.coinbase).call().then(nPolicies => {
-  //           policyRegistry.methods.getPoliciesInfo(ethereum.coinbase, true, 0, nPolicies).call().then(async activeInfos => {
-  //             policyRegistry.methods.getPoliciesInfo(ethereum.coinbase, false, 0, nPolicies).call().then(async expiredInfos => {
-  //               // merge the arrays from both sets
-  //               let mergedPolicyInfos = activeInfos._policies.concat(expiredInfos._policies);
-  //               let mergedPolicyBooks = activeInfos._policyBooksArr.concat(expiredInfos._policyBooksArr);
-  //               let mergedPolicyStatuses = activeInfos._policyStatuses.concat(expiredInfos._policyStatuses);
-  //               let policies = []
-  //
-  //               let limit = parseInt(nPolicies);
-  //               for (let i = 0; i < limit; i++) {
-  //                 let info = mergedPolicyInfos[i];
-  //                 let policyBookAddress = mergedPolicyBooks[i];
-  //                 if (policyBookAddress === zeroAddress) {
-  //                   //Bridge BUG, means no actual policy info
-  //                   limit++;
-  //                   continue;
-  //                 }
-  //                 let policyBook = await getBridgePolicyBookContract(policyBookAddress, ethereum.web3Instance);
-  //                 let policyBookinfo = await policyBook.methods.info().call();
-  //                 let claimStatus = mergedPolicyStatuses[i];
-  //
-  //                 let asset = state.trustWalletAssets[Object.keys(state.trustWalletAssets)
-  //                     .find(key => key.toLowerCase() === policyBookinfo._insuredContract.toLowerCase())];
-  //                 let logo = asset ? asset.logoURI : require('@/assets/img/bridge.svg')
-  //                 let name = asset ? asset.name : policyBookinfo._symbol
-  //
-  //                 let cover = {
-  //                   risk_protocol: 'bridge',
-  //                   policyBookAddr: policyBookAddress,
-  //                   status: claimStatus,
-  //                   coverAmount: info.coverAmount,
-  //                   endTime: info.endTime,
-  //                   premium: info.premium,
-  //                   startTime: info.startTime,
-  //                   name: name,
-  //                   logo: logo,
-  //                   net: ethereum.networkId
-  //                 }
-  //
-  //                 policies.push(cover)
-  //               }
-  //               commit('activeCovers', {provider: 'bridge', covers: policies});
-  //             });
-  //           });
-  //         });
-  //       });
-  //     });
+  const policyRegistryAddr = await _getBridgeRegistryContract( NetConfig.netById(global.user.networkId).bridgeRegistry , global.user.web3).methods.getPolicyRegistryContract().call();
+  const policyRegistry = await  _getBridgePolicyRegistryContract(policyRegistryAddr, global.user.web3)
 
-  console.log("getCoversBridge");
+  let trustWalletAssets: { [key: string]: any } = {};
+  trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
 
+  const nPolicies = await  policyRegistry.methods.getPoliciesLength(global.user.account).call();
+  const activeInfos = await  policyRegistry.methods.getPoliciesInfo(global.user.account, true, 0, nPolicies).call();
+  const expiredInfos = await  policyRegistry.methods.getPoliciesInfo(global.user.account, false, 0, nPolicies).call();
+  // merge the arrays from both sets
+  let mergedPolicyInfos = activeInfos._policies.concat(expiredInfos._policies);
+  let mergedPolicyBooks = activeInfos._policyBooksArr.concat(expiredInfos._policyBooksArr);
+  let mergedPolicyStatuses = activeInfos._policyStatuses.concat(expiredInfos._policyStatuses);
+  let policies = []
 
-  return [];
+  let limit = parseInt(nPolicies);
+
+  for (let i = 0; i < limit; i++) {
+    let info = mergedPolicyInfos[i];
+    let policyBookAddress = mergedPolicyBooks[i];
+    if (policyBookAddress === '0x0000000000000000000000000000000000000000') {
+      //Bridge BUG, means no actual policy info
+      limit++;
+      continue;
+    }
+    let policyBook = await _getBridgePolicyBookContract(policyBookAddress, global.user.web3);
+    let policyBookinfo = await policyBook.methods.info().call();
+    let claimStatus = mergedPolicyStatuses[i];
+
+    let asset = trustWalletAssets[Object.keys(trustWalletAssets)
+      .find(key => key.toLowerCase() === policyBookinfo._insuredContract.toLowerCase())];
+      let logo = asset ? asset.logoURI : 'logo link'
+      // let logo = asset ? asset.logoURI : require('@/assets/img/bridge.svg')
+      let name = asset ? asset.name : policyBookinfo._symbol
+
+      let cover = {
+        risk_protocol: 'bridge',
+        policyBookAddr: policyBookAddress,
+        status: claimStatus,
+        coverAmount: info.coverAmount,
+        endTime: info.endTime,
+        premium: info.premium,
+        startTime: info.startTime,
+        name: name,
+        logo: logo,
+        net: global.user.networkId
+      }
+
+      policies.push(cover)
+    }
+    // commit('activeCovers', {provider: 'bridge', covers: policies});
+
+  // console.log("getCoversBridge");
+
+  return policies;
 }
 
 

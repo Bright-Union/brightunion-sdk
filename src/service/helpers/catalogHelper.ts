@@ -113,20 +113,25 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
   },
 }
 
+const catalogLogoLinks: any = [
+  { name: "Eth 0.2" , link:"https://app.insurace.io/asset/product/Eth2.0.png"},
+  { name: "Beefy" , link:"https://app.insurace.io/asset/product/BeefyFinance.png"}
+];
+
 class CatalogHelper {
 
+  public static getSpecialLogoName (_name:string){
+    const isSpecial = catalogLogoLinks.find((i:any) => {return i.name == _name}); // find name in
+    if(isSpecial ){
+      isSpecial.link;
+    }else{
+      return false;
+    }
+  }
 
+  //Unify Cover object from Bright contract
   public static coverFromData (_distributorName:string, _rawData:any ) {
     return{
-      // contractName: web3.web3Instance.utils.hexToUtf8(prodDetails['0']),
-      // risk_protocol: 'insurace',
-      // logo: require('@/assets/img/insurace.svg'),
-      // coverType: web3.web3Instance.utils.hexToUtf8(prodDetails['1']),
-      // coverAmount: amount,
-      // coverAsset: currency,
-      // endTime: expiration,
-      // status: status,
-      // net: web3.networkId
     }
   }
 
@@ -260,7 +265,7 @@ class CatalogHelper {
               const mergedName = this.coverableDuplicate(_catalog[i], _catalog[j]);
               if (mergedName) {
                 //duplicate found. merge the fields
-                const mergedPair = _.mergeWith({}, _catalog[i], _catalog[j], (o, s) => _.isNull(s) ? o : s);
+                const mergedPair = _.mergeWith({}, _catalog[j], _catalog[i], (o, s) => _.isNull(s) ? o : s);
                 mergedCoverableObject = _.mergeWith({}, mergedCoverableObject, mergedPair, (o, s) => _.isNull(s) ? o : s);
 
                 mergedCoverableObject.availableCounter = ++duplicates;

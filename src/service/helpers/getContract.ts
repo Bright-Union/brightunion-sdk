@@ -1,4 +1,4 @@
-import  DistributorsABI  from '../abi/Distributors.json';
+import DistributorsABI  from '../abi/Distributors.json';
 import IERC20ABI from '../abi/IERC20.json';
 
 import InsuraceDistributorABI from '../abi/insurace/InsuraceDistributor.json';
@@ -8,6 +8,10 @@ import InsuraceProductABI from '../abi/insurace/IProduct.json';
 
 import NexusDistributorABI from '../abi/nexus/NexusDistributor.json';
 import DistributorNexusABI from '../abi/nexus/Distributor.json';
+import NexusQuotationABI from '../abi/nexus/IQuotationData.json';
+import NexusGatewayABI from '../abi/nexus/IGateway.json';
+import NexusClaimsDataABI from '../abi/nexus/IClaimsData.json';
+import NexusMasterABI from '../abi/nexus/INXMaster.json';
 
 import BridgeRegistryContractABI from '../abi/bridge/IContractsRegistry.json';
 import BridgePolicyBookRegistryABI from '../abi/bridge/IPolicyBookRegistry.json';
@@ -15,8 +19,12 @@ import BridgePolicyQuoteABI from '../abi/bridge/IPolicyQuote.json';
 import BridgePolicyBookABI from '../abi/bridge/IPolicyBook.json';
 import BridgePolicyRegistryABI from '../abi/bridge/IPolicyRegistry.json';
 
-import { StringChain } from 'lodash';
 
+// possible JSON loader solution to reduce SDK code base size
+// let NexusDistributorABI2:any = null;
+// async function _loadAllABIs(){
+//   NexusDistributorABI2 = await (await fetch("https://kmettom.com/projects/bu/Distributors.json")).json();
+// }
 
 /**
  *    "Distributors"
@@ -54,6 +62,26 @@ function _getInsurAceProductContract(address:string) : any {
  *  Direct Call to Distributors Contracts
  *  "without BU protocol Layer"
  */
+function _getNexusMasterContract(address:string) : any {
+  const web3:any = global.user.web3;
+  const distAbi:any = NexusMasterABI .abi;
+  return new web3.eth.Contract(distAbi, address );
+}
+function _getNexusClaimsDataContract(address:string) : any {
+  const web3:any = global.user.web3;
+  const distAbi:any = NexusClaimsDataABI .abi;
+  return new web3.eth.Contract(distAbi, address );
+}
+function _getNexusGatewayContract(address:string) : any {
+  const web3:any = global.user.web3;
+  const distAbi:any = NexusGatewayABI .abi;
+  return new web3.eth.Contract(distAbi, address );
+}
+function _getNexusQuotationContract(address:string) : any {
+  const web3:any = global.user.web3;
+  const distAbi:any = NexusQuotationABI .abi;
+  return new web3.eth.Contract(distAbi, address );
+}
 function _getNexusDistributor(address:string) : any {
   const web3:any = global.user.web3;
   const distAbi:any = DistributorNexusABI .abi;
@@ -99,5 +127,10 @@ export  {
     _getInsurAceCoverDataContract,
     _getInsurAceProductContract,
     _getNexusDistributorsContract,
-    _getNexusDistributor
+    _getNexusDistributor,
+    _getNexusQuotationContract,
+    _getNexusGatewayContract,
+    _getNexusClaimsDataContract,
+    _getNexusMasterContract,
+    // _loadAllABIs
 } ;

@@ -9,6 +9,7 @@ import { buyQuote } from "./service/Buying";
 import { getQuoteFrom, getQuotes } from "./service/Quotes";
 import NetConfig from './service/config/NetConfig'
 import CurrencyHelper from './service/helpers/currencyHelper'
+// import {_loadAllABIs} from "./service/helpers/getContract"
 
 /**
  * Main module class, entry point of the
@@ -67,6 +68,7 @@ async initialize(): Promise<object>{
       await CurrencyHelper.getETHDAIPrice();
       await CurrencyHelper.getInsureUSDCPrice();
       this.initialized = true;
+      // await _loadAllABIs();
       return {initialized: this.initialized, message: 'Bright Union Initialized'};
   }
 
@@ -116,22 +118,22 @@ async getAllCovers(
   return await getAllCovers()
 }
 
-async getCoversCountFrom(
-    _distributorName : string,
-    // _owner: string ,
-    _isActive : boolean
-  ):Promise<any> {
-   return await getCoversCount(
-      _distributorName,
-      global.user.account,
-      _isActive
-    )
-  }
-
-async getAllCoversCount(
-  ):Promise<any> {
-   return await getAllCoversCount()
-  }
+// async getCoversCountFrom(
+//     _distributorName : string,
+//     // _owner: string ,
+//     _isActive : boolean
+//   ):Promise<any> {
+//    return await getCoversCount(
+//       _distributorName,
+//       global.user.account,
+//       _isActive
+//     )
+//   }
+//
+// async getAllCoversCount(
+//   ):Promise<any> {
+//    return await getAllCoversCount()
+//   }
 
  async getQuotes(
   _amount: number,
