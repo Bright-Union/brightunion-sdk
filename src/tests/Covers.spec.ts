@@ -28,17 +28,17 @@ before(async () => {
   instance = new Distributors({ web3: web3 });
 });
 
-describe('Get Owners Cover count', () => {
-  it('should return number of covers owned by address',async () => {
-    const result = await instance.getCoversCountFrom(
-        'insurace',
-        // '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2',
-        true
-    );
-    console.log('COUNT - ' , result)
-    expect(result).to.equal('4');
-  });
-});
+// describe('Get Owners Cover count', () => {
+//   it('should return number of covers owned by address',async () => {
+//     const result = await instance.getCoversCountFrom(
+//         'insurace',
+//         // '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2',
+//         true
+//     );
+//     console.log('COUNT - ' , result)
+//     expect(result).to.equal('4');
+//   });
+// });
 
 describe('Get Owners Covers', () => {
   let distributorName = 'bridge';
