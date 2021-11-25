@@ -54,6 +54,7 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
       global.events.emit("buy_quote" , { status: "CONFIRMATION" , type:"main", count:1 , current:1 } );
       return callInsurace(buyingObj , true);
     } else {
+      global.events.emit("buy_quote" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
       return { error: "You have insufficient funds to continue with this transaction..." };
     }
   }else{
@@ -108,6 +109,7 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
             return {error: err , message: 'ERC20Helper approveAndCall Error'};
           });
         } else {
+          global.events.emit("buy_quote" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
           return {error: 'You have insufficient funds to continue with this transaction' }
         }
 
@@ -201,6 +203,8 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
     throw new Error();
   }
 
+  global.events.emit("buy_quote" , { status: "INITIALIZED"} );
+
   if(!NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.rawData.currency)){
 
     const erc20Instance = await _getIERC20Contract(asset);
@@ -222,6 +226,7 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
       return await ERC20Helper.approveAndCall( erc20Instance,  _quoteProtocol.rawData.contract,  _quoteProtocol.rawData.price, onSuccess, onError);
 
     } else {
+      global.events.emit("buy_quote" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
       return{ error: "You have insufficient funds to continue with this transaction" }
     }
 
@@ -233,6 +238,7 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
       return callNexus(_quoteProtocol, true);
     } else {
+      global.events.emit("buy_quote" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
       return {error: 'You have insufficient funds to continue with this transaction' }
     }
   }
@@ -293,6 +299,7 @@ export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
       })
 
     } else {
+      global.events.emit("buy_quote" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
       return {error: "You have insufficient funds to continue with this transaction"};
     }
 
