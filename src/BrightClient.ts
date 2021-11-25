@@ -138,6 +138,9 @@ async getAllCovers(
   _period: number,
   _protocol: any
 ){
+  if(!this.initialized){
+    return this.initErrorResponse();
+  }
   if(!_protocol){
     return {error: "No protocol provided"};
   }
@@ -147,32 +150,39 @@ async getAllCovers(
 
 
 async getQuoteFrom(_distributorName:string,
-             _amount:number,
-             _currency:string,
-             _period:number,
-             _protocol:any): Promise<any> {
+  _amount:number,
+  _currency:string,
+  _period:number,
+  _protocol:any): Promise<any> {
+    if(!this.initialized){
+      return this.initErrorResponse();
+    }
 
-   return await getQuoteFrom(
-     _distributorName,
-     _amount,
-     _currency,
-     _period,
-     _protocol
-                     );
- }
+    return await getQuoteFrom(
+      _distributorName,
+      _amount,
+      _currency,
+      _period,
+      _protocol
+    );
+  }
 
 
- async buyQuote(
-   _quote:any,
- ): Promise<any>{
-   if(!_quote){
-     return {error : "No quote provided"};
-   }
-   return await buyQuote(
-     _quote
-   )
+  async buyQuote(
+    _quote:any,
+  ): Promise<any>{
+    if(!this.initialized){
+      return this.initErrorResponse();
+    }
+    if(!_quote){
+      return {error : "No quote provided"};
+    }
+    return await buyQuote(
+      _quote
+    )
 
- }
+  }
+  
 }
 
 export default BrightClient;

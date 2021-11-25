@@ -31,7 +31,6 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
  */
 export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
 
-  global.events.emit("buy_quote" , { status: "INIT" } );
 
   const chainSymbol:string  = NetConfig.netById(global.user.networkId).symbol;
 
@@ -44,12 +43,15 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
   // Check for user ETH balance
   const netBalance = await global.user.web3.eth.getBalance(global.user.account);
 
+  global.events.emit("buy_quote" , { status: "INITIALIZED"} );
+
   let insuraceAddress :any;
   if(global.user.networkId === 1 ){ insuraceAddress = NetConfig.netById(1).insuraceCover; }
   else { insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();}
 
   if(NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency)){
     if (Number(netBalance) >= (Number)(_quoteProtocol.price)) {
+      global.events.emit("buy_quote" , { status: "CONFIRMATION" , type:"main", count:1 , current:1 } );
       return callInsurace(buyingObj , true);
     } else {
       return { error: "You have insufficient funds to continue with this transaction..." };
@@ -70,29 +72,36 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
       buyingObj.premium = Number(ERC20Helper.USDTtoERCDecimals(buyingObj.premium))
 
       //proceed with USDT
+      global.events.emit("buy_quote" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
       return ERC20Helper.approveUSDTAndCall(
         erc20Instance,
-        insuraceAddress,  // global.user.brightProtoAddress //0x7e758e0D330B9B340A7282029e73dA448fb4BdB6
+        insuraceAddress,
         buyingObj.premium,
         () => {
-          console.log('SHOW_CONFIRMATION_WAITING', {msg: `(1/3) Resetting USDT allowance to 0`});
-          global.events.emit("buy_quote" , { status: "SHOW_CONFIRMATION_WAITING" } );
+          global.events.emit("buy_quote" , { status: "CONFIRMATION" , type:"reset_usdt_allowance" , count:3 , current:2 } );
         },
         () => {
           buyingObj.premium = Number(ERC20Helper.ERCtoUSDTDecimals(buyingObj.premium))
+          global.events.emit("buy_quote" , { status: "CONFIRMATION" , type:"main", count:2 , current:2 } );
           return callInsurace(buyingObj, false);
         },
         () => {
+          global.events.emit("buy_quote" , { status: "REJECTED" } );
           return {error: "Confirmation rejected"}
         })
 
       } else if (Number(ercBalance) >= (Number)(_quoteProtocol.quote.price)) {
         //proceed with ERC
+
+        global.events.emit("buy_quote" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
+
         return await ERC20Helper.approveAndCall(
           erc20Instance,
           insuraceAddress,  // global.user.brightProtoAddress //0x7e758e0D330B9B340A7282029e73dA448fb4BdB6
           buyingObj.premium,
           () => {
+
+            global.events.emit("buy_quote" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
             return callInsurace(buyingObj , false);
           },
           (err:any) => {
@@ -200,11 +209,15 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
     if (Number(ercBalance) >= (Number)(_quoteProtocol.rawData.price)) {
 
       const onSuccess =  () => {
+        global.events.emit("buy_quote" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
         return callNexus(_quoteProtocol, false);
       };
       const onError =  (err:any) => {
+        global.events.emit("buy_quote" , { status: "REJECTED" } );
         return {error : "Confirmation rejected"};
       }
+
+      global.events.emit("buy_quote" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
 
       return await ERC20Helper.approveAndCall( erc20Instance,  _quoteProtocol.rawData.contract,  _quoteProtocol.rawData.price, onSuccess, onError);
 
@@ -214,8 +227,10 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
   }else{
 
-  const netBalance = await global.user.web3.eth.getBalance(global.user.account);
+    const netBalance = await global.user.web3.eth.getBalance(global.user.account);
     if (Number(netBalance) >= (Number)(_quoteProtocol.rawData.price)) {
+      global.events.emit("buy_quote" , { status: "CONFIRMATION" , type:"main" , count:1 , current:1 } );
+
       return callNexus(_quoteProtocol, true);
     } else {
       return {error: 'You have insufficient funds to continue with this transaction' }
@@ -228,8 +243,6 @@ export async function callBridge(_quoteProtocol:any){
 
     // let net:any = NetConfig.netById(global.user.networkId);
     // let asset = net[_quoteProtocol.rawData.currency]
-
-
 
     return buyCover(
       global.user.account,
@@ -257,8 +270,12 @@ export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
   const erc20Instance = _getIERC20Contract(asset);
   const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
+  global.events.emit("buy_quote" , { status: "INITIALIZED"} );
+
   if (Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.price)) {
     // this.showModal = false;
+    global.events.emit("buy_quote" , { status: "CONFIRMATION" , type:"approve_spending", count:2 , current:1 } );
+
     return  ERC20Helper.approveUSDTAndCall(
       erc20Instance,
       _quoteProtocol.protocol.bridgeProductAddress,
@@ -268,6 +285,7 @@ export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
         console.log('Confirmation waiting');
       },
       () => {
+        global.events.emit("buy_quote" , { status: "CONFIRMATION" , type:"main", count:2 , current:2 } );
         return callBridge(_quoteProtocol);
       },
       () => {

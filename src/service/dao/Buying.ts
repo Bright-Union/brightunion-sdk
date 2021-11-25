@@ -71,14 +71,19 @@ export async function buyCover(
                 'period': _coverPeriod
               }
 
+              global.events.emit("buy_quote" , { status: "TX_GENERATED" , data: res } );
               isProdNet(global.user.networkId) ? TxEvents.onTxHash(tx) : null;
               resolve({success:res});
              })
-            .on('error', (err:any, receipt:any) => { reject( {error: err, receipt:receipt}) })
+            .on('error', (err:any, receipt:any) => {
+              global.events.emit("buy_quote" , { status: "REJECTED" } );
+              reject( {error: err, receipt:receipt})
+            })
             .on('confirmation', (confirmationNumber:any) => {
               if (confirmationNumber === 0) {
                 isProdNet(global.user.networkId) ? TxEvents.onTxHash(txHash) : null;
-                console.info('TX_CONFIRMED')
+                global.events.emit("buy_quote" , { status: "TX_CONFIRMED" } );
+
               }
             });
           });
@@ -108,14 +113,20 @@ export async function buyCover(
                   'period': _coverPeriod
                 }
 
+                global.events.emit("buy_quote" , { status: "TX_GENERATED" , data: res } );
+
                 isProdNet(global.user.networkId) ? TxEvents.onTxHash(tx) : null;
                 resolve({success:res});
             })
-            .on('error', (err:any, receipt:any) => { reject( {error: err, receipt:receipt}) })
+            .on('error', (err:any, receipt:any) => {
+              global.events.emit("buy_quote" , { status: "REJECTED" } );
+              reject( {error: err, receipt:receipt})
+            })
             .on('confirmation', (confirmationNumber:any) => {
               if (confirmationNumber === 0) {
                 isProdNet(global.user.networkId) ? TxEvents.onTxHash(txHash) : null;
-                console.info('TX_CONFIRMED')
+                global.events.emit("buy_quote" , { status: "TX_CONFIRMED" } );
+
               }
             });
           });
@@ -140,17 +151,20 @@ export async function buyCover(
           'period': epochs,
           'currency':'USDT'
         }
+        global.events.emit("buy_quote" , { status: "TX_GENERATED" , data: transactionHash } );
 
         isProdNet(global.user.networkId) ? TxEvents.onTxHash(tx) : null;
         resolve({success: transactionHash});
       })
       .on('error', (err:any, receipt:any) => {
+        global.events.emit("buy_quote" , { status: "REJECTED" } );
         reject( {error: err, receipt:receipt})
       })
       .on('confirmation', (confirmationNumber:any) => {
         if (confirmationNumber === 0) {
           isProdNet(global.user.networkId) ? TxEvents.onTxHash(txHash) : null;
-          console.info('TX_CONFIRMED')
+          global.events.emit("buy_quote" , { status: "TX_CONFIRMED" } );
+
         }
       });
     });
@@ -217,16 +231,18 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
           'period':buyingObj.durationInDays
         }
 
+        global.events.emit("buy_quote" , { status: "TX_GENERATED" , data: res } );
         isProdNet(global.user.networkId) ? TxEvents.onTxHash(tx) : null;
         resolve({success: res});
       })
       .on('error', (err:any, receipt:any) => {
+        global.events.emit("buy_quote" , { status: "REJECTED" } );
         reject({error: err , receipt:receipt})
       })
       .on('confirmation', (confirmationNumber:any) => {
         if (confirmationNumber === 0) {
           isProdNet(global.user.networkId) ? TxEvents.onTxHash(txHash) : null;
-          console.info('TX_CONFIRMED')
+          global.events.emit("buy_quote" , { status: "TX_CONFIRMED" } );
         }
       });
     });
@@ -234,7 +250,6 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
  // Else call through Bright Union protocol
   } else {
     insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();
-    console.log('calling insurace to', insuraceAddress);
     return await new Promise((resolve, reject) => {
       _getInsuraceDistributorsContract(insuraceAddress)
       .methods
@@ -254,16 +269,18 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
           'period':buyingObj.durationInDays
         }
 
+        global.events.emit("buy_quote" , { status: "TX_GENERATED" , data: res } );
         isProdNet(global.user.networkId) ? TxEvents.onTxHash(tx) : null;
         resolve({success: res});
       })
       .on('error', (err:any, receipt:any) => {
+        global.events.emit("buy_quote" , { status: "REJECTED" } );
         reject({error: err , receipt:receipt})
       })
       .on('confirmation', (confirmationNumber:any) => {
         if (confirmationNumber === 0) {
+          global.events.emit("buy_quote" , { status: "TX_CONFIRMED" } );
           isProdNet(global.user.networkId)?TxEvents.onTxConfirmation(txHash) :null;
-          console.info('TX_CONFIRMED')
         }
       });
     });
