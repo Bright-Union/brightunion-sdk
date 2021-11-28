@@ -15,7 +15,10 @@ import {  _getNexusDistributor,
 export default class NexusApi {
 
     static fetchCoverables () {
-        return axios.get(`${NetConfig.netById(global.user.networkId).nexusAPI}/coverables/contracts.json`)
+
+      const ethNet:any = NetConfig.getETHNetwork();
+
+        return axios.get(`${NetConfig.netById(ethNet.networkId).nexusAPI}/coverables/contracts.json`)
             .then((response) => {
                 return response.data;
             }).catch(error => {
@@ -24,6 +27,8 @@ export default class NexusApi {
     }
 
     static fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<any> {
+
+      const ethNet:any = NetConfig.getETHNetwork();
 
       const amountInWei:any = toBN(toWei(amount.toString(), 'ether'));
 
@@ -35,7 +40,7 @@ export default class NexusApi {
        }
 
        return axios.get(
-         `${NetConfig.netById(global.user.networkId).nexusAPI}/v1/quote?coverAmount=${amount}&currency=${currency}&period=${period}&contractAddress=${protocol.nexusCoverable}`,
+         `${NetConfig.netById(ethNet.networkId).nexusAPI}/v1/quote?coverAmount=${amount}&currency=${currency}&period=${period}&contractAddress=${protocol.nexusCoverable}`,
          {
            headers : {
              // Origin: process.env.API_REQUEST_ORIGIN,
@@ -46,9 +51,9 @@ export default class NexusApi {
 
         let basePrice = toBN(response.data.price);
         let distributor:any;
-        
-        if(global.user.networkId === 1 ){ 
-          distributor =  await _getNexusDistributor(NetConfig.netById(global.user.networkId).nexusDistributor)
+
+        if(ethNet.networkId === 1 ){
+          distributor =  await _getNexusDistributor(NetConfig.netById(ethNet.networkId).nexusDistributor)
         }else{
           const sideChainAddress = await _getDistributorsContract().methods.getDistributorAddress('nexus').call();
           distributor = await _getNexusDistributorsContract(sideChainAddress);
@@ -65,7 +70,7 @@ export default class NexusApi {
             currency: currency,
             period: period,
             chain: 'ETH',
-            chainId: global.user.networkId,
+            chainId: ethNet.networkId,
             // price: basePrice,
             price: priceWithFee.toString(),
             pricePercent: new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000), //%, annualize
@@ -113,7 +118,7 @@ export default class NexusApi {
                                 currency: currency,
                                 period: period,
                                 chain: 'ETH',
-                                chainId: global.user.networkId,
+                                chainId: ethNet.networkId,
                                 price: 0,
                                 pricePercent: 0,
                                 estimatedGasPrice: 0,

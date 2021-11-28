@@ -301,6 +301,10 @@ class NetConfig{
     return asset === 'ETH' || asset === 'BNB' || asset === 'MATIC';
   }
 
+  public static getETHNetwork() {
+    return
+  }
+
 }
 
 export default NetConfig;

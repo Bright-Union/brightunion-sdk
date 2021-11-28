@@ -6,8 +6,7 @@ import NetConfig from '../service/config/NetConfig';
 import CurrencyHelper from './helpers/currencyHelper';
 import RiskCarriers from './config/RiskCarriers';
 import BigNumber from 'bignumber.js'
-
-
+import { toWei, hexToBytes, numberToHex } from "web3-utils"
 
 /**
  *
@@ -91,10 +90,12 @@ export async function getQuoteFrom(
  */
  async function getBridgeQuote(_amount :any, _currency:any, _period :any, _protocol :any ) : Promise<object>{
 
-   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeProductAddress) {
+   const ethNet:any = NetConfig.getETHNetwork();
+
+   if (CatalogHelper.availableOnNetwork(ethNet.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeProductAddress) {
 
 
-     let amountInWei:any = global.user.web3.utils.toWei(_amount.toString(), 'ether');
+     let amountInWei:any = toWei(_amount.toString(), 'ether');
 
      if (_currency === 'ETH') {
        amountInWei = CurrencyHelper.eth2usd(amountInWei);
@@ -106,7 +107,7 @@ export async function getQuoteFrom(
      let quote:any = {}
      // let bridgeQuote:any = {}
 
-     if(global.user.networkId = 1 ){
+     if(ethNet.networkId = 1 ){
 
        quote = await getQuoteFromBridge(
          _protocol.bridgeProductAddress,
@@ -149,7 +150,7 @@ export async function getQuoteFrom(
          _protocol.bridgeProductAddress,
          '0x0000000000000000000000000000000000000000',
          '0x0000000000000000000000000000000000000000',
-         global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500)),
+         hexToBytes(numberToHex(500)),
        );
 
        const bridgeQuote = {
@@ -174,7 +175,7 @@ export async function getQuoteFrom(
            currency: _currency,
            period: _period,
            chain: 'ETH',
-           chainId: global.user.networkId,
+           chainId: ethNet.networkId,
            actualPeriod: actualPeriod,
            price: bridgeQuote.totalPrice,
            response: bridgeQuote,
@@ -192,7 +193,9 @@ export async function getQuoteFrom(
 
 
  export async function getNexusQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
-    if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL') && _protocol.nexusCoverable){
+   const ethNet:any = NetConfig.getETHNetwork();
+
+    if (CatalogHelper.availableOnNetwork(ethNet.networkId, 'NEXUS_MUTUAL') && _protocol.nexusCoverable){
      return await NexusApi.fetchQuote( _amount , _currency, _period, _protocol);
    }
  }
