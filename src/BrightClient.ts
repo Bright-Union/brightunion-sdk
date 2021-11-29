@@ -31,8 +31,8 @@ import EventEmitter from 'events'
 
  // *********NOTES events: ***********START
  // catalog
- // quote_cover
- // buy_quote -
+ // quote
+ // buy
  // ************************************END
 
 
