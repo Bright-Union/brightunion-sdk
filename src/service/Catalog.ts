@@ -1,6 +1,3 @@
-// import NetConfig from '@/service/config/NetConfig';
-// import NexusApi  from '@/service/distributorsApi/NexusApi';
-
 import NexusApi from './distributorsApi/NexusApi';
 import InsuraceApi from './distributorsApi/InsuraceApi';
 import CatalogHelper from './helpers/catalogHelper';
@@ -18,14 +15,13 @@ export async function getCatalog(): Promise<any> {
 
   const catalogPromiseArray:any[] = [];
 
-
-  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL')) {
+  if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'NEXUS_MUTUAL')) {
     catalogPromiseArray.push(getNexusCoverables())
   }
-  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE')) {
+  if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'INSURACE')) {
     catalogPromiseArray.push(getInsuraceCoverables())
   }
-  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL')) {
+  if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL')) {
     catalogPromiseArray.push(getBridgeCoverables())
   }
 
@@ -49,14 +45,14 @@ export async function getBridgeCoverables(): Promise<any[]> {
   let trustWalletAssets: { [key: string]: any } = {};
   trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
 
-  const chainId = await global.user.web3.eth.getChainId();
-  const bridgeRegistryAdd = NetConfig.netById( chainId ).bridgeRegistry;
+  // const chainId = await global.user.web3.eth.getChainId();
+  const bridgeRegistryAdd = NetConfig.netById( global.user.ethNet.networkId ).bridgeRegistry;
 
-  const BridgeContract = await _getBridgeRegistryContract(bridgeRegistryAdd,global.user.web3);
+  const BridgeContract = await _getBridgeRegistryContract(bridgeRegistryAdd, global.user.ethNet.web3Instance );
 
   return BridgeContract.methods.getPolicyBookRegistryContract().call().then(async (policyBookRegistryAddr:any) => {
 
-    let BridgePolicyBookRegistryContract = await _getBridgePolicyBookRegistryContract(policyBookRegistryAddr,global.user.web3);
+    let BridgePolicyBookRegistryContract = await _getBridgePolicyBookRegistryContract(policyBookRegistryAddr, global.user.ethNet.web3Instance );
 
     return BridgePolicyBookRegistryContract.methods.count().call().then((policyBookCounter:any) => {
 
@@ -127,7 +123,6 @@ export async function getNexusCoverables(): Promise<any[]> {
   export async function getInsuraceCoverables() : Promise<object[]> {
   let trustWalletAssets: { [key: string]: any } = {};
     trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
-    // const NetID = await global.user.web3.eth.getChainId();
     return await InsuraceApi.fetchCoverables().then((data:object) => {
 
       const coverablesArray = [];

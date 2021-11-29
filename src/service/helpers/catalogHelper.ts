@@ -265,18 +265,27 @@ class CatalogHelper {
               const mergedName = this.coverableDuplicate(_catalog[i], _catalog[j]);
               if (mergedName) {
                 //duplicate found. merge the fields
-                const mergedPair = _.mergeWith({}, _catalog[j], _catalog[i], (o, s) => _.isNull(s) ? o : s);
+                const mergedPair = _.mergeWith({}, _catalog[i], _catalog[j], (o, s) => _.isNull(s) ? o : s);
                 mergedCoverableObject = _.mergeWith({}, mergedCoverableObject, mergedPair, (o, s) => _.isNull(s) ? o : s);
+
+                if(mergedCoverableObject.productId && !mergedCoverableObject.availableCounterMultiChain){
+                  mergedCoverableObject.availableCounterMultiChain = true;
+                  duplicates += 2;
+                }
 
                 mergedCoverableObject.availableCounter = ++duplicates;
                 mergedCoverableObject.name = mergedName;
                 duplicateIndexes.push(j)
+
               }
             }
             if (duplicates > 1) {
               coverablesNoDuplicates.push(mergedCoverableObject);
             } else {
               //no duplicate for it, leave it as is
+              if(_catalog[i].productId){
+                mergedCoverableObject.availableCounter += 2;
+              }
               coverablesNoDuplicates.push(_catalog[i])
             }
           }

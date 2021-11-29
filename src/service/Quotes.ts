@@ -63,12 +63,6 @@ export async function getQuoteFrom(
                                     _protocol:any
     ): Promise<object> {
 
-      //prepare Multichain Quote logc from UI
-      // let ethereum = [global.user.web3, ...global.user.web3Passive].find(net => {
-        //   console.log(net);
-        //   return net.symbol === 'ETH'
-        // });
-
   if(_distributorName == 'bridge'){
      return await getBridgeQuote(_amount,_currency,_period,_protocol);
   }else if(_distributorName == 'nexus'){
@@ -90,9 +84,7 @@ export async function getQuoteFrom(
  */
  async function getBridgeQuote(_amount :any, _currency:any, _period :any, _protocol :any ) : Promise<object>{
 
-   const ethNet:any = NetConfig.getETHNetwork();
-
-   if (CatalogHelper.availableOnNetwork(ethNet.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeProductAddress) {
+   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeProductAddress) {
 
 
      let amountInWei:any = toWei(_amount.toString(), 'ether');
@@ -107,7 +99,7 @@ export async function getQuoteFrom(
      let quote:any = {}
      // let bridgeQuote:any = {}
 
-     if(ethNet.networkId = 1 ){
+     if(global.user.ethNet.networkId = 1 ){
 
        quote = await getQuoteFromBridge(
          _protocol.bridgeProductAddress,
@@ -175,7 +167,7 @@ export async function getQuoteFrom(
            currency: _currency,
            period: _period,
            chain: 'ETH',
-           chainId: ethNet.networkId,
+           chainId: global.user.ethNet.networkId,
            actualPeriod: actualPeriod,
            price: bridgeQuote.totalPrice,
            response: bridgeQuote,
@@ -193,9 +185,8 @@ export async function getQuoteFrom(
 
 
  export async function getNexusQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
-   const ethNet:any = NetConfig.getETHNetwork();
 
-    if (CatalogHelper.availableOnNetwork(ethNet.networkId, 'NEXUS_MUTUAL') && _protocol.nexusCoverable){
+    if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'NEXUS_MUTUAL') && _protocol.nexusCoverable){
      return await NexusApi.fetchQuote( _amount , _currency, _period, _protocol);
    }
  }
@@ -218,20 +209,6 @@ export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_
     return await InsuraceApi.fetchInsuraceQuote(_web3, _amount , _currency, _period, _protocol);
   }
 }
-
-
-// export async function getInsuraceQuoteWithConfirm( _amount:number, _currency:string, _period: number, _protocol:any ) {
-//   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE') && _protocol.productId) {
-//
-//     const _owner        = global.user.account;
-//     const chainSymbol   = NetConfig.netById(global.user.networkId).symbol;
-//     const premium : any = await InsuraceApi.getCoverPremium( _amount, _currency, _period,_protocol, _owner);
-//     const quote   : any = await InsuraceApi.confirmCoverPremium(chainSymbol, premium.params);
-//
-//     return quote;
-//   }
-// }
-
 
 export default {
   getQuoteFrom,

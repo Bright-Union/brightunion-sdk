@@ -302,7 +302,10 @@ class NetConfig{
   }
 
   public static getETHNetwork() {
-    return
+    const activeWeb3 = { symbol: global.user.symbol , web3: global.user.web3, networkId: global.user.networkId }
+    return [ activeWeb3 , ...global.user.web3Passive].find((net:any) => {
+        return net.symbol === 'ETH'
+      });
   }
 
 }

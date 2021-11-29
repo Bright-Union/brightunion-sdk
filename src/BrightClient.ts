@@ -46,11 +46,13 @@ events:any
 constructor(_config:any) {
     global.user = {
       web3: _config.web3,
-      networkId: _config.networkId,
       web3Passive: [],
-      brightProtoAddress: _config.brightProtoAddress,
-      account: _config.account,
-    };
+      networkId: null,
+      symbol: null,
+      brightProtoAddress: null,
+      account: null,
+      ethNet: null,
+    }
     this.initialized = false;
     global.events = this.events = new EventEmitter();
   }
@@ -61,6 +63,8 @@ async initialize(): Promise<object>{
       global.user.networkId = await global.user.web3.eth.net.getId();
       global.user.brightProtoAddress = NetConfig.netById(global.user.networkId).brightProtocol;
       global.user.web3Passive = NetConfig.createWeb3Passives();
+      global.user.symbol =  NetConfig.netById(global.user.networkId).symbol;
+      global.user.ethNet =  NetConfig.getETHNetwork();
       await CurrencyHelper.getETHDAIPrice();
       CurrencyHelper.getInsureUSDCPrice();
       this.initialized = true;
@@ -182,7 +186,7 @@ async getQuoteFrom(_distributorName:string,
     )
 
   }
-  
+
 }
 
 export default BrightClient;
