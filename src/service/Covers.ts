@@ -31,11 +31,9 @@ export async function getAllCovers(
   coversPromiseArray.push(getBridgeCovers())
   coversPromiseArray.push(getNexusCovers())
 
-  // console.log("global.user.web3Passive - " , global.user.web3Passive);
-  // for (let net of global.user.web3Passive) {
-  //   console.log("net");
-  //   coversPromiseArray.push( getInsuraceCovers(net))
-  // }
+  for (let net of global.user.web3Passive) {
+    coversPromiseArray.push( getInsuraceCovers(net))
+  }
 
   return Promise.all(coversPromiseArray)
   .then((_data: any) => {

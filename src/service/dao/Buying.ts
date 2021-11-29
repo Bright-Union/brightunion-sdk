@@ -202,7 +202,7 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
   if(global.user.networkId === 1 ){
     insuraceAddress = NetConfig.netById(1).insuraceCover;
     return await new Promise((resolve, reject) => {
-      _getInsuraceDistributor(insuraceAddress)
+      _getInsuraceDistributor(insuraceAddress, global.user.web3)
       .methods
       .buyCover(
                   buyingObj.products,

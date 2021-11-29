@@ -76,7 +76,7 @@ export async function getCovers(
   _limit : number,
 ) : Promise<any[]>  {
 
-  if( _web3 || global.user.networkId ){ // global.user.networkId == 1
+  // if( _web3 || global.user.networkId ){ // global.user.networkId == 1
 
     if(_distributorName == "insurace"){
       return await getCoversInsurace(_web3);
@@ -86,27 +86,27 @@ export async function getCovers(
       return await getCoversNexus();
     }
 
-  }else{
-
-    return await _getDistributorsContract()
-    .methods
-    .getCovers(
-      _distributorName,
-      _ownerAddress,
-      _activeCover,
-      _limit,
-    ).call().then((_data:any) => {
-      console.log("getCovers SDK " , _distributorName ,  _data)
-      return _data;
-    });
-
-  }
+  // }else{
+  //
+  //   return await _getDistributorsContract()
+  //   .methods
+  //   .getCovers(
+  //     _distributorName,
+  //     _ownerAddress,
+  //     _activeCover,
+  //     _limit,
+  //   ).call().then((_data:any) => {
+  //     console.log("getCovers SDK " , _distributorName ,  _data)
+  //     return _data;
+  //   });
+  //
+  // }
 
 }
 
 export async function getCoversNexus():Promise<any>{
 
-  const distributor = await _getNexusDistributor(NetConfig.netById(global.user.networkId).nexusDistributor );
+  const distributor = await _getNexusDistributor(NetConfig.netById(global.user.ethNet.networkId).nexusDistributor );
   const count = await distributor.methods.balanceOf(global.user.account).call();
 
   let covers = [];
@@ -118,7 +118,7 @@ export async function getCoversNexus():Promise<any>{
     cover.source = 'distributor';
     cover.risk_protocol = 'nexus';
     // cover.logo = cover.logo || require('@/assets/img/nexus.png');
-    cover.net = global.user.networkId;
+    cover.net = global.user.ethNet.networkId;
     covers.push(cover)
   }
 
@@ -139,7 +139,7 @@ export async function getCoversNexus():Promise<any>{
       cover.source = 'nexus';
       cover.risk_protocol = 'nexus';
       // cover.logo = cover.logo || require('@/assets/img/nexus.png')
-      cover.net = global.user.networkId;
+      cover.net = global.user.ethNet.networkId;
       covers.push(cover)
     } catch (e) {
       //ignore this cover
@@ -173,9 +173,9 @@ export async function getCoversNexus():Promise<any>{
 
 export async function getCoversInsurace(_web3:any):Promise<any>{
 
-  const insuraceCoverInstance = await  _getInsuraceDistributor(NetConfig.netById(_web3.networkId).insuraceCover);
+  const insuraceCoverInstance = await  _getInsuraceDistributor(NetConfig.netById(_web3.networkId).insuraceCover, _web3.web3Instance);
   const coverDataAddress = await insuraceCoverInstance.methods.data().call();
-  const coverDataInstance = await _getInsurAceCoverDataContract(coverDataAddress);
+  const coverDataInstance = await _getInsurAceCoverDataContract(coverDataAddress, _web3.web3Instance);
   const count =  await coverDataInstance.methods.getCoverCount(_web3.account).call();
 
   let allCovers:any = [];
@@ -189,7 +189,7 @@ export async function getCoversInsurace(_web3:any):Promise<any>{
 
     const productId = await coverDataInstance.methods.getCoverProductId(_web3.account, coverId.toString()).call();
     const productAddress =  await insuraceCoverInstance.methods.product().call();
-    const product =  await  _getInsurAceProductContract(productAddress);
+    const product =  await  _getInsurAceProductContract(productAddress, _web3.web3Instance);
     const prodDetailsP =  product.methods.getProductDetails(productId).call();
 
     let coverDataPromises = [expirationP, amountP, currencyP, statusP, prodDetailsP];
@@ -223,8 +223,8 @@ export async function getCoversInsurace(_web3:any):Promise<any>{
 export async function getCoversBridge():Promise<any>{
 
 
-  const policyRegistryAddr = await _getBridgeRegistryContract( NetConfig.netById(global.user.networkId).bridgeRegistry , global.user.web3).methods.getPolicyRegistryContract().call();
-  const policyRegistry = await  _getBridgePolicyRegistryContract(policyRegistryAddr, global.user.web3)
+  const policyRegistryAddr = await _getBridgeRegistryContract( NetConfig.netById(global.user.ethNet.networkId).bridgeRegistry , global.user.ethNet.web3Instance).methods.getPolicyRegistryContract().call();
+  const policyRegistry = await  _getBridgePolicyRegistryContract(policyRegistryAddr, global.user.ethNet.web3Instance)
 
   let trustWalletAssets: { [key: string]: any } = {};
   trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
@@ -248,7 +248,7 @@ export async function getCoversBridge():Promise<any>{
       limit++;
       continue;
     }
-    let policyBook = await _getBridgePolicyBookContract(policyBookAddress, global.user.web3);
+    let policyBook = await _getBridgePolicyBookContract(policyBookAddress, global.user.ethNet.web3Instance);
     let policyBookinfo = await policyBook.methods.info().call();
     let claimStatus = mergedPolicyStatuses[i];
 
@@ -268,7 +268,7 @@ export async function getCoversBridge():Promise<any>{
         startTime: info.startTime,
         name: name,
         logo: logo,
-        net: global.user.networkId
+        net: global.user.ethNet.networkId
       }
 
       policies.push(cover)

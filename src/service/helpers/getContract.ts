@@ -50,11 +50,11 @@ function _getInsuraceDistributorsContract(address:string) : any {
   return new web3.eth.Contract(distAbi, address );
 }
 
-function _getInsurAceProductContract(address:string) : any {
-  const web3:any = global.user.web3;
+function _getInsurAceProductContract(address:string, _web3:any) : any {
+  // const web3:any = global.user.web3;
   const distAbi:any = InsuraceProductABI.abi;
 
-  return new web3.eth.Contract(distAbi, address );
+  return new _web3.eth.Contract(distAbi, address );
 }
 
 /**
@@ -88,16 +88,15 @@ function _getNexusDistributor(address:string) : any {
   return new web3.eth.Contract(distAbi, address );
 }
 
-function _getInsuraceDistributor(address:string) : any {
-  const web3:any = global.user.web3;
+function _getInsuraceDistributor(address:string, _web3:any) : any {
   const distAbi:any = ICoverABI.abi;
-  return new web3.eth.Contract(distAbi, address );
+  return new _web3.eth.Contract(distAbi, address );
 }
 
-function _getInsurAceCoverDataContract(address:string) : any {
-  const web3:any = global.user.web3;
+function _getInsurAceCoverDataContract(address:string, _web3:any) : any {
+  // const web3:any = global.user.web3;
   const distAbi:any = InsuraceCoverDataABI.abi;
-  return new web3.eth.Contract(distAbi, address );
+  return new _web3.eth.Contract(distAbi, address );
 }
 
 const _getBridgeRegistryContract           =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeRegistryContractABI.abi, address , web3);

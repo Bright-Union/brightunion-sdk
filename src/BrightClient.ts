@@ -181,6 +181,9 @@ async getQuoteFrom(_distributorName:string,
     if(!_quote){
       return {error : "No quote provided"};
     }
+    if(_quote.chainId !== global.user.networkId){
+      return {error : "Please switch network"};
+    }
     return await buyQuote(
       _quote
     )
