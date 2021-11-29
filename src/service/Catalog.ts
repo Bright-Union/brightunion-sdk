@@ -45,7 +45,6 @@ export async function getBridgeCoverables(): Promise<any[]> {
   let trustWalletAssets: { [key: string]: any } = {};
   trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
 
-  // const chainId = await global.user.web3.eth.getChainId();
   const bridgeRegistryAdd = NetConfig.netById( global.user.ethNet.networkId ).bridgeRegistry;
 
   const BridgeContract = await _getBridgeRegistryContract(bridgeRegistryAdd, global.user.ethNet.web3Instance );

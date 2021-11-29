@@ -38,7 +38,7 @@ function _getDistributorsContract() : any {
 }
 
 function _getNexusDistributorsContract(address:any) : any {
-  const web3:any = global.user.web3;
+  const web3:any = global.user.ethNet.web3Instance;
   const distAbi:any = NexusDistributorABI.abi;
   return new web3.eth.Contract(distAbi, address );
 }
@@ -63,27 +63,27 @@ function _getInsurAceProductContract(address:string) : any {
  *  "without BU protocol Layer"
  */
 function _getNexusMasterContract(address:string) : any {
-  const web3:any = global.user.web3;
+  const web3:any = global.user.ethNet.web3Instance;
   const distAbi:any = NexusMasterABI .abi;
   return new web3.eth.Contract(distAbi, address );
 }
 function _getNexusClaimsDataContract(address:string) : any {
-  const web3:any = global.user.web3;
+  const web3:any = global.user.ethNet.web3Instance;
   const distAbi:any = NexusClaimsDataABI .abi;
   return new web3.eth.Contract(distAbi, address );
 }
 function _getNexusGatewayContract(address:string) : any {
-  const web3:any = global.user.web3;
+  const web3:any = global.user.ethNet.web3Instance;
   const distAbi:any = NexusGatewayABI .abi;
   return new web3.eth.Contract(distAbi, address );
 }
 function _getNexusQuotationContract(address:string) : any {
-  const web3:any = global.user.web3;
+  const web3:any = global.user.ethNet.web3Instance;
   const distAbi:any = NexusQuotationABI .abi;
   return new web3.eth.Contract(distAbi, address );
 }
 function _getNexusDistributor(address:string) : any {
-  const web3:any = global.user.web3;
+  const web3:any = global.user.ethNet.web3Instance;
   const distAbi:any = DistributorNexusABI .abi;
   return new web3.eth.Contract(distAbi, address );
 }

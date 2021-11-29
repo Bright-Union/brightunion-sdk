@@ -16,8 +16,8 @@ export default class NexusApi {
 
     static fetchCoverables () {
 
-      // return axios.get(`${NetConfig.netById(global.user.ethNet.networkId).nexusAPI}/coverables/contracts.json`)
-        return axios.get(`https://api.nexusmutual.io/coverables/contracts.json`)
+      return axios.get(`${NetConfig.netById(global.user.ethNet.networkId).nexusAPI}/coverables/contracts.json`)
+        // return axios.get(`https://api.nexusmutual.io/coverables/contracts.json`)
             .then((response) => {
                 return response.data;
             }).catch(error => {

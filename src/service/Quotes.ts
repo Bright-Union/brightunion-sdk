@@ -86,7 +86,6 @@ export async function getQuoteFrom(
 
    if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeProductAddress) {
 
-
      let amountInWei:any = toWei(_amount.toString(), 'ether');
 
      if (_currency === 'ETH') {
@@ -99,7 +98,7 @@ export async function getQuoteFrom(
      let quote:any = {}
      // let bridgeQuote:any = {}
 
-     if(global.user.ethNet.networkId = 1 ){
+     if(global.user.ethNet.networkId == 1 ){
 
        quote = await getQuoteFromBridge(
          _protocol.bridgeProductAddress,
@@ -185,7 +184,6 @@ export async function getQuoteFrom(
 
 
  export async function getNexusQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
-
     if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'NEXUS_MUTUAL') && _protocol.nexusCoverable){
      return await NexusApi.fetchQuote( _amount , _currency, _period, _protocol);
    }
@@ -194,7 +192,7 @@ export async function getQuoteFrom(
 
 export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
 
-  if(!_web3.networkId){ // if not passive net
+  if(!_web3.networkId){ // if active net
     const newWeb3Instance = {
         account: global.user.account,
         networkId: global.user.networkId,
