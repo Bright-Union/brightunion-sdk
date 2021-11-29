@@ -119,16 +119,17 @@ export async function getQuoteFrom(
            price: quote.price,
            response: quote._stats,
            pricePercent: quote.pricePercent, //%, annualize
-           // estimatedGasPrice: quote.estimatedGasPrice,
-           // estimatedGasPriceCurrency: quote.defaultCurrencySymbol,
-           // estimatedGasPriceDefault: quote.feeInDefaultCurrency
+           estimatedGasPrice: quote.estimatedGasPrice,
+           estimatedGasPriceCurrency: quote.defaultCurrencySymbol,
+           estimatedGasPriceDefault: quote.feeInDefaultCurrency,
+           errorMsg: quote.errorMsg
          },
          {
-           // totalUSDTLiquidity: quote.totalUSDTLiquidity,
-           // maxCapacity: quote.maxCapacity,
-           // stakedSTBL: quote.stakedSTBL,
-           // activeCovers: quote.activeCovers,
-           // utilizationRatio: quote.utilizationRatio,
+           totalUSDTLiquidity: quote.totalUSDTLiquidity,
+           maxCapacity: quote.maxCapacity,
+           stakedSTBL: quote.stakedSTBL,
+           activeCovers: quote.activeCovers,
+           utilizationRatio: quote.utilizationRatio,
          }
        );
 

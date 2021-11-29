@@ -120,7 +120,7 @@ class InsuraceApi {
             const cashbackInStable = .075 *
                 parseFloat(toBN(premium)
                     .div(toBN(10 ** 18)).toNumber().toString());
-            const {gasPrice, USDRate} = await GasHelper.getGasPrice(web3);
+            const {gasPrice, USDRate} = await GasHelper.getGasPrice(web3.symbol);
 
             let estimatedGasPrice;
             let feeInDefaultCurrency;

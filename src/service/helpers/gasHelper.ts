@@ -3,19 +3,19 @@ import ExchangeRateHelper from "./exchangeRateHelper";
 
 class GasHelper {
 
-    public static async  getGasPrice(web3:any) {
+    public static async  getGasPrice(_web3Symbol:any) {
 
-        if(web3.symbol === "POLYGON"){
+        if(_web3Symbol === "POLYGON"){
             const result:any = await this.fetchMaticGasPrice();
             return {gasPrice: result.standard, USDRate: await ExchangeRateHelper.fetchExchangeRate('MATIC')};
         }
 
-        if(web3.symbol === "BSC"){
+        if(_web3Symbol === "BSC"){
             const result:any = await this.fetchBSCGasPrice();
             return {gasPrice: result.standard, USDRate: await ExchangeRateHelper.fetchExchangeRate('BNB')};
         }
 
-        if(web3.symbol === "ETH"){
+        if(_web3Symbol === "ETH"){
             const result = await this.fetchEthereumGasPrice();
             return  { gasPrice: result.SafeGasPrice, USDRate: await ExchangeRateHelper.fetchExchangeRate('ETH')};
         }
