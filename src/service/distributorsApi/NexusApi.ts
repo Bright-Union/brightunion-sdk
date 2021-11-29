@@ -5,7 +5,7 @@ import RiskCarriers from '../config/RiskCarriers'
 import CatalogHelper from '../helpers/catalogHelper'
 import BigNumber from 'bignumber.js'
 import {toBN, toWei, asciiToHex, fromWei} from 'web3-utils'
-import {  _getNexusDistributor,  _getNexusDistributorsContract, _getDistributorsContract, _getNexusQuotationContract } from '../helpers/getContract'
+import {  _getNexusDistributor,  _getNexusDistributorsContract, _getDistributorsContract, _getNexusQuotationContract , _getNexusMasterContract } from '../helpers/getContract'
 import GasHelper from "../helpers/gasHelper"
 
 
@@ -67,7 +67,10 @@ export default class NexusApi {
         fee = toBN(fee);
         let priceWithFee:any = basePrice.mul(fee).div(toBN(10000)).add(basePrice);
 
-        const quotationContract = await _getNexusQuotationContract(global.user.ethNet.web3Instance);
+        const masterAddress = await distributor.methods.master().call()
+        const masterContract = await _getNexusMasterContract(masterAddress );
+        const quotationAddress =  await masterContract.methods.getLatestAddress(asciiToHex('QD')).call();
+        const quotationContract = await _getNexusQuotationContract(quotationAddress);
         const totalCovers = await quotationContract.methods.getCoverLength().call();
         const activeCoversETH  = await quotationContract.methods.getTotalSumAssuredSC(protocol.nexusCoverable, asciiToHex('ETH')).call();
         const activeCoversDAI = await quotationContract.methods.getTotalSumAssuredSC(protocol.nexusCoverable, asciiToHex('DAI')).call();
@@ -75,10 +78,10 @@ export default class NexusApi {
         const totalActiveCoversDAI = await quotationContract.methods.getTotalSumAssured(asciiToHex('DAI')).call();
         const {gasPrice, USDRate} = await GasHelper.getGasPrice(global.user.ethNet.symbol);
 
-        let estimatedGasPrice = (RiskCarriers.NEXUS.description.estimatedGas * gasPrice) * USDRate / (10**9);
-        let feeInDefaultCurrency = (RiskCarriers.NEXUS.description.estimatedGas * gasPrice) / 10**9;
-        let defaultCurrencySymbol = global.user.ethNet.symbol === 'POLYGON'? 'MATIC': global.user.ethNet.symbol === 'BSC' ? 'BNB' : 'ETH';
-        const nexusMaxCapacityError = this.checkNexusCapacity(currency, amountInWei.toString(), capacityETH, capacityDAI);
+        // let estimatedGasPrice = (RiskCarriers.NEXUS.description.estimatedGas * gasPrice) * USDRate / (10**9);
+        // let feeInDefaultCurrency = (RiskCarriers.NEXUS.description.estimatedGas * gasPrice) / 10**9;
+        // let defaultCurrencySymbol = global.user.ethNet.symbol === 'POLYGON'? 'MATIC': global.user.ethNet.symbol === 'BSC' ? 'BNB' : 'ETH';
+        // const nexusMaxCapacityError = this.checkNexusCapacity(currency, amountInWei.toString(), capacityETH, capacityDAI);
 
         return CatalogHelper.quoteFromCoverable(
           'nexus',
@@ -92,11 +95,12 @@ export default class NexusApi {
             price: priceWithFee.toString(),
             pricePercent: new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000), //%, annualize
             response: response.data,
-            estimatedGasPrice: estimatedGasPrice,
-            estimatedGasPriceCurrency: defaultCurrencySymbol,
-            estimatedGasPriceDefault: feeInDefaultCurrency,
+            estimatedGasPrice:123, //estimatedGasPrice,
+            estimatedGasPriceCurrency:123, //defaultCurrencySymbol,
+            estimatedGasPriceDefault:123 //feeInDefaultCurrency,
           },
           {
+            remainingCapacity:123,
             activeCoversETH: activeCoversETH,
             activeCoversDAI: activeCoversDAI,
             capacityETH: capacityETH,
@@ -104,7 +108,7 @@ export default class NexusApi {
             totalCovers: totalCovers,
             totalActiveCoversDAI: totalActiveCoversDAI,
             totalActiveCoversETH: totalActiveCoversETH,
-            nexusMaxCapacityError: nexusMaxCapacityError
+            nexusMaxCapacityError: 'null' //nexusMaxCapacityError
           }
         );
 
