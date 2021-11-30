@@ -8,10 +8,6 @@ import {toBN, toWei, asciiToHex, fromWei} from 'web3-utils'
 import {  _getNexusDistributor,  _getNexusDistributorsContract, _getDistributorsContract, _getNexusQuotationContract , _getNexusMasterContract } from '../helpers/getContract'
 import GasHelper from "../helpers/gasHelper"
 
-
-
-
-
 export default class NexusApi {
 
     static fetchCoverables () {
@@ -66,6 +62,7 @@ export default class NexusApi {
         let fee:any = await distributor.methods.feePercentage().call();
         fee = toBN(fee);
         let priceWithFee:any = basePrice.mul(fee).div(toBN(10000)).add(basePrice);
+        let pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000)
 
         const masterAddress = await distributor.methods.master().call()
         const masterContract = await _getNexusMasterContract(masterAddress );
@@ -93,7 +90,7 @@ export default class NexusApi {
             chain: 'ETH',
             chainId: global.user.ethNet.networkId,
             price: priceWithFee.toString(),
-            pricePercent: new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000), //%, annualize
+            pricePercent: pricePercent , //%, annualize
             response: response.data,
             estimatedGasPrice:estimatedGasPrice, //estimatedGasPrice,
             estimatedGasPriceCurrency:defaultCurrencySymbol, //defaultCurrencySymbol,

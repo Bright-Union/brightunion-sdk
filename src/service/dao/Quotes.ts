@@ -84,7 +84,8 @@ export async function getQuoteFromBridge(
 
         let estimatedGasPrice = (RiskCarriers.BRIDGE.description.estimatedGas * gasPrice) * USDRate / (10**9);
         let feeInDefaultCurrency = (RiskCarriers.BRIDGE.description.estimatedGas * gasPrice) / 10**9;
-        let defaultCurrencySymbol = NetConfig.networkCurrency(global.user.ethNet.networkId);
+        let defaultCurrencySymbol = "ETH";
+        // let defaultCurrencySymbol = NetConfig.networkCurrency(global.user.ethNet.networkId);
         const bridgeEpochs = Math.min(52, Math.ceil(Number(_period) / 7));
 
         const {totalSeconds, totalPrice} =  await policyBookContract.methods.getPolicyPrice(bridgeEpochs, _amountInWei).call();
