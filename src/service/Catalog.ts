@@ -27,7 +27,7 @@ export async function getCatalog(): Promise<any> {
   }
 
   for (let net of global.user.web3Passive) {
-     console.log('fetching insurace coveraables for ', net.symbol)
+     // console.log('fetching insurace coveraables for ', net.symbol)
      catalogPromiseArray.push(getInsuraceCoverables(net.symbol))
   }
 
@@ -170,7 +170,7 @@ export async function getNexusCoverables(): Promise<any[]> {
             coingecko: value.coingecko,
             source: 'insurace',
             productId: value.product_id,
-            stats: { "capacityRemaining": value.capacity_remaining, "unitCost":value.unit_cost_yearly }
+            ['stats_'+netSymbol]: { "capacityRemaining": value.capacity_remaining, "unitCost":value.unit_cost_yearly }
           }))
 
         }

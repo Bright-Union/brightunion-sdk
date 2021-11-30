@@ -171,13 +171,16 @@ class InsuraceApi {
                     estimatedGasPriceDefault: feeInDefaultCurrency
                 },
                 {
-                    remainingCapacity: protocol.stats ? protocol.stats.capacityRemaining : null
+                    remainingCapacity: protocol['stats_'+currency] ? protocol['stats_'+currency].capacityRemaining : 0
                 }
             );
             return quote;
         })
             .catch((e) => {
                 let errorMsg = e.response && e.response.data ? e.response.data.message : e.message;
+
+                let defaultCapacity = protocol['stats_'+currency] ? protocol['stats_'+currency].capacityRemaining : 0;
+
 
                 if (errorMsg.includes('GPCHK') && errorMsg.includes(String(4))) {
                     errorMsg = "Invalid amount or period.";
@@ -192,7 +195,6 @@ class InsuraceApi {
                 } else if (errorMsg.match('GP: 4')) {
                     errorMsg = "Minimum duration is 1 day. Maximum is 365";
                 } else if (errorMsg.includes('amount exceeds the maximum capacity')) {
-                    let defaultCapacity = protocol.stats? protocol.stats.capacityRemaining : 0;
                     let currency = 'ETH';
                     if (quoteCurrency === 'USD') {
                         defaultCapacity = CurrencyHelper.eth2usd(defaultCapacity);
@@ -214,7 +216,7 @@ class InsuraceApi {
                         estimatedGasPrice: 0,
                         errorMsg: errorMsg,
                     }, {
-                        remainingCapacity: protocol.stats.capacityRemaining
+                        remainingCapacity: defaultCapacity,
                     }
                 );
                 return quote;
