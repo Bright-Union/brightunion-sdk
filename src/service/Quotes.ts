@@ -120,8 +120,8 @@ export async function getQuoteFrom(
            response: quote._stats,
            pricePercent: quote.pricePercent, //%, annualize
            estimatedGasPrice: quote.estimatedGasPrice,
-           estimatedGasPriceCurrency: quote.defaultCurrencySymbol,
-           estimatedGasPriceDefault: quote.feeInDefaultCurrency,
+           defaultCurrencySymbol: quote.estimatedGasPriceCurrency,
+           feeInDefaultCurrency: quote.estimatedGasPriceDefault,
            errorMsg: quote.errorMsg
          },
          {
