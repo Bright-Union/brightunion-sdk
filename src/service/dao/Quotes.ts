@@ -56,7 +56,8 @@ export async function getQuote(
 }
 
 export async function getQuoteFromBridge(
-  _bridgeProductAddress:any,
+  _protocol:any,
+  // _bridgeProductAddress:any,
   _period:any,
   _amountInWei:any,
 
@@ -69,9 +70,9 @@ export async function getQuoteFromBridge(
       return _getBridgePolicyBookRegistryContract(policyBookRegistryAddr, global.user.ethNet.web3Instance );
     })
 
-    const isPolicyPresent  = await policyBookRegistry.methods.isPolicyBook(_bridgeProductAddress).call();
+    const isPolicyPresent  = await policyBookRegistry.methods.isPolicyBook(_protocol.bridgeProductAddress).call();
     if(isPolicyPresent){
-      const policyBookContract = await _getBridgePolicyBookContract(_bridgeProductAddress, global.user.ethNet.web3Instance );
+      const policyBookContract = await _getBridgePolicyBookContract(_protocol.bridgeProductAddress, global.user.ethNet.web3Instance );
       const policyBookContractArray:any = Array.of(policyBookContract._address);
 
       // const _stats = await
@@ -80,19 +81,37 @@ export async function getQuoteFromBridge(
         let capacity = _stats[0].maxCapacity;
         let remainingCapacity = capacity;
         let stakedSTBL = _stats[0].stakedSTBL;
-        const {gasPrice, USDRate} = await GasHelper.getGasPrice(global.user.ethNet.symbol);
-
-        let estimatedGasPrice = (RiskCarriers.BRIDGE.description.estimatedGas * gasPrice) * USDRate / (10**9);
-        let feeInDefaultCurrency = (RiskCarriers.BRIDGE.description.estimatedGas * gasPrice) / 10**9;
-        let defaultCurrencySymbol = "ETH";
         // let defaultCurrencySymbol = NetConfig.networkCurrency(global.user.ethNet.networkId);
         const bridgeEpochs = Math.min(52, Math.ceil(Number(_period) / 7));
 
         const {totalSeconds, totalPrice} =  await policyBookContract.methods.getPolicyPrice(bridgeEpochs, _amountInWei).call();
+        const actualPeriod = Math.floor(Number(totalSeconds) / 3600 / 24);
+        const pricePercent = new BigNumber(totalPrice).times(1000).dividedBy(_amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000;
+
+        global.events.emit("quote" , {
+          status: "INITIAL_DATA" ,
+          distributorName:"bridge",
+          price: totalPrice ,
+          pricePercent:pricePercent,
+          amount:_amountInWei,
+          currency:"ETH",
+          period:_period,
+          actualPeriod:actualPeriod,
+          protocol:_protocol,
+          chain: 'ETH',
+          chainId: global.user.ethNet.networkId,
+          rawData: _stats,
+        } );
+
+        const {gasPrice, USDRate} = await GasHelper.getGasPrice(global.user.ethNet.symbol);
+
+        const estimatedGasPrice = (RiskCarriers.BRIDGE.description.estimatedGas * gasPrice) * USDRate / (10**9);
+        const feeInDefaultCurrency = (RiskCarriers.BRIDGE.description.estimatedGas * gasPrice) / 10**9;
+        const defaultCurrencySymbol = "ETH";
+
         const totalLiquidity  = await policyBookContract.methods.totalLiquidity().call();
         const coverTokens = await policyBookContract.methods.totalCoverTokens().call();
 
-        const actualPeriod = Math.floor(Number(totalSeconds) / 3600 / 24);
 
         return{
           _stats : _stats,
@@ -103,7 +122,7 @@ export async function getQuoteFromBridge(
           chain: "ETH",
           chainId: global.user.ethNet.networkId,
           price: totalPrice,
-          pricePercent: new BigNumber(totalPrice).times(1000).dividedBy(_amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000, //%, annualize
+          pricePercent: pricePercent, //%, annualize
           estimatedGasPrice: estimatedGasPrice,
           estimatedGasPriceCurrency: defaultCurrencySymbol,
           estimatedGasPriceDefault: feeInDefaultCurrency,

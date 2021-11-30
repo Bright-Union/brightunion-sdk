@@ -62,7 +62,21 @@ export default class NexusApi {
         let fee:any = await distributor.methods.feePercentage().call();
         fee = toBN(fee);
         let priceWithFee:any = basePrice.mul(fee).div(toBN(10000)).add(basePrice);
-        let pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000)
+        let pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
+
+        global.events.emit("quote" , {
+          status: "INITIAL_DATA" ,
+          distributorName:"nexus",
+          price: priceWithFee ,
+          pricePercent:pricePercent,
+          amount:amount,
+          currency:currency,
+          period:period,
+          protocol:protocol,
+          chain: 'ETH',
+          chainId: global.user.ethNet.networkId,
+          rawData: response.data,
+        } );
 
         const masterAddress = await distributor.methods.master().call()
         const masterContract = await _getNexusMasterContract(masterAddress );

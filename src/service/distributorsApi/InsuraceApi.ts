@@ -95,8 +95,7 @@ class InsuraceApi {
         let selectedCurrency:any = currencies.find((curr:any) => {return curr.name == currency});
 
         if (!selectedCurrency) {
-          console.error(`Selected currency is not supported by InsurAce: ${currency} on net ${web3.networkId}`)
-          return;
+          return {error: `Selected currency is not supported by InsurAce: ${currency} on net ${web3.networkId}`};
         }
 
         web3.symbol = NetConfig.netById(web3.networkId).symbol;
@@ -112,11 +111,27 @@ class InsuraceApi {
           global.user.account,
         ).then( async (response: any) => {
 
-            const insurPrice = CurrencyHelper.insurPrice();
+          const defaultCurrencySymbol = web3.symbol === 'POLYGON' ? 'MATIC' : web3.symbol === 'BSC' ? 'BNB' : 'ETH';
             let premium: number = response.premiumAmount;
             if (NetConfig.sixDecimalsCurrency(web3.networkId, currency)) {
                 premium = Number(ERC20Helper.USDTtoERCDecimals(premium));
             }
+            const pricePercent = new BigNumber(premium).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
+
+            global.events.emit("quote" , {
+              status: "INITIAL_DATA" ,
+              distributorName:"insurace",
+              price: premium ,
+              pricePercent:pricePercent,
+              amount:amountInWei,
+              currency:currency,
+              period:period,
+              protocol:protocol,
+              chain: web3.symbol,
+              chainId: web3.networkId,
+              rawData: response,
+            } );
+
             const cashbackInStable = .075 *
                 parseFloat(toBN(premium)
                     .div(toBN(10 ** 18)).toNumber().toString());
@@ -135,7 +150,7 @@ class InsuraceApi {
                 feeInDefaultCurrency = 0;
             }
 
-            const defaultCurrencySymbol = web3.symbol === 'POLYGON' ? 'MATIC' : web3.symbol === 'BSC' ? 'BNB' : 'ETH';
+            const insurPrice = CurrencyHelper.insurPrice();
 
             const quote = CatalogHelper.quoteFromCoverable(
                 'insurace',
@@ -149,7 +164,7 @@ class InsuraceApi {
                     price: premium,
                     cashBack: [(cashbackInStable / insurPrice), cashbackInStable],
                     cashBackInWei: web3.web3Instance.utils.toWei(cashbackInStable.toString(), 'ether'),
-                    pricePercent: new BigNumber(premium).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000), //%, annualize
+                    pricePercent: pricePercent,  //%, annualize
                     response: response,
                     estimatedGasPrice: estimatedGasPrice,
                     estimatedGasPriceCurrency: defaultCurrencySymbol,

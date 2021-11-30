@@ -25,6 +25,10 @@ export async function getCatalog(): Promise<any> {
     catalogPromiseArray.push(getBridgeCoverables())
   }
 
+  // for (let net of global.user.web3Passive) {
+  //   catalogPromiseArray.push(getInsuraceCoverables())
+  // }
+
   return Promise.all(catalogPromiseArray)
   .then((_data: any) => {
     let allCoverables: any[] = [];

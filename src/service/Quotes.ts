@@ -101,7 +101,7 @@ export async function getQuoteFrom(
      if(global.user.ethNet.networkId == 1 ){
 
        quote = await getQuoteFromBridge(
-         _protocol.bridgeProductAddress,
+         _protocol,
          _period,
          amountInWei,
        );
