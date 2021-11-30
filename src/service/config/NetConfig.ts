@@ -1,5 +1,26 @@
 import Web3 from 'web3';
 
+
+// const VUE_APP_FALLBACK_NET="42"
+// const VUE_APP_PASSWORD_PROTECTED=true
+// const VUE_APP_APOLLO_ENGINE_KEY="none"
+// const VUE_APP_GRAPHQL_HTTP="https://api.thegraph.com/subgraphs/name/"
+// const VUE_APP_GRAPHQL_WS="wss://api.thegraph.com/subgraphs/name/"
+// const VUE_APP_GRAPHQL_NEXUS="nexusmutual/nexus-mutual"
+// const VUE_APP_SET_PROTOCOL='0x243a6acfef9aea12884b5c95e3bf5e2db880f3af'
+// const VUE_APP_SET_PROTOCOL_BASIC_ISSUANCE_MODULE='0x8a070235a4b9b477655bf4eb65a1db81051b3cc1'
+const VUE_APP_MAINNET_MODULES='BRIGHT_TOKEN UNISWAP BRIDGE_MUTUAL NEXUS_MUTUAL INSURACE'
+const VUE_APP_KOVAN_MODULES='BRIGHT_TOKEN NEXUS_MUTUAL BRI_INDEX'
+const VUE_APP_RINKEBY_MODULES='BRIDGE_MUTUAL INSURACE'
+const VUE_APP_ROPSTEN_MODULES='BRIDGE_MUTUAL'
+const VUE_APP_BSC_MODULES='INSURACE'
+const VUE_APP_BSC_TESTNET_MODULES=''
+// const VUE_APP_BSC_TESTNET_MODULES='INSURACE'
+const VUE_APP_POLYGON_MODULES='INSURACE'
+const VUE_APP_MUMBAI_TESTNET_MODULES=''
+// const VUE_APP_MUMBAI_TESTNET_MODULES='INSURACE'
+
+
  const NETWORK_CONFIG = [
     {
         name: 'Ethereum',
@@ -7,7 +28,7 @@ import Web3 from 'web3';
         symbol: 'ETH',
         explorer: 'https://etherscan.io',
         provider: 'https://eth-mainnet.alchemyapi.io/v2/OlIDDqLH9Uo3AUQ_0ezj6sfqHIGxJRxw',
-        modules: process.env.VUE_APP_MAINNET_MODULES.split(' '),
+        modules: VUE_APP_MAINNET_MODULES.split(' '),
         bridgeRegistry: '0x8050c5a46FC224E3BCfa5D7B7cBacB1e4010118d',
         nexusDistributor: '0x3756C3C9374f38e0d9aAcB637Fed1641504a5b28',
         nexusAPI: 'https://api.nexusmutual.io',
@@ -36,7 +57,7 @@ import Web3 from 'web3';
         insuraceAPI: '',                                        //not used
         insuraceAPIKey: '',                                     //not used
         insuraceReferral: '',
-        modules: process.env.VUE_APP_ROPSTEN_MODULES.split(' '),
+        modules: VUE_APP_ROPSTEN_MODULES.split(' '),
         ETH: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
         DAI: '0x69dDdb0F010D9Cac595F75d8b0fff59CDCD1D44f',      //not used
         USDT: '0xcc54b12a18f2c575ca97991046090f43c3070aa0',     //not used
@@ -50,18 +71,20 @@ import Web3 from 'web3';
         explorer: 'https://rinkeby.etherscan.io',
         provider: 'https://rinkeby.infura.io/v3/98d7e501879243c5877bac07a57cde7e',
         nexusAPI: 'https://api.nexusmutual.io',                 //not used
-        brightProtocol:'0x902eaf0Df408a8c170bC1f389FB8D1bC4Fe22f2f',
+        brightProtocol:'0x908DDB24Ea9f1abc9B2cD2be8114b01EE5Ff76b2',
         brightContractRegistry: '',                             //not used
-        insuraceCover: '0x0921f628b8463227615D2199D0D3860E4fBcD411',
+        insuraceCover: "0x0921f628b8463227615D2199D0D3860E4fBcD411" ,
+        // insuraceCover: "0x908DDB24Ea9f1abc9B2cD2be8114b01EE5Ff76b2" ,
         insuraceAPI: 'https://insurace-sl-microservice.azurewebsites.net',
         insuraceAPIKey: 'OmgwnM39a/M9/9Q856wbRkILcYh2ZmlJPpG9cVxT5Vy6aR8eNl3/jw==',
         insuraceReferral: '',
-        modules: process.env.VUE_APP_RINKEBY_MODULES.split(' '),
+        modules: VUE_APP_RINKEBY_MODULES.split(' '),
         bridgeRegistry: '0x0Ac28BcDcef8D8C95c4a079418dbC34e4AD4DF1D',
         ETH: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-        DAI: '0x69dDdb0F010D9Cac595F75d8b0fff59CDCD1D44f',      //not used
-        USDT: '0xcc54b12a18f2c575ca97991046090f43c3070aa0',
-        USDC: '0x4dbcdf9b62e891a7cec5a2568c3f4faf9e8abe2b',
+        DAI: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',      //not used
+        // DAI: '0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa',      //not used
+        USDT: '0xD92E713d051C37EbB2561803a3b5FBAbc4962431',
+        USDC: '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b',
         INSUR: '',                                               //not used
     },
     {
@@ -70,10 +93,10 @@ import Web3 from 'web3';
         symbol: 'ETH',
         explorer: 'https://kovan.etherscan.io',
         provider: 'https://eth-kovan.alchemyapi.io/v2/9r8lwXZcACNfMovcyYaquN_CNK81Cqxi',
-        modules: process.env.VUE_APP_KOVAN_MODULES.split(' '),
+        modules: VUE_APP_KOVAN_MODULES.split(' '),
         nexusDistributor: '0x95454264489114534dD39D81E03Cf4003F948cA6',
         nexusAPI: 'https://api.staging.nexusmutual.io',
-        brightProtocol:'0x4d968a79d76a42761620B64533718D56A9E978D2',
+        brightProtocol:'0x15E83c77857859C0Ab3E36c144c3225C4BacD7f7',
         brightContractRegistry: '0x269601a1825dB9194620477e2D251167Ae938117',
         insuraceCover: '',                                      //not used
         insuraceAPI: '',                                        //not used
@@ -91,13 +114,14 @@ import Web3 from 'web3';
         symbol: 'BSC',
         explorer: 'https://bscscan.com',
         provider: 'https://bsc-dataseed.binance.org',
-        modules: process.env.VUE_APP_BSC_MODULES.split(' '),
+        modules: VUE_APP_BSC_MODULES.split(' '),
         bridgeRegistry: '',
         nexusDistributor: '',
         nexusAPI: '',
-        brightProtocol:'0xf58174a5999Db42F56Fdf8010Fa024D8c88B6De7',
+        brightProtocol:'0xe457d4be112ca8b14bd9fedebae48037c11366ea',
         brightContractRegistry: '',
         insuraceCover: '0xfBa24bdbb36001F1F88B3a552c77EC1c10f5E4C0',
+        // insuraceCover: '0xB96eB892fc5fAC87ffE4f4F6eB509Eeaf6019243',
         insuraceAPI: 'https://api.insurace.io/ops/v1',
         insuraceAPIKey: 'H7C8k69Eiisz7AG1/6xcI5UWGluTtyAbizXrsfbfQIBDapQZEHAHFw==',
         insuraceReferral: '982107115070280393099561761653261738634756834311',
@@ -114,10 +138,10 @@ import Web3 from 'web3';
         symbol: 'BSC',
         explorer: 'https://testnet.bscscan.com',
         provider: 'https://data-seed-prebsc-1-s1.binance.org:8545',
-        modules: process.env.VUE_APP_BSC_TESTNET_MODULES.split(' '),
+        modules: VUE_APP_BSC_TESTNET_MODULES.split(' '),
         nexusDistributor: '',
         nexusAPI: '',
-        brightProtocol:'0x9dfFb15A9E320801c9997d826533cc7960D21a46',
+        brightProtocol:'0x888F2aDC65C4e64A4A9B98f8b1261a232397B348',
         brightContractRegistry: '',
         insuraceCover: '0x5f463Cc70f9706E63d4b927E25c28d5A709828b9',
         insuraceAPI: 'https://insurace-sl-microservice.azurewebsites.net',
@@ -136,11 +160,11 @@ import Web3 from 'web3';
         symbol: 'POLYGON',
         explorer: 'https://polygonscan.com',
         provider: 'https://polygon-rpc.com',
-        modules: process.env.VUE_APP_POLYGON_MODULES.split(' '),
+        modules: VUE_APP_POLYGON_MODULES.split(' '),
         bridgeRegistry: '',
         nexusDistributor: '',
         nexusAPI: '',
-        brightProtocol:'',
+        brightProtocol:'0x2c3783aac396bacb02559a2bb209986f0e5ebf94',
         brightContractRegistry: '',
         insuraceCover: '0x3e00FE643337A0f4E345539096cA01e6B8d4374A',
         insuraceAPI: 'https://api.insurace.io/ops/v1',
@@ -159,10 +183,10 @@ import Web3 from 'web3';
         symbol: 'POLYGON',
         explorer: 'https://explorer-mumbai.maticvigil.com',
         provider: 'https://rpc-mumbai.matic.today',
-        modules: process.env.VUE_APP_MUMBAI_TESTNET_MODULES.split(' '),
+        modules: VUE_APP_MUMBAI_TESTNET_MODULES.split(' '),
         nexusDistributor: '',
         nexusAPI: '',
-        brightProtocol:'',
+        brightProtocol:'0x5C59A3A67eC553345cb384eC58FCf1a2b9159b15',
         brightContractRegistry: '',
         insuraceCover: '0xE2Edf233eDB3F971415FD76A7b447e4bfFfcd221',
         insuraceAPI: 'https://insurace-sl-microservice.azurewebsites.net',
@@ -248,6 +272,8 @@ class NetConfig{
   public static sixDecimalsCurrency(networkId : any, symbol : any) {
     if (this.netById(networkId).symbol === 'ETH' && symbol === 'USDT') {
       return true;
+    } else if (this.netById(networkId).symbol === 'ETH' && symbol === 'USDC') {
+      return true;
     } else if (this.netById(networkId).symbol === 'POLYGON' && symbol === 'USDT') {
       return true;
     } else if (this.netById(networkId).symbol === 'POLYGON' && symbol === 'USDC') {
@@ -257,6 +283,9 @@ class NetConfig{
 
   // Cannot buy De-peg bundles with testnet tokens
   public static insuraceDePegTestCurrency(protocol:any,currency:any,web3Symbol:any,selectedCurrency:any) : any {
+    if(!protocol.name){
+      return [currency,selectedCurrency]
+    }
     if(currency !== 'ETH' && protocol.name.includes('De-Peg')){
       switch(web3Symbol){
         case "ETH": selectedCurrency.address = this.netById(1)['USDC']; break;
@@ -270,6 +299,13 @@ class NetConfig{
 
   public static isNetworkCurrencyBySymbol(asset:any) {
     return asset === 'ETH' || asset === 'BNB' || asset === 'MATIC';
+  }
+
+  public static getETHNetwork() {
+    const activeWeb3 = { symbol: global.user.symbol , web3Instance: global.user.web3, networkId: global.user.networkId }
+    return [ activeWeb3 , ...global.user.web3Passive].find((net:any) => {
+        return net.symbol === 'ETH'
+      });
   }
 
 }

@@ -3,14 +3,21 @@ import axios from 'axios';
 import NetConfig from '../config/NetConfig'
 import RiskCarriers from '../config/RiskCarriers'
 import CatalogHelper from '../helpers/catalogHelper'
+import BigNumber from 'bignumber.js'
 import {toBN, toWei} from 'web3-utils'
+import {  _getNexusDistributor,
+          _getNexusDistributorsContract,
+          _getDistributorsContract } from '../helpers/getContract'
+
 
 
 
 export default class NexusApi {
 
     static fetchCoverables () {
-        return axios.get(`${NetConfig.netById(global.user.networkId).nexusAPI}/coverables/contracts.json`)
+
+      return axios.get(`${NetConfig.netById(global.user.ethNet.networkId).nexusAPI}/coverables/contracts.json`)
+        // return axios.get(`https://api.nexusmutual.io/coverables/contracts.json`)
             .then((response) => {
                 return response.data;
             }).catch(error => {
@@ -18,9 +25,9 @@ export default class NexusApi {
             });
     }
 
-    static fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<object[]> {
+    static fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<any> {
 
-      const amountInWei = toBN(toWei(amount.toString(), 'ether'));
+      const amountInWei:any = toBN(toWei(amount.toString(), 'ether'));
 
        if (currency === 'USD') {
            currency = RiskCarriers.NEXUS.fallbackQuotation;
@@ -30,16 +37,27 @@ export default class NexusApi {
        }
 
        return axios.get(
-         `${NetConfig.netById(global.user.networkId).nexusAPI}/v1/quote?coverAmount=${amount}&currency=${currency}&period=${period}&contractAddress=${protocol.nexusCoverable}`,
+         `${NetConfig.netById(global.user.ethNet.networkId).nexusAPI}/v1/quote?coverAmount=${amount}&currency=${currency}&period=${period}&contractAddress=${protocol.nexusCoverable}`,
          {
            headers : {
              // Origin: process.env.API_REQUEST_ORIGIN,
            }
          }
        )
-      .then((response:any) => {
+      .then(async (response:any) => {
 
         let basePrice = toBN(response.data.price);
+        let distributor:any;
+
+        if(global.user.ethNet.networkId === 1 ){
+          distributor =  await _getNexusDistributor(NetConfig.netById(global.user.ethNet.networkId).nexusDistributor)
+        }else{
+          const sideChainAddress = await _getDistributorsContract().methods.getDistributorAddress('nexus').call();
+          distributor = await _getNexusDistributorsContract(sideChainAddress);
+        }
+        let fee:any = await distributor.methods.feePercentage().call();
+        fee = toBN(fee);
+        let priceWithFee:any = basePrice.mul(fee).div(toBN(10000)).add(basePrice);
 
         return CatalogHelper.quoteFromCoverable(
           'nexus',
@@ -49,28 +67,29 @@ export default class NexusApi {
             currency: currency,
             period: period,
             chain: 'ETH',
-            chainId: global.user.networkId,
-            price: basePrice,
-            // price: priceWithFee.toString(),
-            // pricePercent: new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000), //%, annualize
+            chainId: global.user.ethNet.networkId,
+            // price: basePrice,
+            price: priceWithFee.toString(),
+            pricePercent: new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000), //%, annualize
             response: response.data,
-            // estimatedGasPrice: estimatedGasPrice,
-            // estimatedGasPriceCurrency: defaultCurrencySymbol,
-            // estimatedGasPriceDefault: feeInDefaultCurrency,
+            estimatedGasPrice: 123,//estimatedGasPrice,
+            estimatedGasPriceCurrency: 123, //defaultCurrencySymbol,
+            estimatedGasPriceDefault: 123, //feeInDefaultCurrency,
           },
           {
-            // activeCoversETH: activeCoversETH,
-            // activeCoversDAI: activeCoversDAI,
-            // capacityETH: capacityETH,
-            // capacityDAI: capacityDAI,
-            // totalCovers: totalCovers,
-            // totalActiveCoversDAI: totalActiveCoversDAI,
-            // totalActiveCoversETH: totalActiveCoversETH,
-            // nexusMaxCapacityError: nexusMaxCapacityError
+            remainingCapacity: 123,
+            activeCoversETH: 1, //activeCoversETH,
+            activeCoversDAI: 1,//activeCoversDAI,
+            capacityETH: 1,//capacityETH,
+            capacityDAI: 1,//capacityDAI,
+            totalCovers: 1, //totalCovers,
+            totalActiveCoversDAI: 1,//totalActiveCoversDAI,
+            totalActiveCoversETH: 1, //totalActiveCoversETH,
+            nexusMaxCapacityError: null //nexusMaxCapacityError
           }
         );
 
-        return response.data;
+        // return response.data;
 
 
       }).catch(function (error) {
@@ -96,7 +115,7 @@ export default class NexusApi {
                                 currency: currency,
                                 period: period,
                                 chain: 'ETH',
-                                chainId: global.user.networkId,
+                                chainId: global.user.ethNet.networkId,
                                 price: 0,
                                 pricePercent: 0,
                                 estimatedGasPrice: 0,
@@ -111,7 +130,7 @@ export default class NexusApi {
                 }
             } else {
                 return new Promise(() => {
-                    return
+                    return {error: error}
                 });
             }
         });

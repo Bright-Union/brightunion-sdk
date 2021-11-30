@@ -1,6 +1,3 @@
-// import NetConfig from '@/service/config/NetConfig';
-// import NexusApi  from '@/service/distributorsApi/NexusApi';
-
 import NexusApi from './distributorsApi/NexusApi';
 import InsuraceApi from './distributorsApi/InsuraceApi';
 import CatalogHelper from './helpers/catalogHelper';
@@ -8,7 +5,7 @@ import {
   _getBridgeRegistryContract,
   _getBridgePolicyBookRegistryContract,
   _getBridgePolicyQuoteContract,
-  _getBridgePolicyBookContract,
+  // _getBridgePolicyBookContract,
   _getBridgePolicyRegistryContract,
 } from './helpers/getContract';
 import NetConfig from './config/NetConfig';
@@ -18,14 +15,13 @@ export async function getCatalog(): Promise<any> {
 
   const catalogPromiseArray:any[] = [];
 
-
-  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL')) {
+  if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'NEXUS_MUTUAL')) {
     catalogPromiseArray.push(getNexusCoverables())
   }
-  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE')) {
+  if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'INSURACE')) {
     catalogPromiseArray.push(getInsuraceCoverables())
   }
-  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL')) {
+  if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL')) {
     catalogPromiseArray.push(getBridgeCoverables())
   }
 
@@ -40,7 +36,7 @@ export async function getCatalog(): Promise<any> {
     }
 
     const mergedCoverables:any[] =  CatalogHelper.mergeCoverables(allCoverables)
-    return { sorted: mergedCoverables, unSrted: allCoverables };
+    return { sorted: mergedCoverables, unSorted: allCoverables };
   })
 
 }
@@ -49,14 +45,13 @@ export async function getBridgeCoverables(): Promise<any[]> {
   let trustWalletAssets: { [key: string]: any } = {};
   trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
 
-  const chainId = await global.user.web3.eth.getChainId();
-  const bridgeRegistryAdd = NetConfig.netById( chainId ).bridgeRegistry;
+  const bridgeRegistryAdd = NetConfig.netById( global.user.ethNet.networkId ).bridgeRegistry;
 
-  const BridgeContract = await _getBridgeRegistryContract(bridgeRegistryAdd,global.user.web3);
+  const BridgeContract = await _getBridgeRegistryContract(bridgeRegistryAdd, global.user.ethNet.web3Instance );
 
   return BridgeContract.methods.getPolicyBookRegistryContract().call().then(async (policyBookRegistryAddr:any) => {
 
-    let BridgePolicyBookRegistryContract = await _getBridgePolicyBookRegistryContract(policyBookRegistryAddr,global.user.web3);
+    let BridgePolicyBookRegistryContract = await _getBridgePolicyBookRegistryContract(policyBookRegistryAddr, global.user.ethNet.web3Instance );
 
     return BridgePolicyBookRegistryContract.methods.count().call().then((policyBookCounter:any) => {
 
@@ -127,7 +122,6 @@ export async function getNexusCoverables(): Promise<any[]> {
   export async function getInsuraceCoverables() : Promise<object[]> {
   let trustWalletAssets: { [key: string]: any } = {};
     trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
-    // const NetID = await global.user.web3.eth.getChainId();
     return await InsuraceApi.fetchCoverables().then((data:object) => {
 
       const coverablesArray = [];
@@ -142,7 +136,27 @@ export async function getNexusCoverables(): Promise<any[]> {
           }
         });
 
-        const logo: string = assetIndex ? assetIndex : `https://app.insurace.io/asset/product/${value.name.replace(/\s+/g, '')}.png`
+        let logo: string = null;
+
+        if(assetIndex){
+          logo = assetIndex;
+        }else{
+
+          let specialLogo:any = CatalogHelper.getSpecialLogoName(value.name);
+          console.log(specialLogo);
+            if(specialLogo){
+              logo = specialLogo;
+            }else{
+              let name = value.name + ' '; // needed for V1 regex to match
+              name = name.replace( '.' , "");
+              name = name.replace( "(", "");
+              name = name.replace( ")", "");
+              name = name.replace(/V.[^0-9]/g, "");
+              name = name.replace(/\s+/g, '')
+
+              logo = `https://app.insurace.io/asset/product/${name}.png`
+            }
+        }
 
         coverablesArray.push(CatalogHelper.createCoverable({
             name: value.name.trim(),

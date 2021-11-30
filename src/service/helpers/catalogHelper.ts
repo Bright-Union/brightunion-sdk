@@ -8,6 +8,7 @@ import * as _ from  "lodash";
 //   _getBridgePolicyRegistryContract,
 // } from '../helpers/getContract';
 import NetConfig from '../config/NetConfig';
+import {hexToUtf8} from 'web3-utils';
 
 const bridge_nexus_insurace = [
   // BRIDGE NAME, NEXUS NAME, INSURACE NAME, COMMON NAME
@@ -112,7 +113,27 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
   },
 }
 
+const catalogLogoLinks: any = [
+  { name: "Eth 0.2" , link:"https://app.insurace.io/asset/product/Eth2.0.png"},
+  { name: "Beefy" , link:"https://app.insurace.io/asset/product/BeefyFinance.png"}
+];
+
 class CatalogHelper {
+
+  public static getSpecialLogoName (_name:string){
+    const isSpecial = catalogLogoLinks.find((i:any) => {return i.name == _name}); // find name in
+    if(isSpecial ){
+      isSpecial.link;
+    }else{
+      return false;
+    }
+  }
+
+  //Unify Cover object from Bright contract
+  public static coverFromData (_distributorName:string, _rawData:any ) {
+    return{
+    }
+  }
 
   public static quoteFromCoverable (_distributorName:string, _coverable:any, obj:any, stats:object) {
     return {
@@ -185,6 +206,22 @@ class CatalogHelper {
     };
   }
 
+  public static createCoverItem(obj:any) {
+    return {
+      distributorName: obj.distributorName,
+      contractName: obj.contractName,
+      name: obj.name,
+      logo: obj.logo,
+      coverType: obj.coverType,
+      coverAmount: obj.coverAmount,
+      coverAsset: obj.coverAsset,
+      endTime: obj.endTime,
+      status: obj.status,
+      net: obj.net,
+      rawData: obj.response,
+    };
+  }
+
 
   public static commonCategory (category:string, provider:string) {
     try{
@@ -231,15 +268,24 @@ class CatalogHelper {
                 const mergedPair = _.mergeWith({}, _catalog[i], _catalog[j], (o, s) => _.isNull(s) ? o : s);
                 mergedCoverableObject = _.mergeWith({}, mergedCoverableObject, mergedPair, (o, s) => _.isNull(s) ? o : s);
 
+                if(mergedCoverableObject.productId && !mergedCoverableObject.availableCounterMultiChain){
+                  mergedCoverableObject.availableCounterMultiChain = true;
+                  duplicates += 2;
+                }
+
                 mergedCoverableObject.availableCounter = ++duplicates;
                 mergedCoverableObject.name = mergedName;
                 duplicateIndexes.push(j)
+
               }
             }
             if (duplicates > 1) {
               coverablesNoDuplicates.push(mergedCoverableObject);
             } else {
               //no duplicate for it, leave it as is
+              if(_catalog[i].productId){
+                mergedCoverableObject.availableCounter += 2;
+              }
               coverablesNoDuplicates.push(_catalog[i])
             }
           }
@@ -305,7 +351,6 @@ class CatalogHelper {
         }
 
         static availableOnNetwork(networkId:number, module:string) {
-
           return NetConfig.netById(networkId).modules.find(mod => mod === module);
         }
 

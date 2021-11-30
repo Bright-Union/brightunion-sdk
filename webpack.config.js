@@ -36,7 +36,7 @@ var config = {
     }
   },
   output: {
-    filename: 'BrightClient.js',
+    filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),
     libraryTarget: 'commonjs',
     clean: true,
@@ -66,6 +66,9 @@ var config = {
   //   },
   // ]),
 ],
+stats: {
+   builtAt: true,
+},
 }
 
 module.exports  = (env, argv) => {

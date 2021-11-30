@@ -1,5 +1,14 @@
-import CoverQuote from "../domain/CoverQuote";
-import {_getDistributorContract} from "../helpers/getContract";
+// import CoverQuote from "../domain/CoverQuote";
+// import GasHelper from "../helpers/gasHelper";
+// import RiskCarriers from "../config/RiskCarriers";
+
+import NetConfig from "../config/NetConfig";
+import {_getDistributorsContract, _getBridgeRegistryContract, _getBridgePolicyBookRegistryContract, _getBridgePolicyBookContract} from "../helpers/getContract";
+import BigNumber from 'bignumber.js'
+import {toBN , fromWei} from 'web3-utils'
+import GasHelper from "../helpers/gasHelper"
+import RiskCarriers from "../config/RiskCarriers"
+// import {fromWei} from
 
 
 /**
@@ -33,7 +42,7 @@ export async function getQuote(
     _interfaceCompliant2 : string,
     _data : any,
 ) : Promise<any>  {
-  return await _getDistributorContract() // SDK
+  return await _getDistributorsContract() // SDK
                       .methods
                       .getQuote(
                         _distributorName,
@@ -46,5 +55,103 @@ export async function getQuote(
                       ).call();
 }
 
+export async function getQuoteFromBridge(
+  _bridgeProductAddress:any,
+  _period:any,
+  _amountInWei:any,
 
-export default getQuote;
+) : Promise<any>  {
+  // return await
+
+    const registry = _getBridgeRegistryContract(NetConfig.netById(global.user.ethNet.networkId).bridgeRegistry, global.user.ethNet.web3Instance)
+
+    const policyBookRegistry = await registry.methods.getPolicyBookRegistryContract().call().then((policyBookRegistryAddr:any) => {
+      return _getBridgePolicyBookRegistryContract(policyBookRegistryAddr, global.user.ethNet.web3Instance );
+    })
+
+    const isPolicyPresent  = await policyBookRegistry.methods.isPolicyBook(_bridgeProductAddress).call();
+    if(isPolicyPresent){
+      const policyBookContract = await _getBridgePolicyBookContract(_bridgeProductAddress, global.user.ethNet.web3Instance );
+      const policyBookContractArray:any = Array.of(policyBookContract._address);
+
+      // const _stats = await
+       return await policyBookRegistry.methods.stats(policyBookContractArray).call().then(async(_stats:any) => {
+
+        let capacity = _stats[0].maxCapacity;
+        let remainingCapacity = capacity;
+        let stakedSTBL = _stats[0].stakedSTBL;
+        const {gasPrice, USDRate} = await GasHelper.getGasPrice(global.user.ethNet.symbol);
+
+        let estimatedGasPrice = (RiskCarriers.BRIDGE.description.estimatedGas * gasPrice) * USDRate / (10**9);
+        let feeInDefaultCurrency = (RiskCarriers.BRIDGE.description.estimatedGas * gasPrice) / 10**9;
+        let defaultCurrencySymbol = NetConfig.networkCurrency(global.user.ethNet.networkId);
+        const bridgeEpochs = Math.min(52, Math.ceil(Number(_period) / 7));
+
+        const {totalSeconds, totalPrice} =  await policyBookContract.methods.getPolicyPrice(bridgeEpochs, _amountInWei).call();
+        const totalLiquidity  = await policyBookContract.methods.totalLiquidity().call();
+        const coverTokens = await policyBookContract.methods.totalCoverTokens().call();
+
+        const actualPeriod = Math.floor(Number(totalSeconds) / 3600 / 24);
+
+        return{
+          _stats : _stats,
+          amount: _amountInWei,
+          currency: defaultCurrencySymbol,
+          period : _period,
+          actualPeriod : actualPeriod,
+          chain: "ETH",
+          chainId: global.user.ethNet.networkId,
+          price: totalPrice,
+          pricePercent: new BigNumber(totalPrice).times(1000).dividedBy(_amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000, //%, annualize
+          estimatedGasPrice: estimatedGasPrice,
+          estimatedGasPriceCurrency: defaultCurrencySymbol,
+          estimatedGasPriceDefault: feeInDefaultCurrency,
+          totalUSDTLiquidity: toBN(totalLiquidity),
+          maxCapacity: _stats[0].maxCapacity,
+          stakedSTBL: _stats[0].stakedSTBL,
+          activeCovers: toBN(coverTokens),
+          utilizationRatio: toBN(coverTokens).mul(toBN(10000)).div(toBN(totalLiquidity)).toNumber() / 100,
+         }
+
+
+      }).catch((e:any) => {
+
+        let errorMsg = e.message;
+        // if(initialBridgeCurrency === 'ETH') {
+        //   capacity = cu.usd2eth(capacity);
+        //   currency = "ETH"
+        // }
+        if (errorMsg.toLowerCase().includes("requiring more than there exists")) {
+          errorMsg = `MAX capacity reached`;
+          // errorMsg = `MAX capacity is ${fromWei(capacity.toString())} ${initialBridgeCurrency}`;
+        } else if (errorMsg.toLowerCase().includes("pb: wrong epoch duration")) {
+          errorMsg = "Minimum duration is 1 day. Maximum is 365";
+        } else if (errorMsg.toLowerCase().includes("pb: wrong cover")) {
+          errorMsg = "Invalid cover amount";
+        }
+
+        return {
+            amount: _amountInWei,
+            // currency: currency,
+            period: _period,
+            chain: 'ETH',
+            chainId: global.user.ethNet.networkId,
+            price: 0,
+            pricePercent: 0,
+            estimatedGasPrice: 0,
+            errorMsg: errorMsg,
+            // maxCapacity: fromWei(remainingCapacity.toString()),
+            // stakedSTBL: fromWei(stakedSTBL.toString())
+          };
+
+      });
+
+
+    }
+
+
+
+}
+
+
+export default {getQuote, getQuoteFromBridge };

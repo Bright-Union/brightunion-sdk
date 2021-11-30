@@ -1,11 +1,12 @@
 import NexusApi from './distributorsApi/NexusApi';
 import InsuraceApi from './distributorsApi/InsuraceApi';
-import { getQuote } from "./dao/Quotes";
+import { getQuote, getQuoteFromBridge } from "./dao/Quotes";
 import CatalogHelper from './helpers/catalogHelper';
 import NetConfig from '../service/config/NetConfig';
 import CurrencyHelper from './helpers/currencyHelper';
 import RiskCarriers from './config/RiskCarriers';
-
+import BigNumber from 'bignumber.js'
+import { toWei, hexToBytes, numberToHex } from "web3-utils"
 
 /**
  *
@@ -81,65 +82,102 @@ export async function getQuoteFrom(
  * @param _protocol
  * @returns
  */
- async function getBridgeQuote(_amount :any, currency:any, _period :any, _protocol :any ) : Promise<object>{
+ async function getBridgeQuote(_amount :any, _currency:any, _period :any, _protocol :any ) : Promise<object>{
 
-   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeProductAddress) {
+   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeProductAddress) {
 
-     let amountInWei:any = global.user.web3.utils.toWei(_amount.toString(), 'ether');
+     let amountInWei:any = toWei(_amount.toString(), 'ether');
 
-     if (currency === 'ETH') {
+     if (_currency === 'ETH') {
        amountInWei = CurrencyHelper.eth2usd(amountInWei);
      }
-     currency = RiskCarriers.BRIDGE.fallbackQuotation;
+     _currency = RiskCarriers.BRIDGE.fallbackQuotation;
 
-     const quote =  await getQuote(
-       'bridge',
-       _period,
-       amountInWei,
-      _protocol.bridgeProductAddress,
-     '0x0000000000000000000000000000000000000000',
-     '0x0000000000000000000000000000000000000000',
-     global.user.web3.utils.hexToBytes(global.user.web3.utils.numberToHex(500)),
-     );
+     const bridgeEpochs = Math.min(52, Math.ceil(Number(_period) / 7));
 
-     // mapping to bridge object Or could be mapping to UI object
-     // only reason of why we have diff get<provider>Quote methods
+     let quote:any = {}
+     // let bridgeQuote:any = {}
 
-     const bridgeQuote = {
-       totalSeconds       : quote.prop1,
-       totalPrice         : quote.prop2,
-       totalLiquidity     : quote.prop3,
-       totalCoverTokens   : quote.prop4,
-       prop5              : quote.prop5,
-       prop6              : quote.prop6,
-       prop7              : quote.prop7
+     if(global.user.ethNet.networkId == 1 ){
+
+       quote = await getQuoteFromBridge(
+         _protocol.bridgeProductAddress,
+         _period,
+         amountInWei,
+       );
+
+       return CatalogHelper.quoteFromCoverable(
+         'bridge',
+         _protocol,
+         {
+           amount: amountInWei,
+           currency: _currency,
+           period: _period,
+           chain: quote.chain,
+           chainId: quote.chainId,
+           actualPeriod: quote.actualPeriod,
+           price: quote.price,
+           response: quote._stats,
+           pricePercent: quote.pricePercent, //%, annualize
+           estimatedGasPrice: quote.estimatedGasPrice,
+           estimatedGasPriceCurrency: quote.defaultCurrencySymbol,
+           estimatedGasPriceDefault: quote.feeInDefaultCurrency,
+           errorMsg: quote.errorMsg
+         },
+         {
+           totalUSDTLiquidity: quote.totalUSDTLiquidity,
+           maxCapacity: quote.maxCapacity,
+           stakedSTBL: quote.stakedSTBL,
+           activeCovers: quote.activeCovers,
+           utilizationRatio: quote.utilizationRatio,
+         }
+       );
+
+     }else{
+
+       quote =  await getQuote(
+         'bridge',
+         bridgeEpochs,
+         amountInWei,
+         _protocol.bridgeProductAddress,
+         '0x0000000000000000000000000000000000000000',
+         '0x0000000000000000000000000000000000000000',
+         hexToBytes(numberToHex(500)),
+       );
+
+       const bridgeQuote = {
+         totalSeconds       : quote.prop1,
+         totalPrice         : quote.prop2,
+         totalLiquidity     : quote.prop3,
+         totalCoverTokens   : quote.prop4,
+         prop5              : quote.prop5,
+         prop6              : quote.prop6,
+         prop7              : quote.prop7,
+       }
+       // mapping to bridge object Or could be mapping to UI object
+       // only reason of why we have diff get<provider>Quote methods
+
+       const actualPeriod = Math.floor(Number(bridgeQuote.totalSeconds) / 3600 / 24);
+
+       return CatalogHelper.quoteFromCoverable(
+         'bridge',
+         _protocol,
+         {
+           amount: amountInWei,
+           currency: _currency,
+           period: _period,
+           chain: 'ETH',
+           chainId: global.user.ethNet.networkId,
+           actualPeriod: actualPeriod,
+           price: bridgeQuote.totalPrice,
+           response: bridgeQuote,
+           pricePercent: new BigNumber(bridgeQuote.totalPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000, //%, annualize
+         },
+         {}
+       );
+
      }
 
-     return CatalogHelper.quoteFromCoverable(
-       'bridge',
-       _protocol,
-       {
-         amount: _amount,
-         currency: 'ETH',
-         period: _period,
-         chain: '',
-         chainId: global.user.networkId,
-         // actualPeriod: actualPeriod,
-         price: bridgeQuote.totalPrice,
-         response: bridgeQuote,
-         // pricePercent: new BigNumber(totalPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000, //%, annualize
-         // estimatedGasPrice: estimatedGasPrice,
-         // estimatedGasPriceCurrency: defaultCurrencySymbol,
-         // estimatedGasPriceDefault: feeInDefaultCurrency
-       },
-       {
-         // totalUSDTLiquidity: toBN(totalLiquidity),
-         // maxCapacity: _stats[0].maxCapacity,
-         // stakedSTBL: _stats[0].stakedSTBL,
-         // activeCovers: toBN(coverTokens),
-         // utilizationRatio: toBN(coverTokens).mul(toBN(10000)).div(toBN(totalLiquidity)).toNumber() / 100,
-       }
-     );
 
 
    }
@@ -147,7 +185,7 @@ export async function getQuoteFrom(
 
 
  export async function getNexusQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
-    if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL') && _protocol.nexusCoverable){
+    if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'NEXUS_MUTUAL') && _protocol.nexusCoverable){
      return await NexusApi.fetchQuote( _amount , _currency, _period, _protocol);
    }
  }
@@ -155,7 +193,7 @@ export async function getQuoteFrom(
 
 export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
 
-  if(!_web3.networkId){ // if not passive net
+  if(!_web3.networkId){ // if active net
     const newWeb3Instance = {
         account: global.user.account,
         networkId: global.user.networkId,
@@ -170,20 +208,6 @@ export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_
     return await InsuraceApi.fetchInsuraceQuote(_web3, _amount , _currency, _period, _protocol);
   }
 }
-
-
-// export async function getInsuraceQuoteWithConfirm( _amount:number, _currency:string, _period: number, _protocol:any ) {
-//   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE') && _protocol.productId) {
-//
-//     const _owner        = global.user.account;
-//     const chainSymbol   = NetConfig.netById(global.user.networkId).symbol;
-//     const premium : any = await InsuraceApi.getCoverPremium( _amount, _currency, _period,_protocol, _owner);
-//     const quote   : any = await InsuraceApi.confirmCoverPremium(chainSymbol, premium.params);
-//
-//     return quote;
-//   }
-// }
-
 
 export default {
   getQuoteFrom,

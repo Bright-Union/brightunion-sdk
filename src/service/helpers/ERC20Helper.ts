@@ -36,7 +36,6 @@ export default class ERC20Helper {
 
             if (toBN(ERC20Helper.USDTtoERCDecimals(currentAllowance)).gte(toBN(amount))) {
                 //current allowance is sufficient
-                console.log('approveUSDTAndCall: calling onConfirmation() ')
                 onConfirmation();
             } else if (currentAllowance !== '0' && toBN(ERC20Helper.USDTtoERCDecimals(currentAllowance)).lt(toBN(amount))) {
                 //there is a allowance, but not enough for buying

@@ -23,11 +23,45 @@ A swagger API documentation can be found [here](http://api.brightunion.io/protoc
 ```javascript
 npm install @brightunion/sdk
 ```
+# Available methods
+
+### Get the full catalog from all our distributors
+```
+getCatalog()
+```
+
+### Get total cover count from address around all our distributors
+````
+getCoverCountFrom(< walletAddress >)
+````
+
+
+### Get all the covers details from account around all distributors
+```
+getCoversFrom(< WalletAddress >)
+```
+
+### Get quotes from distributor
+```
+getQuotes( amount, currency, period, productId)
+```
+
+
+
+### Get specific quote from distributor 
+```
+getQuoteFrom( distributorName, amount, currency, period, productId)
+```
+
+### Buy previously queried quote
+```
+buyQuote(< preExistingQuote>)
+```
 
 ## Basic Use
 
 ```javascript
-const BrightClient = require('@Brightunion/SDK');B
+const BrightClient = require('@Brightunion/SDK');
 
 const brightClient= new BrightClient({ <web3_instance> });
 
@@ -41,7 +75,15 @@ const catalog = brightClient.getCatalog();
 const quotes = brightClient.getQuotes( <amount> , <currency>, <period>, <catalog_item> )
 
 // Buy quoted cover
-brightClient.buyQuote( <quote> )
+brightClient.buyQuote( <quote> ).then(data => {
+  // transaction done
+})
+
+// Get purchased cover count from all distributors
+const coversCount = await brightClient.getAllCoversCount();
+
+// Get purchased covers from all distributors
+const coversAll = await brightClient.getAllCovers();
 
 ```
 
@@ -65,14 +107,23 @@ const catalogItemBridge = { bridgeProductAddress: <Bridge_product_address> };
 const catalogItemNexus = { nexusCoverable: <Nexus_product_address> };
 
 // Get quote from specific distributor on a catalog item
-const quote = await state.brightClient.getQuoteFrom( <distributorName>, <amount> , <currency>, <period>, <catalog_item>);
+const quote = await brightClient.getQuoteFrom( <distributorName>, <amount> , <currency>, <period>, <catalog_item>);
 
 // Buy quoted cover
-brightClient.buyQuote( <quote> )
+brightClient.buyQuote( <quote> ).then(data => {
+  // transaction done
+})
 
 ```
 
 
+
+<!-- ## Currently supported distributors
+- InsurAce
+- Ethereum - ETH
+- Binance smart chain -
+- Polygon
+- Nexus -->
 
 
 
