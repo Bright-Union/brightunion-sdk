@@ -18,16 +18,16 @@ export async function getCatalog(): Promise<any> {
   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'NEXUS_MUTUAL')) {
     catalogPromiseArray.push(getNexusCoverables())
   }
-  if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'INSURACE')) {
+  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE')) {
     catalogPromiseArray.push(getInsuraceCoverables())
   }
   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL')) {
     catalogPromiseArray.push(getBridgeCoverables())
   }
 
-  // for (let net of global.user.web3Passive) {
-  //   catalogPromiseArray.push(getInsuraceCoverables())
-  // }
+  for (let net of global.user.web3Passive) {
+    // catalogPromiseArray.push(getInsuraceCoverables(_net.networkId))
+  }
 
   return Promise.all(catalogPromiseArray)
   .then((_data: any) => {
@@ -123,7 +123,7 @@ export async function getNexusCoverables(): Promise<any[]> {
 
   }
 
-  export async function getInsuraceCoverables() : Promise<object[]> {
+  export async function getInsuraceCoverables() : Promise<object[]> { // Daniel
   let trustWalletAssets: { [key: string]: any } = {};
     trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
     return await InsuraceApi.fetchCoverables().then((data:object) => {
