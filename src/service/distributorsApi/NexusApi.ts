@@ -30,7 +30,7 @@ export default class NexusApi {
       let capacityETH:any = null;
       let capacityDAI:any = null;
 
-     this.fetchCapacity(protocol).then((capacity:any) => {
+     this.fetchCapacity(protocol.nexusCoverable).then((capacity:any) => {
         capacityETH = capacity.capacityETH;
         capacityDAI = capacity.capacityDAI;
       })
@@ -78,10 +78,10 @@ export default class NexusApi {
         const totalActiveCoversDAI = await quotationContract.methods.getTotalSumAssured(asciiToHex('DAI')).call();
         const {gasPrice, USDRate} = await GasHelper.getGasPrice(global.user.ethNet.symbol);
 
-        // let estimatedGasPrice = (RiskCarriers.NEXUS.description.estimatedGas * gasPrice) * USDRate / (10**9);
-        // let feeInDefaultCurrency = (RiskCarriers.NEXUS.description.estimatedGas * gasPrice) / 10**9;
-        // let defaultCurrencySymbol = global.user.ethNet.symbol === 'POLYGON'? 'MATIC': global.user.ethNet.symbol === 'BSC' ? 'BNB' : 'ETH';
-        // const nexusMaxCapacityError = this.checkNexusCapacity(currency, amountInWei.toString(), capacityETH, capacityDAI);
+        let estimatedGasPrice = (RiskCarriers.NEXUS.description.estimatedGas * gasPrice) * USDRate / (10**9);
+        let feeInDefaultCurrency = (RiskCarriers.NEXUS.description.estimatedGas * gasPrice) / 10**9;
+        let defaultCurrencySymbol = global.user.ethNet.symbol === 'POLYGON'? 'MATIC': global.user.ethNet.symbol === 'BSC' ? 'BNB' : 'ETH';
+        const nexusMaxCapacityError = this.checkNexusCapacity(currency, amountInWei.toString(), capacityETH, capacityDAI);
 
         return CatalogHelper.quoteFromCoverable(
           'nexus',
@@ -95,12 +95,12 @@ export default class NexusApi {
             price: priceWithFee.toString(),
             pricePercent: new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000), //%, annualize
             response: response.data,
-            estimatedGasPrice:123, //estimatedGasPrice,
-            estimatedGasPriceCurrency:123, //defaultCurrencySymbol,
-            estimatedGasPriceDefault:123 //feeInDefaultCurrency,
+            estimatedGasPrice:estimatedGasPrice, //estimatedGasPrice,
+            estimatedGasPriceCurrency:defaultCurrencySymbol, //defaultCurrencySymbol,
+            estimatedGasPriceDefault:feeInDefaultCurrency //feeInDefaultCurrency,
           },
           {
-            remainingCapacity:123,
+            // remainingCapacity:123,
             activeCoversETH: activeCoversETH,
             activeCoversDAI: activeCoversDAI,
             capacityETH: capacityETH,
@@ -108,12 +108,9 @@ export default class NexusApi {
             totalCovers: totalCovers,
             totalActiveCoversDAI: totalActiveCoversDAI,
             totalActiveCoversETH: totalActiveCoversETH,
-            nexusMaxCapacityError: 'null' //nexusMaxCapacityError
+            nexusMaxCapacityError: nexusMaxCapacityError //nexusMaxCapacityError
           }
         );
-
-        // return response.data;
-
 
       }).catch(function (error) {
             if ((error.response && error.response.status === 400) || (error.response && error.response.status === 409)) {
