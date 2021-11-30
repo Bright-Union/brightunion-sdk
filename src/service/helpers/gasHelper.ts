@@ -25,6 +25,8 @@ class GasHelper {
         return axios.get("https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=N1AR8EKTZMBZMVSPW6F3XY45D6DKWUQUP5")
             .then((response:any) => {
                 return response.data.result;
+            } , (error:any) => {
+              return {};
             });
     }
 
@@ -32,7 +34,9 @@ class GasHelper {
         return axios.get("https://gasstation-mainnet.matic.network/")
             .then((response:any) => {
                 return response.data;
-            });
+            }, (error:any) => {
+              return {};
+            })
     }
 
     static fetchBSCGasPrice() {
@@ -40,42 +44,41 @@ class GasHelper {
             .then((response) => {
                 return response.data
             }, error => {
-                console.log(error)
                 return {};
             });
     }
 
 
-    static  fetchGasPrice(symbol:string) {
-        if (symbol === "POLYGON") {
-            return  this.fetchMaticGasPrice().then((data) => {
-                return {
-                    rapid: data.fastest,
-                    fast: data.fast,
-                    standard: data.standard,
-                    slow: data.safeLow
-                };
-            });
-        } else if (symbol === "BSC") {
-            return  this.fetchBSCGasPrice().then((data:any) => {
-                return {
-                    rapid: data.instant,
-                    fast: data.fast,
-                    standard: data.standard,
-                    slow: data.slow
-                };
-            });
-        } else {
-            return  this.fetchEthereumGasPrice().then((data:any) => {
-                return {
-                    rapid: data.FastGasPrice,
-                    fast: data.FastGasPrice,
-                    standard: data.SafeGasPrice,
-                    slow: data.ProposeGasPrice
-                };
-            });
-        }
-    }
+    // static  fetchGasPrice(symbol:string) {
+    //     if (symbol === "POLYGON") {
+    //         return  this.fetchMaticGasPrice().then((data) => {
+    //             return {
+    //                 rapid: data.fastest,
+    //                 fast: data.fast,
+    //                 standard: data.standard,
+    //                 slow: data.safeLow
+    //             };
+    //         });
+    //     } else if (symbol === "BSC") {
+    //         return  this.fetchBSCGasPrice().then((data:any) => {
+    //             return {
+    //                 rapid: data.instant,
+    //                 fast: data.fast,
+    //                 standard: data.standard,
+    //                 slow: data.slow
+    //             };
+    //         });
+    //     } else {
+    //         return  this.fetchEthereumGasPrice().then((data:any) => {
+    //             return {
+    //                 rapid: data.FastGasPrice,
+    //                 fast: data.FastGasPrice,
+    //                 standard: data.SafeGasPrice,
+    //                 slow: data.ProposeGasPrice
+    //             };
+    //         });
+    //     }
+    // }
 
 }
 
