@@ -30,29 +30,32 @@ npm install @brightunion/sdk
 getCatalog()
 ```
 
-### Get quotes from distributors
+### Get total cover count from address around all our distributors
+````
+getCoverCountFrom(< walletAddress >)
+````
+
+
+### Get all the covers details from account around all distributors
 ```
-getQuotes( <amount> , <currency> , <period> , <productId> )
+getCoversFrom(< WalletAddress >)
 ```
 
-### Get a quote from a distributor
+### Get quotes from distributor
 ```
-getQuoteFrom( <distributorName>, <amount>, <currency>, <period>, <productId>)
+getQuotes( amount, currency, period, productId)
+```
+
+
+
+### Get specific quote from distributor
+```
+getQuoteFrom( distributorName, amount, currency, period, productId)
 ```
 
 ### Buy previously queried quote
 ```
-buyQuote(<preExistingQuote>)
-```
-
-### Get details on purchased covers from a distributor
-```
-getCoversFrom(<DistributorName>)
-```
-
-### Get details on purchased covers from all distributors
-```
-getAllCovers()
+buyQuote(< preExistingQuote>)
 ```
 
 ## Basic Use
@@ -75,6 +78,9 @@ const quotes = brightClient.getQuotes( <amount> , <currency>, <period>, <catalog
 brightClient.buyQuote( <quote> ).then(data => {
   // transaction done
 })
+
+// Get purchased cover count from all distributors
+const coversCount = await brightClient.getAllCoversCount();
 
 // Get purchased covers from all distributors
 const coversAll = await brightClient.getAllCovers();
@@ -110,23 +116,7 @@ brightClient.buyQuote( <quote> ).then(data => {
 
 ```
 
-## Events
-Events are fired before the main function returns the final response
 
-```
-brightClient.events.on(<eventName> , ()=> {})
-```
-Events which are currently supported are for methods related to Quotation and Buy
-- "quote"
-- "buy"
-
-###Examples of event subscriptions
-
-```javascript
-brightClient.events.on("buy" , (data)=> {})
-
-brightClient.events.on("quote" , (data)=> {})
-```
 
 <!-- ## Currently supported distributors
 - InsurAce
