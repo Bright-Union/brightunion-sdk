@@ -11,10 +11,10 @@ import GasHelper from "@/service/helpers/gasHelper";
 
 class InsuraceApi {
 
-    static fetchCoverables (): Promise<object> {
+    static fetchCoverables (netSymbol : string): Promise<object> {
         return axios.post(
             `${NetConfig.netById(global.user.networkId).insuraceAPI}/getProductList?code=${encodeURIComponent(NetConfig.netById(global.user.networkId).insuraceAPIKey)}`, {
-            chain: NetConfig.netById(global.user.networkId).symbol
+            chain: netSymbol
         })
         .then((response:any) => {
             return response.data;
