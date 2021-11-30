@@ -163,7 +163,7 @@ class InsuraceApi {
                     chainId: web3.networkId,
                     price: premium,
                     cashBack: [(cashbackInStable / insurPrice), cashbackInStable],
-                    cashBackInWei: web3.web3Instance.utils.toWei(cashbackInStable.toString(), 'ether'),
+                    cashBackInWei: toWei(cashbackInStable.toString(), 'ether'),
                     pricePercent: pricePercent,  //%, annualize
                     response: response,
                     estimatedGasPrice: estimatedGasPrice,
