@@ -8,8 +8,7 @@ import BigNumber from 'bignumber.js'
 import {toBN , fromWei} from 'web3-utils'
 import GasHelper from "../helpers/gasHelper"
 import RiskCarriers from "../config/RiskCarriers"
-// import {fromWei} from
-
+// import Filters from "../helpers/filters"
 
 /**
  * Returns a quotation for specified distributor.
@@ -146,7 +145,7 @@ export async function getQuoteFromBridge(
         // }
         if (errorMsg.toLowerCase().includes("requiring more than there exists")) {
           errorMsg = `MAX capacity reached`;
-          // errorMsg = `MAX capacity is ${fromWei(capacity.toString())} ${initialBridgeCurrency}`;
+          // errorMsg = `MAX capacity is ${Filters.flexDecimals(fromWei(capacity.toString()))} ${initialBridgeCurrency}`;
         } else if (errorMsg.toLowerCase().includes("pb: wrong epoch duration")) {
           errorMsg = "Minimum duration is 1 day. Maximum is 365";
         } else if (errorMsg.toLowerCase().includes("pb: wrong cover")) {

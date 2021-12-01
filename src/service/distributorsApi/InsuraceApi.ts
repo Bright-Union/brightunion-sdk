@@ -7,6 +7,7 @@ import CatalogHelper from '../helpers/catalogHelper'
 import CurrencyHelper from '../helpers/currencyHelper'
 import {toBN,fromWei, toWei} from 'web3-utils'
 import GasHelper from "@/service/helpers/gasHelper";
+import Filters from "../helpers/filters";
 
 
 class InsuraceApi {
@@ -199,7 +200,7 @@ class InsuraceApi {
                         defaultCapacity = CurrencyHelper.eth2usd(defaultCapacity);
                         currency = 'USD';
                     }
-                    errorMsg = `MAX capacity is ${fromWei(defaultCapacity.toString())} ${currency}`
+                    errorMsg = `MAX capacity is ${Filters.flexDecimals(fromWei(defaultCapacity.toString()))} ${currency}`
                 }
                 const quote = CatalogHelper.quoteFromCoverable(
                     "insurace",
