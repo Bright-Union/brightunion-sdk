@@ -181,7 +181,6 @@ class InsuraceApi {
 
                 let defaultCapacity = protocol['stats_'+currency] ? protocol['stats_'+currency].capacityRemaining : 0;
 
-
                 if (errorMsg.includes('GPCHK') && errorMsg.includes(String(4))) {
                     errorMsg = "Invalid amount or period.";
                 } else if (errorMsg.includes('GPCHK') && errorMsg.includes(String(5))) {

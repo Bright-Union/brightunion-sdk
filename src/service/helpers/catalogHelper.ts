@@ -175,6 +175,7 @@ class CatalogHelper {
       coingecko: obj.coingecko,
       productId: obj.productId,// underlying token on Coingecko
       stats: obj.stats,
+      ['stats_'+obj.netSymbol]: obj['stats_'+obj.netSymbol],
       //Common
       source: obj.source,                                                 // holds the 'initial source' of this object.
       // Can be either Bridge | Nexus | InsurAce

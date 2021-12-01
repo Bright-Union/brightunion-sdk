@@ -170,7 +170,8 @@ export async function getNexusCoverables(): Promise<any[]> {
             coingecko: value.coingecko,
             source: 'insurace',
             productId: value.product_id,
-            ['stats_'+netSymbol]: { "capacityRemaining": value.capacity_remaining, "unitCost":value.unit_cost_yearly }
+            ['stats_'+netSymbol]: { "capacityRemaining": value.capacity_remaining, "unitCost":value.unit_cost_yearly },
+            netSymbol:netSymbol,
           }))
 
         }
