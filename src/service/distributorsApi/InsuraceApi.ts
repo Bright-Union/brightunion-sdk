@@ -133,10 +133,8 @@ class InsuraceApi {
               rawData: response,
             } );
 
-            const cashbackInStable = .075 *
-                parseFloat(toBN(premium)
-                    .div(toBN(10 ** 18)).toNumber().toString());
 
+            const cashbackInStable = .075 * parseFloat(toBN(premium).div(toBN(10 ** 18)).toNumber().toString());
 
             const {gasPrice, USDRate} = await GasHelper.getGasPrice(web3.symbol);
 
@@ -175,6 +173,7 @@ class InsuraceApi {
                     remainingCapacity: protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0
                 }
             );
+
             return quote;
         })
             .catch((e) => {
