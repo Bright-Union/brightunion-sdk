@@ -249,10 +249,10 @@ class CatalogHelper {
                 const mergedPair = _.mergeWith({}, _catalog[i], _catalog[j], (o, s) => _.isNull(s) ? o : s);
                 mergedCoverableObject = _.mergeWith({}, mergedCoverableObject, mergedPair, (o, s) => _.isNull(s) ? o : s);
 
-                if(mergedCoverableObject.productId && !mergedCoverableObject.availableCounterMultiChain){
-                  mergedCoverableObject.availableCounterMultiChain = true;
-                  duplicates += 2;
-                }
+                // if(mergedCoverableObject.productId && !mergedCoverableObject.availableCounterMultiChain){
+                //   mergedCoverableObject.availableCounterMultiChain = true;
+                //   duplicates += 2;
+                // }
 
                 mergedCoverableObject.availableCounter = ++duplicates;
                 mergedCoverableObject.name = mergedName;
