@@ -80,7 +80,7 @@ export async function getQuoteFromBridge(
 
         let capacity = _stats[0].maxCapacity;
         let remainingCapacity = capacity;
-        let stakedSTBL = _stats[0].stakedSTBL;
+        // let stakedSTBL = _stats[0].stakedSTBL;
         // let defaultCurrencySymbol = NetConfig.networkCurrency(global.user.ethNet.networkId);
         const bridgeEpochs = Math.min(52, Math.ceil(Number(_period) / 7));
 
@@ -128,6 +128,7 @@ export async function getQuoteFromBridge(
           estimatedGasPriceDefault: feeInDefaultCurrency,
           totalUSDTLiquidity: toBN(totalLiquidity),
           maxCapacity: _stats[0].maxCapacity,
+          remainingCapacity: _stats[0].maxCapacity,
           stakedSTBL: _stats[0].stakedSTBL,
           activeCovers: toBN(coverTokens),
           utilizationRatio: toBN(coverTokens).mul(toBN(10000)).div(toBN(totalLiquidity)).toNumber() / 100,
@@ -135,6 +136,8 @@ export async function getQuoteFromBridge(
 
 
       }).catch((e:any) => {
+
+        // console.log("")
 
         let errorMsg = e.message;
         // if(initialBridgeCurrency === 'ETH') {

@@ -167,11 +167,11 @@ class InsuraceApi {
                     pricePercent: pricePercent,  //%, annualize
                     response: response,
                     estimatedGasPrice: estimatedGasPrice,
-                    estimatedGasPriceCurrency: defaultCurrencySymbol,
-                    estimatedGasPriceDefault: feeInDefaultCurrency
+                    defaultCurrencySymbol: defaultCurrencySymbol,
+                    feeInDefaultCurrency: feeInDefaultCurrency
                 },
                 {
-                    remainingCapacity: protocol['stats_'+currency] ? protocol['stats_'+currency].capacityRemaining : 0
+                    remainingCapacity: protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0
                 }
             );
             return quote;
@@ -179,7 +179,7 @@ class InsuraceApi {
             .catch((e) => {
                 let errorMsg = e.response && e.response.data ? e.response.data.message : e.message;
 
-                let defaultCapacity = protocol['stats_'+currency] ? protocol['stats_'+currency].capacityRemaining : 0;
+                let defaultCapacity = protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0;
 
                 if (errorMsg.includes('GPCHK') && errorMsg.includes(String(4))) {
                     errorMsg = "Invalid amount or period.";

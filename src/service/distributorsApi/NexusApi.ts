@@ -107,8 +107,8 @@ export default class NexusApi {
             pricePercent: pricePercent , //%, annualize
             response: response.data,
             estimatedGasPrice:estimatedGasPrice, //estimatedGasPrice,
-            estimatedGasPriceCurrency:defaultCurrencySymbol, //defaultCurrencySymbol,
-            estimatedGasPriceDefault:feeInDefaultCurrency //feeInDefaultCurrency,
+            defaultCurrencySymbol:defaultCurrencySymbol, //defaultCurrencySymbol,
+            feeInDefaultCurrency:feeInDefaultCurrency //feeInDefaultCurrency,
           },
           {
             // remainingCapacity:123,
