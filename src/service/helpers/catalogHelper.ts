@@ -114,16 +114,46 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
 }
 
 const catalogLogoLinks: any = [
-  { name: "Eth 0.2" , link:"https://app.insurace.io/asset/product/Eth2.0.png"},
-  { name: "Beefy" , link:"https://app.insurace.io/asset/product/BeefyFinance.png"}
+  { name: "Eth 2.0" , link:"https://app.insurace.io/asset/product/Eth2.0.png"},
+  { name: "Beefy" , link:"https://app.insurace.io/asset/product/BeefyFinance.png"},
+  { name: "Alchemix" , link:"https://app.bridgemutual.io/assets/icons/coins/Alchemix.webp"},
+  { name: "Anchor Protocol" , link:"https://app.insurace.io/asset/product/AnchorProtocol.png"},
+  { name: "ANC + UST De-Peg" , link:"https://app.insurace.io/asset/product/AnchorProtocol.png"},
+  { name: "ANC + MIR + UST De-Peg" , link:"https://app.insurace.io/asset/product/AnchorProtocol.png"},
+  { name: "Convex" , link:"https://app.insurace.io/asset/product/ConvexFinance.png"},
+  { name: "Vesper" , link:"https://app.insurace.io/asset/product/Vesper.png"},
+  { name: "Kyber" , link:"https://app.insurace.io/asset/product/KyberNetwork.png"},
+  { name: "Maple" , link:"https://app.insurace.io/asset/product/MapleFinance.png"},
+  { name: "MCDex" , link:"https://app.insurace.io/asset/product/MCDEX.png"},
+  { name: "Abracadabra.money" , link:"https://app.insurace.io/asset/product/AbracadabraMoney.png"},
+  { name: "Mushrooms" , link:"https://app.insurace.io/asset/product/MushroomsFinance.png"},
+  { name: "NAOS Finance Formation V2" , link:"https://app.insurace.io/asset/product/NaosFinance.png"},
+  { name: "PancakeSwap" , link:"https://app.insurace.io/asset/product/PancakeSwapV1.png"},
+  { name: "Pendle" , link:"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x808507121B80c02388fAd14726482e061B8da827/logo.png"},
+  { name: "Orion Money + UST De-Peg" , link:"https://app.insurace.io/asset/product/OrionMoney.png"},
+  { name: "MIM De-Peg" , link:"https://app.insurace.io/asset/product/MIMDepeg.png"},
+  { name: "MIR + UST De-Peg" , link:"https://app.insurace.io/asset/product/MirrorFinance.png"},
+  { name: "Yield YAK" , link:"https://app.insurace.io/asset/product/YieldYak.png"},
+  { name: "YFI + CRV" , link:"https://app.insurace.io/asset/product/YearnFinance.png"},
+  { name: "YFI + BAL V2 + Element" , link:"https://app.insurace.io/asset/product/YearnFinance.png"},
+  { name: "Venus" , link:"https://app.insurace.io/asset/product/Venus.png"},
+  { name: "UST De-Peg" , link:"https://app.insurace.io/asset/product/USTDepeg.png"},
+  { name: "USDT De-Peg" , link:"https://app.insurace.io/asset/product/USDTDepeg.png"},
+  { name: "Trader JOE" , link:"https://app.insurace.io/asset/product/TraderJoe.png"},
+  { name: "SPELL + MIM De-Peg" , link:"https://app.insurace.io/asset/product/SPELLDepeg.png"},
+  { name: "Set Protocol V2" , link:"https://app.insurace.io/asset/product/SetProtocolV2.png"},
+  { name: "Serum DEX" , link:"https://app.insurace.io/asset/product/Serum.png"},
+  { name: "0.exchange" , link:"https://app.bridgemutual.io/assets/icons/coins/0.webp"},
+  { name: "Keeper DAO" , link:"https://app.bridgemutual.io/assets/icons/coins/keeper_dao_logo.webp"},
+  { name: "Universe.XYZ" , link:"https://app.bridgemutual.io/assets/icons/coins/universexyz.webp"},
 ];
 
 class CatalogHelper {
 
   public static getSpecialLogoName (_name:string){
-    const isSpecial = catalogLogoLinks.find((i:any) => {return i.name == _name}); // find name in
+    const isSpecial = catalogLogoLinks.find((i:any) => i.name == _name); // find name in
     if(isSpecial ){
-      isSpecial.link;
+      return isSpecial.link;
     }else{
       return false;
     }

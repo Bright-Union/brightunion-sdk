@@ -75,8 +75,21 @@ export async function getBridgeCoverables(): Promise<any[]> {
               asset = trustWalletAssets[key];
             }
           });
-          const logo = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${_stats[i].insuredContract}/logo.png`;
+          let logo: string = null;
           const name = asset ? asset.name : _stats[i][0]
+          logo = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${_stats[i].insuredContract}/logo.png`;
+          const missedLogos: any = [
+            { name: '0.exchange'},
+            { name: 'Keeper DAO'},
+            { name: 'Universe.XYZ'},
+            { name: 'Alchemix'},
+            { name: 'Anchor Protocol'}
+          ];
+          let missedLogoName = missedLogos.find((i:any) => i.name == name)
+          if(missedLogoName) {
+            let specialLogo:any = CatalogHelper.getSpecialLogoName(missedLogoName.name);
+            logo = specialLogo
+          }
             policyBooksArray.push(CatalogHelper.createCoverable({
               bridgeProductAddress: _policyBooksArr[i],
               bridgeCoverable: _stats[i].insuredContract,
@@ -144,10 +157,9 @@ export async function getNexusCoverables(): Promise<any[]> {
 
         let logo: string = null;
 
-        if(assetIndex){
+        if(assetIndex && value.name !== 'Pendle'){
           logo = assetIndex;
         }else{
-
           let specialLogo:any = CatalogHelper.getSpecialLogoName(value.name);
             if(specialLogo){
               logo = specialLogo;
