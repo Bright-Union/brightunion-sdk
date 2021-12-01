@@ -1,8 +1,8 @@
 {
   "name": "@brightunion/sdk",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Brightjs is a set of javascript tools to interact with the Bright Union's risk platform aggregator's protocol on Ethereum, Binance Smart Chain and Polygon blockchains.",
-  "main": "index.ts",
+  "main": "dist/index.js",
   "scripts": {
     "test": "mocha -r ts-node/register src/tests/**/*.spec.ts --timeout 5000",
     "lint": "eslint . --ext .ts",
