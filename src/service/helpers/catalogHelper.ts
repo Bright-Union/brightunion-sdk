@@ -239,7 +239,6 @@ class CatalogHelper {
 
 
   public static commonCategory (category:string, provider:string) {
-    console.log("category - " , provider , category)
     try{
       if (provider == 'nexus') {
         return bridge_nexus_insurace_categories.find((cat) => {return cat[1] === category})[3];
