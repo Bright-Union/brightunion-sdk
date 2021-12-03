@@ -90,6 +90,7 @@ export async function getBridgeCoverables(): Promise<any[]> {
             let specialLogo:any = CatalogHelper.getSpecialLogoName(missedLogoName.name);
             logo = specialLogo
           }
+
             policyBooksArray.push(CatalogHelper.createCoverable({
               bridgeProductAddress: _policyBooksArr[i],
               bridgeCoverable: _stats[i].insuredContract,
@@ -99,6 +100,8 @@ export async function getBridgeCoverables(): Promise<any[]> {
               name: name,
               type: CatalogHelper.commonCategory(_stats[i].contractType, 'bridge'),
               source: 'bridge',
+              rawDataBridge: _stats,
+              // stats: _stats,
             }))
           }
 
@@ -128,7 +131,8 @@ export async function getNexusCoverables(): Promise<any[]> {
           logo: `https://app.nexusmutual.io/logos/${value.logo}`,
           name: value.name,
           type: CatalogHelper.commonCategory(value.type, 'nexus'),
-          source: 'nexus'
+          source: 'nexus',
+          rawDataNexus: value,
         }))
 
       }
@@ -184,6 +188,7 @@ export async function getNexusCoverables(): Promise<any[]> {
             productId: value.product_id,
             ['stats_'+netSymbol]: { "capacityRemaining": value.capacity_remaining, "unitCost":value.unit_cost_yearly },
             netSymbol:netSymbol,
+            rawDataInsurace: value,
           }))
 
         }

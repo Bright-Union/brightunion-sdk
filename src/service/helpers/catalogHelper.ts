@@ -116,8 +116,8 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
 const catalogLogoLinks: any = [
   { name: "Eth 2.0" , link:"https://app.insurace.io/asset/product/Eth2.0.png"},
   { name: "Beefy" , link:"https://app.insurace.io/asset/product/BeefyFinance.png"},
-  { name: "Alchemix" , link:"https://app.bridgemutual.io/assets/icons/coins/Alchemix.webp"},
-  { name: "Anchor Protocol" , link:"https://app.insurace.io/asset/product/AnchorProtocol.png"},
+  { name: "Alchemix V1" , link:"https://app.bridgemutual.io/assets/icons/coins/Alchemix.webp"},
+  { name: "Anchor" , link:"https://app.insurace.io/asset/product/AnchorProtocol.png"},
   { name: "ANC + UST De-Peg" , link:"https://app.insurace.io/asset/product/AnchorProtocol.png"},
   { name: "ANC + MIR + UST De-Peg" , link:"https://app.insurace.io/asset/product/AnchorProtocol.png"},
   { name: "Convex" , link:"https://app.insurace.io/asset/product/ConvexFinance.png"},
@@ -135,6 +135,7 @@ const catalogLogoLinks: any = [
   { name: "MIR + UST De-Peg" , link:"https://app.insurace.io/asset/product/MirrorFinance.png"},
   { name: "Yield YAK" , link:"https://app.insurace.io/asset/product/YieldYak.png"},
   { name: "YFI + CRV" , link:"https://app.insurace.io/asset/product/YearnFinance.png"},
+  { name: "Yearn Finance (all vaults)" , link:"https://app.insurace.io/asset/product/YearnFinance.png"},
   { name: "YFI + BAL V2 + Element" , link:"https://app.insurace.io/asset/product/YearnFinance.png"},
   { name: "Venus" , link:"https://app.insurace.io/asset/product/Venus.png"},
   { name: "UST De-Peg" , link:"https://app.insurace.io/asset/product/USTDepeg.png"},
@@ -213,7 +214,10 @@ class CatalogHelper {
       logo: obj.logo,
       name: obj.name,
       type: obj.type,
-      availableCounter: 1,                                                 //field will be increased if similar products found
+      availableCounter: 1,
+      rawDataNexus: obj.rawDataNexus,                                           //field will be increased if similar products found
+      rawDataBridge: obj.rawDataBridge,                                           //field will be increased if similar products found
+      rawDataInsurace: obj.rawDataInsurace,                                           //field will be increased if similar products found
     };
   }
 
@@ -235,15 +239,14 @@ class CatalogHelper {
 
 
   public static commonCategory (category:string, provider:string) {
+    console.log("category - " , provider , category)
     try{
-      if (provider === 'nexus') {
-        return bridge_nexus_insurace_categories.find((cat) => {return cat[1] === category[3]});
-      } else if (provider === 'bridge') {
-        return bridge_nexus_insurace_categories.find((cat) => {cat[0] === category[3]});
-      } else if (provider === 'insurace') {
-        return bridge_nexus_insurace_categories.find((cat) => {cat[2] === category[3]});
-      } else {
-        return '';
+      if (provider == 'nexus') {
+        return bridge_nexus_insurace_categories.find((cat) => {return cat[1] === category})[3];
+      } else if (provider == 'bridge') {
+        return bridge_nexus_insurace_categories.find((cat) => {return cat[0] === category})[3];
+      } else if (provider == 'insurace') {
+        return bridge_nexus_insurace_categories.find((cat) => {return cat[2] === category})[3];
       }
     } catch (e){ console.error(`Can't map ${category} from provider ${provider}`, e); }
   }
