@@ -68,7 +68,7 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
 
     // balance is enough?
     if (NetConfig.sixDecimalsCurrency(global.user.networkId, _quoteProtocol.currency) &&       //6 digits currency?
-    Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.quote.price)) {
+    Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.price)) {
 
       buyingObj.premium = Number(ERC20Helper.USDTtoERCDecimals(buyingObj.premium))
 
@@ -91,7 +91,7 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
           return {error: "Confirmation rejected"}
         })
 
-      } else if (Number(ercBalance) >= (Number)(_quoteProtocol.quote.price)) {
+      } else if (Number(ercBalance) >= (Number)(_quoteProtocol.price)) {
         //proceed with ERC
 
         global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );

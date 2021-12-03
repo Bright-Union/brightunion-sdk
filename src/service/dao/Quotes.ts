@@ -77,10 +77,6 @@ export async function getQuoteFromBridge(
       // const _stats = await
        return await policyBookRegistry.methods.stats(policyBookContractArray).call().then(async(_stats:any) => {
 
-        let capacity = _stats[0].maxCapacity;
-        let remainingCapacity = capacity;
-        // let stakedSTBL = _stats[0].stakedSTBL;
-        // let defaultCurrencySymbol = NetConfig.networkCurrency(global.user.ethNet.networkId);
         const bridgeEpochs = Math.min(52, Math.ceil(Number(_period) / 7));
 
         const {totalSeconds, totalPrice} =  await policyBookContract.methods.getPolicyPrice(bridgeEpochs, _amountInWei).call();
@@ -135,8 +131,6 @@ export async function getQuoteFromBridge(
 
 
       }).catch((e:any) => {
-
-        // console.log("")
 
         let errorMsg = e.message;
         // if(initialBridgeCurrency === 'ETH') {
