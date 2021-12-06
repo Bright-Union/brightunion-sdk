@@ -241,11 +241,11 @@ class NetConfig{
     })[0]
   }
 
-  public mainNets() {
+  public static mainNets() {
     return MAIN_NETS
   }
 
-  public testNets() {
+  public static testNets() {
     return TEST_NETS
   }
 
