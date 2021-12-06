@@ -43,7 +43,6 @@ class CurrencyHelper {
     }
 
     public static  insurPrice () {
-      console.log("insurPrice - " ,this.insur_usdc );
       let insurPrice = parseFloat(this.insur_usdc.split('.')[1]) / 100000;
       return insurPrice;
     }
