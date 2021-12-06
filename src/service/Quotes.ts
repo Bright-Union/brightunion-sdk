@@ -87,9 +87,10 @@ export async function getQuoteFrom(
    if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeProductAddress) {
 
      let amountInWei:any = toWei(_amount.toString(), 'ether');
-
+     let initialBridgeCurrency: any = "USD"
      if (_currency === 'ETH') {
        amountInWei = CurrencyHelper.eth2usd(amountInWei);
+        initialBridgeCurrency = 'ETH';
      }
      _currency = RiskCarriers.BRIDGE.fallbackQuotation;
 
@@ -104,6 +105,8 @@ export async function getQuoteFrom(
          _protocol,
          _period,
          amountInWei,
+         _currency,
+         initialBridgeCurrency,
        );
 
        return CatalogHelper.quoteFromCoverable(
