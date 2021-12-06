@@ -1,7 +1,3 @@
-// import CoverQuote from "../domain/CoverQuote";
-// import GasHelper from "../helpers/gasHelper";
-// import RiskCarriers from "../config/RiskCarriers";
-
 import NetConfig from "../config/NetConfig";
 import {_getDistributorsContract, _getBridgeRegistryContract, _getBridgePolicyBookRegistryContract, _getBridgePolicyBookContract} from "../helpers/getContract";
 import BigNumber from 'bignumber.js'
@@ -171,92 +167,7 @@ export async function getQuoteFromBridge(
 
     }
 
-
-
 }
-
-
-
-// if (isPolicyPresent) {
-//                    return getBridgePolicyBookContract(protocol.bridgeProductAddress, web3.web3Instance).then(policyBookContract => {
-//                        const policyBookContractArray = Array.of(policyBookContract._address);
-//                        return policyBookRegistry.methods.stats(policyBookContractArray).call().then( async _stats => {
-//                            capacity = _stats[0].maxCapacity;
-//                            remainingCapacity = capacity;
-//                            stakedSTBL = _stats[0].stakedSTBL;
-//                            const {gasPrice, USDRate} = await getGasPrice(web3);
-//                            let estimatedGasPrice = (BRIDGE.description.estimatedGas * gasPrice) * USDRate / (10**9);
-//                            let feeInDefaultCurrency = (BRIDGE.description.estimatedGas * gasPrice) / 10**9;
-//                            let defaultCurrencySymbol = networkCurrency(web3.networkId);
-//                        const bridgeEpochs = Math.min(52, Math.ceil(Number(period) / 7));
-//                        return policyBookContract.methods.getPolicyPrice(bridgeEpochs, amountInWei).call().then(({totalSeconds, totalPrice}) => {
-//                            return policyBookContract.methods.totalLiquidity().call().then(totalLiquidity => {
-//                                return policyBookContract.methods.totalCoverTokens().call().then(coverTokens => {
-//                                        const actualPeriod = Math.floor(Number(totalSeconds) / 3600 / 24);
-//                                        return quoteFromCoverable(
-//                                            'bridge',
-//                                            protocol,
-//                                            {
-//                                                amount: amountInWei,
-//                                                currency: currency,
-//                                                period: period,
-//                                                chain: 'ETH',
-//                                                chainId: web3.networkId,
-//                                                actualPeriod: actualPeriod,
-//                                                price: totalPrice,
-//                                                pricePercent: new BigNumber(totalPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000, //%, annualize
-//                                                estimatedGasPrice: estimatedGasPrice,
-//                                                estimatedGasPriceCurrency: defaultCurrencySymbol,
-//                                                estimatedGasPriceDefault: feeInDefaultCurrency
-//                                            },
-//                                            {
-//                                                totalUSDTLiquidity: toBN(totalLiquidity),
-//                                                maxCapacity: flexDecimals(fromWei(capacity.toString())),
-//                                                stakedSTBL: flexDecimals(fromWei(stakedSTBL.toString())),
-//                                                activeCovers: flexDecimals(fromWei(toBN(coverTokens).toString())),
-//                                                utilizationRatio: toBN(coverTokens).mul(toBN(10000)).div(toBN(totalLiquidity)).toNumber() / 100,
-//                                            }
-//                                        );
-//                                    });
-//                                });
-//                            });
-//                        })
-//                            .catch(e => {
-//                                let errorMsg = e.message;
-//                                if(initialBridgeCurrency === 'ETH') {
-//                                    capacity = getters.usd2eth(capacity);
-//                                    currency = "ETH"
-//                                }
-//                                if (errorMsg.toLowerCase().includes("requiring more than there exists")) {
-//                                    errorMsg = `MAX capacity is ${flexDecimals(fromWei(capacity.toString()))} ${initialBridgeCurrency}`;
-//                                } else if (errorMsg.toLowerCase().includes("pb: wrong epoch duration")) {
-//                                    errorMsg = "Minimum duration is 1 day. Maximum is 365";
-//                                } else if (errorMsg.toLowerCase().includes("pb: wrong cover")) {
-//                                    errorMsg = "Invalid cover amount";
-//                                }
-//                                return quoteFromCoverable(
-//                                    'bridge',
-//                                    protocol,
-//                                    {
-//                                        amount: amountInWei,
-//                                        currency: currency,
-//                                        period: period,
-//                                        chain: 'ETH',
-//                                        chainId: web3.networkId,
-//                                        price: 0,
-//                                        pricePercent: 0,
-//                                        estimatedGasPrice: 0,
-//                                        errorMsg: errorMsg,
-//                                    },
-//                                    {
-//                                        maxCapacity: flexDecimals(fromWei(remainingCapacity.toString())),
-//                                        stakedSTBL: flexDecimals(fromWei(stakedSTBL.toString()))
-//                                    }
-//                                );
-//                            })
-//                    })
-//                }
-
 
 
 export default {getQuote, getQuoteFromBridge };
