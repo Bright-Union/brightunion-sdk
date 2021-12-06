@@ -133,12 +133,10 @@ export default class NexusApi {
                     } else {
                         errorMsg = error.response.data.message.details[0].message;
                     }
-
                     if (errorMsg.toLowerCase().includes("\"period\" must be")) {
                         errorMsg = "Minimum duration is 30 days. Maximum is 365";
                     }
-                    return new Promise((resolve) => {
-                        resolve(CatalogHelper.quoteFromCoverable(
+                    return CatalogHelper.quoteFromCoverable(
                             'nexus',
                             protocol,
                             {
@@ -151,13 +149,15 @@ export default class NexusApi {
                                 pricePercent: 0,
                                 estimatedGasPrice: 0,
                                 errorMsg: errorMsg,
+                                defaultCurrencySymbol:0, //defaultCurrencySymbol,
+                                feeInDefaultCurrency:0, //feeInDefaultCurrency,
+                                response: {error:error},
                             },
                             {
                                 capacityETH: capacityETH,
                                 capacityDAI: capacityDAI,
                             }
-                        ))
-                    });
+                        );
                 }
             } else {
                 return new Promise(() => {
