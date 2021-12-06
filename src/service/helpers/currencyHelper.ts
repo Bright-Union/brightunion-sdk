@@ -10,10 +10,10 @@ class CurrencyHelper {
   public static insur_usdc:any = '0.2'; //fallback
 
   public static getInsureUSDCPrice(){
-    if (CatalogHelper.availableOnNetwork(global.user.networkId, 'UNISWAP')) {
+    if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'UNISWAP')) {
       try {
-        UniswapV2Api.priceTokenAtoTokenB(global.user.networkId, NetConfig.netById(global.user.networkId).USDC,
-        NetConfig.netById(global.user.networkId).INSUR).then(price => {
+        UniswapV2Api.priceTokenAtoTokenB(global.user.ethNet.networkId, NetConfig.netById(global.user.ethNet.networkId).USDC,
+        NetConfig.netById(global.user.ethNet.networkId).INSUR).then(price => {
           this.insur_usdc = price
         })}catch(e) {
           console.error(e)
@@ -43,6 +43,7 @@ class CurrencyHelper {
     }
 
     public static  insurPrice () {
+      console.log("insurPrice - " ,this.insur_usdc );
       let insurPrice = parseFloat(this.insur_usdc.split('.')[1]) / 100000;
       return insurPrice;
     }
