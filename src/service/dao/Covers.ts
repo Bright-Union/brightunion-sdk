@@ -37,8 +37,7 @@ export async function getCoversCount(
 ): Promise<number>  {
 
   if(global.user.ethNet.networkId == 1){
-
-    console.log("getCount COVERS on MAIN NET - SDK");
+    //ToDO - finish the logic of fetching Count from Distributors 
 
   }else{
 

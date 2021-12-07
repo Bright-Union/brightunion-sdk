@@ -287,8 +287,7 @@ export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
       _quoteProtocol.protocol.bridgeProductAddress,
       _quoteProtocol.price,
       () => {
-        // EventBus.publish('SHOW_CONFIRMATION_WAITING', {msg: `(1/3) Resetting USDT allowance to 0`});
-        console.log('Confirmation waiting');
+        global.events.emit("buy" , { status: "CONFIRMATION" , type:"reset_usdt_allowance" , count:3 , current:2 } );
       },
       () => {
         global.events.emit("buy" , { status: "CONFIRMATION" , type:"main", count:2 , current:2 } );

@@ -27,7 +27,6 @@ export async function getCatalog(): Promise<any> {
   }
 
   for (let net of global.user.web3Passive) {
-     // console.log('fetching insurace coveraables for ', net.symbol)
      catalogPromiseArray.push(getInsuraceCoverables(net.symbol))
   }
 

@@ -44,7 +44,6 @@ export default class NexusApi {
          `${NetConfig.netById(global.user.ethNet.networkId).nexusAPI}/v1/quote?coverAmount=${amount}&currency=${currency}&period=${period}&contractAddress=${protocol.nexusCoverable}`,
          {
            headers : {
-             // Origin: process.env.API_REQUEST_ORIGIN,
            }
          }
        )
