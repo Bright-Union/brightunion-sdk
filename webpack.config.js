@@ -4,7 +4,6 @@ const webpack = require('webpack')
 
 var config = {
   entry: './src/BrightClient.ts',
-  // target: 'node',
   module: {
     rules: [
       {
@@ -21,20 +20,13 @@ var config = {
     extensions: ['.tsx', '.ts', '.js', '.json'],
     fallback: {
       "fs":false,
-      // "stream": false,
-      // "path": false,
-      // "http": false,
-      // "https": false,
       "os": false,
       "url": false,
       "assert": false,
-      // "crypto": false
       "stream": require.resolve("stream-browserify"),
       "path": require.resolve("path-browserify") ,
       "http": require.resolve("stream-http") ,
       "https": require.resolve("https-browserify"),
-      // "os": require.resolve("os-browserify/browser"),
-      // "url": require.resolve("url/"),
       "crypto": require.resolve('crypto-browserify'),
     }
   },
