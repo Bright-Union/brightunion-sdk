@@ -1,11 +1,6 @@
 const path = require('path');
 
-// const DeclarationBundlerPlugin = require('declaration-bundler-webpack-plugin');
-// const CopyWebpackPlugin = require('copy-webpack-plugin');
-// const CleanWebpackPlugin = require('clean-webpack-plugin');
-// const ESLintPlugin = require('eslint-webpack-plugin');
-
-const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
+const webpack = require('webpack')
 
 var config = {
   entry: './src/BrightClient.ts',
@@ -26,12 +21,20 @@ var config = {
     extensions: ['.tsx', '.ts', '.js', '.json'],
     fallback: {
       "fs":false,
+      // "stream": false,
+      // "path": false,
+      // "http": false,
+      // "https": false,
+      "os": false,
+      "url": false,
+      "assert": false,
+      // "crypto": false
       "stream": require.resolve("stream-browserify"),
       "path": require.resolve("path-browserify") ,
       "http": require.resolve("stream-http") ,
       "https": require.resolve("https-browserify"),
-      "os": require.resolve("os-browserify/browser"),
-      "url": require.resolve("url/"),
+      // "os": require.resolve("os-browserify/browser"),
+      // "url": require.resolve("url/"),
       "crypto": require.resolve('crypto-browserify'),
     }
   },
@@ -40,31 +43,11 @@ var config = {
     path: path.resolve(__dirname, 'dist'),
     libraryTarget: 'commonjs',
     clean: true,
-
   },
   plugins: [
-    // new NodePolyfillPlugin(),
-    // new ESLintPlugin(
-    //   {
-    //     extensions: ['.tsx', '.ts', '.js', 'json'],
-    //
-    //   }
-    // ),
-  // new CleanWebpackPlugin(['./@types', './dist']),
-  // new DeclarationBundlerPlugin({
-  //   moduleName: '"@mycomp/mylib"',
-  //   out: '../@types/index.d.ts',
-  // }),
-  // new CopyWebpackPlugin([
-  //   {
-  //     from: './types/package.json',
-  //     to: '../@types/package.json',
-  //   },
-  //   {
-  //     from: './src/package.json',
-  //     to: '../dist/package.json',
-  //   },
-  // ]),
+    new webpack.ProvidePlugin({
+       process: 'process/browser',
+     }),
 ],
 stats: {
    builtAt: true,
