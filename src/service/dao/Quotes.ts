@@ -141,11 +141,12 @@ export async function getQuoteFromBridge(
           _currency = "ETH"
         }
         if (errorMsg.toLowerCase().includes("requiring more than there exists")) {
-          errorMsg = `MAX capacity is ${Filters.flexDecimals(fromWei(capacity.toString()))} ${_initialBridgeCurrency}`;
+          errorMsg = {message: "MAX capacity is " , currency:_initialBridgeCurrency, capacity:fromWei(capacity.toString()), errorType: "capacity"};
+          // ${Filters.flexDecimals(fromWei(capacity.toString()))} ${_initialBridgeCurrency}`;
         } else if (errorMsg.toLowerCase().includes("pb: wrong epoch duration")) {
-          errorMsg = "Minimum duration is 1 day. Maximum is 365";
+          errorMsg = { message: "Minimum duration is 1 day. Maximum is 365" , errorType:"period"};
         } else if (errorMsg.toLowerCase().includes("pb: wrong cover")) {
-          errorMsg = "Invalid cover amount";
+          errorMsg = { message: "Invalid cover amount" , errorType: "amount"};
         }
 
         return {

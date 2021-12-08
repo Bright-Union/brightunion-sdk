@@ -1,4 +1,3 @@
-require('dotenv').config();
 import axios from 'axios';
 import NetConfig from '../config/NetConfig'
 import RiskCarriers from '../config/RiskCarriers'
@@ -18,6 +17,7 @@ export default class NexusApi {
                 return response.data;
             }).catch(error => {
               console.log('ERROR Nexus fetchCoverables:',error.response.data && error.response.data.message);
+              return [];
             });
     }
 
@@ -103,14 +103,14 @@ export default class NexusApi {
             chain: 'ETH',
             chainId: global.user.ethNet.networkId,
             price: priceWithFee.toString(),
-            pricePercent: pricePercent , //%, annualize
+            pricePercent: pricePercent,
             response: response.data,
-            estimatedGasPrice:estimatedGasPrice, //estimatedGasPrice,
-            defaultCurrencySymbol:defaultCurrencySymbol, //defaultCurrencySymbol,
-            feeInDefaultCurrency:feeInDefaultCurrency //feeInDefaultCurrency,
+            estimatedGasPrice:estimatedGasPrice,
+            defaultCurrencySymbol:defaultCurrencySymbol,
+            feeInDefaultCurrency:feeInDefaultCurrency,
+            errorMsg: nexusMaxCapacityError,
           },
           {
-            // remainingCapacity:123,
             activeCoversETH: activeCoversETH,
             activeCoversDAI: activeCoversDAI,
             capacityETH: capacityETH,
@@ -118,7 +118,6 @@ export default class NexusApi {
             totalCovers: totalCovers,
             totalActiveCoversDAI: totalActiveCoversDAI,
             totalActiveCoversETH: totalActiveCoversETH,
-            nexusMaxCapacityError: nexusMaxCapacityError //nexusMaxCapacityError
           }
         );
 
@@ -126,14 +125,14 @@ export default class NexusApi {
             if ((error.response && error.response.status === 400) || (error.response && error.response.status === 409)) {
                 //wrong parameters
                 if (error.response.data.message.details || error.response.data.message) {
-                    let errorMsg = '';
+                    let errorMsg:any = null;
                     if(!error.response.data.message.details) {
-                        errorMsg = error.response.data.message;
+                        errorMsg = {message: error.response.data.message};
                     } else {
-                        errorMsg = error.response.data.message.details[0].message;
+                        errorMsg = {message:error.response.data.message.details[0].message }
                     }
-                    if (errorMsg.toLowerCase().includes("\"period\" must be")) {
-                        errorMsg = "Minimum duration is 30 days. Maximum is 365";
+                    if (errorMsg.message.toLowerCase().includes("\"period\" must be")) {
+                        errorMsg = { message: "Minimum duration is 30 days. Maximum is 365" , errorType: "period"};
                     }
                     return CatalogHelper.quoteFromCoverable(
                             'nexus',
@@ -184,7 +183,7 @@ export default class NexusApi {
         let capacityDifference = capacityDAI - amount;
         if(capacityDifference < 0) {
             const maxCapacity = fromWei(capacityDAI.toString());
-          return `MAX capacity is ${maxCapacity} USD`
+          return { message: `MAX capacity is `, capacity:maxCapacity, currency:"USD", errorType:"capacity"}
         } else {
             return null;
         }
@@ -192,7 +191,7 @@ export default class NexusApi {
         let capacityDifference = capacityETH - amount;
         if(capacityDifference < 0) {
             const maxCapacity = fromWei(capacityETH.toString());
-            return `MAX capacity is ${maxCapacity} ETH`
+            return { message: `MAX capacity is `, capacity:maxCapacity, currency:"ETH", errorType:"capacity"}
         } else {
             return null;
         }

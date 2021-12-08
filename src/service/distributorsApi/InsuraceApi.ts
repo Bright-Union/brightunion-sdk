@@ -20,7 +20,8 @@ class InsuraceApi {
         .then((response:any) => {
             return response.data;
         }).catch(error =>{
-            console.log('ERROR on Insurace fetchCoverables : ' , error.response.data && error.response.data.message);
+          console.log('ERROR on Insurace fetchCoverables : ' , error.response.data && error.response.data.message);
+          return [];
         });
     }
 
@@ -59,10 +60,6 @@ class InsuraceApi {
         }).then((response : any) => {
             return response.data;
         })
-        // .catch(error =>{
-        //     console.log('ERROR on Insurace getCoverPremium : ' , error.response.data && error.response.data.message);
-        //     return error;
-        // });
     }
 
     static confirmCoverPremium (chainSymbol :any, params : any) {
@@ -73,15 +70,11 @@ class InsuraceApi {
             params: params
         }).then((response : any) => {
             return response.data;
-        }).catch(error =>{
-            console.log('ERROR on Insurace confirmCoverPremium : ', error.response.data && error.response.data.message);
         });
     }
 
 
     static async fetchInsuraceQuote ( web3:any, amount:string | number, currency:string , period:number, protocol:any): Promise<object> {
-        let quoteCurrency = currency;
-
         let amountInWei = toWei(amount.toString(), 'ether');
 
         if (currency === 'USD') {
@@ -177,29 +170,31 @@ class InsuraceApi {
             return quote;
         })
             .catch((e) => {
-                let errorMsg = e.response && e.response.data ? e.response.data.message : e.message;
+                let errorMsg:any = { message: e.response && e.response.data ? e.response.data.message : e.message }
 
                 let defaultCapacity = protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0;
 
-                if (errorMsg.includes('GPCHK') && errorMsg.includes(String(4))) {
-                    errorMsg = "Invalid amount or period.";
-                } else if (errorMsg.includes('GPCHK') && errorMsg.includes(String(5))) {
-                    errorMsg = "Invalid amount or period";
-                } else if (errorMsg.includes('S') && errorMsg.includes(String(4))) {
-                    errorMsg = "Invalid amount or period";
-                } else if (errorMsg.includes('GPCHK') && errorMsg.includes(String(3))) {
-                    errorMsg = "Currency is NOT a valid premium currency"
-                } else if (errorMsg.includes('GPCHK') && errorMsg.includes(String(6))) {
-                    errorMsg = "Not sufficient capital available"
-                } else if (errorMsg.match('GP: 4')) {
-                    errorMsg = "Minimum duration is 1 day. Maximum is 365";
-                } else if (errorMsg.includes('amount exceeds the maximum capacity')) {
-                    let currency = 'ETH';
-                    if (quoteCurrency === 'USD') {
-                        defaultCapacity = CurrencyHelper.eth2usd(defaultCapacity);
-                        currency = 'USD';
-                    }
-                    errorMsg = `MAX capacity is ${Filters.flexDecimals(fromWei(defaultCapacity.toString()))} ${currency}`
+                if (errorMsg.message.includes('GPCHK') && errorMsg.includes(String(4))) {
+                    errorMsg = {message:"Invalid amount or period." , errorType: "period or amount" }
+
+                } else if (errorMsg.message.includes('GPCHK') && errorMsg.includes(String(5))) {
+                  errorMsg = {message:"Invalid amount or period." , errorType: "period or amount" }
+
+                } else if (errorMsg.message.includes('S') && errorMsg.includes(String(4))) {
+                  errorMsg = {message:"Invalid amount or period." , errorType: "period or amount" }
+
+                } else if (errorMsg.message.includes('GPCHK') && errorMsg.includes(String(3))) {
+                  errorMsg = {message:"Currency is NOT a valid premium currency" , errorType: "currency" }
+
+                } else if (errorMsg.message.includes('GPCHK') && errorMsg.includes(String(6))) {
+                  errorMsg = {message:"Not sufficient capital available" , errorType: "capital" }
+
+                } else if (errorMsg.message.match('GP: 4')) {
+                  errorMsg = {message:"Minimum duration is 1 day. Maximum is 365" , errorType: "period" }
+
+                } else if (errorMsg.message.includes('amount exceeds the maximum capacity')) {
+                  let capacityCurrency = web3.symbol == "POLYGON" ? "MATIC" : web3.symbol == "BSC" ? "BNB" : "ETH";
+                  errorMsg = { message: `MAX capacity is `, capacity:fromWei(defaultCapacity.toString()), currency: capacityCurrency, errorType:"capacity"}
                 }
                 const quote = CatalogHelper.quoteFromCoverable(
                     "insurace",
@@ -219,11 +214,7 @@ class InsuraceApi {
                     }
                 );
                 return quote;
-            });
-            // .catch( (err:any) => {
-            //   console.log('err' , err);
-            //   return {}
-            // })
+            })
     }
 
 }
