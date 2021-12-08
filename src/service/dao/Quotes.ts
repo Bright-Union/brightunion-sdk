@@ -5,7 +5,6 @@ import {toBN , fromWei} from 'web3-utils'
 import GasHelper from "../helpers/gasHelper"
 import RiskCarriers from "../config/RiskCarriers"
 import CurrencyHelper from "../helpers/currencyHelper"
-import Filters from "../helpers/filters"
 
 /**
  * Returns a quotation for specified distributor.
@@ -142,7 +141,6 @@ export async function getQuoteFromBridge(
         }
         if (errorMsg.toLowerCase().includes("requiring more than there exists")) {
           errorMsg = {message: "MAX capacity is " , currency:_initialBridgeCurrency, capacity:fromWei(capacity.toString()), errorType: "capacity"};
-          // ${Filters.flexDecimals(fromWei(capacity.toString()))} ${_initialBridgeCurrency}`;
         } else if (errorMsg.toLowerCase().includes("pb: wrong epoch duration")) {
           errorMsg = { message: "Minimum duration is 1 day. Maximum is 365" , errorType:"period"};
         } else if (errorMsg.toLowerCase().includes("pb: wrong cover")) {
