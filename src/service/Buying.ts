@@ -294,6 +294,7 @@ export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
         return callBridge(_quoteProtocol);
       },
       () => {
+        global.events.emit("buy" , { status: "REJECTED" } );
         return {error: "Rejected confirmation"};
       })
 
