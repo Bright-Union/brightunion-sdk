@@ -81,10 +81,6 @@ class InsuraceApi {
           currency = RiskCarriers.INSURACE.fallbackQuotation[NetConfig.netById(web3.networkId).symbol];
         }
 
-        if (NetConfig.sixDecimalsCurrency(web3.networkId, currency)) {
-          amountInWei = ERC20Helper.ERCtoUSDTDecimals(amountInWei);
-        }
-
         let currencies:object[] = await this.getCurrencyList(web3.networkId);
         let selectedCurrency:any = currencies.find((curr:any) => {return curr.name == currency});
 
@@ -93,8 +89,11 @@ class InsuraceApi {
         }
 
         web3.symbol = NetConfig.netById(web3.networkId).symbol;
-
         [currency, selectedCurrency] = NetConfig.insuraceDePegTestCurrency(protocol,currency,web3.symbol,selectedCurrency);
+
+        if (NetConfig.sixDecimalsCurrency(web3.networkId, currency)) {
+          amountInWei = ERC20Helper.ERCtoUSDTDecimals(amountInWei);
+        }
 
         return await this.getCoverPremium(
           web3,
@@ -106,10 +105,14 @@ class InsuraceApi {
         ).then( async (response: any) => {
 
           const defaultCurrencySymbol = web3.symbol === 'POLYGON' ? 'MATIC' : web3.symbol === 'BSC' ? 'BNB' : 'ETH';
-            let premium: number = response.premiumAmount;
+
+            let premium: any = response.premiumAmount;
+
             if (NetConfig.sixDecimalsCurrency(web3.networkId, currency)) {
-                premium = Number(ERC20Helper.USDTtoERCDecimals(premium));
+                premium = ERC20Helper.USDTtoERCDecimals(premium);
+                amountInWei =  ERC20Helper.USDTtoERCDecimals(amountInWei);
             }
+
             const pricePercent = new BigNumber(premium).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
 
             global.events.emit("quote" , {
