@@ -203,7 +203,7 @@ const VUE_APP_MUMBAI_TESTNET_MODULES=''
 
 
 const MAIN_NETS = [1, 56, 137];
-const TEST_NETS = [42, 97, 80001]; //using Kovan here as Eth testnet
+const TEST_NETS = [4, 42, 97, 80001]; //using Kovan here as Eth testnet
 
 class NetConfig{
 
