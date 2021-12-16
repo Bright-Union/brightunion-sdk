@@ -16,7 +16,6 @@ export default class NexusApi {
             .then((response) => {
                 return response.data;
             }).catch(error => {
-              console.log('ERROR Nexus fetchCoverables:',error.response.data && error.response.data.message);
               return [];
             });
     }
@@ -35,9 +34,6 @@ export default class NexusApi {
 
        if (currency === 'USD') {
            currency = RiskCarriers.NEXUS.fallbackQuotation;
-       }
-       if (!Number.isInteger(amount)) {
-           amount = Math.round(amount);
        }
 
        return axios.get(
@@ -122,6 +118,7 @@ export default class NexusApi {
         );
 
       }).catch(function (error) {
+
             if ((error.response && error.response.status === 400) || (error.response && error.response.status === 409)) {
                 //wrong parameters
                 if (error.response.data.message.details || error.response.data.message) {
@@ -134,6 +131,10 @@ export default class NexusApi {
                     if (errorMsg.message.toLowerCase().includes("\"period\" must be")) {
                         errorMsg = { message: "Minimum duration is 30 days. Maximum is 365" , errorType: "period"};
                     }
+                    if  (errorMsg.message.includes("coverAmount") && errorMsg.message.includes("required pattern")){
+                       errorMsg = { message: "Nexus supports only whole amounts to cover (e.g. 1999)" , errorType: "amount"};
+                    }
+
                     return CatalogHelper.quoteFromCoverable(
                             'nexus',
                             protocol,
