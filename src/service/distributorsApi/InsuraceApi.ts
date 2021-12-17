@@ -192,8 +192,8 @@ class InsuraceApi {
                 } else if (errorMsg.message.includes('GPCHK') && errorMsg.includes(String(6))) {
                   errorMsg = {message:"Not sufficient capital available" , errorType: "capital" }
 
-                } else if (errorMsg.message.match('GP: 4')) {
-                  errorMsg = {message:"Minimum duration is 1 day. Maximum is 365" , errorType: "period" }
+                } else if (errorMsg.message.match('GP: 4') || errorMsg.message.includes('cover duration is either too small or')) {
+                  errorMsg = {message:"Minimum duration is 15 days. Maximum is 365" , errorType: "period" }
 
                 } else if (errorMsg.message.includes('amount exceeds the maximum capacity')) {
                   let capacityCurrency = web3.symbol == "POLYGON" ? "MATIC" : web3.symbol == "BSC" ? "BNB" : "ETH";
