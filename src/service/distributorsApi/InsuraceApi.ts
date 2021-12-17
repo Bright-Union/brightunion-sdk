@@ -8,6 +8,7 @@ import CurrencyHelper from '../helpers/currencyHelper'
 import {toBN,fromWei, toWei} from 'web3-utils'
 import GasHelper from "@/service/helpers/gasHelper";
 import Filters from "../helpers/filters";
+import {getCoverMin} from "../helpers/cover_minimums"
 
 
 class InsuraceApi {
@@ -95,6 +96,8 @@ class InsuraceApi {
           amountInWei = ERC20Helper.ERCtoUSDTDecimals(amountInWei);
         }
 
+        const minimumAmount= getCoverMin("insurace", web3.symbol, currency );
+
         return await this.getCoverPremium(
           web3,
           amountInWei,
@@ -127,6 +130,7 @@ class InsuraceApi {
               chain: web3.symbol,
               chainId: web3.networkId,
               rawData: response,
+              minimumAmount: minimumAmount,
             } );
 
 
@@ -163,7 +167,8 @@ class InsuraceApi {
                     response: response,
                     estimatedGasPrice: estimatedGasPrice,
                     defaultCurrencySymbol: defaultCurrencySymbol,
-                    feeInDefaultCurrency: feeInDefaultCurrency
+                    feeInDefaultCurrency: feeInDefaultCurrency,
+                    minimumAmount: minimumAmount,
                 },
                 {
                     remainingCapacity: protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0
@@ -212,6 +217,8 @@ class InsuraceApi {
                         pricePercent: 0,
                         estimatedGasPrice: 0,
                         errorMsg: errorMsg,
+                        minimumAmount: minimumAmount,
+
                     }, {
                         remainingCapacity: defaultCapacity,
                     }

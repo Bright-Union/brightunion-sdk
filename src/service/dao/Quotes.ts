@@ -5,6 +5,8 @@ import {toBN , fromWei} from 'web3-utils'
 import GasHelper from "../helpers/gasHelper"
 import RiskCarriers from "../config/RiskCarriers"
 import CurrencyHelper from "../helpers/currencyHelper"
+import {getCoverMin} from "../helpers/cover_minimums"
+
 
 /**
  * Returns a quotation for specified distributor.
@@ -74,6 +76,8 @@ export async function getQuoteFromBridge(
       let remainingCapacity:any = '';
       let stakedSTBL:any = '';
 
+      const minimumAmount = getCoverMin("bridge", global.user.ethNet.symbol, _currency );
+
       // const _stats = await
        return await policyBookRegistry.methods.stats(policyBookContractArray).call().then(async(_stats:any) => {
         capacity = _stats[0].maxCapacity;
@@ -99,6 +103,7 @@ export async function getQuoteFromBridge(
           chain: 'ETH',
           chainId: global.user.ethNet.networkId,
           rawData: _stats,
+          minimumAmount: minimumAmount,
         } );
 
         const {gasPrice, USDRate} = await GasHelper.getGasPrice(global.user.ethNet.symbol);
@@ -129,6 +134,7 @@ export async function getQuoteFromBridge(
           stakedSTBL: _stats[0].stakedSTBL,
           activeCovers: toBN(coverTokens),
           utilizationRatio: toBN(coverTokens).mul(toBN(10000)).div(toBN(totalLiquidity)).toNumber() / 100,
+          minimumAmount: minimumAmount,
          }
 
 
@@ -159,6 +165,7 @@ export async function getQuoteFromBridge(
             errorMsg: errorMsg,
             maxCapacity: remainingCapacity,
             stakedSTBL: stakedSTBL,
+            minimumAmount: minimumAmount,
           };
 
       });

@@ -7,6 +7,8 @@ import CurrencyHelper from './helpers/currencyHelper';
 import RiskCarriers from './config/RiskCarriers';
 import BigNumber from 'bignumber.js'
 import { toWei, hexToBytes, numberToHex } from "web3-utils"
+import {getCoverMin} from "./helpers/cover_minimums"
+
 
 /**
  *
@@ -125,7 +127,8 @@ export async function getQuoteFrom(
            estimatedGasPrice: quote.estimatedGasPrice,
            defaultCurrencySymbol: quote.estimatedGasPriceCurrency,
            feeInDefaultCurrency: quote.estimatedGasPriceDefault,
-           errorMsg: quote.errorMsg
+           errorMsg: quote.errorMsg,
+           minimumAmount: quote.minimumAmount,
          },
          {
            totalUSDTLiquidity: quote.totalUSDTLiquidity,
@@ -175,6 +178,7 @@ export async function getQuoteFrom(
            price: bridgeQuote.totalPrice,
            response: bridgeQuote,
            pricePercent: new BigNumber(bridgeQuote.totalPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000, //%, annualize
+           minimumAmount: getCoverMin("bridge", global.user.ethNet.symbol, _currency ),
          },
          {}
        );

@@ -6,6 +6,7 @@ import BigNumber from 'bignumber.js'
 import {toBN, toWei, asciiToHex, fromWei} from 'web3-utils'
 import {  _getNexusDistributor,  _getNexusDistributorsContract, _getDistributorsContract, _getNexusQuotationContract , _getNexusMasterContract } from '../helpers/getContract'
 import GasHelper from "../helpers/gasHelper"
+import {getCoverMin} from "../helpers/cover_minimums"
 
 export default class NexusApi {
 
@@ -35,6 +36,8 @@ export default class NexusApi {
        if (currency === 'USD') {
            currency = RiskCarriers.NEXUS.fallbackQuotation;
        }
+
+       const minimumAmount= getCoverMin("nexus", global.user.ethNet.symbol , currency );
 
        return axios.get(
          `${NetConfig.netById(global.user.ethNet.networkId).nexusAPI}/v1/quote?coverAmount=${amount}&currency=${currency}&period=${period}&contractAddress=${protocol.nexusCoverable}`,
@@ -71,7 +74,9 @@ export default class NexusApi {
           chain: 'ETH',
           chainId: global.user.ethNet.networkId,
           rawData: response.data,
+          minimumAmount:minimumAmount,
         } );
+
 
         const masterAddress = await distributor.methods.master().call()
         const masterContract = await _getNexusMasterContract(masterAddress );
@@ -105,6 +110,7 @@ export default class NexusApi {
             defaultCurrencySymbol:defaultCurrencySymbol,
             feeInDefaultCurrency:feeInDefaultCurrency,
             errorMsg: nexusMaxCapacityError,
+            minimumAmount: minimumAmount,
           },
           {
             activeCoversETH: activeCoversETH,
@@ -151,6 +157,7 @@ export default class NexusApi {
                                 defaultCurrencySymbol:0, //defaultCurrencySymbol,
                                 feeInDefaultCurrency:0, //feeInDefaultCurrency,
                                 response: {error:error},
+                                minimumAmount: minimumAmount,
                             },
                             {
                                 capacityETH: capacityETH,

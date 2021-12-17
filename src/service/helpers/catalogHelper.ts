@@ -191,6 +191,7 @@ class CatalogHelper {
       estimatedGasPriceDefault: obj.feeInDefaultCurrency,
       rawData: obj.response,
       stats: stats,
+      minimumAmount: obj.minimumAmount,
     }
   }
 
