@@ -28,6 +28,11 @@ const bridge_nexus_insurace = [
   ['', 'Pancakeswap V1', 'PancakeSwap', 'PancakeSwap'],
   ['Synthetix Network Token', 'Synthetix', '', 'Synthetix'],
   ['Sushi', 'SushiSwap V1', '', 'Sushi'],
+  ['Kyber (katalyst)', '', 'Kyber', 'Kyber'],
+  ['', 'DyDx Perpetual', 'DyDx', 'DyDx'],
+  ['', 'ETH 2.0 (deposit contract)', 'ETH 2.0', 'ETH 2.0'],
+  ['', 'OlympusDAO', 'Olympus DAO', 'Olympus DAO'],
+  ['', 'Abracadabra', 'Abracadabra.money', 'Abracadabra'],
   ['Uniswap', 'Uniswap V1', '', 'Uniswap V1'],
   ['Uniswap', 'Uniswap V2', 'Uniswap V2', 'Uniswap V2'],
   ['Uniswap', 'Uniswap V3', 'Uniswap V3', 'Uniswap V3'],
@@ -281,11 +286,6 @@ class CatalogHelper {
                 //duplicate found. merge the fields
                 const mergedPair = _.mergeWith({}, _catalog[i], _catalog[j], (o, s) => _.isNull(s) ? o : s);
                 mergedCoverableObject = _.mergeWith({}, mergedCoverableObject, mergedPair, (o, s) => _.isNull(s) ? o : s);
-
-                // if(mergedCoverableObject.productId && !mergedCoverableObject.availableCounterMultiChain){
-                //   mergedCoverableObject.availableCounterMultiChain = true;
-                //   duplicates += 2;
-                // }
 
                 mergedCoverableObject.availableCounter = ++duplicates;
                 mergedCoverableObject.name = mergedName;

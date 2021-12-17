@@ -5,7 +5,6 @@ import {
   _getBridgeRegistryContract,
   _getBridgePolicyBookRegistryContract,
   _getBridgePolicyQuoteContract,
-  // _getBridgePolicyBookContract,
   _getBridgePolicyRegistryContract,
 } from './helpers/getContract';
 import NetConfig from './config/NetConfig';
