@@ -1,12 +1,5 @@
 import axios from 'axios';
 import * as _ from  "lodash";
-// import {
-//   _getBridgeRegistryContract,
-//   _getBridgePolicyBookRegistryContract,
-//   _getBridgePolicyQuoteContract,
-//   _getBridgePolicyBookContract,
-//   _getBridgePolicyRegistryContract,
-// } from '../helpers/getContract';
 import NetConfig from '../config/NetConfig';
 import {hexToUtf8} from 'web3-utils';
 
@@ -28,7 +21,7 @@ const bridge_nexus_insurace = [
   ['', 'Pancakeswap V1', 'PancakeSwap', 'PancakeSwap'],
   ['Synthetix Network Token', 'Synthetix', '', 'Synthetix'],
   ['Sushi', 'SushiSwap V1', '', 'Sushi'],
-  ['Kyber (katalyst)', '', 'Kyber', 'Kyber'],
+  ['', 'Kyber', 'Kyber (Katalyst)', 'Kyber'],
   ['', 'DyDx Perpetual', 'DyDx', 'DyDx'],
   ['', 'ETH 2.0 (deposit contract)', 'ETH 2.0', 'ETH 2.0'],
   ['', 'OlympusDAO', 'Olympus DAO', 'Olympus DAO'],
