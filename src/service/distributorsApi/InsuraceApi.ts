@@ -202,7 +202,7 @@ class InsuraceApi {
 
                 } else if (errorMsg.message.includes('amount exceeds the maximum capacity')) {
                   let capacityCurrency = web3.symbol == "POLYGON" ? "MATIC" : web3.symbol == "BSC" ? "BNB" : "ETH";
-                  errorMsg = { message: `MAX capacity is `, capacity:fromWei(defaultCapacity.toString()), currency: capacityCurrency, errorType:"capacity"}
+                  errorMsg = { message: `Maximum available capacity is `, capacity:fromWei(defaultCapacity.toString()), currency: capacityCurrency, errorType:"capacity"}
                 }
                 const quote = CatalogHelper.quoteFromCoverable(
                     "insurace",

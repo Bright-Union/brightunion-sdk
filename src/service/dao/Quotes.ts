@@ -146,7 +146,7 @@ export async function getQuoteFromBridge(
           _currency = "ETH"
         }
         if (errorMsg.toLowerCase().includes("requiring more than there exists")) {
-          errorMsg = {message: "MAX capacity is " , currency:_initialBridgeCurrency, capacity:fromWei(capacity.toString()), errorType: "capacity"};
+          errorMsg = {message: "Maximum available capacity is " , currency:_initialBridgeCurrency, capacity:fromWei(capacity.toString()), errorType: "capacity"};
         } else if (errorMsg.toLowerCase().includes("pb: wrong epoch duration")) {
           errorMsg = { message: "Minimum duration is 1 day. Maximum is 365" , errorType:"period"};
         } else if (errorMsg.toLowerCase().includes("pb: wrong cover")) {

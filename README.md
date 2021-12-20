@@ -120,7 +120,7 @@ Events which are currently supported are for methods related to Quotation and Bu
 - "quote"
 - "buy"
 
-###Examples of event subscriptions
+### Examples of event subscriptions
 
 ```javascript
 brightClient.events.on("buy" , (data)=> {})

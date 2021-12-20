@@ -191,7 +191,7 @@ export default class NexusApi {
         let capacityDifference = capacityDAI - amount;
         if(capacityDifference < 0) {
             const maxCapacity = fromWei(capacityDAI.toString());
-          return { message: `MAX capacity is `, capacity:maxCapacity, currency:"USD", errorType:"capacity"}
+          return { message: `Maximum available capacity is `, capacity:maxCapacity, currency:"USD", errorType:"capacity"}
         } else {
             return null;
         }
@@ -199,7 +199,7 @@ export default class NexusApi {
         let capacityDifference = capacityETH - amount;
         if(capacityDifference < 0) {
             const maxCapacity = fromWei(capacityETH.toString());
-            return { message: `MAX capacity is `, capacity:maxCapacity, currency:"ETH", errorType:"capacity"}
+            return { message: `Maximum available capacity is `, capacity:maxCapacity, currency:"ETH", errorType:"capacity"}
         } else {
             return null;
         }
