@@ -87,7 +87,7 @@ export async function getQuoteFromBridge(
         const bridgeEpochs = Math.min(52, Math.ceil(Number(_period) / 7));
 
         const {totalSeconds, totalPrice} =  await policyBookContract.methods.getPolicyPrice(bridgeEpochs, _amountInWei).call();
-        const actualPeriod = Math.floor(Number(totalSeconds) / 3600 / 24);
+        let actualPeriod = Math.floor(Number(totalSeconds) / 3600 / 24);
         const pricePercent = new BigNumber(totalPrice).times(1000).dividedBy(_amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000;
 
         global.events.emit("quote" , {
@@ -114,6 +114,11 @@ export async function getQuoteFromBridge(
         const totalLiquidity  = await policyBookContract.methods.totalLiquidity().call();
         const coverTokens = await policyBookContract.methods.totalCoverTokens().call();
 
+        let errorMsg = null;
+        if(_period > 365){
+          errorMsg = { message: "Minimum duration is 1 day. Maximum is 365" , errorType:"period"};
+          actualPeriod = _period;
+        }
 
         return{
           _stats : _stats,
@@ -135,8 +140,8 @@ export async function getQuoteFromBridge(
           activeCovers: toBN(coverTokens),
           utilizationRatio: toBN(coverTokens).mul(toBN(10000)).div(toBN(totalLiquidity)).toNumber() / 100,
           minimumAmount: minimumAmount,
+          errorMsg: errorMsg,
          }
-
 
       }).catch((e:any) => {
 

@@ -21,7 +21,7 @@ const bridge_nexus_insurace = [
   ['', 'Pancakeswap V1', 'PancakeSwap', 'PancakeSwap'],
   ['Synthetix Network Token', 'Synthetix', '', 'Synthetix'],
   ['Sushi', 'SushiSwap V1', '', 'Sushi'],
-  ['', 'Kyber', 'Kyber (Katalyst)', 'Kyber'],
+  ['', 'Kyber (Katalyst)', 'Kyber', 'Kyber'],
   ['', 'DyDx Perpetual', 'DyDx', 'DyDx'],
   ['', 'ETH 2.0 (deposit contract)', 'ETH 2.0', 'ETH 2.0'],
   ['', 'OlympusDAO', 'Olympus DAO', 'Olympus DAO'],
