@@ -5,7 +5,8 @@ import {hexToUtf8} from 'web3-utils';
 
 const bridge_nexus_insurace = [
   // BRIDGE NAME, NEXUS NAME, INSURACE NAME, COMMON NAME
-  ['88mph.app', '', '88mph', '88mph'],
+  ['88mph.app', '88mph', '88mph V2', '88mph V2'],
+  ['88mph.app', '88mph', '88mph V3', '88mph V3'],
   ['1INCH Token', '1Inch (DEX & Liquidity Pools)', '1Inch', '1Inch'],
   ['Aave', 'Aave V2', 'Aave V2', 'Aave V2'],
   ['Aave', 'Aave V1', '', 'Aave V1'],
