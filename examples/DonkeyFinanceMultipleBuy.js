@@ -55,6 +55,6 @@
      // Get  Autofarm Quote
      const quotesArray = await brightClient.getMultipleQuotes( [ AutofarmLP, Alpaca ,PancakeSwap ]);
      // Buy Quote
-     await brightClient.buyQuotes(allQuotes).then(data => { console.log("Successful Tx data", data);  });
+     await brightClient.buyQuotes(quotesArray).then(data => { console.log("Successful Tx data", data);  });
 
 })();
