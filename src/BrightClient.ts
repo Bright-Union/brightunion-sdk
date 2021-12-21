@@ -186,22 +186,21 @@ async getQuoteFrom(_distributorName:string,
 
    for (var i = 0; i < _arrayOfQuotes.length; i++) {
      if(areSameCurrency === true){
-       areSameCurrency = _arrayOfQuotes[i].asset;
-     }else if(areSameCurrency != _arrayOfQuotes[i].asset){
+       areSameCurrency = _arrayOfQuotes[i].currency;
+     }else if(areSameCurrency != _arrayOfQuotes[i].currency){
        areSameCurrency = false;
      }
+
      if(_arrayOfQuotes[i].distributorName != "insurace"){
        isSupportedDistributor = false
      }
    }
-
    if(!areSameCurrency){
      return { error:"All quotes have to be in the same currency"}
    }
    if(!isSupportedDistributor){
      return { error:"Currently only protocoles from Insurace are supported for muliple quotes in one request"}
    }
-
    return await getInsuraceQuotes(_arrayOfQuotes);
  }
 
@@ -233,9 +232,6 @@ async getQuoteFrom(_distributorName:string,
     if(!_quotes || _quotes.length < 1){
       return {error : "No quotes provided"};
     }
-    // if(_quotes[0].chainId !== global.user.networkId){
-    //   return {error : "Wrong network" , message:"Please switch your active network to fit the quote network"};
-    // }
     return await buyMultipleQuotes(
       _quotes
     )

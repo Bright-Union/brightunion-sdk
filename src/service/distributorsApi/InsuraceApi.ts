@@ -99,34 +99,50 @@ class InsuraceApi {
         });
     }
 
+    static async formatQuoteDataforInsurace(amount:any , currency:any, web3:any, protocol:any ) {
+
+      let amountInWei:any= toWei(amount.toString(), 'ether');
+
+      if (currency === 'USD') {
+        currency = RiskCarriers.INSURACE.fallbackQuotation[NetConfig.netById(web3.networkId).symbol];
+      }
+
+      let currencies:object[] = await this.getCurrencyList(web3.networkId);
+      let selectedCurrency:any = currencies.find((curr:any) => {return curr.name == currency});
+
+      if (!selectedCurrency) {
+        return {error: `Selected currency is not supported by InsurAce: ${currency} on net ${web3.networkId}`};
+      }
+
+      [currency, selectedCurrency] = NetConfig.insuraceDePegTestCurrency(protocol,currency,web3.symbol,selectedCurrency);
+
+      if (NetConfig.sixDecimalsCurrency(web3.networkId, currency)) {
+        amountInWei = ERC20Helper.ERCtoUSDTDecimals(amountInWei);
+      }
+
+      return {amountInWei: amountInWei, currency:currency, selectedCurrency: selectedCurrency}
+
+    }
 
     static async fetchInsuraceQuote ( web3:any, amount:string | number, currency:string , period:number, protocol:any): Promise<object> {
-        let amountInWei = toWei(amount.toString(), 'ether');
+      let quoteData = await this.formatQuoteDataforInsurace(amount, currency, web3, protocol);
 
-        if (currency === 'USD') {
-          currency = RiskCarriers.INSURACE.fallbackQuotation[NetConfig.netById(web3.networkId).symbol];
-        }
-
-        let currencies:object[] = await this.getCurrencyList(web3.networkId);
-        let selectedCurrency:any = currencies.find((curr:any) => {return curr.name == currency});
-
-        if (!selectedCurrency) {
+        if (!quoteData.selectedCurrency) {
           return {error: `Selected currency is not supported by InsurAce: ${currency} on net ${web3.networkId}`};
         }
 
         web3.symbol = NetConfig.netById(web3.networkId).symbol;
-        [currency, selectedCurrency] = NetConfig.insuraceDePegTestCurrency(protocol,currency,web3.symbol,selectedCurrency);
 
         if (NetConfig.sixDecimalsCurrency(web3.networkId, currency)) {
-          amountInWei = ERC20Helper.ERCtoUSDTDecimals(amountInWei);
+          quoteData.amountInWei = ERC20Helper.ERCtoUSDTDecimals(quoteData.amountInWei);
         }
 
         const minimumAmount= getCoverMin("insurace", web3.symbol, currency );
 
         return await this.getCoverPremium(
           web3,
-          amountInWei,
-          selectedCurrency.address,
+          quoteData.amountInWei,
+          quoteData.selectedCurrency.address,
           period,
           parseInt(protocol.productId),
           global.user.account,
@@ -136,20 +152,20 @@ class InsuraceApi {
 
             let premium: any = response.premiumAmount;
 
-            if (NetConfig.sixDecimalsCurrency(web3.networkId, currency)) {
+            if (NetConfig.sixDecimalsCurrency(web3.networkId, quoteData.currency)) {
                 premium = ERC20Helper.USDTtoERCDecimals(premium);
-                amountInWei =  ERC20Helper.USDTtoERCDecimals(amountInWei);
+                quoteData.amountInWei =  ERC20Helper.USDTtoERCDecimals(quoteData.amountInWei);
             }
 
-            const pricePercent = new BigNumber(premium).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
+            const pricePercent = new BigNumber(premium).times(1000).dividedBy(quoteData.amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
 
             global.events.emit("quote" , {
               status: "INITIAL_DATA" ,
               distributorName:"insurace",
               price: premium ,
               pricePercent:pricePercent,
-              amount:amountInWei,
-              currency:currency,
+              amount:quoteData.amountInWei,
+              currency:quoteData.currency,
               period:period,
               protocol:protocol,
               chain: web3.symbol,
@@ -180,8 +196,8 @@ class InsuraceApi {
                 'insurace',
                 protocol,
                 {
-                    amount: amountInWei,
-                    currency: currency,
+                    amount: quoteData.amountInWei,
+                    currency: quoteData.currency,
                     period: period,
                     chain: web3.symbol,
                     chainId: web3.networkId,
@@ -232,7 +248,7 @@ class InsuraceApi {
                 const quote = CatalogHelper.quoteFromCoverable(
                     "insurace",
                     protocol, {
-                        amount: amountInWei,
+                        amount: quoteData.amountInWei,
                         currency: currency,
                         period: period,
                         chain: web3.symbol,

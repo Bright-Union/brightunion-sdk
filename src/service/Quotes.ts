@@ -229,18 +229,27 @@ export async function getInsuraceQuotes( _arrayOfQuotes:any ) : Promise<object> 
   const amounts:any[] = [];
   const periods:any[] = [];
   const protocolIds:any[] = [];
-  // const currency:any = _arrayOfQuotes[0].asset;
-  const currency:any = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
+
+  let currency:any = null;
 
   for (var i = 0; i < _arrayOfQuotes.length; i++) {
-    let amountInWei = toWei(_arrayOfQuotes[i].amount.toString(), 'ether');
-    amounts.push(amountInWei);
+    const protocol = {name:_arrayOfQuotes[i].name };
+    const quoteData:any = await InsuraceApi.formatQuoteDataforInsurace(_arrayOfQuotes[i].amount , _arrayOfQuotes[i].currency, newWeb3Instance , protocol);
+
+    if(!currency) currency = quoteData.selectedCurrency ? quoteData.selectedCurrency : quoteData ;
+    amounts.push(quoteData.amountInWei);
     periods.push(_arrayOfQuotes[i].period);
     protocolIds.push(_arrayOfQuotes[i].productId);
   }
 
+  const defaultCurrencySymbol = newWeb3Instance.symbol === 'POLYGON' ? 'MATIC' : newWeb3Instance.symbol === 'BSC' ? 'BNB' : 'ETH';
+
+  if(newWeb3Instance.symbol == currency.name || currency.error ){
+    return { error: "Currently only network currencies are supported by multiple quotation, please quote in " + defaultCurrencySymbol+'.' };
+  }
+
   if (CatalogHelper.availableOnNetwork(newWeb3Instance.networkId, 'INSURACE')) {
-    return await InsuraceApi.getMultipleCoverPremiums( newWeb3Instance , amounts , currency, periods, protocolIds);
+    return await InsuraceApi.getMultipleCoverPremiums( newWeb3Instance , amounts , currency.address, periods, protocolIds);
   }else{
     return { error: "Please switch to Insurace supported network" }
   }

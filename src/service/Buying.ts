@@ -31,13 +31,16 @@ export async function buyMultipleQuotes (_quotes:any):Promise<any> {
 
 export async function buyMutipleOnInsurace (_quotes:any):Promise<any> {
 
+  const chainSymbol:string  = NetConfig.netById(global.user.networkId).symbol;
+
   // Confirm insurace quoted premium & get security signature params to buy
-  const confirmCoverResult:any = await InsuraceApi.confirmCoverPremium("BSC", _quotes.params);
+  const confirmCoverResult:any = await InsuraceApi.confirmCoverPremium(chainSymbol, _quotes.params);
 
   // Map Quote confirmation to Insurace buying object
   const buyingObj = setInsuraceBuyingObject(confirmCoverResult);
 
-  return  callInsurace(buyingObj, false);
+  let buyingWithNetworkCurrency = true;
+  return  callInsurace(buyingObj, buyingWithNetworkCurrency);
 }
 
 
@@ -123,6 +126,7 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
             return callInsurace(buyingObj , false);
           },
           (err:any) => {
+            global.events.emit("buy" , { status: "REJECTED" } );
             return {error: err , message: 'ERC20Helper approveAndCall Error'};
           });
         } else {
