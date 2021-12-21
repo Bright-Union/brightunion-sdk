@@ -5,8 +5,8 @@ import { getCoversCount, getCovers } from "./service/dao/Covers";
 import { getDistributorAddress } from "./service/dao/Distributors";
 import { getCatalog } from "./service/Catalog";
 import { getAllCovers, getAllCoversCount, getCoversFrom } from "./service/Covers";
-import { buyQuote } from "./service/Buying";
-import { getQuoteFrom, getQuotes } from "./service/Quotes";
+import { buyQuote , buyMultipleQuotes } from "./service/Buying";
+import { getQuoteFrom, getQuotes, getInsuraceQuotes } from "./service/Quotes";
 import NetConfig from './service/config/NetConfig'
 import CurrencyHelper from './service/helpers/currencyHelper'
 import EventEmitter from 'events'
@@ -155,8 +155,6 @@ async getAllCovers(
  return await getQuotes(_amount, _currency, _period, _protocol);
 }
 
-
-
 async getQuoteFrom(_distributorName:string,
   _amount:number,
   _currency:string,
@@ -175,6 +173,38 @@ async getQuoteFrom(_distributorName:string,
     );
   }
 
+  async getMultipleQuotes(
+    _arrayOfQuotes: any
+ ){
+
+   if(!this.initialized){
+     return this.initErrorResponse();
+   }
+
+   let isSupportedDistributor:boolean = true;
+   let areSameCurrency:any = true;
+
+   for (var i = 0; i < _arrayOfQuotes.length; i++) {
+     if(areSameCurrency === true){
+       areSameCurrency = _arrayOfQuotes[i].asset;
+     }else if(areSameCurrency != _arrayOfQuotes[i].asset){
+       areSameCurrency = false;
+     }
+     if(_arrayOfQuotes[i].distributorName != "insurace"){
+       isSupportedDistributor = false
+     }
+   }
+
+   if(!areSameCurrency){
+     return { error:"All quotes have to be in the same currency"}
+   }
+   if(!isSupportedDistributor){
+     return { error:"Currently only protocoles from Insurace are supported for muliple quotes in one request"}
+   }
+
+   return await getInsuraceQuotes(_arrayOfQuotes);
+ }
+
 
   async buyQuote(
     _quote:any,
@@ -190,6 +220,24 @@ async getQuoteFrom(_distributorName:string,
     }
     return await buyQuote(
       _quote
+    )
+
+  }
+
+  async buyQuotes(
+    _quotes:any[],
+  ): Promise<any>{
+    if(!this.initialized){
+      return this.initErrorResponse();
+    }
+    if(!_quotes || _quotes.length < 1){
+      return {error : "No quotes provided"};
+    }
+    // if(_quotes[0].chainId !== global.user.networkId){
+    //   return {error : "Wrong network" , message:"Please switch your active network to fit the quote network"};
+    // }
+    return await buyMultipleQuotes(
+      _quotes
     )
 
   }

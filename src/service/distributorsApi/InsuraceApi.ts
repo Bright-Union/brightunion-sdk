@@ -63,6 +63,31 @@ class InsuraceApi {
         })
     }
 
+    static async getMultipleCoverPremiums (
+        web3:any,
+        amounts : any[],
+        currency : any,
+        periods : any[],
+        protocolIds : any[]
+      ) {
+
+        let url = `${NetConfig.netById(web3.networkId).insuraceAPI}/getCoverPremium?code=${encodeURIComponent(NetConfig.netById(web3.networkId).insuraceAPIKey)}`;
+
+        return  axios.post(
+            url, {
+                    "chain": NetConfig.netById(web3.networkId).symbol,
+                    "coverCurrency": currency,
+                    "productIds": protocolIds,
+                    "coverDays": periods,
+                    "coverAmounts": amounts,
+                    "owner": global.user.account,
+                    "referralCode": NetConfig.netById(web3.networkId).insuraceReferral,
+
+        }).then((response : any) => {
+            return response.data;
+        })
+    }
+
     static confirmCoverPremium (chainSymbol :any, params : any) {
 
         return axios.post(

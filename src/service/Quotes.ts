@@ -216,7 +216,37 @@ export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_
   }
 }
 
+export async function getInsuraceQuotes( _arrayOfQuotes:any ) : Promise<object> {
+
+  const newWeb3Instance = {
+    account: global.user.account,
+    networkId: global.user.networkId,
+    symbol: NetConfig.netById(global.user.networkId).symbol,
+    web3Instance: global.user.web3,
+    readOnly: false,
+  }
+
+  const amounts:any[] = [];
+  const periods:any[] = [];
+  const protocolIds:any[] = [];
+  // const currency:any = _arrayOfQuotes[0].asset;
+  const currency:any = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
+
+  for (var i = 0; i < _arrayOfQuotes.length; i++) {
+    let amountInWei = toWei(_arrayOfQuotes[i].amount.toString(), 'ether');
+    amounts.push(amountInWei);
+    periods.push(_arrayOfQuotes[i].period);
+    protocolIds.push(_arrayOfQuotes[i].productId);
+  }
+
+  if (CatalogHelper.availableOnNetwork(newWeb3Instance.networkId, 'INSURACE')) {
+    return await InsuraceApi.getMultipleCoverPremiums( newWeb3Instance , amounts , currency, periods, protocolIds);
+  }else{
+    return { error: "Please switch to Insurace supported network" }
+  }
+}
+
 export default {
   getQuoteFrom,
-  // getInsuraceQuoteWithConfirm
+  getInsuraceQuotes,
 };

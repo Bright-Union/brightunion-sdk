@@ -24,6 +24,23 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
 }
 
 
+export async function buyMultipleQuotes (_quotes:any):Promise<any> {
+
+  return buyMutipleOnInsurace(_quotes);
+}
+
+export async function buyMutipleOnInsurace (_quotes:any):Promise<any> {
+
+  // Confirm insurace quoted premium & get security signature params to buy
+  const confirmCoverResult:any = await InsuraceApi.confirmCoverPremium("BSC", _quotes.params);
+
+  // Map Quote confirmation to Insurace buying object
+  const buyingObj = setInsuraceBuyingObject(confirmCoverResult);
+
+  return  callInsurace(buyingObj, false);
+}
+
+
 /**
  *  Buy on Insurace multi-currency handler method
  *
@@ -306,4 +323,6 @@ export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
   }
 
 
-  export default buyQuote
+
+
+  export default {buyQuote, buyMultipleQuotes }
