@@ -22,6 +22,7 @@
       *  PANCAKE SWAP
       */
      const PancakeSwap = {
+       distributorName: "insurace",
        productId: 37,
        amount: principal * .25, // 25%
        period: period,
@@ -33,6 +34,7 @@
       *    ALPACA FINANCE
       */
      const Alpaca = {
+       distributorName: "insurace",
        productId: 75,
        amount: principal * .50, // 50%
        period: period,
@@ -45,6 +47,7 @@
       *    AUTO FARM FOR IBALPACA LP TOKENS
       */
      const AutofarmLP = {
+       distributorName: "insurace",
        productId: 39,
        amount: principal * .75, // 50%
        period: period,

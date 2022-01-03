@@ -133,10 +133,6 @@ class InsuraceApi {
 
         web3.symbol = NetConfig.netById(web3.networkId).symbol;
 
-        if (NetConfig.sixDecimalsCurrency(web3.networkId, currency)) {
-          quoteData.amountInWei = ERC20Helper.ERCtoUSDTDecimals(quoteData.amountInWei);
-        }
-
         const minimumAmount= getCoverMin("insurace", web3.symbol, currency );
 
         return await this.getCoverPremium(
