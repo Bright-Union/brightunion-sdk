@@ -144,6 +144,7 @@ class InsuraceApi {
           global.user.account,
         ).then( async (response: any) => {
 
+
           const defaultCurrencySymbol = web3.symbol === 'POLYGON' ? 'MATIC' : web3.symbol === 'BSC' ? 'BNB' : 'ETH';
 
             let premium: any = response.premiumAmount;
@@ -170,8 +171,16 @@ class InsuraceApi {
               minimumAmount: minimumAmount,
             } );
 
+            // const cashbackInStable = .075 * parseFloat(toBN(premium).div(toBN(10 ** 18)).toNumber().toString());
 
-            const cashbackInStable = .075 * parseFloat(toBN(premium).div(toBN(10 ** 18)).toNumber().toString());
+            const cashbackInInsur = Number(fromWei(response.ownerInsurReward));
+            const insurPrice = CurrencyHelper.insurPrice();
+            const cashbackInStable = cashbackInInsur * insurPrice;
+            let cashBackPercent = (cashbackInStable / Number(fromWei(premium))) * 100;
+            if ( defaultCurrencySymbol == quoteData.currency) {
+              const premiumInUSD = Number(fromWei(CurrencyHelper.eth2usd(premium)));
+              cashBackPercent = (cashbackInStable / premiumInUSD) * 100;
+            }
 
             const {gasPrice, USDRate} = await GasHelper.getGasPrice(web3.symbol);
 
@@ -196,8 +205,8 @@ class InsuraceApi {
                     chain: web3.symbol,
                     chainId: web3.networkId,
                     price: premium,
-                    cashBack: [ 0 , cashbackInStable ],
-                    cashBackInWei: toWei(cashbackInStable.toString(), 'ether'),
+                    cashBackPercent: cashBackPercent,
+                    cashBack: [ cashbackInInsur , cashbackInStable ],
                     pricePercent: pricePercent,  //%, annualize
                     response: response,
                     estimatedGasPrice: estimatedGasPrice,
