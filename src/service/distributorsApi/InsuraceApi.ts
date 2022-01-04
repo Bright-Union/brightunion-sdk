@@ -186,8 +186,6 @@ class InsuraceApi {
                 feeInDefaultCurrency = 0;
             }
 
-            const insurPrice = CurrencyHelper.insurPrice();
-
             const quote = CatalogHelper.quoteFromCoverable(
                 'insurace',
                 protocol,
@@ -198,7 +196,7 @@ class InsuraceApi {
                     chain: web3.symbol,
                     chainId: web3.networkId,
                     price: premium,
-                    cashBack: [(cashbackInStable / insurPrice), cashbackInStable],
+                    cashBack: [ 0 , cashbackInStable ],
                     cashBackInWei: toWei(cashbackInStable.toString(), 'ether'),
                     pricePercent: pricePercent,  //%, annualize
                     response: response,
