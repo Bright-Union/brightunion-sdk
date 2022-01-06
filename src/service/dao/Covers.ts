@@ -37,7 +37,7 @@ export async function getCoversCount(
 ): Promise<number>  {
 
   if(global.user.ethNet.networkId == 1){
-    //ToDO - finish the logic of fetching Count from Distributors 
+    //ToDO - finish the logic of fetching Count from Distributors
 
   }else{
 
@@ -182,6 +182,7 @@ export async function getCoversInsurace(_web3:any):Promise<any>{
   for (let coverId = 1; coverId <= Number(count); coverId++) {
 
     const expirationP = coverDataInstance.methods.getCoverEndTimestamp(_web3.account, coverId.toString()).call();
+    const startTimeP = coverDataInstance.methods.getCoverBeginTimestamp(_web3.account, coverId.toString()).call();
     const amountP =  coverDataInstance.methods.getCoverAmount(_web3.account, coverId.toString()).call();
     const currencyP =   coverDataInstance.methods.getCoverCurrency(_web3.account, coverId.toString()).call();
     const statusP =  coverDataInstance.methods.getAdjustedCoverStatus(_web3.account, coverId.toString()).call();
@@ -191,11 +192,11 @@ export async function getCoversInsurace(_web3:any):Promise<any>{
     const product =  await  _getInsurAceProductContract(productAddress, _web3.web3Instance);
     const prodDetailsP =  product.methods.getProductDetails(productId).call();
 
-    let coverDataPromises = [expirationP, amountP, currencyP, statusP, prodDetailsP];
+    let coverDataPromises = [expirationP, amountP, currencyP, statusP, prodDetailsP, startTimeP];
 
     await  Promise.all(coverDataPromises).then((_data:any) => {
 
-      const [expiration, amount, currency, status, prodDetails] = _data;
+      const [expiration, amount, currency, status, prodDetails, startTime] = _data;
 
       allCovers.push(
         {
@@ -205,6 +206,7 @@ export async function getCoversInsurace(_web3:any):Promise<any>{
           coverType: hexToUtf8(prodDetails['1']),
           coverAmount: amount,
           coverAsset: currency,
+          startTime: startTime,
           endTime: expiration,
           status: status,
           net: _web3.networkId,
