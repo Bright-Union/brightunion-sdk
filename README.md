@@ -20,7 +20,7 @@ A swagger API documentation can be found [here](http://api.brightunion.io/protoc
 
 ## Prerequisites for Nexus Quotation
 Quotation support for Nexus provider is only allowed by white-listing your URL, please contact us for support and we will add your app to Nexus supported URL's.
-If not doing so, Nexus quotations will throw 403 error.
+Not doing so, will cause Nexus quotations throwing 403 error. Other quotations from other providers will load.
 
 ## Installation
 
