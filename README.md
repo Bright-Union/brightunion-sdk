@@ -73,7 +73,7 @@ const quotes = brightClient.getQuotes( <amount> , <currency>, <period>, <catalog
 
 // Buy quoted cover
 brightClient.buyQuote( <quote> ).then(data => {
-  // transaction done
+  // Transaction done
 })
 
 // Get purchased covers from all distributors
@@ -92,12 +92,12 @@ const brightClient= new BrightClient({ <web3_instance> });
 await brightClient.initialize();
 
 
-//Define a Catalog Item from a supported insurance distributor
-//INSURACE catalog item example
+// Define a Catalog Item from a supported insurance distributor
+// INSURACE catalog item example
 const catalogItemInsurace = { productId: <Insurace_product_id> };
-//BRIDGE catalog item example
+// BRIDGE catalog item example
 const catalogItemBridge = { bridgeProductAddress: <Bridge_product_address> };
-//NEXUS catalog item example
+// NEXUS catalog item example
 const catalogItemNexus = { nexusCoverable: <Nexus_product_address> };
 
 // Get quote from specific distributor on a catalog item
@@ -105,10 +105,35 @@ const quote = await brightClient.getQuoteFrom( <distributorName>, <amount> , <cu
 
 // Buy quoted cover
 brightClient.buyQuote( <quote> ).then(data => {
-  // transaction done
+  // Transaction done
 })
 
 ```
+
+## Multiple Quotation and Buy
+ Quote and buy multiple covers in one transaction. Currently supported only for covers from Insurace.
+
+ ```javascript
+
+ const BrightClient = require('@Brightunion/SDK');B
+
+ const brightClient= new BrightClient({ <web3_instance> });
+
+ // Initialize the client
+ await brightClient.initialize();
+
+ // Get catalog of all risk covers available
+ const catalog = brightClient.getCatalog();
+
+ // Get  multiple quotes
+ const quotesArray = await brightClient.getMultipleQuotes([catalog[0], catalog[1], catalog[3]]);
+ // Buy multiple quotes
+ await brightClient.buyQuotes(quotesArray).then(data => {
+   // Transaction done
+ });
+
+ ```
+
 
 ## Events
 Events are fired before the main function returns the final response

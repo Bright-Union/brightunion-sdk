@@ -45,6 +45,7 @@ events:any
 
 constructor(_config:any) {
     global.user = {
+      clientKey: _config.clientKey ?  _config.clientKey : window.origin,
       web3: _config.web3,
       web3Passive: [],
       networkId: null,
