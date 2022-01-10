@@ -125,7 +125,7 @@ export default class NexusApi {
 
       }).catch(function (error) {
 
-            if ((error.response && error.response.status === 400) || (error.response && error.response.status === 409)) {
+            if ( (error.response && error.response.status === 400) || (error.response && error.response.status === 409) ) {
                 //wrong parameters
                 if (error.response.data.message.details || error.response.data.message) {
                     let errorMsg:any = null;
@@ -166,9 +166,10 @@ export default class NexusApi {
                         );
                 }
             } else {
-                return new Promise(() => {
-                    return {error: error}
-                });
+
+              console.log(error.response);
+
+              return {error: error}
             }
         });
     }

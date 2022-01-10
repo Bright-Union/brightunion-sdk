@@ -18,11 +18,17 @@ A swagger API documentation can be found [here](http://api.brightunion.io/protoc
 - Blockchain client node provider:
     - infura, quicknode, anyblock etc...
 
+## Prerequisites for Nexus Quotation
+Quotation support for Nexus provider is only allowed by white-listing your URL, please contact us for support and we will add your app to Nexus supported URL's.
+If not doing so, Nexus quotations will throw 403 error.
+
 ## Installation
 
 ```javascript
 npm install @brightunion/sdk
 ```
+
+
 # Available methods
 
 ### Get the full catalog from all our distributors
