@@ -166,9 +166,6 @@ export default class NexusApi {
                         );
                 }
             } else {
-
-              console.log(error.response);
-
               return {error: error}
             }
         });
