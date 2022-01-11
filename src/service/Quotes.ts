@@ -185,8 +185,8 @@ export async function getQuoteFrom(
 
      }
 
-
-
+   }else{
+     return {error: "Not supported network for Bridge"}
    }
  }
 
@@ -194,6 +194,8 @@ export async function getQuoteFrom(
  export async function getNexusQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
     if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'NEXUS_MUTUAL') && _protocol.nexusCoverable){
      return await NexusApi.fetchQuote( _amount , _currency, _period, _protocol);
+   }else{
+     return {error: "Not supported network for Nexus"}
    }
  }
 
@@ -213,6 +215,8 @@ export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_
 
   if (CatalogHelper.availableOnNetwork(_web3.networkId, 'INSURACE') && _protocol.productId) {
     return await InsuraceApi.fetchInsuraceQuote(_web3, _amount , _currency, _period, _protocol);
+  }else{
+    return {error: "Not supported network for Insurace"}
   }
 }
 
