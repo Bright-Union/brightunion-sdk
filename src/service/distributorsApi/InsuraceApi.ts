@@ -21,7 +21,7 @@ class InsuraceApi {
         .then((response:any) => {
             return response.data;
         }).catch(error =>{
-          console.log('ERROR on Insurace fetchCoverables : ' , error.response.data && error.response.data.message);
+          console.error('ERROR on Insurace fetchCoverables : ' , error.response.data && error.response.data.message);
           return [];
         });
     }
@@ -34,7 +34,7 @@ class InsuraceApi {
         .then((response:any) => {
             return response.data;
         }).catch(error =>{
-            console.log('ERROR on Insurace getCurrencyList : ' , error.response.data && error.response.data.message);
+            console.error('ERROR on Insurace getCurrencyList : ' , error.response.data && error.response.data.message);
         });
     }
 
@@ -226,22 +226,7 @@ class InsuraceApi {
 
                 let defaultCapacity = protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0;
 
-                if (errorMsg.message.includes('GPCHK') && errorMsg.includes(String(4))) {
-                    errorMsg = {message:"Invalid amount or period." , errorType: "period or amount" }
-
-                } else if (errorMsg.message.includes('GPCHK') && errorMsg.includes(String(5))) {
-                  errorMsg = {message:"Invalid amount or period." , errorType: "period or amount" }
-
-                } else if (errorMsg.message.includes('S') && errorMsg.includes(String(4))) {
-                  errorMsg = {message:"Invalid amount or period." , errorType: "period or amount" }
-
-                } else if (errorMsg.message.includes('GPCHK') && errorMsg.includes(String(3))) {
-                  errorMsg = {message:"Currency is NOT a valid premium currency" , errorType: "currency" }
-
-                } else if (errorMsg.message.includes('GPCHK') && errorMsg.includes(String(6))) {
-                  errorMsg = {message:"Not sufficient capital available" , errorType: "capital" }
-
-                } else if (errorMsg.message.match('GP: 4') || errorMsg.message.includes('cover duration is either too small or')) {
+                if (errorMsg.message.match('GP: 4') || errorMsg.message.includes('cover duration is either too small or')) {
                   errorMsg = {message:"Minimum duration is 15 days. Maximum is 365" , errorType: "period" }
 
                 } else if (errorMsg.message.includes('amount exceeds the maximum capacity')) {
