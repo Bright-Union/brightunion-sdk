@@ -86,105 +86,109 @@ export async function getQuoteFrom(
  */
  async function getBridgeQuote(_amount :any, _currency:any, _period :any, _protocol :any ) : Promise<object>{
 
-   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL') && _protocol.bridgeProductAddress) {
+   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL')) {
+     if(_protocol.bridgeProductAddress){
 
-     let amountInWei:any = toWei(_amount.toString(), 'ether');
-     let initialBridgeCurrency: any = "USD"
-     if (_currency === 'ETH') {
-       amountInWei = CurrencyHelper.eth2usd(amountInWei);
-        initialBridgeCurrency = 'ETH';
-     }
-     _currency = RiskCarriers.BRIDGE.fallbackQuotation;
+       let amountInWei:any = toWei(_amount.toString(), 'ether');
+       let initialBridgeCurrency: any = "USD"
+       if (_currency === 'ETH') {
+         amountInWei = CurrencyHelper.eth2usd(amountInWei);
+         initialBridgeCurrency = 'ETH';
+       }
+       _currency = RiskCarriers.BRIDGE.fallbackQuotation;
 
-     const bridgeEpochs = Math.min(52, Math.ceil(Number(_period) / 7));
+       const bridgeEpochs = Math.min(52, Math.ceil(Number(_period) / 7));
 
-     let quote:any = {}
-     // let bridgeQuote:any = {}
+       let quote:any = {}
+       // let bridgeQuote:any = {}
 
-     if(global.user.ethNet.networkId == 1 ){
+       if(global.user.ethNet.networkId == 1 ){
 
-       quote = await getQuoteFromBridge(
-         _protocol,
-         _period,
-         amountInWei,
-         _currency,
-         initialBridgeCurrency,
-       );
+         quote = await getQuoteFromBridge(
+           _protocol,
+           _period,
+           amountInWei,
+           _currency,
+           initialBridgeCurrency,
+         );
 
-       return CatalogHelper.quoteFromCoverable(
-         'bridge',
-         _protocol,
-         {
-           amount: amountInWei,
-           currency: _currency,
-           period: _period,
-           chain: quote.chain,
-           chainId: quote.chainId,
-           actualPeriod: quote.actualPeriod,
-           price: quote.price,
-           response: quote._stats,
-           pricePercent: quote.pricePercent, //%, annualize
-           estimatedGasPrice: quote.estimatedGasPrice,
-           defaultCurrencySymbol: quote.estimatedGasPriceCurrency,
-           feeInDefaultCurrency: quote.estimatedGasPriceDefault,
-           errorMsg: quote.errorMsg,
-           minimumAmount: quote.minimumAmount,
-         },
-         {
-           totalUSDTLiquidity: quote.totalUSDTLiquidity,
-           maxCapacity: quote.maxCapacity,
-           stakedSTBL: quote.stakedSTBL,
-           activeCovers: quote.activeCovers,
-           utilizationRatio: quote.utilizationRatio,
+         return CatalogHelper.quoteFromCoverable(
+           'bridge',
+           _protocol,
+           {
+             amount: amountInWei,
+             currency: _currency,
+             period: _period,
+             chain: quote.chain,
+             chainId: quote.chainId,
+             actualPeriod: quote.actualPeriod,
+             price: quote.price,
+             response: quote._stats,
+             pricePercent: quote.pricePercent, //%, annualize
+             estimatedGasPrice: quote.estimatedGasPrice,
+             defaultCurrencySymbol: quote.estimatedGasPriceCurrency,
+             feeInDefaultCurrency: quote.estimatedGasPriceDefault,
+             errorMsg: quote.errorMsg,
+             minimumAmount: quote.minimumAmount,
+           },
+           {
+             totalUSDTLiquidity: quote.totalUSDTLiquidity,
+             maxCapacity: quote.maxCapacity,
+             stakedSTBL: quote.stakedSTBL,
+             activeCovers: quote.activeCovers,
+             utilizationRatio: quote.utilizationRatio,
+           }
+         );
+
+       }else{
+
+         quote =  await getQuote(
+           'bridge',
+           bridgeEpochs,
+           amountInWei,
+           _protocol.bridgeProductAddress,
+           '0x0000000000000000000000000000000000000000',
+           '0x0000000000000000000000000000000000000000',
+           hexToBytes(numberToHex(500)),
+         );
+
+         const bridgeQuote = {
+           totalSeconds       : quote.prop1,
+           totalPrice         : quote.prop2,
+           totalLiquidity     : quote.prop3,
+           totalCoverTokens   : quote.prop4,
+           prop5              : quote.prop5,
+           prop6              : quote.prop6,
+           prop7              : quote.prop7,
          }
-       );
+         // mapping to bridge object Or could be mapping to UI object
+         // only reason of why we have diff get<provider>Quote methods
+
+         const actualPeriod = Math.floor(Number(bridgeQuote.totalSeconds) / 3600 / 24);
+
+         return CatalogHelper.quoteFromCoverable(
+           'bridge',
+           _protocol,
+           {
+             amount: amountInWei,
+             currency: _currency,
+             period: _period,
+             chain: 'ETH',
+             chainId: global.user.ethNet.networkId,
+             actualPeriod: actualPeriod,
+             price: bridgeQuote.totalPrice,
+             response: bridgeQuote,
+             pricePercent: new BigNumber(bridgeQuote.totalPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000, //%, annualize
+             minimumAmount: getCoverMin("bridge", global.user.ethNet.symbol, _currency ),
+           },
+           {}
+         );
+
+       }
 
      }else{
-
-       quote =  await getQuote(
-         'bridge',
-         bridgeEpochs,
-         amountInWei,
-         _protocol.bridgeProductAddress,
-         '0x0000000000000000000000000000000000000000',
-         '0x0000000000000000000000000000000000000000',
-         hexToBytes(numberToHex(500)),
-       );
-
-       const bridgeQuote = {
-         totalSeconds       : quote.prop1,
-         totalPrice         : quote.prop2,
-         totalLiquidity     : quote.prop3,
-         totalCoverTokens   : quote.prop4,
-         prop5              : quote.prop5,
-         prop6              : quote.prop6,
-         prop7              : quote.prop7,
-       }
-       // mapping to bridge object Or could be mapping to UI object
-       // only reason of why we have diff get<provider>Quote methods
-
-       const actualPeriod = Math.floor(Number(bridgeQuote.totalSeconds) / 3600 / 24);
-
-       return CatalogHelper.quoteFromCoverable(
-         'bridge',
-         _protocol,
-         {
-           amount: amountInWei,
-           currency: _currency,
-           period: _period,
-           chain: 'ETH',
-           chainId: global.user.ethNet.networkId,
-           actualPeriod: actualPeriod,
-           price: bridgeQuote.totalPrice,
-           response: bridgeQuote,
-           pricePercent: new BigNumber(bridgeQuote.totalPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000, //%, annualize
-           minimumAmount: getCoverMin("bridge", global.user.ethNet.symbol, _currency ),
-         },
-         {}
-       );
-
+       return {error: "Please provide bridgeProductAddress in protocol object"}
      }
-
    }else{
      return {error: "Not supported network for Bridge"}
    }
@@ -192,8 +196,12 @@ export async function getQuoteFrom(
 
 
  export async function getNexusQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
-    if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'NEXUS_MUTUAL') && _protocol.nexusCoverable){
-     return await NexusApi.fetchQuote( _amount , _currency, _period, _protocol);
+    if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'NEXUS_MUTUAL')){
+      if(_protocol.nexusCoverable){
+        return await NexusApi.fetchQuote( _amount , _currency, _period, _protocol);
+      }else{
+        return {error: "Please provide nexusCoverable address in protocol object"}
+      }
    }else{
      return {error: "Not supported network for Nexus"}
    }
@@ -213,8 +221,12 @@ export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_
       _web3 = newWeb3Instance;
   }
 
-  if (CatalogHelper.availableOnNetwork(_web3.networkId, 'INSURACE') && _protocol.productId) {
-    return await InsuraceApi.fetchInsuraceQuote(_web3, _amount , _currency, _period, _protocol);
+  if (CatalogHelper.availableOnNetwork(_web3.networkId, 'INSURACE')) {
+    if(_protocol.productId){
+      return await InsuraceApi.fetchInsuraceQuote(_web3, _amount , _currency, _period, _protocol);
+    }else{
+      return {error: "Please provide productId of Insurace protocol in protocol object"}
+    }
   }else{
     return {error: "Not supported network for Insurace"}
   }

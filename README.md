@@ -140,6 +140,17 @@ brightClient.buyQuote( <quote> ).then(data => {
 
  ```
 
+## Provider Network Switch
+When provider (Metamask, Trust, WalletConnect etc.) network is switched, new Bright Client should be initialized with the new instance of Web3.
+ ```javascript
+
+const brightClient= new BrightClient({ <web3_instance> });
+
+// Initialize the client
+await brightClient.initialize();
+
+```
+
 
 ## Events
 Events are fired before the main function returns the final response
