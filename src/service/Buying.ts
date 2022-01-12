@@ -29,7 +29,7 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
 
 export async function buyMultipleQuotes (_quotes:any):Promise<any> {
 
-  GoogleEvents.multiBuy(_quotes);
+  GoogleEvents.multiBuy();
 
   return buyMutipleOnInsurace(_quotes);
 }

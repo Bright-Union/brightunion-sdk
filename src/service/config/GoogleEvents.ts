@@ -52,17 +52,12 @@ class GoogleEvents {
     }
   }
 
-  static multiBuy = (_quote:any) => {
+  static multiBuy = () => {
     if(NetConfig.isMainNetwork(global.user.networkId)){
-      this.analytics.track('SDK_Buy_called', {
+      this.analytics.track('SDK_Buy_multiple_called', {
         clientKey: global.user.clientKey,
         label: global.user.clientKey,
-        premium: _quote.premium,
-        amount: _quote.amount,
-        period: _quote.period,
-        currency: _quote.currency,
-        name: _quote.name,
-        provider: _quote.distributorName,
+        distributorName: "Insurace",
       })
     }
   };
