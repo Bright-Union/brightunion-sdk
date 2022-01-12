@@ -46,7 +46,7 @@ class GoogleEvents {
         amount : _quote._amount,
         period: _quote._period,
         currency: _quote._currency,
-        protocol: _quote._protocol.name,
+        protocol: _quote._protocol ? _quote._protocol.name : null,
         distributorName: _quote._distributorName,
       })
     }
