@@ -8,9 +8,12 @@ import {
   _getBridgePolicyRegistryContract,
 } from './helpers/getContract';
 import NetConfig from './config/NetConfig';
+import GoogleEvents from './config/GoogleEvents';
 
 
 export async function getCatalog(): Promise<any> {
+
+  GoogleEvents.catalog();
 
   const catalogPromiseArray:any[] = [];
 

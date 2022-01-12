@@ -241,6 +241,11 @@ class NetConfig{
     })[0]
   }
 
+  public static isMainNetwork(net:number){
+    if (MAIN_NETS.includes(net)) return true;
+    return false;
+  }
+
   public static mainNets() {
     return MAIN_NETS
   }

@@ -8,6 +8,8 @@ import RiskCarriers from './config/RiskCarriers';
 import BigNumber from 'bignumber.js'
 import { toWei, hexToBytes, numberToHex } from "web3-utils"
 import {getCoverMin} from "./helpers/cover_minimums"
+import GoogleEvents from './config/GoogleEvents';
+
 
 
 /**
@@ -29,6 +31,8 @@ export async function getQuotes(
 
 ): Promise<any[]> {
   const quotesPromiseArray = [];
+
+  GoogleEvents.quote( {_amount, _currency, _period, _protocol } , "getQuotes")
 
   quotesPromiseArray.push(getQuoteFrom('nexus', _amount, _currency, _period, _protocol))
   quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol))
@@ -64,6 +68,8 @@ export async function getQuoteFrom(
                                     _period: number,
                                     _protocol:any
     ): Promise<object> {
+
+      GoogleEvents.quote( {_amount, _currency, _period, _protocol, _distributorName } , "getQuoteFrom")
 
   if(_distributorName == 'bridge'){
      return await getBridgeQuote(_amount,_currency,_period,_protocol);
@@ -233,6 +239,8 @@ export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_
 }
 
 export async function getInsuraceQuotes( _arrayOfQuotes:any ) : Promise<object> {
+
+  GoogleEvents.quote( {} , "multiInsuraceQuote" );
 
   const newWeb3Instance = {
     account: global.user.account,

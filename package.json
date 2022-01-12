@@ -48,12 +48,14 @@
     "webpack-cli": "^4.9.1"
   },
   "dependencies": {
+    "@analytics/google-analytics": "^0.5.3",
     "@ethereumjs/tx": "^3.3.2",
     "@ethersproject/contracts": "^5.3.0",
     "@ethersproject/providers": "^5.3.1",
     "@ethersproject/solidity": "^5.3.0",
     "@types/lodash": "^4.14.176",
     "@uniswap/sdk": "^3.0.3",
+    "analytics": "^0.7.21",
     "axios": "^0.23.0",
     "bignumber.js": "^9.0.1",
     "crypto-browserify": "^3.12.0",

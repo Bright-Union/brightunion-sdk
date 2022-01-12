@@ -3,10 +3,13 @@ import { buyCoverInsurace, buyCover } from "./dao/Buying";
 import NetConfig from './config/NetConfig';
 import InsuraceApi from './distributorsApi/InsuraceApi';
 import ERC20Helper from './helpers/ERC20Helper';
+import GoogleEvents from './config/GoogleEvents';
 
 
 
 export async function buyQuote(_quoteProtocol: any): Promise<any> {
+
+  GoogleEvents.buy(_quoteProtocol);
 
   if(_quoteProtocol.distributorName == 'bridge'){
 
@@ -25,6 +28,8 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
 
 
 export async function buyMultipleQuotes (_quotes:any):Promise<any> {
+
+  GoogleEvents.multiBuy(_quotes);
 
   return buyMutipleOnInsurace(_quotes);
 }

@@ -1,4 +1,4 @@
-import TxEvents from '../config/GoogleA';
+import GoogleEvents from '../config/GoogleEvents';
 import BuyReceipt from "../domain/BuyReceipt";
 import {
   _getDistributorsContract,
@@ -72,16 +72,17 @@ export async function buyCover(
               }
 
               global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
-              isProdNet(global.user.networkId) ? TxEvents.onTxHash(tx) : null;
+              GoogleEvents.onTxHash(tx) ;
               resolve({success:res});
              })
             .on('error', (err:any, receipt:any) => {
               global.events.emit("buy" , { status: "REJECTED" } );
+              GoogleEvents.onTxRejected(txHash);
               reject( {error: err, receipt:receipt})
             })
             .on('confirmation', (confirmationNumber:any) => {
               if (confirmationNumber === 0) {
-                isProdNet(global.user.networkId) ? TxEvents.onTxHash(txHash) : null;
+                 GoogleEvents.onTxConfirmation(txHash);
                 global.events.emit("buy" , { status: "TX_CONFIRMED" } );
 
               }
@@ -114,17 +115,17 @@ export async function buyCover(
                 }
 
                 global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
-
-                isProdNet(global.user.networkId) ? TxEvents.onTxHash(tx) : null;
+                GoogleEvents.onTxHash(tx);
                 resolve({success:res});
             })
             .on('error', (err:any, receipt:any) => {
               global.events.emit("buy" , { status: "REJECTED" } );
+              GoogleEvents.onTxRejected(txHash);
               reject( {error: err, receipt:receipt})
             })
             .on('confirmation', (confirmationNumber:any) => {
               if (confirmationNumber === 0) {
-                isProdNet(global.user.networkId) ? TxEvents.onTxHash(txHash) : null;
+               GoogleEvents.onTxConfirmation(txHash);
                 global.events.emit("buy" , { status: "TX_CONFIRMED" } );
 
               }
@@ -152,17 +153,17 @@ export async function buyCover(
           'currency':'USDT'
         }
         global.events.emit("buy" , { status: "TX_GENERATED" , data: transactionHash } );
-
-        isProdNet(global.user.networkId) ? TxEvents.onTxHash(tx) : null;
+        GoogleEvents.onTxHash(tx);
         resolve({success: transactionHash});
       })
       .on('error', (err:any, receipt:any) => {
         global.events.emit("buy" , { status: "REJECTED" } );
+        GoogleEvents.onTxRejected(txHash);
         reject( {error: err, receipt:receipt})
       })
       .on('confirmation', (confirmationNumber:any) => {
         if (confirmationNumber === 0) {
-          isProdNet(global.user.networkId) ? TxEvents.onTxHash(txHash) : null;
+          GoogleEvents.onTxConfirmation(txHash);
           global.events.emit("buy" , { status: "TX_CONFIRMED" } );
 
         }
@@ -232,16 +233,17 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
         }
 
         global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
-        isProdNet(global.user.networkId) ? TxEvents.onTxHash(tx) : null;
+        GoogleEvents.onTxHash(tx);
         resolve({success: res});
       })
       .on('error', (err:any, receipt:any) => {
         global.events.emit("buy" , { status: "REJECTED" } );
+        GoogleEvents.onTxRejected(txHash);
         reject({error: err , receipt:receipt})
       })
       .on('confirmation', (confirmationNumber:any) => {
         if (confirmationNumber === 0) {
-          isProdNet(global.user.networkId) ? TxEvents.onTxHash(txHash) : null;
+        GoogleEvents.onTxConfirmation(txHash);
           global.events.emit("buy" , { status: "TX_CONFIRMED" } );
         }
       });
@@ -270,17 +272,18 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
         }
 
         global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
-        isProdNet(global.user.networkId) ? TxEvents.onTxHash(tx) : null;
+        GoogleEvents.onTxHash(tx);
         resolve({success: res});
       })
       .on('error', (err:any, receipt:any) => {
         global.events.emit("buy" , { status: "REJECTED" } );
+        GoogleEvents.onTxRejected(txHash);
         reject({error: err , receipt:receipt})
       })
       .on('confirmation', (confirmationNumber:any) => {
         if (confirmationNumber === 0) {
           global.events.emit("buy" , { status: "TX_CONFIRMED" } );
-          isProdNet(global.user.networkId)?TxEvents.onTxConfirmation(txHash) :null;
+          GoogleEvents.onTxConfirmation(txHash);
         }
       });
     });
@@ -288,11 +291,6 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
 
 }
 
-
-const isProdNet = (net:number)  =>{
-  if ([1,56,137].includes(net)) return true;
-  return false;
-}
 
 export default {
   buyCover, buyCoverInsurace

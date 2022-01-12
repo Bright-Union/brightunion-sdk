@@ -10,6 +10,7 @@ import { getQuoteFrom, getQuotes, getInsuraceQuotes } from "./service/Quotes";
 import NetConfig from './service/config/NetConfig'
 import CurrencyHelper from './service/helpers/currencyHelper'
 import EventEmitter from 'events'
+import GoogleEvents from './service/config/GoogleEvents';
 
 // import {_loadAllABIs} from "./service/helpers/getContract"
 
@@ -45,7 +46,8 @@ events:any
 
 constructor(_config:any) {
     global.user = {
-      clientKey: _config.clientKey ?  _config.clientKey : window.origin,
+      googleEventsEnabled: _config.GADisable ? false : true, // use GADisable: true to disable Google Analytics Events
+      clientKey: _config.clientKey ?  _config.clientKey : window.location.host,
       web3: _config.web3,
       web3Passive: [],
       networkId: null,
@@ -74,6 +76,7 @@ async initialize(): Promise<object>{
       CurrencyHelper.getInsureUSDCPrice();
       this.initialized = true;
       global.events.emit("initialized" , { user: global.user } );
+      GoogleEvents.onBUInit();
       // await _loadAllABIs();
       return {initialized: this.initialized, message: 'Bright Union Initialized', user:global.user };
   }
