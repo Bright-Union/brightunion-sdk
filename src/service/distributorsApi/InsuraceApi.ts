@@ -84,7 +84,9 @@ class InsuraceApi {
                     "referralCode": NetConfig.netById(web3.networkId).insuraceReferral,
 
         }).then((response : any) => {
-            return response.data;
+          let quote:any = response.data;
+          quote.currency = currency;
+          return quote;
         })
     }
 
