@@ -76,7 +76,7 @@ class InsuraceApi {
         return  axios.post(
             url, {
                     "chain": NetConfig.netById(web3.networkId).symbol,
-                    "coverCurrency": currency,
+                    "coverCurrency": currency.address,
                     "productIds": protocolIds,
                     "coverDays": periods,
                     "coverAmounts": amounts,

@@ -36,24 +36,18 @@ export async function buyMultipleQuotes (_quotes:any):Promise<any> {
 
 export async function buyMutipleOnInsurace (_quotes:any):Promise<any> {
 
-
   const chainSymbol:string  = NetConfig.netById(global.user.networkId).symbol;
   // Confirm insurace quoted premium & get security signature params to buy
   const confirmCoverResult:any = await InsuraceApi.confirmCoverPremium(chainSymbol, _quotes.params);
   // Map Quote confirmation to Insurace buying object
   const buyingObj:any = setInsuraceBuyingObject(confirmCoverResult);
 
-  console.log("buyMutipleOnInsurace - " ,  _quotes , buyingObj);
-
-  if(NetConfig.isNetworkCurrencyBySymbol(_quotes.currency)){
-    console.log("1B");
+  if(NetConfig.isNetworkCurrencyBySymbol(_quotes.currency.name)){
     return  callInsurace(buyingObj, true );
-
   }else{
-    console.log("2B");
 
     const netConfig:any = NetConfig.netById(global.user.networkId);
-    const erc20Address:string = netConfig[_quotes.currency];
+    const erc20Address:string = netConfig[_quotes.currency.name];
 
     const erc20Instance = _getIERC20Contract(erc20Address);
 
@@ -67,8 +61,10 @@ export async function buyMutipleOnInsurace (_quotes:any):Promise<any> {
     const onConfirmationUSDT:any = () => {
       global.events.emit("buy" , { status: "CONFIRMATION" , type:"reset_usdt_allowance" , count:3 , current:2 } );
     };
-    const onConfirmationApproved:any =  () => {
-      buyingObj.premium = Number(ERC20Helper.ERCtoUSDTDecimals(buyingObj.premium))
+    const onConfirmationApproved:any =  (_premiumToUSDDecimals:boolean) => {
+      if(_premiumToUSDDecimals){
+        buyingObj.premium = Number(ERC20Helper.ERCtoUSDTDecimals(buyingObj.premium))
+      }
       global.events.emit("buy" , { status: "CONFIRMATION" , type:"main", count:2 , current:2 } );
       return callInsurace(buyingObj, false);
     };
@@ -78,8 +74,10 @@ export async function buyMutipleOnInsurace (_quotes:any):Promise<any> {
     };
 
 
-    if (NetConfig.sixDecimalsCurrency(global.user.networkId, _quotes.currency) &&       //6 digits currency?
+    if (NetConfig.sixDecimalsCurrency(global.user.networkId, _quotes.currency.name) &&       //6 digits currency?
     Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(buyingObj.premium)) {
+
+      buyingObj.premium = Number(ERC20Helper.USDTtoERCDecimals(buyingObj.premium));
 
       //proceed with USDT
       global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
@@ -88,7 +86,7 @@ export async function buyMutipleOnInsurace (_quotes:any):Promise<any> {
         insuraceAddress,
         buyingObj.premium,
         onConfirmationUSDT(),
-        onConfirmationApproved(),
+        onConfirmationApproved(true),
         onConfirmationRejected()
       )
 
@@ -97,7 +95,7 @@ export async function buyMutipleOnInsurace (_quotes:any):Promise<any> {
         erc20Instance,
         insuraceAddress,  // global.user.brightProtoAddress //0x7e758e0D330B9B340A7282029e73dA448fb4BdB6
         buyingObj.premium,
-        onConfirmationApproved(),
+        onConfirmationApproved(false),
         onConfirmationRejected()
       );
 
@@ -132,8 +130,6 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
   const netBalance = await global.user.web3.eth.getBalance(global.user.account);
 
   global.events.emit("buy" , { status: "INITIALIZED"} );
-
-  console.log("Insurace Buy - " ,  _quoteProtocol);
 
   let insuraceAddress :any;
   if(global.user.networkId === 1 ){ insuraceAddress = NetConfig.netById(1).insuraceCover; }

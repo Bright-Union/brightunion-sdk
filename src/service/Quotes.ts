@@ -266,14 +266,8 @@ export async function getInsuraceQuotes( _arrayOfQuotes:any ) : Promise<object> 
     protocolIds.push(_arrayOfQuotes[i].productId);
   }
 
-  const defaultCurrencySymbol = newWeb3Instance.symbol === 'POLYGON' ? 'MATIC' : newWeb3Instance.symbol === 'BSC' ? 'BNB' : 'ETH';
-
-  if(newWeb3Instance.symbol == currency.name || currency.error ){
-    return { error: "Currently only network currencies are supported by multiple quotation, please quote in " + defaultCurrencySymbol+'.' };
-  }
-
   if (CatalogHelper.availableOnNetwork(newWeb3Instance.networkId, 'INSURACE')) {
-    return await InsuraceApi.getMultipleCoverPremiums( newWeb3Instance , amounts , currency.address, periods, protocolIds);
+    return await InsuraceApi.getMultipleCoverPremiums( newWeb3Instance , amounts , currency, periods, protocolIds);
   }else{
     return { error: "Please switch to Insurace supported network" }
   }
