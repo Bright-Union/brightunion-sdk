@@ -58,22 +58,6 @@ export async function buyMutipleOnInsurace (_quotes:any):Promise<any> {
     if(global.user.networkId === 1 ){ insuraceAddress = NetConfig.netById(1).insuraceCover; }
     else { insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();}
 
-    const onConfirmationUSDT:any = () => {
-      global.events.emit("buy" , { status: "CONFIRMATION" , type:"reset_usdt_allowance" , count:3 , current:2 } );
-    };
-    const onConfirmationApproved:any =  (_premiumToUSDDecimals:boolean) => {
-      if(_premiumToUSDDecimals){
-        buyingObj.premium = Number(ERC20Helper.ERCtoUSDTDecimals(buyingObj.premium))
-      }
-      global.events.emit("buy" , { status: "CONFIRMATION" , type:"main", count:2 , current:2 } );
-      return callInsurace(buyingObj, false);
-    };
-    const onConfirmationRejected:any =  () => {
-      global.events.emit("buy" , { status: "REJECTED" } );
-      return {error: "Confirmation rejected"}
-    };
-
-
     if (NetConfig.sixDecimalsCurrency(global.user.networkId, _quotes.currency.name) &&       //6 digits currency?
     Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(buyingObj.premium)) {
 
@@ -85,9 +69,18 @@ export async function buyMutipleOnInsurace (_quotes:any):Promise<any> {
         erc20Instance,
         insuraceAddress,
         buyingObj.premium,
-        onConfirmationUSDT(),
-        onConfirmationApproved(true),
-        onConfirmationRejected()
+        () => {
+          global.events.emit("buy" , { status: "CONFIRMATION" , type:"reset_usdt_allowance" , count:3 , current:2 } );
+        },
+        () => {
+          buyingObj.premium = Number(ERC20Helper.ERCtoUSDTDecimals(buyingObj.premium))
+          global.events.emit("buy" , { status: "CONFIRMATION" , type:"main", count:2 , current:2 } );
+          return callInsurace(buyingObj, false);
+        },
+        () => {
+          global.events.emit("buy" , { status: "REJECTED" } );
+          return {error: "Confirmation rejected"}
+        }
       )
 
     }else if (Number(ercBalance) >= (Number)(buyingObj.premium)) {
@@ -95,8 +88,14 @@ export async function buyMutipleOnInsurace (_quotes:any):Promise<any> {
         erc20Instance,
         insuraceAddress,  // global.user.brightProtoAddress //0x7e758e0D330B9B340A7282029e73dA448fb4BdB6
         buyingObj.premium,
-        onConfirmationApproved(false),
-        onConfirmationRejected()
+        () => {
+          global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
+          return callInsurace(buyingObj , false);
+        },
+        (err:any) => {
+          global.events.emit("buy" , { status: "REJECTED" } );
+          return {error: err , message: 'ERC20Helper approveAndCall Error'};
+        }
       );
 
     } else{
@@ -187,7 +186,6 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
           insuraceAddress,  // global.user.brightProtoAddress //0x7e758e0D330B9B340A7282029e73dA448fb4BdB6
           buyingObj.premium,
           () => {
-
             global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
             return callInsurace(buyingObj , false);
           },
