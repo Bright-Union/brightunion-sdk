@@ -164,6 +164,7 @@ export async function getCoversNexus():Promise<any>{
     if (coverToClaim[covers[i].id]) {
       covers[i].claimId = coverToClaim[covers[i].id];
     }
+    covers[i].endTime = covers[i].validUntil;
   }
 
   return covers;
@@ -207,6 +208,7 @@ export async function getCoversInsurace(_web3:any):Promise<any>{
           coverAmount: amount,
           coverAsset: currency,
           startTime: startTime,
+          validUntil: expiration,
           endTime: expiration,
           status: status,
           net: _web3.networkId,
@@ -264,6 +266,7 @@ export async function getCoversBridge():Promise<any>{
         policyBookAddr: policyBookAddress,
         status: claimStatus,
         coverAmount: info.coverAmount,
+        validUntil: info.endTime,
         endTime: info.endTime,
         premium: info.premium,
         startTime: info.startTime,

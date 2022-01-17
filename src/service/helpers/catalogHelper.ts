@@ -232,6 +232,7 @@ class CatalogHelper {
       coverType: obj.coverType,
       coverAmount: obj.coverAmount,
       coverAsset: obj.coverAsset,
+      validUntil: obj.validUntil,
       endTime: obj.endTime,
       status: obj.status,
       net: obj.net,
