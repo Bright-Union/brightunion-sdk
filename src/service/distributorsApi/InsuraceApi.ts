@@ -9,6 +9,8 @@ import {toBN,fromWei, toWei} from 'web3-utils'
 import GasHelper from "@/service/helpers/gasHelper";
 import Filters from "../helpers/filters";
 import {getCoverMin} from "../helpers/cover_minimums"
+import * as Sentry from "@sentry/browser";
+
 
 
 class InsuraceApi {
@@ -21,7 +23,7 @@ class InsuraceApi {
         .then((response:any) => {
             return response.data;
         }).catch(error =>{
-          console.error('ERROR on Insurace fetchCoverables : ' , error);
+          Sentry.captureException(error);
           return [];
         });
     }
@@ -34,7 +36,7 @@ class InsuraceApi {
         .then((response:any) => {
             return response.data;
         }).catch(error =>{
-            console.error('ERROR on Insurace getCurrencyList : ' , error);
+          Sentry.captureException(error);
         });
     }
 
@@ -224,6 +226,7 @@ class InsuraceApi {
             return quote;
         })
             .catch((e) => {
+
                 let errorMsg:any = { message: e.response && e.response.data ? e.response.data.message : e.message }
 
                 let defaultCapacity = protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0;

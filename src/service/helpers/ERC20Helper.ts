@@ -23,7 +23,6 @@ export default class ERC20Helper {
                 }
             })
             .on('error', (err:any, receipt:any) => {
-                console.error(err, receipt)
                 onError(err, receipt);
             })
     }

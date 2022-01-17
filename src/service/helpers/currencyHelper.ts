@@ -2,7 +2,7 @@ import NetConfig from '../config/NetConfig';
 import CatalogHelper from './catalogHelper';
 import UniswapV2Api from './UniswapV2Api';
 import {toBN, fromWei} from 'web3-utils'
-
+import * as Sentry from "@sentry/browser";
 
 class CurrencyHelper {
 
@@ -16,9 +16,8 @@ class CurrencyHelper {
         NetConfig.netById(global.user.ethNet.networkId).INSUR).then(price => {
           this.insur_usdc = price
         })}catch(e) {
-          console.error(e)
+          Sentry.captureException(e)
         }
-
 
       }
     }
@@ -29,7 +28,7 @@ class CurrencyHelper {
         return UniswapV2Api.priceTokenAtoETH(global.user.networkId, NetConfig.netById(global.user.networkId).DAI).then((price:any) => {
           this.eth_dai =  price
         })} catch(e) {
-          console.error(e)
+          Sentry.captureException(e)
         }
       }
     }

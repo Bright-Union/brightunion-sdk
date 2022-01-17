@@ -2,6 +2,8 @@ import axios from 'axios';
 import * as _ from  "lodash";
 import NetConfig from '../config/NetConfig';
 import {hexToUtf8} from 'web3-utils';
+import * as Sentry from "@sentry/browser";
+
 
 const bridge_nexus_insurace = [
   // BRIDGE NAME, NEXUS NAME, INSURACE NAME, COMMON NAME
@@ -247,7 +249,7 @@ class CatalogHelper {
       } else if (provider == 'insurace') {
         return bridge_nexus_insurace_categories.find((cat) => {return cat[2] === category})[3];
       }
-    } catch (e){ console.error(`Can't map ${category} from provider ${provider}`, e); }
+    } catch (e){ Sentry.captureException(e) }
   }
 
 
@@ -261,9 +263,6 @@ class CatalogHelper {
       const wallets : object[] = { ...assets, ...CUSTOM_BRIDGE_PROTOCOLS }
       return wallets;
     })
-    // .catch((error:object) => {
-      //   console.error('could not load trustwallet assets', error);
-      // })
     }
 
       public static mergeCoverables(_catalog: any[]) : any[] {

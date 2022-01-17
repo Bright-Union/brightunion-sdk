@@ -12,6 +12,18 @@ import CurrencyHelper from './service/helpers/currencyHelper'
 import EventEmitter from 'events'
 import GoogleEvents from './service/config/GoogleEvents';
 
+import * as Sentry from "@sentry/browser";
+import { Integrations } from "@sentry/tracing";
+
+Sentry.init({
+  dsn: "https://aa50bf5ac0164260947c9869f8d03c84@o1110132.ingest.sentry.io/6153025",
+  integrations: [new Integrations.BrowserTracing()],
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1,
+});
+
 // import {_loadAllABIs} from "./service/helpers/getContract"
 
 /**
