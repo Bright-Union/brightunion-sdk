@@ -21,7 +21,7 @@ class InsuraceApi {
         .then((response:any) => {
             return response.data;
         }).catch(error =>{
-          console.error('ERROR on Insurace fetchCoverables : ' , error.response.data && error.response.data.message);
+          console.error('ERROR on Insurace fetchCoverables : ' , error);
           return [];
         });
     }
@@ -34,7 +34,7 @@ class InsuraceApi {
         .then((response:any) => {
             return response.data;
         }).catch(error =>{
-            console.error('ERROR on Insurace getCurrencyList : ' , error.response.data && error.response.data.message);
+            console.error('ERROR on Insurace getCurrencyList : ' , error);
         });
     }
 
