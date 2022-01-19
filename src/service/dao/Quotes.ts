@@ -2,7 +2,7 @@ import NetConfig from "../config/NetConfig";
 import {_getDistributorsContract, _getBridgeRegistryContract, _getBridgePolicyBookRegistryContract, _getBridgePolicyBookContract} from "../helpers/getContract";
 import BigNumber from 'bignumber.js'
 import {toBN , fromWei} from 'web3-utils'
-import GasHelper from "../helpers/gasHelper"
+// import GasHelper from "../helpers/gasHelper"
 import RiskCarriers from "../config/RiskCarriers"
 import CurrencyHelper from "../helpers/currencyHelper"
 import {getCoverMin} from "../helpers/cover_minimums"
@@ -106,10 +106,10 @@ export async function getQuoteFromBridge(
           minimumAmount: minimumAmount,
         } );
 
-        const {gasPrice, USDRate} = await GasHelper.getGasPrice(global.user.ethNet.symbol);
+        // const {gasPrice, USDRate} = await GasHelper.getGasPrice(global.user.ethNet.symbol);
 
-        const estimatedGasPrice = (RiskCarriers.BRIDGE.description.estimatedGas * gasPrice) * USDRate / (10**9);
-        const feeInDefaultCurrency = (RiskCarriers.BRIDGE.description.estimatedGas * gasPrice) / 10**9;
+        // const estimatedGasPrice = (RiskCarriers.BRIDGE.description.estimatedGas * gasPrice) * USDRate / (10**9);
+        // const feeInDefaultCurrency = (RiskCarriers.BRIDGE.description.estimatedGas * gasPrice) / 10**9;
 
         const totalLiquidity  = await policyBookContract.methods.totalLiquidity().call();
         const coverTokens = await policyBookContract.methods.totalCoverTokens().call();
@@ -130,9 +130,9 @@ export async function getQuoteFromBridge(
           chainId: global.user.ethNet.networkId,
           price: totalPrice,
           pricePercent: pricePercent, //%, annualize
-          estimatedGasPrice: estimatedGasPrice,
-          estimatedGasPriceCurrency: _currency,
-          estimatedGasPriceDefault: feeInDefaultCurrency,
+          // estimatedGasPrice: estimatedGasPrice,
+          // estimatedGasPriceCurrency: _currency,
+          // estimatedGasPriceDefault: feeInDefaultCurrency,
           totalUSDTLiquidity: toBN(totalLiquidity),
           maxCapacity: _stats[0].maxCapacity,
           remainingCapacity: _stats[0].maxCapacity,

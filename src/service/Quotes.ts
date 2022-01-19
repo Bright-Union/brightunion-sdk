@@ -131,9 +131,9 @@ export async function getQuoteFrom(
              price: quote.price,
              response: quote._stats,
              pricePercent: quote.pricePercent, //%, annualize
-             estimatedGasPrice: quote.estimatedGasPrice,
-             defaultCurrencySymbol: quote.estimatedGasPriceCurrency,
-             feeInDefaultCurrency: quote.estimatedGasPriceDefault,
+             // estimatedGasPrice: quote.estimatedGasPrice,
+             // defaultCurrencySymbol: quote.estimatedGasPriceCurrency,
+             // feeInDefaultCurrency: quote.estimatedGasPriceDefault,
              errorMsg: quote.errorMsg,
              minimumAmount: quote.minimumAmount,
            },
