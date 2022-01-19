@@ -6,6 +6,9 @@ import {
   _getBridgePolicyBookRegistryContract,
   _getBridgePolicyQuoteContract,
   _getBridgePolicyRegistryContract,
+
+  _getBridgeV2RegistryContract,
+
 } from './helpers/getContract';
 import NetConfig from './config/NetConfig';
 import GoogleEvents from './config/GoogleEvents';
@@ -26,6 +29,7 @@ export async function getCatalog(): Promise<any> {
   }
   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL')) {
     catalogPromiseArray.push(getBridgeCoverables())
+    catalogPromiseArray.push(getBridgeV2Coverables())
   }
 
   for (let net of global.user.web3Passive) {
@@ -46,6 +50,14 @@ export async function getCatalog(): Promise<any> {
     return { sorted: mergedCoverables, unSorted: allCoverables };
   })
 
+}
+
+export async function getBridgeV2Coverables(): Promise<any[]> {
+
+  const bridgeRegistryAdd = NetConfig.netById( global.user.ethNet.networkId ).bridgeRegistry;
+  const BridgeContract = await _getBridgeRegistryContract(bridgeRegistryAdd, global.user.ethNet.web3Instance );
+
+  return[1,2,3];
 }
 
 export async function getBridgeCoverables(): Promise<any[]> {
