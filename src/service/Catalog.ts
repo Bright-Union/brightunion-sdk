@@ -1,3 +1,4 @@
+import BridgeHelper from './distributorsApi/BridgeHelper';
 import NexusApi from './distributorsApi/NexusApi';
 import InsuraceApi from './distributorsApi/InsuraceApi';
 import CatalogHelper from './helpers/catalogHelper';
@@ -8,6 +9,7 @@ import {
   _getBridgePolicyRegistryContract,
 
   _getBridgeV2RegistryContract,
+  _getBridgeV2PolicyBookRegistryContract,
 
 } from './helpers/getContract';
 import NetConfig from './config/NetConfig';
@@ -53,11 +55,28 @@ export async function getCatalog(): Promise<any> {
 }
 
 export async function getBridgeV2Coverables(): Promise<any[]> {
+  let trustWalletAssets: { [key: string]: any } = {};
+  trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
 
-  const bridgeRegistryAdd = NetConfig.netById( global.user.ethNet.networkId ).bridgeRegistry;
-  const BridgeContract = await _getBridgeRegistryContract(bridgeRegistryAdd, global.user.ethNet.web3Instance );
+  const bridgeRegistryAdd = NetConfig.netById( global.user.ethNet.networkId ).bridgeV2Registry;
+  const BridgeContract = await _getBridgeV2RegistryContract(bridgeRegistryAdd, global.user.ethNet.web3Instance );
 
-  return[1,2,3];
+  return BridgeContract.methods.getPolicyBookRegistryContract().call().then(async (policyBookRegistryAddr:any) => {
+
+    let BridgePolicyBookRegistryContract = await _getBridgeV2PolicyBookRegistryContract(policyBookRegistryAddr, global.user.ethNet.web3Instance );
+
+    return BridgePolicyBookRegistryContract.methods.count().call().then((policyBookCounter:any) => {
+
+      return BridgePolicyBookRegistryContract.methods.listWithStats(0, policyBookCounter).call()
+      .then(({_policyBooksArr, _stats}:any) => {
+
+        return BridgeHelper.catalogDataFormat(_stats, _policyBooksArr, trustWalletAssets);
+
+      })
+
+    })
+  })
+
 }
 
 export async function getBridgeCoverables(): Promise<any[]> {
@@ -77,48 +96,7 @@ export async function getBridgeCoverables(): Promise<any[]> {
       return BridgePolicyBookRegistryContract.methods.listWithStats(0, policyBookCounter).call()
       .then(({_policyBooksArr, _stats}:any) => {
 
-        const policyBooksArray = [];
-        for (let i = 0; i < _stats.length; i++) {
-          if (!_stats[i].whitelisted) {
-            continue;
-          }
-          let asset: any = undefined;
-          Object.keys(trustWalletAssets).find((key) => {
-            if (key === _stats[i].insuredContract) {
-              asset = trustWalletAssets[key];
-            }
-          });
-          let logo: string = null;
-          const name = asset ? asset.name : _stats[i][0]
-          logo = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${_stats[i].insuredContract}/logo.png`;
-          const missedLogos: any = [
-            { name: '0.exchange'},
-            { name: 'Keeper DAO'},
-            { name: 'Universe.XYZ'},
-            { name: 'Alchemix'},
-            { name: 'Anchor Protocol'}
-          ];
-          let missedLogoName = missedLogos.find((i:any) => i.name == name)
-          if(missedLogoName) {
-            let specialLogo:any = CatalogHelper.getSpecialLogoName(missedLogoName.name);
-            logo = specialLogo
-          }
-
-            policyBooksArray.push(CatalogHelper.createCoverable({
-              bridgeProductAddress: _policyBooksArr[i],
-              bridgeCoverable: _stats[i].insuredContract,
-              protocolAddress: _stats[i].insuredContract,
-              bridgeAPY: Number(_stats[i].APY) / (10 ** 5),
-              logo: logo,
-              name: name,
-              type: CatalogHelper.commonCategory(_stats[i].contractType, 'bridge'),
-              source: 'bridge',
-              rawDataBridge: _stats,
-              // stats: _stats,
-            }))
-          }
-
-          return policyBooksArray;
+        return BridgeHelper.catalogDataFormat(_stats, _policyBooksArr, trustWalletAssets);
 
         });
       });

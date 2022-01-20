@@ -30,6 +30,7 @@ const VUE_APP_MUMBAI_TESTNET_MODULES=''
         provider: 'https://eth-mainnet.alchemyapi.io/v2/OlIDDqLH9Uo3AUQ_0ezj6sfqHIGxJRxw',
         modules: VUE_APP_MAINNET_MODULES.split(' '),
         bridgeRegistry: '0x8050c5a46FC224E3BCfa5D7B7cBacB1e4010118d',
+        bridgeV2Registry: '0x45269F7e69EE636067835e0DfDd597214A1de6ea',
         nexusDistributor: '0x3756C3C9374f38e0d9aAcB637Fed1641504a5b28',
         nexusAPI: 'https://api.nexusmutual.io',
         brightProtocol:'',
