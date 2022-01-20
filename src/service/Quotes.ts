@@ -1,6 +1,6 @@
 import NexusApi from './distributorsApi/NexusApi';
 import InsuraceApi from './distributorsApi/InsuraceApi';
-import { getQuote, getQuoteFromBridge } from "./dao/Quotes";
+import { getQuote, getQuoteFromBridge, getQuoteFromBridgeV2 } from "./dao/Quotes";
 import CatalogHelper from './helpers/catalogHelper';
 import NetConfig from '../service/config/NetConfig';
 import CurrencyHelper from './helpers/currencyHelper';
@@ -106,6 +106,7 @@ export async function getQuoteFrom(
        const bridgeEpochs = Math.min(52, Math.ceil(Number(_period) / 7));
 
        let quote:any = {}
+       let quoteV2:any = {}
        // let bridgeQuote:any = {}
 
        if(global.user.ethNet.networkId == 1 ){
@@ -117,6 +118,16 @@ export async function getQuoteFrom(
            _currency,
            initialBridgeCurrency,
          );
+
+         quoteV2 = await getQuoteFromBridgeV2(
+           _protocol,
+           _period,
+           amountInWei,
+           _currency,
+           initialBridgeCurrency,
+         );
+
+         console.log(quote, quoteV2);
 
          return CatalogHelper.quoteFromCoverable(
            'bridge',

@@ -1,5 +1,13 @@
 import NetConfig from "../config/NetConfig";
-import {_getDistributorsContract, _getBridgeRegistryContract, _getBridgePolicyBookRegistryContract, _getBridgePolicyBookContract} from "../helpers/getContract";
+import {_getDistributorsContract,
+  _getBridgeRegistryContract,
+  _getBridgePolicyBookRegistryContract,
+  _getBridgePolicyBookContract,
+
+  _getBridgeV2PolicyBookRegistryContract,
+  _getBridgeV2PolicyQuoteContract,
+
+} from "../helpers/getContract";
 import BigNumber from 'bignumber.js'
 import {toBN , fromWei} from 'web3-utils'
 import GasHelper from "../helpers/gasHelper"
@@ -179,6 +187,48 @@ export async function getQuoteFromBridge(
     }
 
 }
+export async function getQuoteFromBridgeV2(
+  _protocol:any,
+  // _bridgeProductAddress:any,
+  _period:any,
+  _amountInWei:any,
+  _currency:string,
+  _initialBridgeCurrency:any,
+
+) : Promise<any>  {
+
+    const registry = _getBridgeRegistryContract(NetConfig.netById(global.user.ethNet.networkId).bridgeV2Registry, global.user.ethNet.web3Instance)
+
+    const policyBookRegistry = await registry.methods.getPolicyBookRegistryContract().call().then((policyBookRegistryAddr:any) => {
+      return _getBridgeV2PolicyBookRegistryContract(policyBookRegistryAddr, global.user.ethNet.web3Instance );
+    })
+
+    // _getBridgeV2PolicyQuoteContract
+
+    const isPolicyPresent  = await policyBookRegistry.methods.isPolicyBook(_protocol.bridgeProductAddress).call();
+    if(isPolicyPresent){
+      const policyBookContract = await _getBridgePolicyBookContract(_protocol.bridgeProductAddress, global.user.ethNet.web3Instance );
+      const policyBookContractArray:any = Array.of(policyBookContract._address);
+      let capacity:any = '';
+      let remainingCapacity:any = '';
+      let stakedSTBL:any = '';
+
+      const minimumAmount = getCoverMin("bridge", global.user.ethNet.symbol, _currency );
+
+      // const _stats = await
+       return await policyBookRegistry.methods.stats(policyBookContractArray).call().then(async(_stats:any) => {
 
 
-export default {getQuote, getQuoteFromBridge };
+
+      }).catch((e:any) => {
+
+
+      });
+
+
+    }
+
+}
+
+
+export default {getQuote, getQuoteFromBridge, getQuoteFromBridgeV2 };
