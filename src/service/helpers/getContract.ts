@@ -114,7 +114,7 @@ const _getBridgePolicyRegistryContract     =  (address:string,web3:any)  : any =
 const _getBridgeV2RegistryContract          =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2RegistryContractABI, address , web3);
 const _getBridgeV2PolicyBookRegistryContract  =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyBookRegistryABI, address , web3);
 const _getBridgeV2PolicyQuoteContract         =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyQuoteABI, address , web3);
-
+const _getBridgeV2PolicyBookContract         =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyQuoteABI, address , web3);
 
 
 function _getIERC20Contract(address:any) {
@@ -136,6 +136,7 @@ export  {
     _getBridgeV2RegistryContract,
     _getBridgeV2PolicyBookRegistryContract,
     _getBridgeV2PolicyQuoteContract,
+    _getBridgeV2PolicyBookContract,
 
     _getInsuraceDistributorsContract,
     _getInsuraceDistributor,

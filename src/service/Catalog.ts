@@ -23,19 +23,19 @@ export async function getCatalog(): Promise<any> {
   const catalogPromiseArray:any[] = [];
 
   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'NEXUS_MUTUAL')) {
-    catalogPromiseArray.push(getNexusCoverables())
+    // catalogPromiseArray.push(getNexusCoverables())
   }
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE')) {
     let netSymbol = NetConfig.netById(global.user.networkId).symbol;
-    catalogPromiseArray.push(getInsuraceCoverables(netSymbol))
+    // catalogPromiseArray.push(getInsuraceCoverables(netSymbol))
   }
   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL')) {
-    catalogPromiseArray.push(getBridgeCoverables())
+    // catalogPromiseArray.push(getBridgeCoverables())
     catalogPromiseArray.push(getBridgeV2Coverables())
   }
 
   for (let net of global.user.web3Passive) {
-     catalogPromiseArray.push(getInsuraceCoverables(net.symbol))
+     // catalogPromiseArray.push(getInsuraceCoverables(net.symbol))
   }
 
   return Promise.all(catalogPromiseArray)
@@ -69,6 +69,8 @@ export async function getBridgeV2Coverables(): Promise<any[]> {
 
       return BridgePolicyBookRegistryContract.methods.listWithStats(0, policyBookCounter).call()
       .then(({_policyBooksArr, _stats}:any) => {
+
+        console.log(BridgeHelper.catalogDataFormat(_stats, _policyBooksArr, trustWalletAssets));
 
         return BridgeHelper.catalogDataFormat(_stats, _policyBooksArr, trustWalletAssets);
 

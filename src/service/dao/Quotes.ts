@@ -6,6 +6,8 @@ import {_getDistributorsContract,
 
   _getBridgeV2PolicyBookRegistryContract,
   _getBridgeV2PolicyQuoteContract,
+  _getBridgeV2RegistryContract,
+  _getBridgeV2PolicyBookContract,
 
 } from "../helpers/getContract";
 import BigNumber from 'bignumber.js'
@@ -14,6 +16,7 @@ import GasHelper from "../helpers/gasHelper"
 import RiskCarriers from "../config/RiskCarriers"
 import CurrencyHelper from "../helpers/currencyHelper"
 import {getCoverMin} from "../helpers/cover_minimums"
+import CatalogHelper from '../helpers/catalogHelper';
 
 
 /**
@@ -60,7 +63,126 @@ export async function getQuote(
                       ).call();
 }
 
-export async function getQuoteFromBridge(
+
+
+export async function getQuoteFromBridgeV2(
+  _protocol:any,
+  _period:any,
+  _bridgeEpochs:any,
+  _amountInWei:any,
+  _currency:string,
+  _initialBridgeCurrency:any,
+
+) : Promise<any>  {
+
+    const registryV2 = _getBridgeV2RegistryContract(NetConfig.netById(global.user.ethNet.networkId).bridgeV2Registry, global.user.ethNet.web3Instance)
+
+    const policyBookRegistryV2 = await registryV2.methods.getPolicyBookRegistryContract().call().then((policyBookRegistryAddr:any) => {
+      return _getBridgeV2PolicyBookRegistryContract(policyBookRegistryAddr, global.user.ethNet.web3Instance );
+    })
+
+    const isPolicyPresentV2  = await policyBookRegistryV2.methods.isPolicyBook(_protocol.bridgeProductAddress).call();
+
+    console.log("V2 quote - bridgeEpochs/currnecy/isPolicyPresentV2 - " , _bridgeEpochs, _currency , isPolicyPresentV2);
+
+    if(isPolicyPresentV2){
+      // const policyBookContract = await _getBridgeV2PolicyBookContract(_protocol.bridgeProductAddress, global.user.ethNet.web3Instance );
+      // const policyBookContractArray:any = Array.of(policyBookContract._address);
+      let capacity:any = '';
+      let remainingCapacity:any = '';
+      let stakedSTBL:any = '';
+
+      // const minimumAmount = getCoverMin("bridge", global.user.ethNet.symbol, _currency );
+
+      let price = await policyBookRegistryV2.methods.getPoliciesPrices( [_protocol.bridgeProductAddress] ,[ Number(_bridgeEpochs)] ,[ _amountInWei]).call();
+
+      console.log("Q B2 price - " , price);
+
+      // const _stats = await
+       return await policyBookRegistryV2.methods.stats(_protocol.bridgeProductAddress).call().then(async(_stats:any) => {
+         console.log("_stats - " , _stats);
+
+         // capacity = _stats[0].maxCapacity;
+         // remainingCapacity = capacity;
+         // stakedSTBL = _stats[0].stakedSTBL;
+
+         // const bridgeEpochs = Math.min(52, Math.ceil(Number(_period) / 7));
+
+         // const {totalSeconds, totalPrice} =  await policyBookContract.methods.getPolicyPrice(_bridgeEpochs, _amountInWei).call();
+
+
+         // let actualPeriod = Math.floor(Number(totalSeconds) / 3600 / 24);
+         // const pricePercent = new BigNumber(totalPrice).times(1000).dividedBy(_amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000;
+         //
+         // global.events.emit("quote" , {
+         //   status: "INITIAL_DATA" ,
+         //   distributorName:"bridge",
+         //   price: totalPrice ,
+         //   pricePercent:pricePercent,
+         //   amount:_amountInWei,
+         //   currency:_currency,
+         //   period:_period,
+         //   actualPeriod:actualPeriod,
+         //   protocol:_protocol,
+         //   chain: 'ETH',
+         //   chainId: global.user.ethNet.networkId,
+         //   rawData: _stats,
+         //   minimumAmount: minimumAmount,
+         // } );
+         //
+         // const totalLiquidity  = await policyBookContract.methods.totalLiquidity().call();
+         // const coverTokens = await policyBookContract.methods.totalCoverTokens().call();
+         //
+         // let errorMsg = null;
+         // if(_period > 365){
+         //   errorMsg = { message: "Minimum duration is 1 day. Maximum is 365" , errorType:"period"};
+         //   actualPeriod = _period;
+         // }
+         //
+         // const quote = CatalogHelper.quoteFromCoverable(
+         //   'bridge',
+         //   _protocol,
+         //   {
+         //     amount: _amountInWei,
+         //     currency: _currency,
+         //     period: _period,
+         //     chain: "ETH",
+         //     chainId:  global.user.ethNet.networkId,
+         //     actualPeriod: actualPeriod,
+         //     price: totalPrice,
+         //     response: _stats,
+         //     pricePercent: pricePercent, //%, annualize
+         //     errorMsg: errorMsg,
+         //     minimumAmount: minimumAmount,
+         //   },
+         //   {
+         //     totalUSDTLiquidity: toBN(totalLiquidity),
+         //     maxCapacity: _stats[0].maxCapacity,
+         //     stakedSTBL: _stats[0].stakedSTBL,
+         //     activeCovers: toBN(coverTokens),
+         //     utilizationRatio: toBN(coverTokens).mul(toBN(10000)).div(toBN(totalLiquidity)).toNumber() / 100,
+         //   }
+         // );
+         //
+         // console.log("FINAL V2 quote - " , quote);
+         //
+         // return quote;
+
+
+      }).catch((e:any) => {
+        console.log("QU B2 Error - " , e);
+
+      });
+
+
+    }else{
+      return {error: "not whitelisted? essage?"}
+    }
+
+}
+
+
+export async function getQuoteFromBridge(//out after BridgeV2
   _protocol:any,
   // _bridgeProductAddress:any,
   _period:any,
@@ -180,48 +302,6 @@ export async function getQuoteFromBridge(
             stakedSTBL: stakedSTBL,
             minimumAmount: minimumAmount,
           };
-
-      });
-
-
-    }
-
-}
-export async function getQuoteFromBridgeV2(
-  _protocol:any,
-  // _bridgeProductAddress:any,
-  _period:any,
-  _amountInWei:any,
-  _currency:string,
-  _initialBridgeCurrency:any,
-
-) : Promise<any>  {
-
-    const registry = _getBridgeRegistryContract(NetConfig.netById(global.user.ethNet.networkId).bridgeV2Registry, global.user.ethNet.web3Instance)
-
-    const policyBookRegistry = await registry.methods.getPolicyBookRegistryContract().call().then((policyBookRegistryAddr:any) => {
-      return _getBridgeV2PolicyBookRegistryContract(policyBookRegistryAddr, global.user.ethNet.web3Instance );
-    })
-
-    // _getBridgeV2PolicyQuoteContract
-
-    const isPolicyPresent  = await policyBookRegistry.methods.isPolicyBook(_protocol.bridgeProductAddress).call();
-    if(isPolicyPresent){
-      const policyBookContract = await _getBridgePolicyBookContract(_protocol.bridgeProductAddress, global.user.ethNet.web3Instance );
-      const policyBookContractArray:any = Array.of(policyBookContract._address);
-      let capacity:any = '';
-      let remainingCapacity:any = '';
-      let stakedSTBL:any = '';
-
-      const minimumAmount = getCoverMin("bridge", global.user.ethNet.symbol, _currency );
-
-      // const _stats = await
-       return await policyBookRegistry.methods.stats(policyBookContractArray).call().then(async(_stats:any) => {
-
-
-
-      }).catch((e:any) => {
-
 
       });
 
