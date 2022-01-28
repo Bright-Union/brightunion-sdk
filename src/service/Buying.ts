@@ -1,4 +1,12 @@
-import {_getIERC20Contract,_getInsuraceDistributor,_getDistributorsContract, _getBridgeRegistryContract} from './helpers/getContract';
+import {
+
+  _getIERC20Contract,
+  _getInsuraceDistributor,
+  _getDistributorsContract,
+  _getBridgeRegistryContract,
+  _getBridgeV2RegistryContract,
+
+} from './helpers/getContract';
 import { buyCoverInsurace, buyCover } from "./dao/Buying";
 import NetConfig from './config/NetConfig';
 import InsuraceApi from './distributorsApi/InsuraceApi';
@@ -13,7 +21,9 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
 
   if(_quoteProtocol.distributorName == 'bridge'){
 
-    return await buyOnBridge(_quoteProtocol);
+    // return await buyOnBridge(_quoteProtocol);
+
+    return await buyOnBridgeV2(_quoteProtocol);
 
   }else if(_quoteProtocol.distributorName == 'nexus'){
 
@@ -330,29 +340,86 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
 }
 
-export async function callBridge(_quoteProtocol:any){
+// export async function callBridge(_quoteProtocol:any){
+//
+//     // let net:any = NetConfig.netById(global.user.networkId);
+//     // let asset = net[_quoteProtocol.rawData.currency]
+//
+//     return buyCover(
+//       global.user.account,
+//       'bridge',
+//       _quoteProtocol.protocol.bridgeProductAddress, //bridge prod address
+//       null,  // payment asset
+//       _quoteProtocol.amount.toString(), // sum assured, compliant
+//       _quoteProtocol.actualPeriod, // period
+//       null, //coverType
+//       null, // token amount to cover
+//       null, // random data
+//       null
+//     )
+//
+// }
 
-    // let net:any = NetConfig.netById(global.user.networkId);
-    // let asset = net[_quoteProtocol.rawData.currency]
+export async function callBridgeV2(_quoteProtocol:any){
 
-    return buyCover(
-      global.user.account,
-      'bridge',
-      _quoteProtocol.protocol.bridgeProductAddress, //bridge prod address
-      null,  // payment asset
-      _quoteProtocol.amount.toString(), // sum assured, compliant
-      _quoteProtocol.actualPeriod, // period
-      null, //coverType
-      null, // token amount to cover
-      null, // random data
-      null
-    )
+  return buyCover(
+    global.user.account,
+    'bridge',
+    _quoteProtocol.protocol.bridgeProductAddress, //bridge prod address
+    null,  // payment asset
+    _quoteProtocol.amount.toString(), // sum assured, compliant
+    _quoteProtocol.actualPeriod, // period
+    null, //coverType
+    null, // token amount to cover
+    null, // random data
+    null
+  )
 
 }
 
-export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
+// export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
+//
+//   const registry:any = await _getBridgeRegistryContract(NetConfig.netById(global.user.networkId).bridgeRegistry, global.user.web3 )
+//
+//   let asset: any = await  registry.methods.getUSDTContract().call().then((stableTokenAddr:any) => {
+//     return  _getIERC20Contract(stableTokenAddr).options.address
+//   });
+//
+//   const erc20Instance = _getIERC20Contract(asset);
+//   const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
+//
+//   global.events.emit("buy" , { status: "INITIALIZED"} );
+//
+//   if (Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.price)) {
+//     // this.showModal = false;
+//     global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending", count:2 , current:1 } );
+//
+//     return  ERC20Helper.approveUSDTAndCall(
+//       erc20Instance,
+//       _quoteProtocol.protocol.bridgeProductAddress,
+//       _quoteProtocol.price,
+//       () => {
+//         global.events.emit("buy" , { status: "CONFIRMATION" , type:"reset_usdt_allowance" , count:3 , current:2 } );
+//       },
+//       () => {
+//         global.events.emit("buy" , { status: "CONFIRMATION" , type:"main", count:2 , current:2 } );
+//         return callBridge(_quoteProtocol);
+//       },
+//       () => {
+//         global.events.emit("buy" , { status: "REJECTED" } );
+//         return {error: "Rejected confirmation"};
+//       })
+//
+//     } else {
+//       global.events.emit("buy" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
+//       return {error: "You have insufficient funds to continue with this transaction"};
+//     }
+//
+//   }
 
-  const registry:any = await _getBridgeRegistryContract(NetConfig.netById(global.user.networkId).bridgeRegistry, global.user.web3 )
+export async function buyOnBridgeV2(_quoteProtocol:any) : Promise<any>{
+
+  const registry:any = await _getBridgeV2RegistryContract(NetConfig.netById(global.user.networkId).bridgeRegistry, global.user.web3 )
 
   let asset: any = await  registry.methods.getUSDTContract().call().then((stableTokenAddr:any) => {
     return  _getIERC20Contract(stableTokenAddr).options.address
@@ -376,21 +443,19 @@ export async function buyOnBridge(_quoteProtocol:any) : Promise<any>{
       },
       () => {
         global.events.emit("buy" , { status: "CONFIRMATION" , type:"main", count:2 , current:2 } );
-        return callBridge(_quoteProtocol);
+        return callBridgeV2(_quoteProtocol);
       },
       () => {
         global.events.emit("buy" , { status: "REJECTED" } );
         return {error: "Rejected confirmation"};
-      })
+      }
+    )
 
-    } else {
-      global.events.emit("buy" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
-      return {error: "You have insufficient funds to continue with this transaction"};
-    }
-
+  } else {
+    global.events.emit("buy" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
+    return {error: "You have insufficient funds to continue with this transaction"};
   }
 
+}
 
-
-
-  export default {buyQuote, buyMultipleQuotes }
+export default {buyQuote, buyMultipleQuotes }
