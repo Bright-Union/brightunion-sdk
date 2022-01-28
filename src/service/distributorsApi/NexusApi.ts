@@ -5,7 +5,6 @@ import CatalogHelper from '../helpers/catalogHelper'
 import BigNumber from 'bignumber.js'
 import {toBN, toWei, asciiToHex, fromWei} from 'web3-utils'
 import {  _getNexusDistributor,  _getNexusDistributorsContract, _getDistributorsContract, _getNexusQuotationContract , _getNexusMasterContract } from '../helpers/getContract'
-// import GasHelper from "../helpers/gasHelper"
 import {getCoverMin} from "../helpers/cover_minimums"
 
 export default class NexusApi {
@@ -87,10 +86,7 @@ export default class NexusApi {
         const activeCoversDAI = await quotationContract.methods.getTotalSumAssuredSC(protocol.nexusCoverable, asciiToHex('DAI')).call();
         const totalActiveCoversETH = await quotationContract.methods.getTotalSumAssured( asciiToHex('ETH')).call();
         const totalActiveCoversDAI = await quotationContract.methods.getTotalSumAssured(asciiToHex('DAI')).call();
-        // const {gasPrice, USDRate} = await GasHelper.getGasPrice(global.user.ethNet.symbol);
 
-        // let estimatedGasPrice = (RiskCarriers.NEXUS.description.estimatedGas * gasPrice) * USDRate / (10**9);
-        // let feeInDefaultCurrency = (RiskCarriers.NEXUS.description.estimatedGas * gasPrice) / 10**9;
         let defaultCurrencySymbol = global.user.ethNet.symbol === 'POLYGON'? 'MATIC': global.user.ethNet.symbol === 'BSC' ? 'BNB' : 'ETH';
         const nexusMaxCapacityError = this.checkNexusCapacity(currency, amountInWei.toString(), capacityETH, capacityDAI);
 
@@ -106,9 +102,7 @@ export default class NexusApi {
             price: priceWithFee.toString(),
             pricePercent: pricePercent,
             response: response.data,
-            // estimatedGasPrice:estimatedGasPrice,
             defaultCurrencySymbol:defaultCurrencySymbol,
-            // feeInDefaultCurrency:feeInDefaultCurrency,
             errorMsg: nexusMaxCapacityError,
             minimumAmount: minimumAmount,
           },
@@ -152,10 +146,7 @@ export default class NexusApi {
                                 chainId: global.user.ethNet.networkId,
                                 price: 0,
                                 pricePercent: 0,
-                                estimatedGasPrice: 0,
                                 errorMsg: errorMsg,
-                                defaultCurrencySymbol:0, //defaultCurrencySymbol,
-                                feeInDefaultCurrency:0, //feeInDefaultCurrency,
                                 response: {error:error},
                                 minimumAmount: minimumAmount,
                             },

@@ -12,7 +12,6 @@ import {_getDistributorsContract,
 } from "../helpers/getContract";
 import BigNumber from 'bignumber.js'
 import {toBN , fromWei} from 'web3-utils'
-// import GasHelper from "../helpers/gasHelper"
 import RiskCarriers from "../config/RiskCarriers"
 import CurrencyHelper from "../helpers/currencyHelper"
 import {getCoverMin} from "../helpers/cover_minimums"
@@ -247,10 +246,6 @@ export async function getQuoteFromBridge(//out after BridgeV2
           minimumAmount: minimumAmount,
         } );
 
-        // const {gasPrice, USDRate} = await GasHelper.getGasPrice(global.user.ethNet.symbol);
-
-        // const estimatedGasPrice = (RiskCarriers.BRIDGE.description.estimatedGas * gasPrice) * USDRate / (10**9);
-        // const feeInDefaultCurrency = (RiskCarriers.BRIDGE.description.estimatedGas * gasPrice) / 10**9;
 
         const totalLiquidity  = await policyBookContract.methods.totalLiquidity().call();
         const coverTokens = await policyBookContract.methods.totalCoverTokens().call();
@@ -271,9 +266,6 @@ export async function getQuoteFromBridge(//out after BridgeV2
           chainId: global.user.ethNet.networkId,
           price: totalPrice,
           pricePercent: pricePercent, //%, annualize
-          // estimatedGasPrice: estimatedGasPrice,
-          // estimatedGasPriceCurrency: _currency,
-          // estimatedGasPriceDefault: feeInDefaultCurrency,
           totalUSDTLiquidity: toBN(totalLiquidity),
           maxCapacity: _stats[0].maxCapacity,
           remainingCapacity: _stats[0].maxCapacity,
@@ -307,7 +299,6 @@ export async function getQuoteFromBridge(//out after BridgeV2
           chainId: global.user.ethNet.networkId,
           price: 0,
           pricePercent: 0,
-          estimatedGasPrice: 0,
           errorMsg: errorMsg,
           maxCapacity: remainingCapacity,
           stakedSTBL: stakedSTBL,
