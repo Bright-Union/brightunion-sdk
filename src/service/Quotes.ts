@@ -216,8 +216,6 @@ export async function getQuoteFrom(
 
        let {amountInWei, currency, bridgeEpochs, initialBridgeCurrency } = BridgeHelper.preQuoteDataFormat(_amount, _currency, _period);
 
-       console.log("preQuoteDataFormat - " , amountInWei, currency, bridgeEpochs, initialBridgeCurrency , _protocol);
-
          return getQuoteFromBridgeV2(
            _protocol,
            _period,

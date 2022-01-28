@@ -83,100 +83,111 @@ export async function getQuoteFromBridgeV2(
 
     const isPolicyPresentV2  = await policyBookRegistryV2.methods.isPolicyBook(_protocol.bridgeProductAddress).call();
 
-    console.log("V2 quote - bridgeEpochs/currnecy/isPolicyPresentV2 - " , _bridgeEpochs, _currency , isPolicyPresentV2);
-
     if(isPolicyPresentV2){
-      // const policyBookContract = await _getBridgeV2PolicyBookContract(_protocol.bridgeProductAddress, global.user.ethNet.web3Instance );
-      // const policyBookContractArray:any = Array.of(policyBookContract._address);
       let capacity:any = '';
-      let remainingCapacity:any = '';
-      let stakedSTBL:any = '';
+      const minimumAmount = getCoverMin("bridge", global.user.ethNet.symbol, _currency );
+      let totalSeconds:any;
+      let totalPrice:any;
+      let errorMsg:any = null;
+      let rawPriceData:any = null;
 
-      // const minimumAmount = getCoverMin("bridge", global.user.ethNet.symbol, _currency );
+      await policyBookRegistryV2.methods.getPoliciesPrices( [ _protocol.bridgeProductAddress ] , [ _bridgeEpochs ] , [ _amountInWei ] ).call()
+      .then((_priceData: any) => {
 
-      let price = await policyBookRegistryV2.methods.getPoliciesPrices( [_protocol.bridgeProductAddress] ,[ Number(_bridgeEpochs)] ,[ _amountInWei]).call();
-
-      console.log("Q B2 price - " , price);
-
-      // const _stats = await
-       return await policyBookRegistryV2.methods.stats(_protocol.bridgeProductAddress).call().then(async(_stats:any) => {
-         console.log("_stats - " , _stats);
-
-         // capacity = _stats[0].maxCapacity;
-         // remainingCapacity = capacity;
-         // stakedSTBL = _stats[0].stakedSTBL;
-
-         // const bridgeEpochs = Math.min(52, Math.ceil(Number(_period) / 7));
-
-         // const {totalSeconds, totalPrice} =  await policyBookContract.methods.getPolicyPrice(_bridgeEpochs, _amountInWei).call();
-
-
-         // let actualPeriod = Math.floor(Number(totalSeconds) / 3600 / 24);
-         // const pricePercent = new BigNumber(totalPrice).times(1000).dividedBy(_amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000;
-         //
-         // global.events.emit("quote" , {
-         //   status: "INITIAL_DATA" ,
-         //   distributorName:"bridge",
-         //   price: totalPrice ,
-         //   pricePercent:pricePercent,
-         //   amount:_amountInWei,
-         //   currency:_currency,
-         //   period:_period,
-         //   actualPeriod:actualPeriod,
-         //   protocol:_protocol,
-         //   chain: 'ETH',
-         //   chainId: global.user.ethNet.networkId,
-         //   rawData: _stats,
-         //   minimumAmount: minimumAmount,
-         // } );
-         //
-         // const totalLiquidity  = await policyBookContract.methods.totalLiquidity().call();
-         // const coverTokens = await policyBookContract.methods.totalCoverTokens().call();
-         //
-         // let errorMsg = null;
-         // if(_period > 365){
-         //   errorMsg = { message: "Minimum duration is 1 day. Maximum is 365" , errorType:"period"};
-         //   actualPeriod = _period;
-         // }
-         //
-         // const quote = CatalogHelper.quoteFromCoverable(
-         //   'bridge',
-         //   _protocol,
-         //   {
-         //     amount: _amountInWei,
-         //     currency: _currency,
-         //     period: _period,
-         //     chain: "ETH",
-         //     chainId:  global.user.ethNet.networkId,
-         //     actualPeriod: actualPeriod,
-         //     price: totalPrice,
-         //     response: _stats,
-         //     pricePercent: pricePercent, //%, annualize
-         //     errorMsg: errorMsg,
-         //     minimumAmount: minimumAmount,
-         //   },
-         //   {
-         //     totalUSDTLiquidity: toBN(totalLiquidity),
-         //     maxCapacity: _stats[0].maxCapacity,
-         //     stakedSTBL: _stats[0].stakedSTBL,
-         //     activeCovers: toBN(coverTokens),
-         //     utilizationRatio: toBN(coverTokens).mul(toBN(10000)).div(toBN(totalLiquidity)).toNumber() / 100,
-         //   }
-         // );
-         //
-         // console.log("FINAL V2 quote - " , quote);
-         //
-         // return quote;
-
+        rawPriceData = _priceData;
+        totalPrice = _priceData._allowances[0];
+        totalSeconds =  _priceData._durations[0];
 
       }).catch((e:any) => {
-        console.log("QU B2 Error - " , e);
+
+        errorMsg = e.message;
+
+        if(_initialBridgeCurrency === 'ETH') {
+          capacity = CurrencyHelper.usd2eth(capacity);
+          _currency = "ETH"
+        }
+        if (errorMsg.toLowerCase().includes("requiring more than there exists")) {
+          errorMsg = {message: "Maximum available capacity is " , currency:_initialBridgeCurrency, capacity:fromWei(capacity.toString()), errorType: "capacity"};
+        } else if (errorMsg.toLowerCase().includes("pb: wrong epoch duration")) {
+          errorMsg = { message: "Minimum duration is 1 day. Maximum is 365" , errorType:"period"};
+        } else if (errorMsg.toLowerCase().includes("pb: wrong cover")) {
+          errorMsg = { message: "Invalid cover amount" , errorType: "amount"};
+        }
 
       });
 
+      let actualPeriod = Math.floor(Number(totalSeconds) / 3600 / 24);
+      const pricePercent = new BigNumber(totalPrice).times(1000).dividedBy(_amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000;
+
+      global.events.emit("quote" , {
+        status: "INITIAL_DATA" ,
+        distributorName:"bridge",
+        price: totalPrice ,
+        pricePercent:pricePercent,
+        amount:_amountInWei,
+        currency:_currency,
+        period:_period,
+        actualPeriod:actualPeriod,
+        protocol:_protocol,
+        chain: 'ETH',
+        chainId: global.user.ethNet.networkId,
+        rawData: rawPriceData,
+        errorMsg: errorMsg,
+        minimumAmount: minimumAmount,
+      });
+
+      // let errorMsg = null;
+      if(_period > 365){
+        errorMsg = { message: "Minimum duration is 1 day. Maximum is 365" , errorType:"period"};
+        actualPeriod = _period;
+      }
+
+      let stats:any = {};
+      let quote:any = {};
+
+      if(_protocol.rawDataBridge){
+        stats = {
+          totalUSDTLiquidity: _protocol.rawDataBridge.totalUSDTLiquidity,
+          maxCapacity: _protocol.rawDataBridge.maxCapacity,
+          stakedSTBL:  _protocol.rawDataBridge.stakedSTBL,
+          activeCovers:  _protocol.rawDataBridge.activeCovers,
+          utilizationRatio:  _protocol.rawDataBridge.utilizationRatio,
+        }
+      }else{
+        await policyBookRegistryV2.methods.stats(_protocol.bridgeProductAddress).call().then(async(_stats:any) => {
+          stats =  {
+            totalUSDTLiquidity: toBN(_stats[3]),
+            remainingCapacity:_stats[3],
+            maxCapacity: _stats[3],
+            stakedSTBL: _stats[6],
+          }
+        })
+      }
+
+    quote = CatalogHelper.quoteFromCoverable(
+        'bridge',
+        _protocol,
+        {
+          amount: _amountInWei,
+          currency: _currency,
+          period: _period,
+          chain: "ETH",
+          chainId:  global.user.ethNet.networkId,
+          actualPeriod: actualPeriod,
+          price: totalPrice,
+          response: stats,
+          pricePercent: pricePercent, //%, annualize
+          errorMsg: errorMsg,
+          rawData: rawPriceData,
+          minimumAmount: minimumAmount,
+        },
+        stats
+      );
+
+      return quote;
 
     }else{
-      return {error: "not whitelisted? essage?"}
+      return {error: "This Bridge product is not whitelisted"}
     }
 
 }
@@ -289,19 +300,19 @@ export async function getQuoteFromBridge(//out after BridgeV2
         }
 
         return {
-            amount: _amountInWei,
-            currency: _currency,
-            period: _period,
-            chain: 'ETH',
-            chainId: global.user.ethNet.networkId,
-            price: 0,
-            pricePercent: 0,
-            estimatedGasPrice: 0,
-            errorMsg: errorMsg,
-            maxCapacity: remainingCapacity,
-            stakedSTBL: stakedSTBL,
-            minimumAmount: minimumAmount,
-          };
+          amount: _amountInWei,
+          currency: _currency,
+          period: _period,
+          chain: 'ETH',
+          chainId: global.user.ethNet.networkId,
+          price: 0,
+          pricePercent: 0,
+          estimatedGasPrice: 0,
+          errorMsg: errorMsg,
+          maxCapacity: remainingCapacity,
+          stakedSTBL: stakedSTBL,
+          minimumAmount: minimumAmount,
+        };
 
       });
 

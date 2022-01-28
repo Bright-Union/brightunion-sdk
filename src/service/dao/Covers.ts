@@ -277,10 +277,6 @@ export async function getCoversBridge():Promise<any>{
 
       policies.push(cover)
     }
-    // commit('activeCovers', {provider: 'bridge', covers: policies});
-
-  // console.log("getCoversBridge");
-
   return policies;
 }
 
