@@ -9,6 +9,7 @@ import {
   _getBridgePolicyBookContract,
 
   _getBridgeV2PolicyBookContract,
+  _getBridgeV2PolicyBookFacade,
 
 } from "../helpers/getContract";
 
@@ -50,7 +51,7 @@ export async function buyCover(
     const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
         if(global.user.networkId === 1 ){
           return await new Promise((resolve, reject) => {
-            const nexusAddress = NetConfig.netById(1).nexusDistributor;
+            const nexusAddress = NetConfig.netById(global.user.ethNet.networkId).nexusDistributor;
             _getNexusDistributor(nexusAddress) // Direct Call to Nexus Contract
             .methods.buyCover(
               _contractAddress,
@@ -138,15 +139,15 @@ export async function buyCover(
 
   } else if(_distributorName == 'bridge'){
 
-    const  bookContract = _getBridgeV2PolicyBookContract(_contractAddress, global.user.web3 );
+    const brightRewardsAddress = NetConfig.netById(global.user.ethNet.networkId).bridgeBrightDistributor;
+    const policyBookFacade = _getBridgeV2PolicyBookFacade( _contractAddress, global.user.web3 );
     // convert period from days to bridge epochs (weeks)
     let epochs = Math.min(52, Math.ceil(_coverPeriod / 7));
 
     return await new Promise((resolve, reject) => {
-      bookContract.methods.buyPolicy( epochs, _sumAssured )
+      policyBookFacade.methods.buyPolicyFromDistributor( epochs, _sumAssured, brightRewardsAddress )
       .send({from: global.user.account})
       .on('transactionHash', (transactionHash:any) => {
-
         txHash = transactionHash;
         const tx ={
           'hash': txHash ,

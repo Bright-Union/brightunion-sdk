@@ -80,7 +80,7 @@ export async function getCovers(
     if(_distributorName == "insurace"){
       return await getCoversInsurace(_web3);
     }else if(_distributorName == 'bridge'){
-      return await getCoversBridge();
+      return await getCoversBridgeV2();
     }else if(_distributorName == 'nexus'){
       return await getCoversNexus();
     }
@@ -223,8 +223,7 @@ export async function getCoversInsurace(_web3:any):Promise<any>{
   return allCovers;
 }
 
-export async function getCoversBridge():Promise<any>{
-
+export async function getCoversBridgeV2():Promise<any>{
 
   const policyRegistryAddr = await _getBridgeRegistryContract( NetConfig.netById(global.user.ethNet.networkId).bridgeRegistry , global.user.ethNet.web3Instance).methods.getPolicyRegistryContract().call();
   const policyRegistry = await  _getBridgePolicyRegistryContract(policyRegistryAddr, global.user.ethNet.web3Instance)
@@ -279,6 +278,63 @@ export async function getCoversBridge():Promise<any>{
     }
   return policies;
 }
+
+// export async function getCoversBridge():Promise<any>{
+//
+//
+//   const policyRegistryAddr = await _getBridgeRegistryContract( NetConfig.netById(global.user.ethNet.networkId).bridgeRegistry , global.user.ethNet.web3Instance).methods.getPolicyRegistryContract().call();
+//   const policyRegistry = await  _getBridgePolicyRegistryContract(policyRegistryAddr, global.user.ethNet.web3Instance)
+//
+//   let trustWalletAssets: { [key: string]: any } = {};
+//   trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
+//
+//   const nPolicies = await  policyRegistry.methods.getPoliciesLength(global.user.account).call();
+//   const activeInfos = await  policyRegistry.methods.getPoliciesInfo(global.user.account, true, 0, nPolicies).call();
+//   const expiredInfos = await  policyRegistry.methods.getPoliciesInfo(global.user.account, false, 0, nPolicies).call();
+//   // merge the arrays from both sets
+//   let mergedPolicyInfos = activeInfos._policies.concat(expiredInfos._policies);
+//   let mergedPolicyBooks = activeInfos._policyBooksArr.concat(expiredInfos._policyBooksArr);
+//   let mergedPolicyStatuses = activeInfos._policyStatuses.concat(expiredInfos._policyStatuses);
+//   let policies = []
+//
+//   let limit = parseInt(nPolicies);
+//
+//   for (let i = 0; i < limit; i++) {
+//     let info = mergedPolicyInfos[i];
+//     let policyBookAddress = mergedPolicyBooks[i];
+//     if (policyBookAddress === '0x0000000000000000000000000000000000000000') {
+//       //Bridge BUG, means no actual policy info
+//       limit++;
+//       continue;
+//     }
+//     let policyBook = await _getBridgePolicyBookContract(policyBookAddress, global.user.ethNet.web3Instance);
+//     let policyBookinfo = await policyBook.methods.info().call();
+//     let claimStatus = mergedPolicyStatuses[i];
+//
+//     let asset = trustWalletAssets[Object.keys(trustWalletAssets)
+//       .find(key => key.toLowerCase() === policyBookinfo._insuredContract.toLowerCase())];
+//       let logo = asset ? asset.logoURI : 'logo link'
+//       // let logo = asset ? asset.logoURI : require('@/assets/img/bridge.svg')
+//       let name = asset ? asset.name : policyBookinfo._symbol
+//
+//       let cover = {
+//         risk_protocol: 'bridge',
+//         policyBookAddr: policyBookAddress,
+//         status: claimStatus,
+//         coverAmount: info.coverAmount,
+//         validUntil: info.endTime,
+//         endTime: info.endTime,
+//         premium: info.premium,
+//         startTime: info.startTime,
+//         name: name,
+//         logo: logo,
+//         net: global.user.ethNet.networkId
+//       }
+//
+//       policies.push(cover)
+//     }
+//   return policies;
+// }
 
 
 export async function getCoversCountBridge():Promise<any>{
