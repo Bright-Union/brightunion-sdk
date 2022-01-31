@@ -141,6 +141,8 @@ export async function buyCover(
 
     const brightRewardsAddress = NetConfig.netById(global.user.ethNet.networkId).bridgeBrightDistributor;
     const policyBookFacade = _getBridgeV2PolicyBookFacade( _contractAddress, global.user.web3 );
+
+    console.log( "policyBookFacade - " , policyBookFacade );
     // convert period from days to bridge epochs (weeks)
     let epochs = Math.min(52, Math.ceil(_coverPeriod / 7));
 

@@ -23,6 +23,7 @@ import BridgePolicyRegistryABI from '../abi/bridge/IPolicyRegistry.json';
 import BridgeV2RegistryContractABI from '../abi/bridgeV2/ContractRegistry.json'
 import BridgeV2PolicyBookRegistryABI from '../abi/bridgeV2/PolicyBookRegistry.json'
 import BridgeV2PolicyQuoteABI from '../abi/bridgeV2/PolicyQuote.json'
+import BridgeV2PolicyBookFacadeABI from '../abi/bridgeV2/PolicyBookFacade.json'
 
 
 // possible JSON loader solution to reduce SDK code base size
@@ -115,7 +116,7 @@ const _getBridgeV2RegistryContract          =  (address:string,web3:any)  : any 
 const _getBridgeV2PolicyBookRegistryContract  =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyBookRegistryABI, address , web3);
 const _getBridgeV2PolicyQuoteContract         =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyQuoteABI, address , web3);
 const _getBridgeV2PolicyBookContract         =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyQuoteABI, address , web3);
-const _getBridgeV2PolicyBookFacade        =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyQuoteABI, address , web3);
+const _getBridgeV2PolicyBookFacade        =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyBookFacadeABI, address , web3);
 
 
 function _getIERC20Contract(address:any) {
