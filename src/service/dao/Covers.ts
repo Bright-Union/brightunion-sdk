@@ -6,9 +6,16 @@ import {
   _getInsuraceDistributor,
   _getInsurAceCoverDataContract,
   _getInsurAceProductContract,
+
   _getBridgeRegistryContract,
   _getBridgePolicyRegistryContract,
   _getBridgePolicyBookContract,
+
+  _getBridgeV2RegistryContract,
+  _getBridgeV2PolicyBookRegistryContract,
+  _getBridgeV2PolicyBookContract,
+  _getBridgeV2PolicyRegistry,
+
   _getNexusDistributorsContract,
   _getNexusQuotationContract,
   _getNexusGatewayContract,
@@ -225,11 +232,13 @@ export async function getCoversInsurace(_web3:any):Promise<any>{
 
 export async function getCoversBridgeV2():Promise<any>{
 
-  const policyRegistryAddr = await _getBridgeRegistryContract( NetConfig.netById(global.user.ethNet.networkId).bridgeRegistry , global.user.ethNet.web3Instance).methods.getPolicyRegistryContract().call();
-  const policyRegistry = await  _getBridgePolicyRegistryContract(policyRegistryAddr, global.user.ethNet.web3Instance)
+  const policyRegistryAddr = await _getBridgeV2RegistryContract( NetConfig.netById(global.user.ethNet.networkId).bridgeV2Registry , global.user.ethNet.web3Instance).methods.getPolicyRegistryContract().call();
+  const policyRegistry = await  _getBridgeV2PolicyRegistry(policyRegistryAddr, global.user.ethNet.web3Instance)
 
   let trustWalletAssets: { [key: string]: any } = {};
   trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
+
+  console.log(policyRegistry.methods);
 
   const nPolicies = await  policyRegistry.methods.getPoliciesLength(global.user.account).call();
   const activeInfos = await  policyRegistry.methods.getPoliciesInfo(global.user.account, true, 0, nPolicies).call();

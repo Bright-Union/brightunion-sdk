@@ -22,6 +22,7 @@ import BridgePolicyRegistryABI from '../abi/bridge/IPolicyRegistry.json';
 // BridgeV2
 import BridgeV2RegistryContractABI from '../abi/bridgeV2/ContractRegistry.json'
 import BridgeV2PolicyBookRegistryABI from '../abi/bridgeV2/PolicyBookRegistry.json'
+import BridgeV2PolicyRegistryABI from '../abi/bridgeV2/PolicyRegistry.json'
 import BridgeV2PolicyQuoteABI from '../abi/bridgeV2/PolicyQuote.json'
 import BridgeV2PolicyBookFacadeABI from '../abi/bridgeV2/PolicyBookFacade.json'
 
@@ -117,6 +118,7 @@ const _getBridgeV2PolicyBookRegistryContract  =  (address:string,web3:any)  : an
 const _getBridgeV2PolicyQuoteContract         =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyQuoteABI, address , web3);
 const _getBridgeV2PolicyBookContract         =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyQuoteABI, address , web3);
 const _getBridgeV2PolicyBookFacade        =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyBookFacadeABI, address , web3);
+const _getBridgeV2PolicyRegistry        =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyRegistryABI, address , web3);
 
 
 function _getIERC20Contract(address:any) {
@@ -137,6 +139,7 @@ export  {
 
     _getBridgeV2RegistryContract,
     _getBridgeV2PolicyBookRegistryContract,
+    _getBridgeV2PolicyRegistry,
     _getBridgeV2PolicyQuoteContract,
     _getBridgeV2PolicyBookContract,
     _getBridgeV2PolicyBookFacade,
