@@ -142,11 +142,14 @@ export async function buyCover(
     const brightRewardsAddress = NetConfig.netById(global.user.ethNet.networkId).bridgeBrightDistributor;
     const policyBookFacade = _getBridgeV2PolicyBookFacade( _contractAddress, global.user.web3 );
 
-    console.log( "policyBookFacade - " , policyBookFacade );
     // convert period from days to bridge epochs (weeks)
     let epochs = Math.min(52, Math.ceil(_coverPeriod / 7));
 
+    // console.log('Buy Policy' , _sumAssured , epochs )
+    console.log('Buy Policy Distributor From')
+
     return await new Promise((resolve, reject) => {
+      // policyBookFacade.methods.buyPolicy( epochs, _sumAssured )
       policyBookFacade.methods.buyPolicyFromDistributor( epochs, _sumAssured, brightRewardsAddress )
       .send({from: global.user.account})
       .on('transactionHash', (transactionHash:any) => {
@@ -176,6 +179,7 @@ export async function buyCover(
         }
       });
     });
+
 
     //************************************
     //bridge V1 BACKUP

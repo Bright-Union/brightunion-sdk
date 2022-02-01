@@ -419,7 +419,7 @@ export async function callBridgeV2(_quoteProtocol:any){
 
 export async function buyOnBridgeV2(_quoteProtocol:any) : Promise<any>{
 
-  const registry:any = await _getBridgeV2RegistryContract(NetConfig.netById(global.user.networkId).bridgeRegistry, global.user.web3 )
+  const registry:any = await _getBridgeV2RegistryContract(NetConfig.netById(global.user.networkId).bridgeV2Registry, global.user.web3 )
 
   let asset: any = await  registry.methods.getUSDTContract().call().then((stableTokenAddr:any) => {
     return  _getIERC20Contract(stableTokenAddr).options.address
