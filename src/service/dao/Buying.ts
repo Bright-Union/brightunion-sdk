@@ -145,9 +145,6 @@ export async function buyCover(
     // convert period from days to bridge epochs (weeks)
     let epochs = Math.min(52, Math.ceil(_coverPeriod / 7));
 
-    // console.log('Buy Policy' , _sumAssured , epochs )
-    console.log('Buy Policy Distributor From')
-
     return await new Promise((resolve, reject) => {
       // policyBookFacade.methods.buyPolicy( epochs, _sumAssured )
       policyBookFacade.methods.buyPolicyFromDistributor( epochs, _sumAssured, brightRewardsAddress )
