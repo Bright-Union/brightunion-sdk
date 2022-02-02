@@ -42,16 +42,16 @@ class GoogleEvents {
         this.analytics.track('purchase', pData )
         this.analytics.track('event', pData )
 
-        gtag.purchase({
-          "transaction_id": "testTX",
-          "affiliation": "test_provider",
-          "value": 333,
-          "currency": "USD",
-          "items": [{
-            "name": "TEst Item Product",
-            "quantity": 180,
-          }],
-        })
+        // gtag.purchase({
+        //   "transaction_id": "testTX",
+        //   "affiliation": "test_provider",
+        //   "value": 333,
+        //   "currency": "USD",
+        //   "items": [{
+        //     "name": "TEst Item Product",
+        //     "quantity": 180,
+        //   }],
+        // })
 
         gtag('event', 'SDK-TEST1', pData );
 
