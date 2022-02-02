@@ -238,8 +238,6 @@ export async function getCoversBridgeV2():Promise<any>{
   let trustWalletAssets: { [key: string]: any } = {};
   trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
 
-  console.log(policyRegistry.methods);
-
   const nPolicies = await  policyRegistry.methods.getPoliciesLength(global.user.account).call();
   const activeInfos = await  policyRegistry.methods.getPoliciesInfo(global.user.account, true, 0, nPolicies).call();
   const expiredInfos = await  policyRegistry.methods.getPoliciesInfo(global.user.account, false, 0, nPolicies).call();

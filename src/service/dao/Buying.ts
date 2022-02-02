@@ -140,7 +140,12 @@ export async function buyCover(
   } else if(_distributorName == 'bridge'){
 
     const brightRewardsAddress = NetConfig.netById(global.user.ethNet.networkId).bridgeBrightDistributor;
-    const policyBookFacade = _getBridgeV2PolicyBookFacade( _contractAddress, global.user.web3 );
+
+    const policyBook = await  _getBridgeV2PolicyBookContract( _contractAddress, global.user.web3 );
+
+    const policyBookFacadeAddress = await  policyBook.methods.policyBookFacade().call();
+
+    const policyBookFacade = _getBridgeV2PolicyBookFacade( policyBookFacadeAddress, global.user.web3 );
 
     // convert period from days to bridge epochs (weeks)
     let epochs = Math.min(52, Math.ceil(_coverPeriod / 7));
