@@ -4,9 +4,10 @@ import Analytics from 'analytics'
 import googleAnalytics from '@analytics/google-analytics'
 import NetConfig from './NetConfig'
 const { gtag, install } = require("ga-gtag");
-// const appId = 'G-KCNQQRKDP7';
+
+const appId = 'G-KCNQQRKDP7';
 // const appId = '277065560';
-const appId = 'UA-189970983-1';
+// const appId = 'UA-189970983-1';
 
 install(appId);
 
@@ -39,8 +40,8 @@ class GoogleEvents {
           }],
         }
 
-        this.analytics.track('purchase', pData )
-        this.analytics.track('event', pData )
+        // this.analytics.track('purchase', pData )
+        // this.analytics.track('event', pData )
 
         // gtag.purchase({
         //   "transaction_id": "testTX",
@@ -58,17 +59,17 @@ class GoogleEvents {
         gtag("event", "purchase", {
           label: global.user.clientKey,
           transaction_id: "T_12345",
-          affiliation: "Google Merchandise Store",
-          value: 36.32,
-          tax: 4.90,
-          shipping: 5.99,
+          affiliation: global.user.clientKey,
+          value: 123,
+          tax: 1.23,
+          shipping: 3.21,
           currency: "USD",
-          coupon: "SUMMER_SALE",
+          coupon: "SUMMER_SALE_SDK",
           items: [
             {
               item_id: "SKU_12345",
-              item_name: "Stan and Friends Tee",
-              affiliation: "Google Merchandise Store",
+              item_name: "SDK_TEST",
+              affiliation: "",
               coupon: "SUMMER_FUN",
               currency: "USD",
               discount: 2.22,
@@ -83,7 +84,7 @@ class GoogleEvents {
               item_list_name: "Related Products",
               item_variant: "green",
               location_id: "L_12345",
-              price: 9.99,
+              price: 123,
               quantity: 1
             }]
           });
