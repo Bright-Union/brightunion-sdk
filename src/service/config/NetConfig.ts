@@ -30,10 +30,12 @@ const VUE_APP_MUMBAI_TESTNET_MODULES=''
         provider: 'https://eth-mainnet.alchemyapi.io/v2/OlIDDqLH9Uo3AUQ_0ezj6sfqHIGxJRxw',
         modules: VUE_APP_MAINNET_MODULES.split(' '),
         bridgeRegistry: '0x8050c5a46FC224E3BCfa5D7B7cBacB1e4010118d',
+        bridgeV2Registry: '0x45269F7e69EE636067835e0DfDd597214A1de6ea',
+        bridgeBrightReference: '0xAc0734C62B316041D190438d5d3e5D1359614407',
         nexusDistributor: '0x3756C3C9374f38e0d9aAcB637Fed1641504a5b28',
         nexusAPI: 'https://api.nexusmutual.io',
         brightProtocol:'',
-        brightContractRegistry: '0xAA66e85682429a29363556ef757c44AfC5000F00',
+        bridgeBrightDistributor: '0xAA66e85682429a29363556ef757c44AfC5000F00',
         insuraceCover: '0x88Ef6F235a4790292068646e79Ee563339c796a0',
         insuraceAPI: 'https://api.insurace.io/ops/v1',
         insuraceAPIKey: 'H7C8k69Eiisz7AG1/6xcI5UWGluTtyAbizXrsfbfQIBDapQZEHAHFw==',
@@ -80,6 +82,8 @@ const VUE_APP_MUMBAI_TESTNET_MODULES=''
         insuraceReferral: '',
         modules: VUE_APP_RINKEBY_MODULES.split(' '),
         bridgeRegistry: '0x0Ac28BcDcef8D8C95c4a079418dbC34e4AD4DF1D',
+        bridgeV2Registry: '0x38de74c5ac7d2a3bc81e566ee318fdedb4a8e1f1',
+        bridgeBrightDistributor: '0xAc0734C62B316041D190438d5d3e5D1359614407',
         ETH: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
         DAI: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',      //not used
         // DAI: '0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa',      //not used

@@ -6,12 +6,9 @@ import RiskCarriers from '../config/RiskCarriers'
 import CatalogHelper from '../helpers/catalogHelper'
 import CurrencyHelper from '../helpers/currencyHelper'
 import {toBN,fromWei, toWei} from 'web3-utils'
-import GasHelper from "@/service/helpers/gasHelper";
 import Filters from "../helpers/filters";
 import {getCoverMin} from "../helpers/cover_minimums"
 import * as Sentry from "@sentry/browser";
-
-
 
 class InsuraceApi {
 
@@ -175,8 +172,6 @@ class InsuraceApi {
               minimumAmount: minimumAmount,
             } );
 
-            // const cashbackInStable = .075 * parseFloat(toBN(premium).div(toBN(10 ** 18)).toNumber().toString());
-
             const cashbackInInsur = Number(fromWei(response.ownerInsurReward));
             const insurPrice = CurrencyHelper.insurPrice();
             const cashbackInStable = cashbackInInsur * insurPrice;
@@ -184,19 +179,6 @@ class InsuraceApi {
             if ( defaultCurrencySymbol == quoteData.currency) {
               const premiumInUSD = Number(fromWei(CurrencyHelper.eth2usd(premium)));
               cashBackPercent = (cashbackInStable / premiumInUSD) * 100;
-            }
-
-            const {gasPrice, USDRate} = await GasHelper.getGasPrice(web3.symbol);
-
-            let estimatedGasPrice;
-            let feeInDefaultCurrency;
-
-            if(gasPrice) {
-                 estimatedGasPrice = (RiskCarriers.INSURACE.description.estimatedGas * gasPrice) * USDRate / (10 ** 9);
-                 feeInDefaultCurrency = (RiskCarriers.INSURACE.description.estimatedGas * gasPrice) / 10 ** 9;
-            } else {
-                estimatedGasPrice = 0;
-                feeInDefaultCurrency = 0;
             }
 
             const quote = CatalogHelper.quoteFromCoverable(
@@ -213,9 +195,7 @@ class InsuraceApi {
                     cashBack: [ cashbackInInsur , cashbackInStable ],
                     pricePercent: pricePercent,  //%, annualize
                     response: response,
-                    estimatedGasPrice: estimatedGasPrice,
                     defaultCurrencySymbol: defaultCurrencySymbol,
-                    feeInDefaultCurrency: feeInDefaultCurrency,
                     minimumAmount: minimumAmount,
                 },
                 {

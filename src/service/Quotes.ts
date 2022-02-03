@@ -1,6 +1,6 @@
 import NexusApi from './distributorsApi/NexusApi';
 import InsuraceApi from './distributorsApi/InsuraceApi';
-import { getQuote, getQuoteFromBridge } from "./dao/Quotes";
+import { getQuote, getQuoteFromBridge, getQuoteFromBridgeV2 } from "./dao/Quotes";
 import CatalogHelper from './helpers/catalogHelper';
 import NetConfig from '../service/config/NetConfig';
 import CurrencyHelper from './helpers/currencyHelper';
@@ -9,7 +9,7 @@ import BigNumber from 'bignumber.js'
 import { toWei, hexToBytes, numberToHex } from "web3-utils"
 import {getCoverMin} from "./helpers/cover_minimums"
 import GoogleEvents from './config/GoogleEvents';
-
+import BridgeHelper from './distributorsApi/BridgeHelper';
 
 
 /**
@@ -37,6 +37,7 @@ export async function getQuotes(
   quotesPromiseArray.push(getQuoteFrom('nexus', _amount, _currency, _period, _protocol))
   quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol))
   quotesPromiseArray.push(getQuoteFrom('bridge' , _amount, _currency, _period, _protocol))
+  // quotesPromiseArray.push(getQuoteFrom('bridgeV2' , _amount, _currency, _period, _protocol))
 
   for (let net of global.user.web3Passive) {
     quotesPromiseArray.push( getInsuraceQuote(net , _amount, _currency, _period, _protocol))
@@ -72,7 +73,8 @@ export async function getQuoteFrom(
       GoogleEvents.quote( {_amount, _currency, _period, _protocol, _distributorName } , "getQuoteFrom")
 
   if(_distributorName == 'bridge'){
-     return await getBridgeQuote(_amount,_currency,_period,_protocol);
+    return await getBridgeV2Quote( _amount,_currency,_period,_protocol);
+    // return await getBridgeQuote(_amount,_currency,_period,_protocol);
   }else if(_distributorName == 'nexus'){
     return await getNexusQuote(_amount,_currency,_period,_protocol );
   }else if(_distributorName == 'insurace'){
@@ -106,7 +108,6 @@ export async function getQuoteFrom(
        const bridgeEpochs = Math.min(52, Math.ceil(Number(_period) / 7));
 
        let quote:any = {}
-       // let bridgeQuote:any = {}
 
        if(global.user.ethNet.networkId == 1 ){
 
@@ -131,9 +132,6 @@ export async function getQuoteFrom(
              price: quote.price,
              response: quote._stats,
              pricePercent: quote.pricePercent, //%, annualize
-             estimatedGasPrice: quote.estimatedGasPrice,
-             defaultCurrencySymbol: quote.estimatedGasPriceCurrency,
-             feeInDefaultCurrency: quote.estimatedGasPriceDefault,
              errorMsg: quote.errorMsg,
              minimumAmount: quote.minimumAmount,
            },
@@ -191,6 +189,38 @@ export async function getQuoteFrom(
          );
 
        }
+
+     }else{
+       return {error: "Please provide bridgeProductAddress in protocol object"}
+     }
+   }else{
+     return {error: "Not supported network for Bridge"}
+   }
+ }
+
+/**
+ *  Hard coding only interface compliant since they are CONSTANTS
+ *
+ * @param _amount
+ * @param _period
+ * @param _protocol
+ * @returns
+ */
+ async function getBridgeV2Quote(_amount :any, _currency:any, _period :any, _protocol :any ) : Promise<object>{
+
+   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL')) {
+     if(_protocol.bridgeProductAddress){
+
+       let {amountInWei, currency, bridgeEpochs, initialBridgeCurrency } = BridgeHelper.preQuoteDataFormat(_amount, _currency, _period);
+
+         return getQuoteFromBridgeV2(
+           _protocol,
+           _period,
+           bridgeEpochs,
+           amountInWei,
+           currency,
+           initialBridgeCurrency,
+         );
 
      }else{
        return {error: "Please provide bridgeProductAddress in protocol object"}

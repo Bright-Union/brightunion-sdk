@@ -6,7 +6,11 @@ import {
   _getInsuraceDistributorsContract,
   _getNexusDistributor,
   _getNexusDistributorsContract,
-  _getBridgePolicyBookContract
+  _getBridgePolicyBookContract,
+
+  _getBridgeV2PolicyBookContract,
+  _getBridgeV2PolicyBookFacade,
+
 } from "../helpers/getContract";
 
 import ERC20Helper from '../helpers/ERC20Helper';
@@ -47,7 +51,7 @@ export async function buyCover(
     const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
         if(global.user.networkId === 1 ){
           return await new Promise((resolve, reject) => {
-            const nexusAddress = NetConfig.netById(1).nexusDistributor;
+            const nexusAddress = NetConfig.netById(global.user.ethNet.networkId).nexusDistributor;
             _getNexusDistributor(nexusAddress) // Direct Call to Nexus Contract
             .methods.buyCover(
               _contractAddress,
@@ -134,15 +138,23 @@ export async function buyCover(
         }
 
   } else if(_distributorName == 'bridge'){
-    const  bookContract = _getBridgePolicyBookContract(_contractAddress, global.user.web3 );
+
+    const brightRewardsAddress = NetConfig.netById(global.user.ethNet.networkId).bridgeBrightDistributor;
+
+    const policyBook = await  _getBridgeV2PolicyBookContract( _contractAddress, global.user.web3 );
+
+    const policyBookFacadeAddress = await  policyBook.methods.policyBookFacade().call();
+
+    const policyBookFacade = _getBridgeV2PolicyBookFacade( policyBookFacadeAddress, global.user.web3 );
+
     // convert period from days to bridge epochs (weeks)
     let epochs = Math.min(52, Math.ceil(_coverPeriod / 7));
 
     return await new Promise((resolve, reject) => {
-      bookContract.methods.buyPolicy( epochs, _sumAssured )
+      // policyBookFacade.methods.buyPolicy( epochs, _sumAssured )
+      policyBookFacade.methods.buyPolicyFromDistributor( epochs, _sumAssured, brightRewardsAddress )
       .send({from: global.user.account})
       .on('transactionHash', (transactionHash:any) => {
-
         txHash = transactionHash;
         const tx ={
           'hash': txHash ,
@@ -169,6 +181,49 @@ export async function buyCover(
         }
       });
     });
+
+
+    //************************************
+    //bridge V1 BACKUP
+    //************************************
+
+    // const  bookContract = _getBridgePolicyBookContract(_contractAddress, global.user.web3 );
+    // // convert period from days to bridge epochs (weeks)
+    // let epochs = Math.min(52, Math.ceil(_coverPeriod / 7));
+    //
+    // return await new Promise((resolve, reject) => {
+    //   bookContract.methods.buyPolicy( epochs, _sumAssured )
+    //   .send({from: global.user.account})
+    //   .on('transactionHash', (transactionHash:any) => {
+    //
+    //     txHash = transactionHash;
+    //     const tx ={
+    //       'hash': txHash ,
+    //       'distributor': 'bridge',
+    //       'amount': _sumAssured,
+    //       'productId': _contractAddress,
+    //       'period': epochs,
+    //       'currency':'USDT'
+    //     }
+    //     global.events.emit("buy" , { status: "TX_GENERATED" , data: transactionHash } );
+    //     GoogleEvents.onTxHash(tx);
+    //     resolve({success: transactionHash});
+    //   })
+    //   .on('error', (err:any, receipt:any) => {
+    //     global.events.emit("buy" , { status: "REJECTED" } );
+    //     GoogleEvents.onTxRejected(txHash);
+    //     reject( {error: err, receipt:receipt})
+    //   })
+    //   .on('confirmation', (confirmationNumber:any) => {
+    //     if (confirmationNumber === 0) {
+    //       GoogleEvents.onTxConfirmation(txHash);
+    //       global.events.emit("buy" , { status: "TX_CONFIRMED" } );
+    //
+    //     }
+    //   });
+    // });
+
+
   }
 }
 
