@@ -242,7 +242,7 @@ export async function getCoversBridgeV2():Promise<any>{
   const activeInfos = await  policyRegistry.methods.getPoliciesInfo(global.user.account, true, 0, nPolicies).call();
   const expiredInfos = await  policyRegistry.methods.getPoliciesInfo(global.user.account, false, 0, nPolicies).call();
   // merge the arrays from both sets
-  let mergedPolicyInfos = activeInfos._policies.concat(expiredInfos._policies);
+  let mergedPolicyInfos = activeInfos._policiesArr.concat(expiredInfos._policies);
   let mergedPolicyBooks = activeInfos._policyBooksArr.concat(expiredInfos._policyBooksArr);
   let mergedPolicyStatuses = activeInfos._policyStatuses.concat(expiredInfos._policyStatuses);
   let policies = []
