@@ -5,7 +5,8 @@ import googleAnalytics from '@analytics/google-analytics'
 import NetConfig from './NetConfig'
 const { gtag, install } = require("ga-gtag");
 
-const appId = 'G-KCNQQRKDP7';
+const appId = 'G-E5EN28CF28';
+// const appId = 'G-KCNQQRKDP7';
 // const appId = '277065560';
 // const appId = 'UA-189970983-1';
 
@@ -25,7 +26,7 @@ class GoogleEvents {
   static onBUInit = () => {
     // if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
 
-      console.log("INIT EVENT 1");
+      console.log("INIT EVENT 1" , appId);
 
       let pData = {
         label: global.user.clientKey,
