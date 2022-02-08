@@ -5,6 +5,7 @@ import {
   _getDistributorsContract,
   _getBridgeRegistryContract,
   _getBridgeV2RegistryContract,
+  _getBridgeV2PolicyRegistry,
 
 } from './helpers/getContract';
 import { buyCoverInsurace, buyCover } from "./dao/Buying";
@@ -432,6 +433,18 @@ export async function buyOnBridgeV2(_quoteProtocol:any) : Promise<any>{
   let asset: any = await  registry.methods.getUSDTContract().call().then((stableTokenAddr:any) => {
     return  _getIERC20Contract(stableTokenAddr).options.address
   });
+
+  const policyRegistryAddr = await _getBridgeV2RegistryContract( NetConfig.netById(global.user.ethNet.networkId).bridgeV2Registry , global.user.ethNet.web3Instance).methods.getPolicyRegistryContract().call();
+  const policyRegistry = await  _getBridgeV2PolicyRegistry(policyRegistryAddr, global.user.ethNet.web3Instance)
+
+  const nPolicies = await  policyRegistry.methods.getPoliciesLength(global.user.account).call();
+  const activeInfos = await  policyRegistry.methods.getPoliciesInfo(global.user.account, true, 0, nPolicies).call();
+
+  console.log("is active same? - " , activeInfos, _quoteProtocol );
+
+// for (var i = 0; i < activeInfos[1].length; i++) {
+//   activeInfos[1][i]
+// }
 
   const erc20Instance = _getIERC20Contract(asset);
   const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
