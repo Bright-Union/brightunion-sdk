@@ -83,12 +83,35 @@ export async function getQuoteFromBridgeV2(
     const isPolicyPresentV2  = await policyBookRegistryV2.methods.isPolicyBook(_protocol.bridgeProductAddress).call();
 
     if(isPolicyPresentV2){
-      let capacity:any = '';
       const minimumAmount = getCoverMin("bridge", global.user.ethNet.symbol, _currency );
       let totalSeconds:any;
       let totalPrice:any;
       let errorMsg:any = null;
       let rawPriceData:any = null;
+
+      let stats:any = {};
+
+      if(_protocol.rawDataBridge){
+        stats = {
+          totalUSDTLiquidity: _protocol.rawDataBridge.totalUSDTLiquidity,
+          maxCapacity: _protocol.rawDataBridge.maxCapacity,
+          remainingCapacity:_protocol.rawDataBridge.maxCapacity,
+          stakedSTBL:  _protocol.rawDataBridge.stakedSTBL,
+          activeCovers:  _protocol.rawDataBridge.activeCovers,
+          utilizationRatio:  _protocol.rawDataBridge.utilizationRatio,
+        }
+      }else{
+        await policyBookRegistryV2.methods.stats(_protocol.bridgeProductAddress).call().then(async(_stats:any) => {
+          stats =  {
+            totalUSDTLiquidity: toBN(_stats[3]),
+            remainingCapacity:_stats[3],
+            maxCapacity: _stats[3],
+            stakedSTBL: _stats[6],
+          }
+        })
+      }
+
+      let capacity:any = stats.maxCapacity;
 
       await policyBookRegistryV2.methods.getPoliciesPrices( [ _protocol.bridgeProductAddress ] , [ _bridgeEpochs ] , [ _amountInWei ] ).call()
       .then((_priceData: any) => {
@@ -105,6 +128,7 @@ export async function getQuoteFromBridgeV2(
           capacity = CurrencyHelper.usd2eth(capacity);
           _currency = "ETH"
         }
+
         if (errorMsg.toLowerCase().includes("requiring more than there exists")) {
           errorMsg = {message: "Maximum available capacity is " , currency:_initialBridgeCurrency, capacity:fromWei(capacity.toString()), errorType: "capacity"};
         } else if (errorMsg.toLowerCase().includes("pb: wrong epoch duration")) {
@@ -141,27 +165,8 @@ export async function getQuoteFromBridgeV2(
         actualPeriod = _period;
       }
 
-      let stats:any = {};
-      let quote:any = {};
 
-      if(_protocol.rawDataBridge){
-        stats = {
-          totalUSDTLiquidity: _protocol.rawDataBridge.totalUSDTLiquidity,
-          maxCapacity: _protocol.rawDataBridge.maxCapacity,
-          stakedSTBL:  _protocol.rawDataBridge.stakedSTBL,
-          activeCovers:  _protocol.rawDataBridge.activeCovers,
-          utilizationRatio:  _protocol.rawDataBridge.utilizationRatio,
-        }
-      }else{
-        await policyBookRegistryV2.methods.stats(_protocol.bridgeProductAddress).call().then(async(_stats:any) => {
-          stats =  {
-            totalUSDTLiquidity: toBN(_stats[3]),
-            remainingCapacity:_stats[3],
-            maxCapacity: _stats[3],
-            stakedSTBL: _stats[6],
-          }
-        })
-      }
+      let quote:any = {};
 
     quote = CatalogHelper.quoteFromCoverable(
         'bridge',
