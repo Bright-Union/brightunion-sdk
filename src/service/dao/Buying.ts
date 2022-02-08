@@ -15,6 +15,8 @@ import {
 
 import ERC20Helper from '../helpers/ERC20Helper';
 import NetConfig from '../config/NetConfig';
+import { fromWei} from 'web3-utils'
+
 
 /**
 * Returns a transaction receipt.
@@ -45,9 +47,22 @@ export async function buyCover(
   _maxPriceWithFee : number,
   _data : any,
   buyingWithNetworkCurrency:boolean,
+  _quoteProtocol:any,
 ):Promise<any>{
-  let txHash : any;
+  // let txHash : any;
+
+  let tx:any = {
+    'hash': null,
+    'distributor': _quoteProtocol.distributorName,
+    'premium': fromWei(_quoteProtocol.price),
+    'name': _quoteProtocol.name,
+    'amount':  fromWei(_quoteProtocol.amount),
+    'currency': _quoteProtocol.currency,
+    'period': _quoteProtocol.period,
+  }
+
   if(_distributorName == 'nexus'){
+    tx.distributor  = 'nexus';
     const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
         if(global.user.networkId === 1 ){
           return await new Promise((resolve, reject) => {
@@ -63,36 +78,25 @@ export async function buyCover(
               _data,
             ).send({ from: _ownerAddress, value: sendValue })
             .on('transactionHash', (res:any) => {
-              txHash = res;
-
-              const tx ={
-                'hash': txHash ,
-                'distributor': 'nexus',
-                'premium': _maxPriceWithFee,
-                'productId': _contractAddress,
-                'amount': _sumAssured,
-                'currency': _coverAsset,
-                'period': _coverPeriod
-              }
-
+              tx.hash = res;
               global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
               GoogleEvents.onTxHash(tx) ;
               resolve({success:res});
              })
             .on('error', (err:any, receipt:any) => {
               global.events.emit("buy" , { status: "REJECTED" } );
-              GoogleEvents.onTxRejected(txHash);
+              GoogleEvents.onTxRejected(tx);
               reject( {error: err, receipt:receipt})
             })
             .on('confirmation', (confirmationNumber:any) => {
               if (confirmationNumber === 0) {
-                 GoogleEvents.onTxConfirmation(txHash);
+                GoogleEvents.onTxConfirmation(tx);
                 global.events.emit("buy" , { status: "TX_CONFIRMED" } );
-
               }
             });
           });
         } else { // if not Ethereum Mainnet
+
           return await new Promise( async (resolve, reject) => {
             const nexusAddress = await _getDistributorsContract().methods.getDistributorAddress('nexus').call();
             _getNexusDistributorsContract(nexusAddress) // Nexus Call through Bright Protocol Distributors Layer
@@ -106,30 +110,19 @@ export async function buyCover(
               _data,
             ).send({ from: _ownerAddress, value: sendValue })
             .on('transactionHash', (res:any) => {
-              txHash = res;
-
-                const tx ={
-                  'hash': txHash ,
-                  'distributor': 'nexus',
-                  'premium': _maxPriceWithFee,
-                  'productId': _contractAddress,
-                  'amount': _sumAssured,
-                  'currency': _coverAsset,
-                  'period': _coverPeriod
-                }
-
+              tx.hash = res
                 global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
                 GoogleEvents.onTxHash(tx);
                 resolve({success:res});
             })
             .on('error', (err:any, receipt:any) => {
               global.events.emit("buy" , { status: "REJECTED" } );
-              GoogleEvents.onTxRejected(txHash);
+              GoogleEvents.onTxRejected(tx);
               reject( {error: err, receipt:receipt})
             })
             .on('confirmation', (confirmationNumber:any) => {
               if (confirmationNumber === 0) {
-               GoogleEvents.onTxConfirmation(txHash);
+               GoogleEvents.onTxConfirmation(tx);
                 global.events.emit("buy" , { status: "TX_CONFIRMED" } );
 
               }
@@ -138,6 +131,7 @@ export async function buyCover(
         }
 
   } else if(_distributorName == 'bridge'){
+    tx.distributor = 'bridge';
 
     const brightRewardsAddress = NetConfig.netById(global.user.ethNet.networkId).bridgeBrightDistributor;
 
@@ -155,27 +149,19 @@ export async function buyCover(
       policyBookFacade.methods.buyPolicyFromDistributor( epochs, _sumAssured, brightRewardsAddress )
       .send({from: global.user.account})
       .on('transactionHash', (transactionHash:any) => {
-        txHash = transactionHash;
-        const tx ={
-          'hash': txHash ,
-          'distributor': 'bridge',
-          'amount': _sumAssured,
-          'productId': _contractAddress,
-          'period': epochs,
-          'currency':'USDT'
-        }
+        tx.hash = transactionHash;
         global.events.emit("buy" , { status: "TX_GENERATED" , data: transactionHash } );
         GoogleEvents.onTxHash(tx);
         resolve({success: transactionHash});
       })
       .on('error', (err:any, receipt:any) => {
         global.events.emit("buy" , { status: "REJECTED" } );
-        GoogleEvents.onTxRejected(txHash);
+        GoogleEvents.onTxRejected(tx);
         reject( {error: err, receipt:receipt})
       })
       .on('confirmation', (confirmationNumber:any) => {
         if (confirmationNumber === 0) {
-          GoogleEvents.onTxConfirmation(txHash);
+          GoogleEvents.onTxConfirmation(tx);
           global.events.emit("buy" , { status: "TX_CONFIRMED" } );
 
         }
@@ -248,11 +234,20 @@ export async function buyCover(
 * @returns  BuyReceipt Object
 */
 
-export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency:boolean) {
+export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency:boolean, _quotes:any) {
 
   let insuraceAddress :any;
   const sendValue = buyingWithNetworkCurrency ? buyingObj.premium : 0;
-  let txHash : any;
+
+  let tx:any = {
+    'hash': null,
+    'distributor': 'insurace',
+    'premium': _quotes.price ,
+    'name': _quotes.name,
+    'amount': _quotes.amount,
+    'currency': _quotes.currency,
+    'period':_quotes.period,
+  }
 
   // If mainnet call Distributor Directly
   if(global.user.networkId === 1 ){
@@ -276,29 +271,19 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
                )
       .send({ from: buyingObj.owner, value: sendValue})
       .on('transactionHash', (res:any) => {
-        txHash = res;
-        const tx ={
-          'hash': txHash ,
-          'distributor': 'insurace',
-          'premium': buyingObj.premium ,
-          'productId': buyingObj.products[0],
-          'amount': buyingObj.amounts[0],
-          'currency': buyingObj.currency,
-          'period':buyingObj.durationInDays
-        }
-
+        tx.hash = res;
         global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
         GoogleEvents.onTxHash(tx);
         resolve({success: res});
       })
       .on('error', (err:any, receipt:any) => {
         global.events.emit("buy" , { status: "REJECTED" } );
-        GoogleEvents.onTxRejected(txHash);
+        GoogleEvents.onTxRejected(tx);
         reject({error: err , receipt:receipt})
       })
       .on('confirmation', (confirmationNumber:any) => {
         if (confirmationNumber === 0) {
-        GoogleEvents.onTxConfirmation(txHash);
+        GoogleEvents.onTxConfirmation(tx);
           global.events.emit("buy" , { status: "TX_CONFIRMED" } );
         }
       });
@@ -313,32 +298,20 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
       .buyCoverInsurace(buyingObj)
       .send({ from: buyingObj.owner, value: sendValue })
       .on('transactionHash', (res:any) => {
-
-        txHash = res;
-
-        const tx ={
-          'hash': txHash ,
-          'distributor': 'insurace',
-          'premium': buyingObj.premium ,
-          'productId': buyingObj.products[0],
-          'amount': buyingObj.amounts[0],
-          'currency': buyingObj.currency,
-          'period':buyingObj.durationInDays
-        }
-
+        tx.hash = res;
         global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
         GoogleEvents.onTxHash(tx);
         resolve({success: res});
       })
       .on('error', (err:any, receipt:any) => {
         global.events.emit("buy" , { status: "REJECTED" } );
-        GoogleEvents.onTxRejected(txHash);
+        GoogleEvents.onTxRejected(tx);
         reject({error: err , receipt:receipt})
       })
       .on('confirmation', (confirmationNumber:any) => {
         if (confirmationNumber === 0) {
           global.events.emit("buy" , { status: "TX_CONFIRMED" } );
-          GoogleEvents.onTxConfirmation(txHash);
+          GoogleEvents.onTxConfirmation(tx);
         }
       });
     });

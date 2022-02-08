@@ -1,193 +1,192 @@
-import Analytics from 'analytics'
-// declare module '*';
-// @ts-ignore
-import googleAnalytics from '@analytics/google-analytics'
 import NetConfig from './NetConfig'
+import { fromWei} from 'web3-utils'
+
 const { gtag, install } = require("ga-gtag");
 
 const appId = 'G-E5EN28CF28';
-// const appId = 'G-KCNQQRKDP7';
-// const appId = '277065560';
-// const appId = 'UA-189970983-1';
-
+// const appId = 'G-KCNQQRKDP7'; //app - ui ID
+// const appId = 'UA-189970983-1';// GA3 property ID
 install(appId);
+
+const CURRENCIES: any={
+  'ETH': 'EUR',
+  'DAI': 'UYI',
+  'USDC': 'USN',
+  'USDT': 'USD',
+  'BNB': 'BND',
+  'BUSD': 'BSD',
+  'BUSD-T': 'BDT',
+  'MATIC': 'MAD',
+}
 
 class GoogleEvents {
 
-  static analytics = Analytics({
-    app: 'BrightClient_SDK',
-    plugins: [
-      googleAnalytics({
-        trackingId: appId,
-      })
-    ]
-  })
-
   static onBUInit = () => {
-    // if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
+    if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
 
-      console.log("INIT EVENT 1" , appId);
+        gtag('set', 'client_id', global.user.clientKey + '_2' );
 
-      let pData = {
-        label: global.user.clientKey,
-        transaction_id: "T_12345",
-        affiliation: global.user.clientKey,
-        value: 333,
-        items: [
-          {
-            item_id: "SKU_12345",
-            item_name: "Test SDK item",
-            affiliation: global.user.clientKey,
-          }],
-        }
+        gtag('event', 'login', {
+          method: global.user.clientKey
+        });
 
-        // this.analytics.track('purchase', pData )
-        // this.analytics.track('event', pData )
+      }
+    }
 
-        // gtag.purchase({
-        //   "transaction_id": "testTX",
-        //   "affiliation": "test_provider",
-        //   "value": 333,
-        //   "currency": "USD",
-        //   "items": [{
-        //     "name": "TEst Item Product",
-        //     "quantity": 180,
-        //   }],
-        // })
-
-        gtag('event', 'SDK-TEST1', pData );
-
-        gtag("event", "purchase", {
-          label: global.user.clientKey,
-          transaction_id: "T_12345",
-          affiliation: global.user.clientKey,
-          value: 123,
-          tax: 1.23,
-          shipping: 3.21,
-          currency: "USD",
-          coupon: "SUMMER_SALE_SDK",
-          items: [
-            {
-              item_id: "SKU_12345",
-              item_name: "SDK_TEST",
-              affiliation: "",
-              coupon: "SUMMER_FUN",
-              currency: "USD",
-              discount: 2.22,
-              index: 0,
-              item_brand: "Google",
-              item_category: "Apparel",
-              item_category2: "Adult",
-              item_category3: "Shirts",
-              item_category4: "Crew",
-              item_category5: "Short sleeve",
-              item_list_id: "related_products",
-              item_list_name: "Related Products",
-              item_variant: "green",
-              location_id: "L_12345",
-              price: 123,
-              quantity: 1
-            }]
-          });
-
-          gtag("event", "add_to_cart", {
-            currency: "USD",
-            value: 7.77,
-            items: [
-              {
-                item_id: "SKU_12345",
-                item_name: "Stan and Friends Tee",
-                affiliation: "Google Merchandise Store",
-                coupon: "SUMMER_FUN",
-                currency: "USD",
-                discount: 2.22,
-                index: 0,
-                item_brand: "Google",
-                item_category: "Apparel",
-                item_category2: "Adult",
-                item_category3: "Shirts",
-                item_category4: "Crew",
-                item_category5: "Short sleeve",
-                item_list_id: "related_products",
-                item_list_name: "Related Products",
-                item_variant: "green",
-                location_id: "L_12345",
-                price: 9.99,
-                quantity: 1
-              }
-            ]
-          });
-
-          console.log("INIT EVENT 2");
-        }
+    static setFormatCurrency = (_currency:any) => {
+      return CURRENCIES[_currency];
+    }
 
   static catalog = () => {
     if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
-      // this.analytics.track('SDK_getCatalog', {
-      //   clientKey: global.user.clientKey,
-      //   label: global.user.clientKey,
-      // })
+
+      gtag("event", "view_item_list", {
+        item_list_name: "Get Catalog",
+        items:[
+          {
+            item_id: "Catalog",
+            item_name: "Catalog"
+          }
+        ],
+      });
+
     }
   }
 
   static quote = (_quote:any, _type: any) => {
     if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
-      // this.analytics.track('SDK_getQuote', {
-      //   clientKey: global.user.clientKey,
-      //   label: global.user.clientKey,
-      //   type: _type,
-      //   amount : _quote._amount,
-      //   period: _quote._period,
-      //   currency: _quote._currency,
-      //   protocol: _quote._protocol ? _quote._protocol.name : null,
-      //   distributorName: _quote._distributorName,
-      // })
+
+      // console.log("GA _quote" , _quote);
+      let coverName = _quote.name ? _quote.name : _quote._protocol ? _quote._protocol.name : 'null';
+
+      gtag("event", "select_item", {
+        item_list_id: coverName,
+        item_list_name: coverName,
+        items: [
+          {
+            item_id: coverName,
+            item_name: coverName,
+            affiliation: global.user.clientKey,
+            currency: this.setFormatCurrency(_quote._currency),
+            item_brand: _quote.distributorName,
+            item_variant: _quote.amount,
+            price: _quote.price,
+            quantity: _quote.period,
+          }
+        ]
+      });
+
     }
   }
 
-  static multiBuy = () => {
+  static multiBuy = (_items:any) => {
+    // console.log("multiBuy - " , _items);
     if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
-      // this.analytics.track('SDK_Buy_multiple_called', {
-      //   clientKey: global.user.clientKey,
-      //   label: global.user.clientKey,
-      //   distributorName: "Insurace",
-      // })
+      let formatedItems = [];
+      for (var i = 0; i < _items.params[0].length; i++) {
+        formatedItems.push(
+          {
+            item_id: _items.params[0][i],
+            item_name: 'InsuraceId_'+_items.params[0][i],
+            affiliation: global.user.clientKey,
+            currency: this.setFormatCurrency(_items.currency.name),
+            item_brand: 'insurace',
+            item_variant: fromWei(_items.params[2][i]),
+            quantity: _items.params[1][i],
+            item_category: "Multibuy"
+          })
+      }
+      gtag("event", "add_to_cart", {
+        currency: this.setFormatCurrency(_items.currency.name),
+        value:fromWei(_items.premiumAmount),
+        items: formatedItems
+      });
     }
   };
 
   static buy = (_quote:any) => {
+    // console.log("GA buy" , _quote);
+    if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
+
+      let coverName = _quote.name ? _quote.name : _quote._protocol ? _quote._protocol.name : 'null';
+
+      gtag("event", "add_to_cart", {
+        currency: this.setFormatCurrency(_quote._currency),
+        value:_quote.price,
+        items: [
+          {
+            item_id: coverName,
+            item_name: coverName,
+            affiliation: global.user.clientKey,
+            currency: this.setFormatCurrency(_quote._currency),
+            item_brand: _quote.distributorName,
+            item_variant: _quote.amount,
+            price: _quote.price,
+            quantity: _quote.period,
+          }
+        ]
+      });
+
+    }
+  };
+
+  static buyRejected = (_message:any, _quote:any) => {
+
+    // console.log("GA buy Reject" , _message , _quote);
 
     if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
-      // this.analytics.track('SDK_Buy_called', {
-      //   clientKey: global.user.clientKey,
-      //   label: global.user.clientKey,
-      //   price: _quote.price,
-      //   amount: _quote.amount,
-      //   period: _quote.period,
-      //   currency: _quote.currency,
-      //   name: _quote.name,
-      //   provider: _quote.distributorName,
-      // })
+      gtag("event", "remove_from_cart", {
+        currency: this.setFormatCurrency(_quote._currency),
+        value:_quote.price,
+        items: [
+          {
+            item_id: _quote.name,
+            item_name:  _quote.name ,
+            affiliation: global.user.clientKey,
+            currency: this.setFormatCurrency(_quote._currency),
+            item_brand: _quote.distributorName,
+            item_variant: fromWei(_quote.amount),
+            price: _quote.price ? fromWei(_quote.price) : fromWei(_quote.premium),
+            quantity: _quote.period,
+            item_category: _message,
+            item_category2: _quote.amounts ? "Multibuy" : "SingleBuy",
+          }
+        ]
+      });
+
     }
   };
 
   static onTxHash = (tx:any) => {
+
+    // console.log("GA - onTxHash - " , tx ) ;
+
     if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
-      // this.analytics.track('SDK_Buy_confirmation', {
-      //   clientKey: global.user.clientKey,
-      //   label: global.user.clientKey,
-      //   hash: tx.hash,
-      //   premium: tx.premium,
-      //   amount: tx.amount,
-      //   period: tx.period,
-      //   currency: tx.currency,
-      //   name: this.quote.name,
-      //   provider: tx.distributor,
-      // })
+
+      gtag("event", "purchase", {
+        transaction_id: tx.hash,
+        affiliation: global.user.clientKey,
+        value: fromWei(tx.premium),
+        tax: 0,
+        shipping: 0,
+        currency: this.setFormatCurrency( tx.currency ),
+        items: [
+          {
+            item_id: tx.productId,
+            item_name: tx.productId,
+            affiliation: global.user.clientKey,
+            currency: this.setFormatCurrency( tx.currency),
+            item_brand: tx.distributor,
+            item_variant: fromWei(tx.amount),
+            price: fromWei(tx.premium),
+            quantity: tx.period
+          }]
+        });
     }
   };
 
   static onTxConfirmation = (tx:any) => {
+    // console.log("onTxConfirmation" , tx)
     // if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
     //   this.analytics.track('SDK_Buy_successfull', {
     //     label: global.user.clientKey,
@@ -197,12 +196,30 @@ class GoogleEvents {
   };
 
   static onTxRejected = (tx:any) => {
-    // if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
-    //   this.analytics.track('SDK_Buy_rejected', {
-    //     label: global.user.clientKey,
-    //     hash: tx,
-    //   })
-    // }
+    // console.log("onTxRejected" , tx)
+
+    if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
+
+      gtag("event", "remove_from_cart", {
+        currency: this.setFormatCurrency(tx.currency),
+        value: tx.premium,
+        items: [
+          {
+            item_id: tx.productId,
+            item_name:  tx.productId,
+            affiliation: global.user.clientKey,
+            currency: this.setFormatCurrency(tx.currency),
+            item_brand: tx.distributor,
+            item_list_id: tx.hash,
+            item_variant: tx.amount,
+            price: tx.premium,
+            quantity: tx.period,
+            item_category: "REJECTED",
+          }
+        ]
+      });
+
+    }
   };
 
 }

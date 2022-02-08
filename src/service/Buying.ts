@@ -13,8 +13,6 @@ import InsuraceApi from './distributorsApi/InsuraceApi';
 import ERC20Helper from './helpers/ERC20Helper';
 import GoogleEvents from './config/GoogleEvents';
 
-
-
 export async function buyQuote(_quoteProtocol: any): Promise<any> {
 
   GoogleEvents.buy(_quoteProtocol);
@@ -38,9 +36,7 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
 
 
 export async function buyMultipleQuotes (_quotes:any):Promise<any> {
-
-  GoogleEvents.multiBuy();
-
+  GoogleEvents.multiBuy(_quotes);
   return buyMutipleOnInsurace(_quotes);
 }
 
@@ -53,7 +49,7 @@ export async function buyMutipleOnInsurace (_quotes:any):Promise<any> {
   const buyingObj:any = setInsuraceBuyingObject(confirmCoverResult);
 
   if(NetConfig.isNetworkCurrencyBySymbol(_quotes.currency.name)){
-    return  callInsurace(buyingObj, true );
+    return  callInsurace(buyingObj, true , _quotes );
   }else{
 
     const netConfig:any = NetConfig.netById(global.user.networkId);
@@ -85,9 +81,10 @@ export async function buyMutipleOnInsurace (_quotes:any):Promise<any> {
         () => {
           buyingObj.premium = Number(ERC20Helper.ERCtoUSDTDecimals(buyingObj.premium))
           global.events.emit("buy" , { status: "CONFIRMATION" , type:"main", count:2 , current:2 } );
-          return callInsurace(buyingObj, false);
+          return callInsurace(buyingObj, false, _quotes);
         },
         () => {
+          GoogleEvents.buyRejected('REJECTED - ERC20Helper - approveUSDTAndCall' , _quotes );
           global.events.emit("buy" , { status: "REJECTED" } );
           return {error: "Confirmation rejected"}
         }
@@ -100,15 +97,17 @@ export async function buyMutipleOnInsurace (_quotes:any):Promise<any> {
         buyingObj.premium,
         () => {
           global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
-          return callInsurace(buyingObj , false);
+          return callInsurace(buyingObj , false, _quotes);
         },
         (err:any) => {
+          GoogleEvents.buyRejected('REJECTED - ERC20Helper - approveAndCall' , _quotes );
           global.events.emit("buy" , { status: "REJECTED" } );
           return {error: err , message: 'ERC20Helper approveAndCall Error'};
         }
       );
 
     } else{
+      GoogleEvents.buyRejected('You have insufficient funds to continue with this transaction' , _quotes );
       global.events.emit("buy" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
       return {error: 'You have insufficient funds to continue with this transaction' }
     }
@@ -147,8 +146,9 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
   if(NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency)){
     if (Number(netBalance) >= (Number)(_quoteProtocol.price)) {
       global.events.emit("buy" , { status: "CONFIRMATION" , type:"main", count:1 , current:1 } );
-      return callInsurace(buyingObj , true);
+      return callInsurace(buyingObj , true, _quoteProtocol);
     } else {
+      GoogleEvents.buyRejected('You have insufficient funds to continue with this transaction' , _quoteProtocol );
       global.events.emit("buy" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
       return { error: "You have insufficient funds to continue with this transaction..." };
     }
@@ -179,9 +179,10 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
         () => {
           buyingObj.premium = Number(ERC20Helper.ERCtoUSDTDecimals(buyingObj.premium))
           global.events.emit("buy" , { status: "CONFIRMATION" , type:"main", count:2 , current:2 } );
-          return callInsurace(buyingObj, false);
+          return callInsurace(buyingObj, false, _quoteProtocol);
         },
         () => {
+          GoogleEvents.buyRejected('REJECTED - ERC20Helper - approveUSDTAndCall' , _quoteProtocol );
           global.events.emit("buy" , { status: "REJECTED" } );
           return {error: "Confirmation rejected"}
         })
@@ -197,13 +198,15 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
           buyingObj.premium,
           () => {
             global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
-            return callInsurace(buyingObj , false);
+            return callInsurace(buyingObj , false, _quoteProtocol);
           },
           (err:any) => {
+            GoogleEvents.buyRejected('REJECTED - ERC20Helper - approveAndCall' , _quoteProtocol );
             global.events.emit("buy" , { status: "REJECTED" } );
             return {error: err , message: 'ERC20Helper approveAndCall Error'};
           });
         } else {
+          GoogleEvents.buyRejected('You have insufficient funds to continue with this transaction' , _quoteProtocol );
           global.events.emit("buy" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
           return {error: 'You have insufficient funds to continue with this transaction' }
         }
@@ -217,8 +220,8 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
  * @param buyingObj
  * @returns
  */
-export async function callInsurace(buyingObj:any, buyingWithNetworkCurrency: boolean):Promise<any>{
-  return await buyCoverInsurace( buyingObj, buyingWithNetworkCurrency );
+export async function callInsurace(buyingObj:any, buyingWithNetworkCurrency: boolean, _quote:any):Promise<any>{
+  return await buyCoverInsurace( buyingObj, buyingWithNetworkCurrency,_quote );
 }
 
 /**
@@ -281,7 +284,8 @@ export async function callNexus(_quoteProtocol:any , buyingWithNetworkCurrency: 
       0, //coverType
       _quoteProtocol.price.toString(), // token amount to cover with FEE
       data ,// random data
-      buyingWithNetworkCurrency
+      buyingWithNetworkCurrency,
+      _quoteProtocol,
     )
 
 }
@@ -312,6 +316,7 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
         return callNexus(_quoteProtocol, false);
       };
       const onError =  (err:any) => {
+        GoogleEvents.buyRejected('REJECTED' , _quoteProtocol );
         global.events.emit("buy" , { status: "REJECTED" } );
         return {error : "Confirmation rejected"};
       }
@@ -321,6 +326,7 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
       return await ERC20Helper.approveAndCall( erc20Instance,  _quoteProtocol.rawData.contract,  _quoteProtocol.rawData.price, onSuccess, onError);
 
     } else {
+      GoogleEvents.buyRejected('You have insufficient funds to continue with this transaction' , _quoteProtocol );
       global.events.emit("buy" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
       return{ error: "You have insufficient funds to continue with this transaction" }
     }
@@ -333,6 +339,7 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
       return callNexus(_quoteProtocol, true);
     } else {
+      GoogleEvents.buyRejected('You have insufficient funds to continue with this transaction' , _quoteProtocol );
       global.events.emit("buy" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
       return {error: 'You have insufficient funds to continue with this transaction' }
     }
@@ -372,7 +379,8 @@ export async function callBridgeV2(_quoteProtocol:any){
     null, //coverType
     null, // token amount to cover
     null, // random data
-    null
+    null,
+    _quoteProtocol
   )
 
 }
@@ -446,12 +454,14 @@ export async function buyOnBridgeV2(_quoteProtocol:any) : Promise<any>{
         return callBridgeV2(_quoteProtocol);
       },
       () => {
+        GoogleEvents.buyRejected('REJECTED - ERC20Helper - approveUSDTAndCall' , _quoteProtocol );
         global.events.emit("buy" , { status: "REJECTED" } );
         return {error: "Rejected confirmation"};
       }
     )
 
   } else {
+    GoogleEvents.buyRejected('You have insufficient funds to continue with this transaction' , _quoteProtocol );
     global.events.emit("buy" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
     return {error: "You have insufficient funds to continue with this transaction"};
   }
