@@ -61,6 +61,7 @@ const INSURACE:any = {
             ETH: ['ETH', 'DAI', 'USDC', 'USDT'],
             BSC: ['BNB', 'BUSD', 'BUSD-T', 'USDC'],
             POLYGON: ['MATIC', 'DAI', 'USDT', 'USDC'],
+            AVALANCHE: ['AVAX', 'DAIe', 'USDCe', 'USDTe'],
         },
         estimatedGas:  700000,
         description: 'Lorem ipsum...'
@@ -86,6 +87,7 @@ const INSURACE:any = {
         ETH: 'DAI',
         BSC: 'BUSD',
         POLYGON: 'DAI',
+        AVALANCHE: 'DAIe',
     },
 }
 

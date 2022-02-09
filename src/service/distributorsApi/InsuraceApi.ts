@@ -134,7 +134,16 @@ class InsuraceApi {
 
         web3.symbol = NetConfig.netById(web3.networkId).symbol;
 
-        const minimumAmount= getCoverMin("insurace", web3.symbol, currency );
+        if(web3.symbol == "AVALANCHE"){
+          console.log('Insur api Q 1aaax - ' , web3, currency, quoteData);
+        }
+
+        const minimumAmount = 1000;
+        // const minimumAmount = getCoverMin("insurace", web3.symbol, quoteData.selectedCurrency.name );
+
+        if(web3.symbol == "AVALANCHE"){
+          console.log('Insur api Q 2 - ', minimumAmount);
+        }
 
         return await this.getCoverPremium(
           web3,
@@ -145,6 +154,9 @@ class InsuraceApi {
           global.user.account,
         ).then( async (response: any) => {
 
+          if(web3.symbol == "AVALANCHE"){
+            console.log("INSU QUOTE RES1 - " ,web3.symbol, response)
+          }
 
           const defaultCurrencySymbol = web3.symbol === 'POLYGON' ? 'MATIC' : web3.symbol === 'BSC' ? 'BNB' : 'ETH';
 
@@ -206,6 +218,10 @@ class InsuraceApi {
             return quote;
         })
             .catch((e) => {
+
+              if(web3.symbol == "AVALANCHE"){
+                console.log("INSU QUOTE RES1 - " ,web3.symbol, e.response)
+              }
 
                 let errorMsg:any = { message: e.response && e.response.data ? e.response.data.message : e.message }
 

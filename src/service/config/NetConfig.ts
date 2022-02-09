@@ -19,6 +19,8 @@ const VUE_APP_BSC_TESTNET_MODULES=''
 const VUE_APP_POLYGON_MODULES='INSURACE'
 const VUE_APP_MUMBAI_TESTNET_MODULES=''
 // const VUE_APP_MUMBAI_TESTNET_MODULES='INSURACE'
+const VUE_APP_AVALANCHE_MODULES='INSURACE'
+const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
 
 
  const NETWORK_CONFIG = [
@@ -203,11 +205,59 @@ const VUE_APP_MUMBAI_TESTNET_MODULES=''
         USDC: '0xb7c8bCA891143221a34DB60A26639785C4839040',
         INSUR: '0x0D3A05564821686CC7fB534eE44485B8025Eb4e8',
     },
+    {
+        name: 'Avalanche Mainnet C-Chain',
+        id: 43114,
+        symbol: 'AVALANCHE',
+        explorer: 'https://snowtrace.io/',
+        provider: 'https://api.avax.network/ext/bc/C/rpc',
+        modules: VUE_APP_AVALANCHE_MODULES.split(' '),
+        nexusDistributor: '',
+        nexusAPI: '',
+        brightProtocol:'',
+        brightContractRegistry: '',
+        insuraceCover: '0x544c42fBB96B39B21DF61cf322b5EDC285EE7429',
+        insuraceAPI: 'https://api.insurace.io/ops/v1',
+        insuraceAPIKey: 'H7C8k69Eiisz7AG1/6xcI5UWGluTtyAbizXrsfbfQIBDapQZEHAHFw==',
+        insuraceReferral: '982107115070280393099561761653261738634756834311',
+        ETH: '',
+        MATIC: '',
+        'DAIe': '0xd586E7F844cEa2F87f50152665BCbc2C279D8d70',
+        'USDTe': '0xc7198437980c041c805A1EDcbA50c1Ce5db95118',
+        'USDCe': '0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664',
+        INSUR: '',
+        AVAX: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+    },
+    {
+        name: 'Avalanche FUJI C-Chain',
+        id: 43113,
+        symbol: 'AVALANCHE',
+        explorer: 'https://testnet.snowtrace.io/',
+        provider: 'https://api.avax-test.network/ext/bc/C/rpc',
+        modules: VUE_APP_AVALANCHE_TEST_MODULES.split(' '),
+        nexusDistributor: '',
+        nexusAPI: '',
+        brightProtocol:'0x5C59A3A67eC553345cb384eC58FCf1a2b9159b15',
+        brightContractRegistry: '',
+        insuraceCover: '0xE2Edf233eDB3F971415FD76A7b447e4bfFfcd221',
+        insuraceAPI: 'https://insurace-sl-microservice.azurewebsites.net',
+        insuraceAPIKey: 'OmgwnM39a/M9/9Q856wbRkILcYh2ZmlJPpG9cVxT5Vy6aR8eNl3/jw==',
+        insuraceReferral: '',
+        ETH: '',
+        MATIC: '',
+        'DAIe': '0xd586E7F844cEa2F87f50152665BCbc2C279D8d70',
+        'USDTe': '0xc7198437980c041c805A1EDcbA50c1Ce5db95118',
+        'USDCe': '0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664',
+        INSUR: '',
+        AVAX: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+
+    },
+
 ]
 
 
-const MAIN_NETS = [1, 56, 137];
-const TEST_NETS = [4, 42, 97, 80001]; //using Kovan here as Eth testnet
+const MAIN_NETS = [1, 56, 137, 43114];
+const TEST_NETS = [4, 42, 97, 80001, 43113]; //using Kovan here as Eth testnet
 
 class NetConfig{
 
@@ -286,6 +336,10 @@ class NetConfig{
     } else if (this.netById(networkId).symbol === 'POLYGON' && symbol === 'USDT') {
       return true;
     } else if (this.netById(networkId).symbol === 'POLYGON' && symbol === 'USDC') {
+      return true;
+    } else if (this.netById(networkId).symbol === 'AVALANCHE' && symbol === 'USDTe') {
+      return true;
+    } else if (this.netById(networkId).symbol === 'AVALANCHE' && symbol === 'USDCe') {
       return true;
     }
   }
