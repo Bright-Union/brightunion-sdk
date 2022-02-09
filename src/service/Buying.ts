@@ -440,11 +440,14 @@ export async function buyOnBridgeV2(_quoteProtocol:any) : Promise<any>{
   const nPolicies = await  policyRegistry.methods.getPoliciesLength(global.user.account).call();
   const activeInfos = await  policyRegistry.methods.getPoliciesInfo(global.user.account, true, 0, nPolicies).call();
 
-  console.log("is active same? - " , activeInfos, _quoteProtocol );
-
-// for (var i = 0; i < activeInfos[1].length; i++) {
-//   activeInfos[1][i]
-// }
+  for (var i = 0; i < activeInfos._policyBooksArr.length; i++) {
+    if(activeInfos._policyBooksArr[i] == _quoteProtocol.protocol.bridgeProductAddress){
+      return await new Promise((reject) => {
+        global.events.emit("buy" , { status: "ERROR" , message: "Bridge does not support buying multiple active covers by the same address. Please check your expiry date on the existing cover." } );
+        reject( {error: "Bridge cover already exists" , message: "Bridge does not support buying multiple active policies by the same address. Please check your expiry date on the existing cover."} )
+      })
+    }
+  }
 
   const erc20Instance = _getIERC20Contract(asset);
   const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();

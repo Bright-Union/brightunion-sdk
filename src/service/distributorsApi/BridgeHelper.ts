@@ -14,6 +14,13 @@ class BridgeHelper {
       if (!_stats[i].whitelisted) {
         continue;
       }
+
+      if( // bmiV2LevPf1Cover -> disable
+        _policyBooksArr[i] == "0x421e747B172E2Cc132dD8ABd71f6F430CB7d3408"
+      ){
+        continue;
+      }
+
       let asset: any = undefined;
       Object.keys(trustWalletAssets).find((key) => {
         if (key === _stats[i].insuredContract) {
