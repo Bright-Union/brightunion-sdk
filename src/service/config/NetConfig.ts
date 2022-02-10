@@ -28,6 +28,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         name: 'Ethereum',
         id: 1,
         symbol: 'ETH',
+        defaultCurrency: "ETH",
         explorer: 'https://etherscan.io',
         provider: 'https://eth-mainnet.alchemyapi.io/v2/OlIDDqLH9Uo3AUQ_0ezj6sfqHIGxJRxw',
         modules: VUE_APP_MAINNET_MODULES.split(' '),
@@ -52,6 +53,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         name: 'Ropsten',
         id: 3,
         symbol: 'ETH',
+        defaultCurrency: "ETH",
         explorer: 'https://ropsten.etherscan.io',
         provider: 'https://ropsten.infura.io/v3/98d7e501879243c5877bac07a57cde7e',
         nexusAPI: 'https://api.nexusmutual.io',                 //not used
@@ -72,6 +74,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         name: 'Rinkeby',
         id: 4,
         symbol: 'ETH',
+        defaultCurrency: "ETH",
         explorer: 'https://rinkeby.etherscan.io',
         provider: 'https://rinkeby.infura.io/v3/98d7e501879243c5877bac07a57cde7e',
         nexusAPI: 'https://api.nexusmutual.io',                 //not used
@@ -97,6 +100,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         name: 'Kovan',
         id: 42,
         symbol: 'ETH',
+        defaultCurrency: "ETH",
         explorer: 'https://kovan.etherscan.io',
         provider: 'https://eth-kovan.alchemyapi.io/v2/9r8lwXZcACNfMovcyYaquN_CNK81Cqxi',
         modules: VUE_APP_KOVAN_MODULES.split(' '),
@@ -118,6 +122,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         name: 'BSC',
         id: 56,
         symbol: 'BSC',
+        defaultCurrency: "BNB",
         explorer: 'https://bscscan.com',
         provider: 'https://bsc-dataseed.binance.org',
         modules: VUE_APP_BSC_MODULES.split(' '),
@@ -142,6 +147,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         name: 'BSC Testnet',
         id: 97,
         symbol: 'BSC',
+        defaultCurrency: "BNB",
         explorer: 'https://testnet.bscscan.com',
         provider: 'https://data-seed-prebsc-1-s1.binance.org:8545',
         modules: VUE_APP_BSC_TESTNET_MODULES.split(' '),
@@ -164,6 +170,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         name: 'Polygon',
         id: 137,
         symbol: 'POLYGON',
+        defaultCurrency: "MATIC",
         explorer: 'https://polygonscan.com',
         provider: 'https://polygon-rpc.com',
         modules: VUE_APP_POLYGON_MODULES.split(' '),
@@ -187,6 +194,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         name: 'Mumbai Testnet',
         id: 80001,
         symbol: 'POLYGON',
+        defaultCurrency: "MATIC",
         explorer: 'https://explorer-mumbai.maticvigil.com',
         provider: 'https://rpc-mumbai.matic.today',
         modules: VUE_APP_MUMBAI_TESTNET_MODULES.split(' '),
@@ -209,6 +217,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         name: 'Avalanche Mainnet C-Chain',
         id: 43114,
         symbol: 'AVALANCHE',
+        defaultCurrency: "AVAX",
         explorer: 'https://snowtrace.io/',
         provider: 'https://api.avax.network/ext/bc/C/rpc',
         modules: VUE_APP_AVALANCHE_MODULES.split(' '),
@@ -232,6 +241,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         name: 'Avalanche FUJI C-Chain',
         id: 43113,
         symbol: 'AVALANCHE',
+        defaultCurrency: "AVAX",
         explorer: 'https://testnet.snowtrace.io/',
         provider: 'https://api.avax-test.network/ext/bc/C/rpc',
         modules: VUE_APP_AVALANCHE_TEST_MODULES.split(' '),
@@ -354,6 +364,7 @@ class NetConfig{
         case "ETH": selectedCurrency.address = this.netById(1)['USDC']; break;
         case "BSC": selectedCurrency.address = this.netById(56)['USDC']; break;
         case "POLYGON": selectedCurrency.address = this.netById(137)['USDC']; break;
+        case "AVALANCHE": selectedCurrency.address = this.netById(137)['USDCe']; break;
       }
       return ['USDC',selectedCurrency]
     }

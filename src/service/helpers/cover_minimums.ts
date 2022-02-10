@@ -35,6 +35,12 @@ export const COVER_MINIMUMS:any = {
           USD: 1000,
           USDT: 1000,
           MATIC: 500,
+        },
+        AVALANCHE: {
+          'DAIe': 1000,
+          'USDCe': 1000,
+          'USDTe': 1000,
+          AVAX: 20,
         }
       }
     },

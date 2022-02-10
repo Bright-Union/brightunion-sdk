@@ -134,16 +134,7 @@ class InsuraceApi {
 
         web3.symbol = NetConfig.netById(web3.networkId).symbol;
 
-        if(web3.symbol == "AVALANCHE"){
-          console.log('Insur api Q 1aaax - ' , web3, currency, quoteData);
-        }
-
-        const minimumAmount = 1000;
-        // const minimumAmount = getCoverMin("insurace", web3.symbol, quoteData.selectedCurrency.name );
-
-        if(web3.symbol == "AVALANCHE"){
-          console.log('Insur api Q 2 - ', minimumAmount);
-        }
+        const minimumAmount = getCoverMin("insurace", web3.symbol, quoteData.selectedCurrency.name );
 
         return await this.getCoverPremium(
           web3,
@@ -155,10 +146,10 @@ class InsuraceApi {
         ).then( async (response: any) => {
 
           if(web3.symbol == "AVALANCHE"){
-            console.log("INSU QUOTE RES1 - " ,web3.symbol, response)
+            console.log("INSU QUOTE RES - ", response )
           }
 
-          const defaultCurrencySymbol = web3.symbol === 'POLYGON' ? 'MATIC' : web3.symbol === 'BSC' ? 'BNB' : 'ETH';
+          const defaultCurrencySymbol = NetConfig.netById(web3.networkId).defaultCurrency;
 
             let premium: any = response.premiumAmount;
 
@@ -188,7 +179,7 @@ class InsuraceApi {
             const insurPrice = CurrencyHelper.insurPrice();
             const cashbackInStable = cashbackInInsur * insurPrice;
             let cashBackPercent = (cashbackInStable / Number(fromWei(premium))) * 100;
-            if ( defaultCurrencySymbol == quoteData.currency) {
+            if ( defaultCurrencySymbol == quoteData.currency.name) {
               const premiumInUSD = Number(fromWei(CurrencyHelper.eth2usd(premium)));
               cashBackPercent = (cashbackInStable / premiumInUSD) * 100;
             }
@@ -220,7 +211,7 @@ class InsuraceApi {
             .catch((e) => {
 
               if(web3.symbol == "AVALANCHE"){
-                console.log("INSU QUOTE RES1 - " ,web3.symbol, e.response)
+                console.log("INSU QUOTE RES ERROR - " , e.response)
               }
 
                 let errorMsg:any = { message: e.response && e.response.data ? e.response.data.message : e.message }

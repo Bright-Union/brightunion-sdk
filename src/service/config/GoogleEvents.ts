@@ -17,6 +17,11 @@ const CURRENCIES: any={
   'BUSD': 'BSD',
   'BUSD-T': 'BDT',
   'MATIC': 'MAD',
+  'AVAX': '',
+  'DAIe': '',
+  'USDCe': '',
+  'USDTe': '',
+
 }
 
 class GoogleEvents {
@@ -24,7 +29,7 @@ class GoogleEvents {
   static onBUInit = () => {
     if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
 
-        gtag('set', 'client_id', global.user.clientKey + '_2' );
+        gtag('set', 'client_id', global.user.clientKey );
 
         gtag('event', 'login', {
           method: global.user.clientKey
