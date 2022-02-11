@@ -180,12 +180,31 @@ export async function getCoversNexus():Promise<any>{
 
 export async function getCoversInsurace(_web3:any):Promise<any>{
 
-  const insuraceCoverInstance = await  _getInsuraceDistributor(NetConfig.netById(_web3.networkId).insuraceCover, _web3.web3Instance);
-  const coverDataAddress = await insuraceCoverInstance.methods.data().call();
-  const coverDataInstance = await _getInsurAceCoverDataContract(coverDataAddress, _web3.web3Instance);
-  const count =  await coverDataInstance.methods.getCoverCount(_web3.account).call();
-
   let allCovers:any = [];
+  const insuraceCoverInstance = await  _getInsuraceDistributor(NetConfig.netById(_web3.networkId).insuraceCover, _web3.web3Instance);
+  // if(_web3.symbol == 'AVALANCHE'){
+  //   console.log('1a' ,_web3.symbol,  insuraceCoverInstance);
+  // }
+
+  const coverDataAddress = await insuraceCoverInstance.methods.data().call()
+  .then((_data: any) => {
+    return _data;
+  }).catch((e:any) => {
+    return {error: "coverDataAddress not available at" + _web3.symbol }
+  })
+  if(coverDataAddress.error){
+    return allCovers;
+  }
+
+  const coverDataInstance = await _getInsurAceCoverDataContract(coverDataAddress, _web3.web3Instance);
+
+  console.log('3' ,_web3.symbol,  coverDataInstance);
+
+  const count =  await coverDataInstance.methods.getCoverCount(_web3.account).call();
+  // if(_web3.symbol == 'AVALANCHE'){
+  //   console.log('4' ,_web3.symbol,  count);
+  // }
+
 
   for (let coverId = 1; coverId <= Number(count); coverId++) {
 
