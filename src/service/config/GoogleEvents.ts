@@ -8,7 +8,8 @@ const appId = 'G-E5EN28CF28';
 // const appId = 'UA-189970983-1';// GA3 property ID
 install(appId);
 
-const CURRENCIES: any={
+// https://en.wikipedia.org/wiki/ISO_4217#Active_codes
+const CURRENCIES: any = {
   'ETH': 'EUR',
   'DAI': 'UYI',
   'USDC': 'USN',
@@ -17,11 +18,10 @@ const CURRENCIES: any={
   'BUSD': 'BSD',
   'BUSD-T': 'BDT',
   'MATIC': 'MAD',
-  'AVAX': '',
-  'DAIe': '',
-  'USDCe': '',
-  'USDTe': '',
-
+  'AVAX': 'AOA',
+  'DAIe': 'UYU',
+  'USDCe': 'UGX',
+  'USDTe': 'UAH',
 }
 
 class GoogleEvents {

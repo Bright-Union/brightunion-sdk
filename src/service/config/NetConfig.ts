@@ -324,10 +324,6 @@ class NetConfig{
     .find(key => obj[key].toString().toUpperCase() === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'.toUpperCase());
   }
 
-  public isNetworkCurrencyBySymbol(asset:any) {
-    return asset === 'ETH' || asset === 'BNB' || asset === 'MATIC';
-  }
-
   public isNetworkCurrencyByAddress(address:any) {
     return address.toUpperCase() === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'.toUpperCase();
   }
@@ -372,7 +368,7 @@ class NetConfig{
   }
 
   public static isNetworkCurrencyBySymbol(asset:any) {
-    return asset === 'ETH' || asset === 'BNB' || asset === 'MATIC';
+    return asset === 'ETH' || asset === 'BNB' || asset === 'MATIC' || asset === "AVAX";
   }
 
   public static getETHNetwork() {
