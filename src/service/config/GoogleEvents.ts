@@ -30,6 +30,7 @@ class GoogleEvents {
     if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
 
         gtag('set', 'client_id', global.user.clientKey );
+        gtag('set', 'user_id', global.user.clientKey );
 
         gtag('event', 'login', {
           method: global.user.clientKey

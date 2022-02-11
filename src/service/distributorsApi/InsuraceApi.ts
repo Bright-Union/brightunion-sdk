@@ -145,10 +145,6 @@ class InsuraceApi {
           global.user.account,
         ).then( async (response: any) => {
 
-          if(web3.symbol == "AVALANCHE"){
-            console.log("INSU QUOTE RES - ", response )
-          }
-
           const defaultCurrencySymbol = NetConfig.netById(web3.networkId).defaultCurrency;
 
             let premium: any = response.premiumAmount;
@@ -209,10 +205,6 @@ class InsuraceApi {
             return quote;
         })
             .catch((e) => {
-
-              if(web3.symbol == "AVALANCHE"){
-                console.log("INSU QUOTE RES ERROR - " , e.response)
-              }
 
                 let errorMsg:any = { message: e.response && e.response.data ? e.response.data.message : e.message }
 
