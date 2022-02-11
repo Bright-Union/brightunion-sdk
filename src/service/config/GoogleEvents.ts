@@ -78,6 +78,7 @@ class GoogleEvents {
             item_variant: _quote.amount,
             price: _quote.price,
             quantity: _quote.period,
+            item_category: _quote.chain,
           }
         ]
       });
@@ -99,7 +100,8 @@ class GoogleEvents {
             item_brand: 'insurace',
             item_variant: fromWei(_items.params[2][i]),
             quantity: _items.params[1][i],
-            item_category: "Multibuy"
+            item_category: global.user.symbol,
+            item_category2: "Multibuy"
           })
       }
       gtag("event", "add_to_cart", {
@@ -129,6 +131,7 @@ class GoogleEvents {
             item_variant: _quote.amount,
             price: _quote.price,
             quantity: _quote.period,
+            item_category: global.user.symbol,
           }
         ]
       });
@@ -154,8 +157,9 @@ class GoogleEvents {
             item_variant: fromWei(_quote.amount),
             price: _quote.price ? fromWei(_quote.price) : fromWei(_quote.premium),
             quantity: _quote.period,
-            item_category: _message,
+            item_category: global.user.symbol,
             item_category2: _quote.amounts ? "Multibuy" : "SingleBuy",
+            item_category5: _message,
           }
         ]
       });
@@ -185,7 +189,8 @@ class GoogleEvents {
             item_brand: tx.distributor,
             item_variant: fromWei(tx.amount),
             price: fromWei(tx.premium),
-            quantity: tx.period
+            quantity: tx.period,
+            item_category: global.user.symbol,
           }]
         });
     }
@@ -220,7 +225,8 @@ class GoogleEvents {
             item_variant: tx.amount,
             price: tx.premium,
             quantity: tx.period,
-            item_category: "REJECTED",
+            item_category: global.user.symbol,
+            item_category5: "REJECTED",
           }
         ]
       });
