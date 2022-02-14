@@ -268,6 +268,8 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
 
 const MAIN_NETS = [1, 56, 137, 43114];
 const TEST_NETS = [4, 42, 97, 80001]; //using Kovan here as Eth testnet
+const sixDecimalCurrencies = ['USDT' , 'USDC' , 'USDTe' , 'USDCe']; // currently same for all chains
+
 
 class NetConfig{
 
@@ -335,19 +337,7 @@ class NetConfig{
   }
 
   public static sixDecimalsCurrency(networkId : any, symbol : any) {
-    if (this.netById(networkId).symbol === 'ETH' && symbol === 'USDT') {
-      return true;
-    } else if (this.netById(networkId).symbol === 'ETH' && symbol === 'USDC') {
-      return true;
-    } else if (this.netById(networkId).symbol === 'POLYGON' && symbol === 'USDT') {
-      return true;
-    } else if (this.netById(networkId).symbol === 'POLYGON' && symbol === 'USDC') {
-      return true;
-    } else if (this.netById(networkId).symbol === 'AVALANCHE' && symbol === 'USDTe') {
-      return true;
-    } else if (this.netById(networkId).symbol === 'AVALANCHE' && symbol === 'USDCe') {
-      return true;
-    }
+    return sixDecimalCurrencies.includes(symbol);
   }
 
   // Cannot buy De-peg bundles with testnet tokens
@@ -360,7 +350,7 @@ class NetConfig{
         case "ETH": selectedCurrency.address = this.netById(1)['USDC']; break;
         case "BSC": selectedCurrency.address = this.netById(56)['USDC']; break;
         case "POLYGON": selectedCurrency.address = this.netById(137)['USDC']; break;
-        case "AVALANCHE": selectedCurrency.address = this.netById(137)['USDCe']; break;
+        case "AVALANCHE": selectedCurrency.address = this.netById(43114)['USDCe']; break;
       }
       return ['USDC',selectedCurrency]
     }
