@@ -188,19 +188,24 @@ export async function getCoversInsurace(_web3:any):Promise<any>{
 
   const coverDataAddress = await insuraceCoverInstance.methods.data().call()
   .then((_data: any) => {
+    console.log("coverDataAddress" , _web3.symbol , _data);
     return _data;
   }).catch((e:any) => {
     return {error: "coverDataAddress not available at" + _web3.symbol }
   })
+
   if(coverDataAddress.error){
     return allCovers;
   }
 
   const coverDataInstance = await _getInsurAceCoverDataContract(coverDataAddress, _web3.web3Instance);
 
-  console.log('3' ,_web3.symbol,  coverDataInstance);
+  // console.log('3' ,_web3.symbol,  coverDataInstance);
 
   const count =  await coverDataInstance.methods.getCoverCount(_web3.account).call();
+
+  console.log('4' ,_web3.symbol,  count);
+
   // if(_web3.symbol == 'AVALANCHE'){
   //   console.log('4' ,_web3.symbol,  count);
   // }

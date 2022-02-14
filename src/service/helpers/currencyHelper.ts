@@ -23,9 +23,9 @@ class CurrencyHelper {
     }
 
   public static getETHDAIPrice () {
-    if (CatalogHelper.availableOnNetwork(global.user.networkId, 'UNISWAP')) {
+    if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'UNISWAP')) {
       try {
-        return UniswapV2Api.priceTokenAtoETH(global.user.networkId, NetConfig.netById(global.user.networkId).DAI).then((price:any) => {
+        return UniswapV2Api.priceTokenAtoETH(global.user.ethNet.networkId, NetConfig.netById(global.user.ethNet.networkId).DAI).then((price:any) => {
           this.eth_dai =  price
         })} catch(e) {
           Sentry.captureException(e)

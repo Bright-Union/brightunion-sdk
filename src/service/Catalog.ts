@@ -26,8 +26,7 @@ export async function getCatalog(): Promise<any> {
     catalogPromiseArray.push(getNexusCoverables())
   }
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE')) {
-    let netSymbol = NetConfig.netById(global.user.networkId).symbol;
-    catalogPromiseArray.push(getInsuraceCoverables(netSymbol))
+    catalogPromiseArray.push(getInsuraceCoverables(global.user.networkId))
   }
   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL')) {
     // catalogPromiseArray.push(getBridgeCoverables())
@@ -35,7 +34,7 @@ export async function getCatalog(): Promise<any> {
   }
 
   for (let net of global.user.web3Passive) {
-    catalogPromiseArray.push(getInsuraceCoverables(net.symbol))
+    catalogPromiseArray.push(getInsuraceCoverables(net.networkId))
   }
 
   return Promise.all(catalogPromiseArray)
@@ -133,9 +132,13 @@ export async function getNexusCoverables(): Promise<any[]> {
 
   }
 
-  export async function getInsuraceCoverables(netSymbol : string) : Promise<object[]> { // Daniel
-  let trustWalletAssets: { [key: string]: any } = {};
+  export async function getInsuraceCoverables(netId : string|number) : Promise<object[]> { // Daniel
+    let trustWalletAssets: { [key: string]: any } = {};
     trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
+
+    let netSymbol = NetConfig.netById(netId) ? NetConfig.netById(netId).symbol : false;
+    if(!netSymbol) return [];
+
     return await InsuraceApi.fetchCoverables(netSymbol).then((data:object) => {
 
       const coverablesArray = [];

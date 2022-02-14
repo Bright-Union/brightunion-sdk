@@ -10,6 +10,7 @@ type User = {
   brightProtoAddress: any,
   account: any,
   ethNet: any,
+  // readOnly: boolean,
 };
 
 export default User

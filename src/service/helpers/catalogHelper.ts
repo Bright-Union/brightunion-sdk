@@ -366,6 +366,7 @@ class CatalogHelper {
         }
 
         static availableOnNetwork(networkId:number, module:string) {
+          if(!NetConfig.netById(networkId)) return false;
           return NetConfig.netById(networkId).modules.find(mod => mod === module);
         }
 

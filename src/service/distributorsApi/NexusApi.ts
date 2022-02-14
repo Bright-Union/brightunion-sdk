@@ -87,7 +87,7 @@ export default class NexusApi {
         const totalActiveCoversETH = await quotationContract.methods.getTotalSumAssured( asciiToHex('ETH')).call();
         const totalActiveCoversDAI = await quotationContract.methods.getTotalSumAssured(asciiToHex('DAI')).call();
 
-        let defaultCurrencySymbol = global.user.ethNet.symbol === 'POLYGON'? 'MATIC': global.user.ethNet.symbol === 'BSC' ? 'BNB' : 'ETH';
+        let defaultCurrencySymbol = NetConfig.netById(global.user.ethNet.networkId).defaultCurrency; 
         const nexusMaxCapacityError = this.checkNexusCapacity(currency, amountInWei.toString(), capacityETH, capacityDAI);
 
         return CatalogHelper.quoteFromCoverable(

@@ -225,7 +225,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         nexusAPI: '',
         brightProtocol:'',
         brightContractRegistry: '',
-        insuraceCover: '0x544c42fBB96B39B21DF61cf322b5EDC285EE7429',
+        insuraceCover: '0x0d33C809EeF0aC84FB92BAb81214147e15Ad27B7',
         insuraceAPI: 'https://api.insurace.io/ops/v1',
         insuraceAPIKey: 'H7C8k69Eiisz7AG1/6xcI5UWGluTtyAbizXrsfbfQIBDapQZEHAHFw==',
         insuraceReferral: '982107115070280393099561761653261738634756834311',
@@ -234,7 +234,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         'DAIe': '0xd586E7F844cEa2F87f50152665BCbc2C279D8d70',
         'USDTe': '0xc7198437980c041c805A1EDcbA50c1Ce5db95118',
         'USDCe': '0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664',
-        INSUR: '',
+        INSUR: '0x544c42fBB96B39B21DF61cf322b5EDC285EE7429',
         AVAX: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
     },
     {
@@ -249,7 +249,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         nexusAPI: '',
         brightProtocol:'0x5C59A3A67eC553345cb384eC58FCf1a2b9159b15',
         brightContractRegistry: '',
-        insuraceCover: '0xE2Edf233eDB3F971415FD76A7b447e4bfFfcd221',
+        insuraceCover: '',
         insuraceAPI: 'https://insurace-sl-microservice.azurewebsites.net',
         insuraceAPIKey: 'OmgwnM39a/M9/9Q856wbRkILcYh2ZmlJPpG9cVxT5Vy6aR8eNl3/jw==',
         insuraceReferral: '',
@@ -258,7 +258,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         'DAIe': '0xd586E7F844cEa2F87f50152665BCbc2C279D8d70',
         'USDTe': '0xc7198437980c041c805A1EDcbA50c1Ce5db95118',
         'USDCe': '0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664',
-        INSUR: '',
+        INSUR: '0xE2Edf233eDB3F971415FD76A7b447e4bfFfcd221',
         AVAX: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
 
     },
@@ -267,7 +267,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
 
 
 const MAIN_NETS = [1, 56, 137, 43114];
-const TEST_NETS = [4, 42, 97, 80001, 43113]; //using Kovan here as Eth testnet
+const TEST_NETS = [4, 42, 97, 80001]; //using Kovan here as Eth testnet
 
 class NetConfig{
 

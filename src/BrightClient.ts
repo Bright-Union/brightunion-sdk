@@ -67,6 +67,7 @@ constructor(_config:any) {
       brightProtoAddress: null,
       account: null,
       ethNet: null,
+      // readOnly: null,
     }
     this.initialized = false;
     global.events = this.events = new EventEmitter();
@@ -77,12 +78,20 @@ async initialize(): Promise<object>{
       global.user.account = (await  global.user.web3.eth.getAccounts())[0];
       if(!global.user.account) global.user.account = "0x0000000000000000000000000000000000000001";
       global.user.networkId = await global.user.web3.eth.net.getId();
-      if(!NetConfig.mainNets().includes(global.user.networkId) &&  !NetConfig.testNets().includes(global.user.networkId) ){
-        return {initialized: this.initialized, message: 'Please switch to one of the supported network ID: ' + NetConfig.mainNets().concat(NetConfig.testNets()) , user:global.user  , error: "unsupported network" }
+
+      // console.log("global.user.web3.eth.net" , global.user.web3.eth);
+
+      // if(!NetConfig.mainNets().includes(global.user.networkId) &&  !NetConfig.testNets().includes(global.user.networkId) ){
+      //   return {initialized: this.initialized, message: 'Please switch to one of the supported network ID: ' + NetConfig.mainNets().concat(NetConfig.testNets()) , user:global.user  , error: "unsupported network" }
+      // }
+      const activeNetOpt = NetConfig.netById(global.user.networkId);
+
+      if(activeNetOpt){
+        global.user.brightProtoAddress = activeNetOpt.brightProtocol;
+        global.user.symbol =  activeNetOpt.symbol;
       }
-      global.user.brightProtoAddress = NetConfig.netById(global.user.networkId).brightProtocol;
+
       global.user.web3Passive = NetConfig.createWeb3Passives();
-      global.user.symbol =  NetConfig.netById(global.user.networkId).symbol;
       global.user.ethNet =  NetConfig.getETHNetwork();
       await CurrencyHelper.getETHDAIPrice();
       CurrencyHelper.getInsureUSDCPrice();
