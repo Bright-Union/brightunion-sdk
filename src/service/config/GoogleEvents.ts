@@ -10,6 +10,7 @@ install(appId);
 
 // https://en.wikipedia.org/wiki/ISO_4217#Active_codes
 const CURRENCIES: any = {
+  'USD': 'USD',
   'ETH': 'EUR',
   'DAI': 'UYI',
   'USDC': 'USN',
@@ -62,23 +63,24 @@ class GoogleEvents {
   static quote = (_quote:any, _type: any) => {
     if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
 
-      // console.log("GA _quote" , _quote);
       let coverName = _quote.name ? _quote.name : _quote._protocol ? _quote._protocol.name : 'null';
+      let listItemName = _type == "multiInsuraceQuote" ? _type : coverName;
 
       gtag("event", "select_item", {
-        item_list_id: coverName,
-        item_list_name: coverName,
+        item_list_id: listItemName,
+        item_list_name: listItemName,
         items: [
           {
-            item_id: coverName,
-            item_name: coverName,
+            item_id: listItemName,
+            item_name: listItemName,
             affiliation: global.user.clientKey,
             currency: this.setFormatCurrency(_quote._currency),
             item_brand: _quote.distributorName,
             item_variant: _quote.amount,
             price: _quote.price,
             quantity: _quote.period,
-            item_category: _quote.chain,
+            item_category: _quote._net ? _quote._net.symbol : global.user.symbol,
+            item_category2: _type,
           }
         ]
       });
@@ -113,7 +115,7 @@ class GoogleEvents {
   };
 
   static buy = (_quote:any) => {
-    // console.log("GA buy" , _quote);
+    console.log("GA buy" , _quote);
     if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
 
       let coverName = _quote.name ? _quote.name : _quote._protocol ? _quote._protocol.name : 'null';
@@ -207,7 +209,8 @@ class GoogleEvents {
   };
 
   static onTxRejected = (tx:any) => {
-    // console.log("onTxRejected" , tx)
+
+    console.log("onTxRejected" , tx)
 
     if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
 

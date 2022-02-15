@@ -15,7 +15,6 @@ import {
 import NetConfig from './config/NetConfig';
 import GoogleEvents from './config/GoogleEvents';
 
-
 export async function getCatalog(): Promise<any> {
 
   GoogleEvents.catalog();
@@ -29,7 +28,6 @@ export async function getCatalog(): Promise<any> {
     catalogPromiseArray.push(getInsuraceCoverables(global.user.networkId))
   }
   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL')) {
-    // catalogPromiseArray.push(getBridgeCoverables())
     catalogPromiseArray.push(getBridgeV2Coverables())
   }
 
@@ -54,10 +52,15 @@ export async function getCatalog(): Promise<any> {
 }
 
 export async function getBridgeV2Coverables(): Promise<any[]> {
+
   let trustWalletAssets: { [key: string]: any } = {};
   trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
 
-  const bridgeRegistryAdd = NetConfig.netById( global.user.ethNet.networkId ).bridgeV2Registry;
+  if(!global.user.ethNet || !global.user.ethNet.networkId){
+    return;
+  }
+
+  const bridgeRegistryAdd = NetConfig.netById(global.user.ethNet.networkId).bridgeV2Registry;
   const BridgeContract = await _getBridgeV2RegistryContract(bridgeRegistryAdd, global.user.ethNet.web3Instance );
 
   return BridgeContract.methods.getPolicyBookRegistryContract().call().then(async (policyBookRegistryAddr:any) => {
@@ -139,7 +142,7 @@ export async function getNexusCoverables(): Promise<any[]> {
     let netSymbol = NetConfig.netById(netId) ? NetConfig.netById(netId).symbol : false;
     if(!netSymbol) return [];
 
-    return await InsuraceApi.fetchCoverables(netSymbol).then((data:object) => {
+    return await InsuraceApi.fetchCoverables(netId).then((data:object) => {
 
       const coverablesArray = [];
       for (const [key, value] of Object.entries(data)) {

@@ -66,7 +66,7 @@ constructor(_config:any) {
       symbol: null,
       brightProtoAddress: null,
       account: null,
-      ethNet: null,
+      ethNet: {},
       // readOnly: null,
     }
     this.initialized = false;
@@ -79,19 +79,13 @@ async initialize(): Promise<object>{
       if(!global.user.account) global.user.account = "0x0000000000000000000000000000000000000001";
       global.user.networkId = await global.user.web3.eth.net.getId();
 
-      // console.log("global.user.web3.eth.net" , global.user.web3.eth);
-
-      // if(!NetConfig.mainNets().includes(global.user.networkId) &&  !NetConfig.testNets().includes(global.user.networkId) ){
-      //   return {initialized: this.initialized, message: 'Please switch to one of the supported network ID: ' + NetConfig.mainNets().concat(NetConfig.testNets()) , user:global.user  , error: "unsupported network" }
-      // }
       const activeNetOpt = NetConfig.netById(global.user.networkId);
-
       if(activeNetOpt){
         global.user.brightProtoAddress = activeNetOpt.brightProtocol;
         global.user.symbol =  activeNetOpt.symbol;
       }
 
-      global.user.web3Passive = NetConfig.createWeb3Passives();
+      global.user.web3Passive = await NetConfig.createWeb3Passives();
       global.user.ethNet =  NetConfig.getETHNetwork();
       await CurrencyHelper.getETHDAIPrice();
       CurrencyHelper.getInsureUSDCPrice();
@@ -104,6 +98,9 @@ async initialize(): Promise<object>{
 
   initErrorResponse () {
     return {error: "Await Initialization of BrightClient before calling other methods."}
+  }
+  notSupportedNetMessage(){
+    return { message: "Please switch to one of the supported network ID's: " + NetConfig.mainNets().concat(NetConfig.testNets()) , user:global.user  , error: "Unsupported network connected" }
   }
 
 async getCatalog () {
@@ -136,6 +133,9 @@ async getCoversFrom(
   if(!this.initialized){
     return this.initErrorResponse();
   }
+  if( !NetConfig.isSupportedNetwork(global.user.networkId) ) {
+    return this.notSupportedNetMessage();
+  }
   return await getCoversFrom(_distributorName);
 }
 
@@ -144,6 +144,9 @@ async getAllCovers(
 ){
   if(!this.initialized){
     return this.initErrorResponse();
+  }
+  if( !NetConfig.isSupportedNetwork(global.user.networkId) ) {
+    return this.notSupportedNetMessage();
   }
   return await getAllCovers()
 }
@@ -194,7 +197,8 @@ async getQuoteFrom(_distributorName:string,
       _amount,
       _currency,
       _period,
-      _protocol
+      _protocol,
+      global.user.web3
     );
   }
 

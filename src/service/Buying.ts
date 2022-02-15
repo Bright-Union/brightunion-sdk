@@ -61,7 +61,7 @@ export async function buyMutipleOnInsurace (_quotes:any):Promise<any> {
     let ercBalance  = await erc20Instance.methods.balanceOf(account).call();
 
     let insuraceAddress :any;
-    if(global.user.networkId === 1 || global.user.networkId === 43114  || global.user.networkId === 43113  ){ insuraceAddress = NetConfig.netById(1).insuraceCover; }
+    if(global.user.networkId === 1 || global.user.networkId === 43114  || global.user.networkId === 43113  ){ insuraceAddress = NetConfig.netById(global.user.networkId).insuraceCover; }
     else { insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();}
 
     if (NetConfig.sixDecimalsCurrency(global.user.networkId, _quotes.currency.name) &&       //6 digits currency?
@@ -140,7 +140,7 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
   global.events.emit("buy" , { status: "INITIALIZED"} );
 
   let insuraceAddress :any;
-  if(global.user.networkId === 1 || global.user.networkId === 43114  || global.user.networkId === 43113   ){ insuraceAddress = NetConfig.netById(1).insuraceCover; }
+  if(global.user.networkId === 1 || global.user.networkId === 43114  || global.user.networkId === 43113   ){ insuraceAddress = NetConfig.netById(global.user.networkId).insuraceCover; }
   else { insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();}
 
   if(NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency)){

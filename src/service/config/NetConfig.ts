@@ -225,7 +225,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         nexusAPI: '',
         brightProtocol:'',
         brightContractRegistry: '',
-        insuraceCover: '0x0d33C809EeF0aC84FB92BAb81214147e15Ad27B7',
+        insuraceCover: '0xfBa24bdbb36001F1F88B3a552c77EC1c10f5E4C0',
         insuraceAPI: 'https://api.insurace.io/ops/v1',
         insuraceAPIKey: 'H7C8k69Eiisz7AG1/6xcI5UWGluTtyAbizXrsfbfQIBDapQZEHAHFw==',
         insuraceReferral: '982107115070280393099561761653261738634756834311',
@@ -265,24 +265,24 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
 
 ]
 
-
-const MAIN_NETS = [1, 56, 137, 43114];
+// const MAIN_NETS = [1, 56, 137, 43114];
+const MAIN_NETS = [1, 56, 137]; // disable avaanche until release
 const TEST_NETS = [4, 42, 97, 80001]; //using Kovan here as Eth testnet
 const sixDecimalCurrencies = ['USDT' , 'USDC' , 'USDTe' , 'USDCe']; // currently same for all chains
 
 
 class NetConfig{
 
-  public static createWeb3Passives() {
+  public static async createWeb3Passives() {
 
     let nets: any[];
 
-    if (MAIN_NETS.includes(Number(global.user.networkId))) {
-      //all mainnets except current
-      nets = MAIN_NETS.filter(net => net != Number(global.user.networkId))
-    } else {
+    if (TEST_NETS.includes(Number(global.user.networkId))) {
       //all testnets except current
       nets = TEST_NETS.filter(net => net != Number(global.user.networkId))
+    } else {
+      //all mainnets except current
+      nets = MAIN_NETS.filter(net => net != Number(global.user.networkId))
     }
 
     let web3Passives = [];
@@ -291,7 +291,7 @@ class NetConfig{
         account: global.user.account,
         networkId: net,
         symbol: this.netById(net).symbol,
-        web3Instance: new Web3(new Web3.providers.HttpProvider(this.netById(net).provider)),
+        web3Instance: await new Web3(new Web3.providers.HttpProvider(this.netById(net).provider)),
         readOnly: true,
       });
     }
@@ -363,9 +363,14 @@ class NetConfig{
 
   public static getETHNetwork() {
     const activeWeb3 = { symbol: global.user.symbol , web3Instance: global.user.web3, networkId: global.user.networkId }
-    return [ activeWeb3 , ...global.user.web3Passive].find((net:any) => {
-        return net.symbol === 'ETH'
-      });
+    const ethNet = [ activeWeb3 , ...global.user.web3Passive].find((net:any) => {
+      return net.symbol == 'ETH'
+    });
+    return ethNet;
+  }
+
+  public static isSupportedNetwork (_netId:any) {
+    return this.mainNets().includes(_netId) || this.testNets().includes(_netId)
   }
 
 }

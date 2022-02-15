@@ -30,17 +30,16 @@ export async function getQuotes(
   _protocol:any
 
 ): Promise<any[]> {
-  const quotesPromiseArray = [];
+  const quotesPromiseArray:any = [];
 
-  GoogleEvents.quote( {_amount, _currency, _period, _protocol } , "getQuotes")
-
-  quotesPromiseArray.push(getQuoteFrom('nexus', _amount, _currency, _period, _protocol))
-  quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol))
-  quotesPromiseArray.push(getQuoteFrom('bridge' , _amount, _currency, _period, _protocol))
+  quotesPromiseArray.push(getQuoteFrom('nexus', _amount, _currency, _period, _protocol, null ))
+  quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, global.user.web3 ))
+  quotesPromiseArray.push(getQuoteFrom('bridge' , _amount, _currency, _period, _protocol, null ))
   // quotesPromiseArray.push(getQuoteFrom('bridgeV2' , _amount, _currency, _period, _protocol))
 
   for (let net of global.user.web3Passive) {
-    quotesPromiseArray.push( getInsuraceQuote(net , _amount, _currency, _period, _protocol))
+    quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, net))
+    // quotesPromiseArray.push( getInsuraceQuote(net , _amount, _currency, _period, _protocol))
   }
 
   return Promise.all(quotesPromiseArray).then((data:any) => {
@@ -67,10 +66,11 @@ export async function getQuoteFrom(
                                     _amount:number,
                                     _currency:string, // coverAddress for bridge
                                     _period: number,
-                                    _protocol:any
+                                    _protocol:any,
+                                    _net:any,
     ): Promise<object> {
 
-      GoogleEvents.quote( {_amount, _currency, _period, _protocol, _distributorName } , "getQuoteFrom")
+      GoogleEvents.quote( {_amount, _currency, _period, _protocol, _distributorName , _net } , "getQuoteFrom")
 
   if(_distributorName == 'bridge'){
     return await getBridgeV2Quote( _amount,_currency,_period,_protocol);
@@ -78,7 +78,7 @@ export async function getQuoteFrom(
   }else if(_distributorName == 'nexus'){
     return await getNexusQuote(_amount,_currency,_period,_protocol );
   }else if(_distributorName == 'insurace'){
-    return await getInsuraceQuote( global.user.web3 , _amount,_currency,_period,_protocol);
+    return await getInsuraceQuote( _net , _amount,_currency,_period,_protocol);
   }else {
     return  {error: 'supported distributor names are: bridge, insurace, nexus'}
   }
@@ -270,7 +270,7 @@ export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_
 
 export async function getInsuraceQuotes( _arrayOfQuotes:any ) : Promise<object> {
 
-  GoogleEvents.quote( {} , "multiInsuraceQuote" );
+  GoogleEvents.quote( { _net: global.user.web3 } , "multiInsuraceQuote" );
 
   const newWeb3Instance = {
     account: global.user.account,

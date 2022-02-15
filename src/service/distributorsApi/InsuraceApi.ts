@@ -12,10 +12,13 @@ import * as Sentry from "@sentry/browser";
 
 class InsuraceApi {
 
-    static fetchCoverables (netSymbol : string): Promise<object> {
+    static fetchCoverables (netId : any): Promise<object> {
+
+      const netConfig = NetConfig.netById(netId);
+
         return axios.post(
-            `${NetConfig.netById(global.user.networkId).insuraceAPI}/getProductList?code=${encodeURIComponent(NetConfig.netById(global.user.networkId).insuraceAPIKey)}`, {
-            chain: netSymbol
+            `${netConfig.insuraceAPI}/getProductList?code=${encodeURIComponent(netConfig.insuraceAPIKey)}`, {
+            chain: netConfig.symbol
         })
         .then((response:any) => {
             return response.data;
@@ -26,6 +29,7 @@ class InsuraceApi {
     }
 
     static getCurrencyList (_networkId:any) {
+
         return axios.post(
             `${NetConfig.netById(_networkId).insuraceAPI}/getCurrencyList?code=${encodeURIComponent(NetConfig.netById(_networkId).insuraceAPIKey)}`, {
             chain: NetConfig.netById(_networkId).symbol
@@ -126,6 +130,7 @@ class InsuraceApi {
     }
 
     static async fetchInsuraceQuote ( web3:any, amount:string | number, currency:string , period:number, protocol:any): Promise<object> {
+
       let quoteData = await this.formatQuoteDataforInsurace(amount, currency, web3, protocol);
 
         if (!quoteData.selectedCurrency) {
