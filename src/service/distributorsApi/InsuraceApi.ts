@@ -8,7 +8,7 @@ import CurrencyHelper from '../helpers/currencyHelper'
 import {toBN,fromWei, toWei} from 'web3-utils'
 import Filters from "../helpers/filters";
 import {getCoverMin} from "../helpers/cover_minimums"
-import * as Sentry from "@sentry/browser";
+// import * as Sentry from "@sentry/browser";
 
 class InsuraceApi {
 
@@ -23,7 +23,7 @@ class InsuraceApi {
         .then((response:any) => {
             return response.data;
         }).catch(error =>{
-          Sentry.captureException(error);
+          global.sentry.captureException(error);
           return [];
         });
     }
@@ -37,7 +37,7 @@ class InsuraceApi {
         .then((response:any) => {
             return response.data;
         }).catch(error =>{
-          Sentry.captureException(error);
+          global.sentry.captureException(error);
         });
     }
 

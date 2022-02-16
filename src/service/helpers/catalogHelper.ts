@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as _ from  "lodash";
 import NetConfig from '../config/NetConfig';
 import {hexToUtf8} from 'web3-utils';
-import * as Sentry from "@sentry/browser";
+// import * as Sentry from "@sentry/browser";
 
 
 const bridge_nexus_insurace = [
@@ -257,7 +257,11 @@ class CatalogHelper {
       } else if (provider == 'insurace') {
         return bridge_nexus_insurace_categories.find((cat) => {return cat[2] === category})[3];
       }
-    } catch (e){ Sentry.captureException(e) }
+    } catch (e){
+      console.log('commonCategory error');
+      console.error('commonCategory error');
+      global.sentry.captureException(e)
+    }
   }
 
 

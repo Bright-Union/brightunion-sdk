@@ -15,15 +15,6 @@ import GoogleEvents from './service/config/GoogleEvents';
 import * as Sentry from "@sentry/browser";
 import { Integrations } from "@sentry/tracing";
 
-Sentry.init({
-  dsn: "https://aa50bf5ac0164260947c9869f8d03c84@o1110132.ingest.sentry.io/6153025",
-  integrations: [new Integrations.BrowserTracing()],
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1,
-});
-
 // import {_loadAllABIs} from "./service/helpers/getContract"
 
 /**
@@ -40,6 +31,7 @@ Sentry.init({
  declare global {
    var user:User;
    var events:any;
+   var sentry: any;
  }
 
  // *********NOTES events: ***********START
@@ -71,6 +63,21 @@ constructor(_config:any) {
     }
     this.initialized = false;
     global.events = this.events = new EventEmitter();
+
+    global.sentry = Sentry;
+
+    global.sentry.init({
+      environment: global.user.clientKey,
+      dsn: "https://aa50bf5ac0164260947c9869f8d03c84@o1110132.ingest.sentry.io/6153025",
+      integrations: [
+        new Integrations.BrowserTracing(),
+      ],
+
+      // Set tracesSampleRate to 1.0 to capture 100%
+      // of transactions for performance monitoring.
+      // We recommend adjusting this value in production
+      tracesSampleRate: 0.25,
+    });
   }
 
 
