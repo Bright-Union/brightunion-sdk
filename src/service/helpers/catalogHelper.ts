@@ -247,23 +247,17 @@ class CatalogHelper {
     };
   }
 
-
   public static commonCategory (category:string, provider:string) {
-    try{
-      if (provider == 'nexus') {
-        return bridge_nexus_insurace_categories.find((cat) => {return cat[1] === category})[3];
-      } else if (provider == 'bridge') {
-        return bridge_nexus_insurace_categories.find((cat) => {return cat[0] === category})[3];
-      } else if (provider == 'insurace') {
-        return bridge_nexus_insurace_categories.find((cat) => {return cat[2] === category})[3];
-      }
-    } catch (e){
-      console.log('commonCategory error');
-      console.error('commonCategory error');
-      global.sentry.captureException(e)
+    let commonCategory:any = '';
+    if (provider == 'nexus') {
+      commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[1] === category});
+    } else if (provider == 'bridge') {
+      commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[0] === category});
+    } else if (provider == 'insurace') {
+      commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[2] === category});
     }
+    return commonCategory ? commonCategory[3] : '' ;
   }
-
 
   public static getTrustWalletAssets (): Promise<object[]> {
     let url = "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/tokenlist.json"
