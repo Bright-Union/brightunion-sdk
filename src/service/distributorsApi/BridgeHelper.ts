@@ -42,7 +42,9 @@ class BridgeHelper {
         let specialLogo:any = CatalogHelper.getSpecialLogoName(missedLogoName.name);
         logo = specialLogo
       }
-
+      let type = CatalogHelper.commonCategory(_stats[i].contractType, 'bridge')
+      let typeDescr = type ? type : 'protocol';
+      
         policyBooksArray.push(CatalogHelper.createCoverable({
           bridgeProductAddress: _policyBooksArr[i],
           bridgeCoverable: _stats[i].insuredContract,
@@ -50,7 +52,8 @@ class BridgeHelper {
           bridgeAPY: Number(_stats[i].APY) / (10 ** 5),
           logo: logo,
           name: name,
-          type: CatalogHelper.commonCategory(_stats[i].contractType, 'bridge'),
+          type: type,
+          typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
           source: 'bridge',
           rawDataBridge: _stats[i],
           // stats: _stats,
