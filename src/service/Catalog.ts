@@ -117,13 +117,16 @@ export async function getNexusCoverables(): Promise<any[]> {
           //skip deprecated
           continue;
         }
-
+        let type = CatalogHelper.commonCategory(value.type, 'nexus')
+        let typeDescr = type ? type : 'protocol';
+        
         coverablesArray.push(CatalogHelper.createCoverable({
           protocolAddress: key,
           nexusCoverable: key,
           logo: `https://app.nexusmutual.io/logos/${value.logo}`,
           name: value.name,
-          type: CatalogHelper.commonCategory(value.type, 'nexus'),
+          type: type,
+          typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
           source: 'nexus',
           rawDataNexus: value,
         }))
@@ -175,11 +178,14 @@ export async function getNexusCoverables(): Promise<any[]> {
               logo = `https://app.insurace.io/asset/product/${name}.png`
             }
         }
+        let type = CatalogHelper.commonCategory(value.risk_type, 'insurace')
+        let typeDescr = type ? type : 'protocol';
 
         coverablesArray.push(CatalogHelper.createCoverable({
             name: value.name.trim(),
             logo: logo,
-            type: CatalogHelper.commonCategory(value.risk_type, 'insurace'),
+            type: type,
+            typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
             coingecko: value.coingecko,
             source: 'insurace',
             productId: value.product_id,
