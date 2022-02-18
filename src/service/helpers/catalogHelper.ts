@@ -223,6 +223,7 @@ class CatalogHelper {
       logo: obj.logo,
       name: obj.name,
       type: obj.type,
+      typeDescription: obj.typeDescription,
       availableCounter: 1,
       rawDataNexus: obj.rawDataNexus,                                           //field will be increased if similar products found
       rawDataBridge: obj.rawDataBridge,                                           //field will be increased if similar products found
@@ -257,6 +258,13 @@ class CatalogHelper {
       commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[2] === category});
     }
     return commonCategory ? commonCategory[3] : '' ;
+  }
+
+  public static descriptionByCategory (category: string) {
+    let categoryFound = bridge_nexus_insurace_categories.find(cat => cat[3] === category);
+    if (categoryFound) {
+      return categoryFound[4]
+    }
   }
 
   public static getTrustWalletAssets (): Promise<object[]> {
