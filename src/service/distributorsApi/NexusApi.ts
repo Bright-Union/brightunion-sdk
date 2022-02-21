@@ -87,7 +87,7 @@ export default class NexusApi {
         const totalActiveCoversETH = await quotationContract.methods.getTotalSumAssured( asciiToHex('ETH')).call();
         const totalActiveCoversDAI = await quotationContract.methods.getTotalSumAssured(asciiToHex('DAI')).call();
 
-        let defaultCurrencySymbol = NetConfig.netById(global.user.ethNet.networkId).defaultCurrency; 
+        let defaultCurrencySymbol = NetConfig.netById(global.user.ethNet.networkId).defaultCurrency;
         const nexusMaxCapacityError = this.checkNexusCapacity(currency, amountInWei.toString(), capacityETH, capacityDAI);
 
         return CatalogHelper.quoteFromCoverable(
@@ -133,6 +133,9 @@ export default class NexusApi {
                     }
                     if  (errorMsg.message.includes("coverAmount") && errorMsg.message.includes("required pattern")){
                        errorMsg = { message: "Nexus supports only whole amounts to cover (e.g. 1999)" , errorType: "amount"};
+                    }
+                    if  (errorMsg.message.includes("only allows ETH as a currency")){
+                       errorMsg = { message: "Nexus supports only ETH currency for this cover"};
                     }
 
                     return CatalogHelper.quoteFromCoverable(
