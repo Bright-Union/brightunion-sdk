@@ -26,6 +26,7 @@ import BridgeV2PolicyRegistryABI from '../abi/bridgeV2/PolicyRegistry.json'
 import BridgeV2PolicyQuoteABI from '../abi/bridgeV2/PolicyQuote.json'
 import BridgeV2PolicyBookFacadeABI from '../abi/bridgeV2/PolicyBookFacade.json'
 import BridgeV2PolicyBookABI from '../abi/bridgeV2/PolicyBook.json'
+import BridgeDistributorV2ABI from '../abi/bridgeV2/BridgeDistributorV2.json'
 
 
 // possible JSON loader solution to reduce SDK code base size
@@ -120,6 +121,7 @@ const _getBridgeV2PolicyQuoteContract         =  (address:string,web3:any)  : an
 const _getBridgeV2PolicyBookContract         =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyBookABI, address , web3);
 const _getBridgeV2PolicyBookFacade        =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyBookFacadeABI, address , web3);
 const _getBridgeV2PolicyRegistry        =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyRegistryABI, address , web3);
+const _getBridgeDistributorV2        =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeDistributorV2ABI, address , web3);
 
 
 function _getIERC20Contract(address:any) {
@@ -144,6 +146,7 @@ export  {
     _getBridgeV2PolicyQuoteContract,
     _getBridgeV2PolicyBookContract,
     _getBridgeV2PolicyBookFacade,
+    _getBridgeDistributorV2,
 
     _getInsuraceDistributorsContract,
     _getInsuraceDistributor,
@@ -155,6 +158,7 @@ export  {
     _getNexusGatewayContract,
     _getNexusClaimsDataContract,
     _getNexusMasterContract,
+    
     // _loadAllABIs
 
 } ;
