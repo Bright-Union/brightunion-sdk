@@ -323,7 +323,7 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
       global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
 
-      return await ERC20Helper.approveAndCall( erc20Instance,  _quoteProtocol.rawData.contract,  _quoteProtocol.rawData.price, onSuccess, onError);
+      return await ERC20Helper.approveAndCall( erc20Instance,  NetConfig.netById(global.user.networkId).nexusDistributor,  _quoteProtocol.rawData.price, onSuccess, onError);
 
     } else {
       GoogleEvents.buyRejected('You have insufficient funds to continue with this transaction' , _quoteProtocol );
