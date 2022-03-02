@@ -7,7 +7,7 @@ import {
   _getNexusDistributor,
   _getNexusDistributorsContract,
   _getBridgePolicyBookContract,
-
+  _getBridgeDistributorV2,
   _getBridgeV2PolicyBookContract,
   _getBridgeV2PolicyBookFacade,
 
@@ -131,6 +131,7 @@ export async function buyCover(
         }
 
   } else if(_distributorName == 'bridge'){
+    let bridgeV2 = _getBridgeDistributorV2(NetConfig.netById(global.user.ethNet.networkId).bridgeV2Distributor, global.user.web3 );
     tx.distributor = 'bridge';
 
     const brightRewardsAddress = NetConfig.netById(global.user.ethNet.networkId).bridgeBrightReference;
@@ -146,7 +147,15 @@ export async function buyCover(
 
     return await new Promise((resolve, reject) => {
       // policyBookFacade.methods.buyPolicy( epochs, _sumAssured )
-      policyBookFacade.methods.buyPolicyFromDistributorFor( global.user.account, epochs, _sumAssured, brightRewardsAddress )
+      // policyBookFacade.methods.buyPolicyFromDistributorFor( global.user.account, epochs, _sumAssured, brightRewardsAddress )
+      bridgeV2.buyCover(
+        policyBook.address,
+        epochs,
+        _sumAssured,
+        global.user.account,
+        brightRewardsAddress,
+        _maxPriceWithFee,
+      )
       .send({from: global.user.account})
       .on('transactionHash', (transactionHash:any) => {
         tx.hash = transactionHash;
