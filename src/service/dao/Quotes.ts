@@ -84,8 +84,8 @@ export async function getQuoteFromBridgeV2(
 
     if(isPolicyPresentV2){
       const minimumAmount = getCoverMin("bridge", global.user.ethNet.symbol, _currency );
-      let totalSeconds:any;
-      let totalPrice:any;
+      let totalSeconds:any = 0;
+      let totalPrice:any = 0;
       let errorMsg:any = null;
       let rawPriceData:any = null;
 
