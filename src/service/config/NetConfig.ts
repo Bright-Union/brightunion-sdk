@@ -59,7 +59,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         provider: 'https://ropsten.infura.io/v3/98d7e501879243c5877bac07a57cde7e',
         nexusAPI: 'https://api.nexusmutual.io',                 //not used
         brightProtocol:'',
-        brightContractRegistry: '',  
+        brightContractRegistry: '',
         bridgeV2Distributor: ' ',        //not used
         insuraceCover: '',                                      //not used
         insuraceAPI: '',                                        //not used
@@ -278,8 +278,13 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
 // const MAIN_NETS = [1, 56, 137, 43114];
 const MAIN_NETS = [1, 56, 137]; // disable avaanche until release
 const TEST_NETS = [4, 42, 97, 80001]; //using Kovan here as Eth testnet
-const sixDecimalCurrencies = ['USDT' , 'USDC' , 'USDTe' , 'USDCe']; // currently same for all chains
 
+const sixDecimalCurrencies:any = {
+  1:[ 'USDT' , 'USDC'],
+  56:[],
+  137:[ 'USDT' , 'USDC'],
+  43114 : ['USDTe' , 'USDCe'],
+}
 
 class NetConfig{
 
@@ -347,7 +352,7 @@ class NetConfig{
   }
 
   public static sixDecimalsCurrency(networkId : any, symbol : any) {
-    return sixDecimalCurrencies.includes(symbol);
+    return sixDecimalCurrencies[networkId].includes(symbol);
   }
 
   // Cannot buy De-peg bundles with testnet tokens
