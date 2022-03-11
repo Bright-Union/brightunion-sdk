@@ -231,7 +231,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         modules: VUE_APP_AVALANCHE_MODULES.split(' '),
         nexusDistributor: '',
         nexusAPI: '',
-        brightProtocol:'',
+        brightProtocol:'0x4fcCAE4221A43D31EfCEdEff1D4FE1C497fA0ec7',
         brightContractRegistry: '',
         bridgeV2Distributor: '',
         insuraceCover: '0xfBa24bdbb36001F1F88B3a552c77EC1c10f5E4C0',
