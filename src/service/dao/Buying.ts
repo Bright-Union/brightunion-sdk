@@ -259,7 +259,7 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
   }
 
   // If mainnet call Distributor Directly
-  if(global.user.networkId === 1 || global.user.networkId === 43114 || global.user.networkId === 43113 ){
+  if(global.user.networkId === 1){
     insuraceAddress = NetConfig.netById(global.user.networkId).insuraceCover;
     return await new Promise((resolve, reject) => {
       _getInsuraceDistributor(insuraceAddress, global.user.web3)
