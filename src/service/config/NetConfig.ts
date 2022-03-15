@@ -281,6 +281,7 @@ const TEST_NETS = [4, 42, 97, 80001]; //using Kovan here as Eth testnet
 
 const sixDecimalCurrencies:any = {
   1:[ 'USDT' , 'USDC'],
+  4:[ 'USDT' , 'USDC'],
   56:[],
   137:[ 'USDT' , 'USDC'],
   43114 : ['USDTe' , 'USDCe'],
