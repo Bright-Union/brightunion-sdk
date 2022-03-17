@@ -114,8 +114,6 @@ class InsuraceApi {
 
       let currencies:object[] = await this.getCurrencyList(web3.networkId);
 
-      console.log(currencies);
-
       let selectedCurrency:any = currencies.find((curr:any) => {return curr.name == currency});
 
       if (!selectedCurrency) {
