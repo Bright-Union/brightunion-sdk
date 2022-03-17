@@ -35,11 +35,9 @@ export async function getQuotes(
   quotesPromiseArray.push(getQuoteFrom('nexus', _amount, _currency, _period, _protocol, null ))
   quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, global.user.web3 ))
   quotesPromiseArray.push(getQuoteFrom('bridge' , _amount, _currency, _period, _protocol, null ))
-  // quotesPromiseArray.push(getQuoteFrom('bridgeV2' , _amount, _currency, _period, _protocol))
 
   for (let net of global.user.web3Passive) {
     quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, net))
-    // quotesPromiseArray.push( getInsuraceQuote(net , _amount, _currency, _period, _protocol))
   }
 
   return Promise.all(quotesPromiseArray).then((data:any) => {
@@ -74,7 +72,6 @@ export async function getQuoteFrom(
 
   if(_distributorName == 'bridge'){
     return await getBridgeV2Quote( _amount,_currency,_period,_protocol);
-    // return await getBridgeQuote(_amount,_currency,_period,_protocol);
   }else if(_distributorName == 'nexus'){
     return await getNexusQuote(_amount,_currency,_period,_protocol );
   }else if(_distributorName == 'insurace'){
@@ -83,120 +80,6 @@ export async function getQuoteFrom(
     return  {error: 'supported distributor names are: bridge, insurace, nexus'}
   }
 }
-
-/**
- *  Hard coding only interface compliant since they are CONSTANTS
- *
- * @param _amount
- * @param _period
- * @param _protocol
- * @returns
- */
- async function getBridgeQuote(_amount :any, _currency:any, _period :any, _protocol :any ) : Promise<object>{
-
-   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL')) {
-     if(_protocol.bridgeProductAddress){
-
-       let amountInWei:any = toWei(_amount.toString(), 'ether');
-       let initialBridgeCurrency: any = "USD"
-       if (_currency === 'ETH') {
-         amountInWei = CurrencyHelper.eth2usd(amountInWei);
-         initialBridgeCurrency = 'ETH';
-       }
-       _currency = RiskCarriers.BRIDGE.fallbackQuotation;
-
-       const bridgeEpochs = Math.min(52, Math.ceil(Number(_period) / 7));
-
-       let quote:any = {}
-
-       if(global.user.ethNet.networkId == 1 ){
-
-         quote = await getQuoteFromBridge(
-           _protocol,
-           _period,
-           amountInWei,
-           _currency,
-           initialBridgeCurrency,
-         );
-
-         return CatalogHelper.quoteFromCoverable(
-           'bridge',
-           _protocol,
-           {
-             amount: amountInWei,
-             currency: _currency,
-             period: _period,
-             chain: quote.chain,
-             chainId: quote.chainId,
-             actualPeriod: quote.actualPeriod,
-             price: quote.price,
-             response: quote._stats,
-             pricePercent: quote.pricePercent, //%, annualize
-             errorMsg: quote.errorMsg,
-             minimumAmount: quote.minimumAmount,
-           },
-           {
-             totalUSDTLiquidity: quote.totalUSDTLiquidity,
-             maxCapacity: quote.maxCapacity,
-             stakedSTBL: quote.stakedSTBL,
-             activeCovers: quote.activeCovers,
-             utilizationRatio: quote.utilizationRatio,
-           }
-         );
-
-       }else{
-
-         quote =  await getQuote(
-           'bridge',
-           bridgeEpochs,
-           amountInWei,
-           _protocol.bridgeProductAddress,
-           '0x0000000000000000000000000000000000000000',
-           '0x0000000000000000000000000000000000000000',
-           hexToBytes(numberToHex(500)),
-         );
-
-         const bridgeQuote = {
-           totalSeconds       : quote.prop1,
-           totalPrice         : quote.prop2,
-           totalLiquidity     : quote.prop3,
-           totalCoverTokens   : quote.prop4,
-           prop5              : quote.prop5,
-           prop6              : quote.prop6,
-           prop7              : quote.prop7,
-         }
-         // mapping to bridge object Or could be mapping to UI object
-         // only reason of why we have diff get<provider>Quote methods
-
-         const actualPeriod = Math.floor(Number(bridgeQuote.totalSeconds) / 3600 / 24);
-
-         return CatalogHelper.quoteFromCoverable(
-           'bridge',
-           _protocol,
-           {
-             amount: amountInWei,
-             currency: _currency,
-             period: _period,
-             chain: 'ETH',
-             chainId: global.user.ethNet.networkId,
-             actualPeriod: actualPeriod,
-             price: bridgeQuote.totalPrice,
-             response: bridgeQuote,
-             pricePercent: new BigNumber(bridgeQuote.totalPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000, //%, annualize
-             minimumAmount: getCoverMin("bridge", global.user.ethNet.symbol, _currency ),
-           },
-           {}
-         );
-
-       }
-
-     }else{
-       return {error: "Please provide bridgeProductAddress in protocol object"}
-     }
-   }else{
-     return {error: "Not supported network for Bridge"}
-   }
- }
 
 /**
  *  Hard coding only interface compliant since they are CONSTANTS

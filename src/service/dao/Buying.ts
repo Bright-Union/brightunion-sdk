@@ -177,48 +177,6 @@ export async function buyCover(
       });
     });
 
-
-    //************************************
-    //bridge V1 BACKUP
-    //************************************
-
-    // const  bookContract = _getBridgePolicyBookContract(_contractAddress, global.user.web3 );
-    // // convert period from days to bridge epochs (weeks)
-    // let epochs = Math.min(52, Math.ceil(_coverPeriod / 7));
-    //
-    // return await new Promise((resolve, reject) => {
-    //   bookContract.methods.buyPolicy( epochs, _sumAssured )
-    //   .send({from: global.user.account})
-    //   .on('transactionHash', (transactionHash:any) => {
-    //
-    //     txHash = transactionHash;
-    //     const tx ={
-    //       'hash': txHash ,
-    //       'distributor': 'bridge',
-    //       'amount': _sumAssured,
-    //       'productId': _contractAddress,
-    //       'period': epochs,
-    //       'currency':'USDT'
-    //     }
-    //     global.events.emit("buy" , { status: "TX_GENERATED" , data: transactionHash } );
-    //     GoogleEvents.onTxHash(tx);
-    //     resolve({success: transactionHash});
-    //   })
-    //   .on('error', (err:any, receipt:any) => {
-    //     global.events.emit("buy" , { status: "REJECTED" } );
-    //     GoogleEvents.onTxRejected(txHash);
-    //     reject( {error: err, receipt:receipt})
-    //   })
-    //   .on('confirmation', (confirmationNumber:any) => {
-    //     if (confirmationNumber === 0) {
-    //       GoogleEvents.onTxConfirmation(txHash);
-    //       global.events.emit("buy" , { status: "TX_CONFIRMED" } );
-    //
-    //     }
-    //   });
-    // });
-
-
   }
 }
 
