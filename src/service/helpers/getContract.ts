@@ -121,7 +121,7 @@ const _getBridgeV2PolicyQuoteContract         =  (address:string,web3:any)  : an
 const _getBridgeV2PolicyBookContract         =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyBookABI, address , web3);
 const _getBridgeV2PolicyBookFacade        =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyBookFacadeABI, address , web3);
 const _getBridgeV2PolicyRegistry        =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyRegistryABI, address , web3);
-const _getBridgeDistributorV2        =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeDistributorV2ABI, address , web3);
+const _getBridgeDistributorV2        =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeDistributorV2ABI.abi, address , web3);
 
 
 function _getIERC20Contract(address:any) {
@@ -158,7 +158,7 @@ export  {
     _getNexusGatewayContract,
     _getNexusClaimsDataContract,
     _getNexusMasterContract,
-    
+
     // _loadAllABIs
 
 } ;
