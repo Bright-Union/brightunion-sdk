@@ -134,6 +134,8 @@ export async function buyCover(
     let bridgeV2 = _getBridgeDistributorV2(NetConfig.netById(global.user.ethNet.networkId).bridgeV2Distributor, global.user.web3 );
     tx.distributor = 'bridge';
 
+    console.log("bridgeV2" , bridgeV2);
+
     const brightRewardsAddress = NetConfig.netById(global.user.ethNet.networkId).bridgeBrightReference;
 
     const policyBook = await  _getBridgeV2PolicyBookContract( _contractAddress, global.user.web3 );
@@ -147,15 +149,15 @@ export async function buyCover(
 
     return await new Promise((resolve, reject) => {
       // policyBookFacade.methods.buyPolicy( epochs, _sumAssured )
-      // policyBookFacade.methods.buyPolicyFromDistributorFor( global.user.account, epochs, _sumAssured, brightRewardsAddress )
-      bridgeV2.buyCover(
-        policyBook.address,
-        epochs,
-        _sumAssured,
-        global.user.account,
-        brightRewardsAddress,
-        _maxPriceWithFee,
-      )
+      policyBookFacade.methods.buyPolicyFromDistributorFor( global.user.account, epochs, _sumAssured, brightRewardsAddress )
+      // bridgeV2.buyCover(
+      //   policyBook.address,
+      //   epochs,
+      //   _sumAssured,
+      //   global.user.account,
+      //   brightRewardsAddress,
+      //   _maxPriceWithFee,
+      // )
       .send({from: global.user.account})
       .on('transactionHash', (transactionHash:any) => {
         tx.hash = transactionHash;
