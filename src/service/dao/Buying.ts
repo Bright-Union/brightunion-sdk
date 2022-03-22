@@ -16,7 +16,6 @@ import ERC20Helper from '../helpers/ERC20Helper';
 import NetConfig from '../config/NetConfig';
 import { fromWei} from 'web3-utils'
 
-
 /**
 * Returns a transaction receipt.
 * (Emits a boughtCover event at contract level)
@@ -63,41 +62,10 @@ export async function buyCover(
   if(_distributorName == 'nexus'){
     tx.distributor  = 'nexus';
     const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
-        // if(global.user.networkId === 1 ){
-        //   return await new Promise((resolve, reject) => {
-        //     const nexusAddress = NetConfig.netById(global.user.ethNet.networkId).nexusDistributor;
-        //     _getNexusDistributor(nexusAddress) // Direct Call to Nexus Contract
-        //     .methods.buyCover(
-        //       _contractAddress,
-        //       _coverAsset,
-        //       _sumAssured,
-        //       _coverPeriod,
-        //       _coverType,
-        //       _maxPriceWithFee,
-        //       _data,
-        //     ).send({ from: _ownerAddress, value: sendValue })
-        //     .on('transactionHash', (res:any) => {
-        //       tx.hash = res;
-        //       global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
-        //       GoogleEvents.onTxHash(tx) ;
-        //       resolve({success:res});
-        //      })
-        //     .on('error', (err:any, receipt:any) => {
-        //       global.events.emit("buy" , { status: "REJECTED" } );
-        //       GoogleEvents.onTxRejected(tx);
-        //       reject( {error: err, receipt:receipt})
-        //     })
-        //     .on('confirmation', (confirmationNumber:any) => {
-        //       if (confirmationNumber === 0) {
-        //         GoogleEvents.onTxConfirmation(tx);
-        //         global.events.emit("buy" , { status: "TX_CONFIRMED" } );
-        //       }
-        //     });
-        //   });
-        // } else { // if not Ethereum Mainnet
 
           return await new Promise( async (resolve, reject) => {
             const nexusAddress = await _getDistributorsContract().methods.getDistributorAddress('nexus').call();
+            console.log("nexusAddress" , nexusAddress);
             _getNexusDistributorsContract(nexusAddress) // Nexus Call through Bright Protocol Distributors Layer
             .methods.buyCover(
               _contractAddress,
@@ -127,26 +95,18 @@ export async function buyCover(
               }
             });
           });
-        // }
 
   } else if(_distributorName == 'bridge'){
     let bridgeV2 = _getBridgeV2Distributor(NetConfig.netById(global.user.ethNet.networkId).bridgeV2Distributor, global.user.web3 );
     tx.distributor = 'bridge';
 
-    console.log("bridgeV2x" , bridgeV2);
-
     const brightRewardsAddress = NetConfig.netById(global.user.ethNet.networkId).brightTreasury;
-
     const policyBook = await  _getBridgeV2PolicyBookContract( _contractAddress, global.user.web3 );
-    // const policyBookFacadeAddress = await  policyBook.methods.policyBookFacade().call();
-    // const policyBookFacade = _getBridgeV2PolicyBookFacade( policyBookFacadeAddress, global.user.web3 );
 
     // convert period from days to bridge epochs (weeks)
     let epochs = Math.min(52, Math.ceil(_coverPeriod / 7));
 
     return await new Promise((resolve, reject) => {
-      // policyBookFacade.methods.buyPolicy( epochs, _sumAssured )
-      // policyBookFacade.methods.buyPolicyFromDistributorFor( global.user.account, epochs, _sumAssured, brightRewardsAddress )
       bridgeV2.methods.buyCover(
         policyBook.address,
         epochs,
@@ -215,49 +175,6 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
     'period':_quotes.period,
   }
 
-  // If mainnet call Distributor Directly
-  // if(global.user.networkId === 1){
-  //   insuraceAddress = NetConfig.netById(global.user.networkId).insuraceCover;
-  //   return await new Promise((resolve, reject) => {
-  //     _getInsuraceDistributor(insuraceAddress, global.user.web3)
-  //     .methods
-  //     .buyCover(
-  //                 buyingObj.products,
-  //                 buyingObj.durationInDays,
-  //                 buyingObj.amounts,
-  //                 buyingObj.currency,
-  //                 buyingObj.owner,
-  //                 buyingObj.refCode,
-  //                 buyingObj.premium,
-  //                 buyingObj.helperParameters,
-  //                 buyingObj.securityParameters,
-  //                 buyingObj.v,
-  //                 buyingObj.r,
-  //                 buyingObj.s
-  //              )
-  //     .send({ from: buyingObj.owner, value: sendValue})
-  //     .on('transactionHash', (res:any) => {
-  //       tx.hash = res;
-  //       global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
-  //       GoogleEvents.onTxHash(tx);
-  //       resolve({success: res});
-  //     })
-  //     .on('error', (err:any, receipt:any) => {
-  //       global.events.emit("buy" , { status: "REJECTED" } );
-  //       GoogleEvents.onTxRejected(tx);
-  //       reject({error: err , receipt:receipt})
-  //     })
-  //     .on('confirmation', (confirmationNumber:any) => {
-  //       if (confirmationNumber === 0) {
-  //       GoogleEvents.onTxConfirmation(tx);
-  //         global.events.emit("buy" , { status: "TX_CONFIRMED" } );
-  //       }
-  //     });
-  //   });
-
- // Else call through Bright Union protocol
-  // } else {
-
     insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();
     return await new Promise((resolve, reject) => {
       _getInsuraceDistributorsContract(insuraceAddress)
@@ -282,7 +199,6 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
         }
       });
     });
-  // }
 
 }
 
