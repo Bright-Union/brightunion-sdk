@@ -147,7 +147,7 @@ export async function buyCover(
     return await new Promise((resolve, reject) => {
       // policyBookFacade.methods.buyPolicy( epochs, _sumAssured )
       // policyBookFacade.methods.buyPolicyFromDistributorFor( global.user.account, epochs, _sumAssured, brightRewardsAddress )
-      bridgeV2.buyCover(
+      bridgeV2.methods.buyCover(
         policyBook.address,
         epochs,
         _sumAssured,
