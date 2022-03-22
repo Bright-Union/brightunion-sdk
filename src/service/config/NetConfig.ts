@@ -275,16 +275,19 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
 
 ]
 
-// const MAIN_NETS = [1, 56, 137, 43114];
-const MAIN_NETS = [1, 56, 137]; // disable avaanche until release
+const MAIN_NETS = [1, 56, 137, 43114];
+// const MAIN_NETS = [1, 56, 137]; // disable avaanche until release
 const TEST_NETS = [4, 42, 97, 80001]; //using Kovan here as Eth testnet
 
 const sixDecimalCurrencies:any = {
-  1:[ 'USDT' , 'USDC'],
-  4:[ 'USDT' , 'USDC'],
-  56:[],
-  137:[ 'USDT' , 'USDC'],
-  43114 : ['USDTe' , 'USDCe'],
+  1:[ 'USDT' , 'USDC'], //ETH Main
+  56:[],//BSC Main
+  137:[ 'USDT' , 'USDC'],//POLYGON Main
+  43114 : ['USDTe' , 'USDCe'],//AVALANCHE Main
+  4:[ 'USDT' , 'USDC'],//ETH Test
+  42:[ 'USDT' , 'USDC'],//ETH Test
+  97:[],//BSC Test
+  80001:['USDT' , 'USDC'],//POLYGON Test
 }
 
 class NetConfig{
