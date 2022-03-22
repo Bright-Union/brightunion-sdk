@@ -174,6 +174,9 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
   }
 
     insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();
+
+    console.log("insuraceAddress", insuraceAddress);
+
     return await new Promise((resolve, reject) => {
       _getInsuraceDistributorsContract(insuraceAddress)
       .methods
