@@ -117,12 +117,14 @@
       "type": "event"
     },
     {
-      "stateMutability": "payable",
-      "type": "fallback"
-    },
-    {
-      "inputs": [],
-      "name": "owner",
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "name": "distributorsMap",
       "outputs": [
         {
           "internalType": "address",
@@ -135,10 +137,10 @@
     },
     {
       "inputs": [],
-      "name": "registry",
+      "name": "owner",
       "outputs": [
         {
-          "internalType": "contract DistributorRegistry",
+          "internalType": "address",
           "name": "",
           "type": "address"
         }
@@ -167,14 +169,30 @@
       "type": "function"
     },
     {
+      "stateMutability": "payable",
+      "type": "receive"
+    },
+    {
+      "inputs": [],
+      "name": "__Distributors_init",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
-          "internalType": "address payable",
-          "name": "_registry",
+          "internalType": "string",
+          "name": "distributorName",
+          "type": "string"
+        },
+        {
+          "internalType": "address",
+          "name": "distributorAddress",
           "type": "address"
         }
       ],
-      "name": "initialize",
+      "name": "addDistributor",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -397,117 +415,6 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "_distributorName",
-          "type": "string"
-        },
-        {
-          "internalType": "address",
-          "name": "_contractAddress",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_coverAsset",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_sumAssured",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint16",
-          "name": "_coverPeriod",
-          "type": "uint16"
-        },
-        {
-          "internalType": "uint8",
-          "name": "_coverType",
-          "type": "uint8"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_maxPriceWithFee",
-          "type": "uint256"
-        },
-        {
-          "internalType": "bytes",
-          "name": "_data",
-          "type": "bytes"
-        }
-      ],
-      "name": "buyCover",
-      "outputs": [],
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint16[]",
-          "name": "_products",
-          "type": "uint16[]"
-        },
-        {
-          "internalType": "uint16[]",
-          "name": "_durationInDays",
-          "type": "uint16[]"
-        },
-        {
-          "internalType": "uint256[]",
-          "name": "_amounts",
-          "type": "uint256[]"
-        },
-        {
-          "internalType": "address",
-          "name": "_currency",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_owner",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_premiumAmount",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256[]",
-          "name": "_helperParameters",
-          "type": "uint256[]"
-        },
-        {
-          "internalType": "uint256[]",
-          "name": "_securityParameters",
-          "type": "uint256[]"
-        },
-        {
-          "internalType": "uint8[]",
-          "name": "_v",
-          "type": "uint8[]"
-        },
-        {
-          "internalType": "bytes32[]",
-          "name": "_r",
-          "type": "bytes32[]"
-        },
-        {
-          "internalType": "bytes32[]",
-          "name": "_s",
-          "type": "bytes32[]"
-        }
-      ],
-      "name": "buyCoverInsurace",
-      "outputs": [],
-      "stateMutability": "payable",
       "type": "function"
     }
   ]
