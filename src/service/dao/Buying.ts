@@ -4,7 +4,6 @@ import {
   _getDistributorsContract,
   _getInsuraceDistributor,
   _getInsuraceDistributorsContract,
-  _getNexusDistributor,
   _getNexusDistributorsContract,
   _getBridgeV2Distributor,
   _getBridgeV2PolicyBookContract,
@@ -65,7 +64,6 @@ export async function buyCover(
 
           return await new Promise( async (resolve, reject) => {
             const nexusAddress = await _getDistributorsContract().methods.getDistributorAddress('nexus').call();
-            console.log("nexusAddress" , nexusAddress);
             _getNexusDistributorsContract(nexusAddress) // Nexus Call through Bright Protocol Distributors Layer
             .methods.buyCover(
               _contractAddress,
