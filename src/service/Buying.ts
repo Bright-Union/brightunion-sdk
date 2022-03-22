@@ -78,6 +78,9 @@ export async function buyMutipleOnInsurace (_quotes:any):Promise<any> {
         () => {
           global.events.emit("buy" , { status: "CONFIRMATION" , type:"reset_usdt_allowance" , count:3 , current:2 } );
         },
+          () => {
+            global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
+          },
         () => {
           buyingObj.premium = Number(ERC20Helper.ERCtoUSDTDecimals(buyingObj.premium))
           global.events.emit("buy" , { status: "CONFIRMATION" , type:"main", count:2 , current:2 } );
@@ -95,6 +98,9 @@ export async function buyMutipleOnInsurace (_quotes:any):Promise<any> {
         erc20Instance,
         insuraceAddress,  // global.user.brightProtoAddress //0x7e758e0D330B9B340A7282029e73dA448fb4BdB6
         buyingObj.premium,
+          () => {
+            global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
+          },
         () => {
           global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
           return callInsurace(buyingObj , false, _quotes);
@@ -176,6 +182,9 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
         () => {
           global.events.emit("buy" , { status: "CONFIRMATION" , type:"reset_usdt_allowance" , count:3 , current:2 } );
         },
+          () => {
+            global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
+          },
         () => {
           buyingObj.premium = Number(ERC20Helper.ERCtoUSDTDecimals(buyingObj.premium))
           global.events.emit("buy" , { status: "CONFIRMATION" , type:"main", count:2 , current:2 } );
@@ -196,6 +205,9 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
           erc20Instance,
           insuraceAddress,  // global.user.brightProtoAddress //0x7e758e0D330B9B340A7282029e73dA448fb4BdB6
           buyingObj.premium,
+            () => {
+              global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
+            },
           () => {
             global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
             return callInsurace(buyingObj , false, _quoteProtocol);
@@ -315,6 +327,10 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
         global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
         return callNexus(_quoteProtocol, false);
       };
+      const onTXHash =  () => {
+        global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
+        return callNexus(_quoteProtocol, false);
+      };
       const onError =  (err:any) => {
         GoogleEvents.buyRejected('REJECTED' , _quoteProtocol );
         global.events.emit("buy" , { status: "REJECTED" } );
@@ -323,7 +339,7 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
       global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
 
-      return await ERC20Helper.approveAndCall( erc20Instance,  NetConfig.netById(global.user.networkId).nexusDistributor,  _quoteProtocol.rawData.price, onSuccess, onError);
+      return await ERC20Helper.approveAndCall( erc20Instance,  NetConfig.netById(global.user.networkId).nexusDistributor,  _quoteProtocol.rawData.price, onTXHash, onSuccess, onError);
 
     } else {
       GoogleEvents.buyRejected('You have insufficient funds to continue with this transaction' , _quoteProtocol );
@@ -464,6 +480,9 @@ export async function buyOnBridgeV2(_quoteProtocol:any) : Promise<any>{
       () => {
         global.events.emit("buy" , { status: "CONFIRMATION" , type:"reset_usdt_allowance" , count:3 , current:2 } );
       },
+        () => {
+          global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
+        },
       () => {
         global.events.emit("buy" , { status: "CONFIRMATION" , type:"main", count:2 , current:2 } );
         return callBridgeV2(_quoteProtocol);
