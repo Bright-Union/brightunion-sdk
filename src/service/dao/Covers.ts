@@ -7,10 +7,6 @@ import {
   _getInsurAceCoverDataContract,
   _getInsurAceProductContract,
 
-  _getBridgeRegistryContract,
-  _getBridgePolicyRegistryContract,
-  _getBridgePolicyBookContract,
-
   _getBridgeV2RegistryContract,
   _getBridgeV2PolicyBookRegistryContract,
   _getBridgeV2PolicyBookContract,
@@ -256,7 +252,7 @@ export async function getCoversBridgeV2():Promise<any>{
       limit++;
       continue;
     }
-    let policyBook = await _getBridgePolicyBookContract(policyBookAddress, global.user.ethNet.web3Instance);
+    let policyBook = await _getBridgeV2PolicyBookContract(policyBookAddress, global.user.ethNet.web3Instance);
     let policyBookinfo = await policyBook.methods.info().call();
     let claimStatus = mergedPolicyStatuses[i];
 

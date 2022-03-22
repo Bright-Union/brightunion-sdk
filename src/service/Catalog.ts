@@ -3,11 +3,6 @@ import NexusApi from './distributorsApi/NexusApi';
 import InsuraceApi from './distributorsApi/InsuraceApi';
 import CatalogHelper from './helpers/catalogHelper';
 import {
-  _getBridgeRegistryContract,
-  _getBridgePolicyBookRegistryContract,
-  _getBridgePolicyQuoteContract,
-  _getBridgePolicyRegistryContract,
-
   _getBridgeV2RegistryContract,
   _getBridgeV2PolicyBookRegistryContract,
 
@@ -81,32 +76,6 @@ export async function getBridgeV2Coverables(): Promise<any[]> {
 
 }
 
-export async function getBridgeCoverables(): Promise<any[]> {
-  let trustWalletAssets: { [key: string]: any } = {};
-  trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
-
-  const bridgeRegistryAdd = NetConfig.netById( global.user.ethNet.networkId ).bridgeRegistry;
-
-  const BridgeContract = await _getBridgeRegistryContract(bridgeRegistryAdd, global.user.ethNet.web3Instance );
-
-  return BridgeContract.methods.getPolicyBookRegistryContract().call().then(async (policyBookRegistryAddr:any) => {
-
-    let BridgePolicyBookRegistryContract = await _getBridgePolicyBookRegistryContract(policyBookRegistryAddr, global.user.ethNet.web3Instance );
-
-    return BridgePolicyBookRegistryContract.methods.count().call().then((policyBookCounter:any) => {
-
-      return BridgePolicyBookRegistryContract.methods.listWithStats(0, policyBookCounter).call()
-      .then(({_policyBooksArr, _stats}:any) => {
-
-        return BridgeHelper.catalogDataFormat(_stats, _policyBooksArr, trustWalletAssets);
-
-        });
-      });
-    });
-
-    // return await CatalogHelper.getBridgeCatalogTemp();
-  }
-
 export async function getNexusCoverables(): Promise<any[]> {
 
     return await NexusApi.fetchCoverables().then( (data:object) => {
@@ -119,7 +88,7 @@ export async function getNexusCoverables(): Promise<any[]> {
         }
         let type = CatalogHelper.commonCategory(value.type, 'nexus')
         let typeDescr = type ? type : 'protocol';
-        
+
         coverablesArray.push(CatalogHelper.createCoverable({
           protocolAddress: key,
           nexusCoverable: key,

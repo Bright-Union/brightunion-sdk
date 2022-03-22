@@ -1,6 +1,6 @@
 import NexusApi from './distributorsApi/NexusApi';
 import InsuraceApi from './distributorsApi/InsuraceApi';
-import { getQuote, getQuoteFromBridge, getQuoteFromBridgeV2 } from "./dao/Quotes";
+import { getQuote, getQuoteFromBridgeV2 } from "./dao/Quotes";
 import CatalogHelper from './helpers/catalogHelper';
 import NetConfig from '../service/config/NetConfig';
 import CurrencyHelper from './helpers/currencyHelper';

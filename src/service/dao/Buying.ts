@@ -6,8 +6,7 @@ import {
   _getInsuraceDistributorsContract,
   _getNexusDistributor,
   _getNexusDistributorsContract,
-  _getBridgePolicyBookContract,
-  _getBridgeDistributorV2,
+  _getBridgeV2Distributor,
   _getBridgeV2PolicyBookContract,
   _getBridgeV2PolicyBookFacade,
 
@@ -131,33 +130,31 @@ export async function buyCover(
         // }
 
   } else if(_distributorName == 'bridge'){
-    let bridgeV2 = _getBridgeDistributorV2(NetConfig.netById(global.user.ethNet.networkId).bridgeV2Distributor, global.user.web3 );
+    let bridgeV2 = _getBridgeV2Distributor(NetConfig.netById(global.user.ethNet.networkId).bridgeV2Distributor, global.user.web3 );
     tx.distributor = 'bridge';
 
-    console.log("bridgeV2" , bridgeV2);
+    console.log("bridgeV2x" , bridgeV2);
 
-    const brightRewardsAddress = NetConfig.netById(global.user.ethNet.networkId).bridgeBrightReference;
+    const brightRewardsAddress = NetConfig.netById(global.user.ethNet.networkId).brightTreasury;
 
     const policyBook = await  _getBridgeV2PolicyBookContract( _contractAddress, global.user.web3 );
-
-    const policyBookFacadeAddress = await  policyBook.methods.policyBookFacade().call();
-
-    const policyBookFacade = _getBridgeV2PolicyBookFacade( policyBookFacadeAddress, global.user.web3 );
+    // const policyBookFacadeAddress = await  policyBook.methods.policyBookFacade().call();
+    // const policyBookFacade = _getBridgeV2PolicyBookFacade( policyBookFacadeAddress, global.user.web3 );
 
     // convert period from days to bridge epochs (weeks)
     let epochs = Math.min(52, Math.ceil(_coverPeriod / 7));
 
     return await new Promise((resolve, reject) => {
       // policyBookFacade.methods.buyPolicy( epochs, _sumAssured )
-      policyBookFacade.methods.buyPolicyFromDistributorFor( global.user.account, epochs, _sumAssured, brightRewardsAddress )
-      // bridgeV2.buyCover(
-      //   policyBook.address,
-      //   epochs,
-      //   _sumAssured,
-      //   global.user.account,
-      //   brightRewardsAddress,
-      //   _maxPriceWithFee,
-      // )
+      // policyBookFacade.methods.buyPolicyFromDistributorFor( global.user.account, epochs, _sumAssured, brightRewardsAddress )
+      bridgeV2.buyCover(
+        policyBook.address,
+        epochs,
+        _sumAssured,
+        global.user.account,
+        brightRewardsAddress,
+        _maxPriceWithFee,
+      )
       .send({from: global.user.account})
       .on('transactionHash', (transactionHash:any) => {
         tx.hash = transactionHash;

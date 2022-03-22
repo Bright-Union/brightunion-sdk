@@ -13,12 +13,6 @@ import NexusGatewayABI from '../abi/nexus/IGateway.json';
 import NexusClaimsDataABI from '../abi/nexus/IClaimsData.json';
 import NexusMasterABI from '../abi/nexus/INXMaster.json';
 
-import BridgeRegistryContractABI from '../abi/bridge/IContractsRegistry.json';
-import BridgePolicyBookRegistryABI from '../abi/bridge/IPolicyBookRegistry.json';
-import BridgePolicyQuoteABI from '../abi/bridge/IPolicyQuote.json';
-import BridgePolicyBookABI from '../abi/bridge/IPolicyBook.json';
-import BridgePolicyRegistryABI from '../abi/bridge/IPolicyRegistry.json';
-
 // BridgeV2
 import BridgeV2RegistryContractABI from '../abi/bridgeV2/ContractRegistry.json'
 import BridgeV2PolicyBookRegistryABI from '../abi/bridgeV2/PolicyBookRegistry.json'
@@ -26,7 +20,7 @@ import BridgeV2PolicyRegistryABI from '../abi/bridgeV2/PolicyRegistry.json'
 import BridgeV2PolicyQuoteABI from '../abi/bridgeV2/PolicyQuote.json'
 import BridgeV2PolicyBookFacadeABI from '../abi/bridgeV2/PolicyBookFacade.json'
 import BridgeV2PolicyBookABI from '../abi/bridgeV2/PolicyBook.json'
-import BridgeDistributorV2ABI from '../abi/bridgeV2/BridgeDistributorV2.json'
+import BridgeV2DistributorABI from '../abi/bridgeV2/BridgeDistributorV2.json'
 
 
 // possible JSON loader solution to reduce SDK code base size
@@ -108,12 +102,6 @@ function _getInsurAceCoverDataContract(address:string, _web3:any) : any {
   return new _web3.eth.Contract(distAbi, address );
 }
 
-const _getBridgeRegistryContract           =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeRegistryContractABI.abi, address , web3);
-const _getBridgePolicyBookRegistryContract =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgePolicyBookRegistryABI.abi, address , web3);
-const _getBridgePolicyQuoteContract        =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgePolicyQuoteABI.abi, address , web3);
-const _getBridgePolicyBookContract         =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgePolicyBookABI.abi, address , web3);
-const _getBridgePolicyRegistryContract     =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgePolicyRegistryABI.abi, address , web3);
-
 // BridgeV2
 const _getBridgeV2RegistryContract          =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2RegistryContractABI, address , web3);
 const _getBridgeV2PolicyBookRegistryContract  =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyBookRegistryABI, address , web3);
@@ -121,7 +109,7 @@ const _getBridgeV2PolicyQuoteContract         =  (address:string,web3:any)  : an
 const _getBridgeV2PolicyBookContract         =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyBookABI, address , web3);
 const _getBridgeV2PolicyBookFacade        =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyBookFacadeABI, address , web3);
 const _getBridgeV2PolicyRegistry        =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyRegistryABI, address , web3);
-const _getBridgeDistributorV2        =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeDistributorV2ABI.abi, address , web3);
+const _getBridgeV2Distributor       =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2DistributorABI.abi, address , web3);
 
 
 function _getIERC20Contract(address:any) {
@@ -134,11 +122,6 @@ function _getIERC20Contract(address:any) {
 export  {
   _getDistributorsContract,
     _getIERC20Contract,
-    _getBridgeRegistryContract,
-    _getBridgePolicyBookRegistryContract,
-    _getBridgePolicyQuoteContract,
-    _getBridgePolicyBookContract,
-    _getBridgePolicyRegistryContract,
 
     _getBridgeV2RegistryContract,
     _getBridgeV2PolicyBookRegistryContract,
@@ -146,7 +129,7 @@ export  {
     _getBridgeV2PolicyQuoteContract,
     _getBridgeV2PolicyBookContract,
     _getBridgeV2PolicyBookFacade,
-    _getBridgeDistributorV2,
+    _getBridgeV2Distributor,
 
     _getInsuraceDistributorsContract,
     _getInsuraceDistributor,
