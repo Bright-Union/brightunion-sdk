@@ -276,7 +276,6 @@ export async function callNexus(_quoteProtocol:any , buyingWithNetworkCurrency: 
         _quoteProtocol.rawData.generatedAt, _quoteProtocol.rawData.v, _quoteProtocol.rawData.r, _quoteProtocol.rawData.s],
       );
 
-      // let bridgeProductAddress: any = '0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f';
       let net:any = NetConfig.netById(global.user.networkId);
       let asset = net[_quoteProtocol.rawData.currency]
 
@@ -356,26 +355,6 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
   }
 
 }
-
-// export async function callBridge(_quoteProtocol:any){
-//
-//     // let net:any = NetConfig.netById(global.user.networkId);
-//     // let asset = net[_quoteProtocol.rawData.currency]
-//
-//     return buyCover(
-//       global.user.account,
-//       'bridge',
-//       _quoteProtocol.protocol.bridgeProductAddress, //bridge prod address
-//       null,  // payment asset
-//       _quoteProtocol.amount.toString(), // sum assured, compliant
-//       _quoteProtocol.actualPeriod, // period
-//       null, //coverType
-//       null, // token amount to cover
-//       null, // random data
-//       null
-//     )
-//
-// }
 
 export async function callBridgeV2(_quoteProtocol:any){
 
