@@ -13,7 +13,7 @@ import {
 
 import ERC20Helper from '../helpers/ERC20Helper';
 import NetConfig from '../config/NetConfig';
-import { fromWei} from 'web3-utils'
+import { fromWei, toBN, toWei} from 'web3-utils'
 
 /**
 * Returns a transaction receipt.
@@ -106,14 +106,25 @@ export async function buyCover(
     // convert period from days to bridge epochs (weeks)
     let epochs = Math.min(52, Math.ceil(_coverPeriod / 7));
 
+    console.log('2' ,
+      policyBook._address,
+      epochs,
+      fromWei(_sumAssured.toString()),
+      global.user.account,
+      brightRewardsAddress,
+      // _maxPriceWithFee,
+      fromWei(_maxPriceWithFee.toString()),
+      _data
+    );
+
     return await new Promise((resolve, reject) => {
       bridgeV2.methods.buyCover(
-        policyBook.address,
+        policyBook._address,
         epochs,
-        _sumAssured,
+        fromWei(_sumAssured.toString()),
         global.user.account,
         brightRewardsAddress,
-        _maxPriceWithFee,
+        toBN(fromWei(_maxPriceWithFee.toString())),
         _data
       )
       .send({from: global.user.account})

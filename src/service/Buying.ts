@@ -358,6 +358,13 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
 export async function callBridgeV2(_quoteProtocol:any){
 
+  const data = global.user.web3.eth.abi.encodeParameters(
+    ['uint256', 'uint256'],
+    [_quoteProtocol.price, _quoteProtocol.period ],
+  );
+
+  console.log(_quoteProtocol);
+
   return buyCover(
     global.user.account,
     'bridge',
@@ -366,8 +373,8 @@ export async function callBridgeV2(_quoteProtocol:any){
     _quoteProtocol.amount.toString(), // sum assured, compliant
     _quoteProtocol.actualPeriod, // period
     null, //coverType
-    null, // token amount to cover
-    null, // random data
+    _quoteProtocol.price, // token amount to cover
+    data, // random data
     null,
     _quoteProtocol
   )
