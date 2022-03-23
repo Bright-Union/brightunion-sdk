@@ -95,7 +95,8 @@ export async function buyCover(
           });
 
   } else if(_distributorName == 'bridge'){
-    let bridgeV2 = _getBridgeV2Distributor(NetConfig.netById(global.user.ethNet.networkId).bridgeV2Distributor, global.user.web3 );
+
+    const bridgeV2 = _getBridgeV2Distributor(NetConfig.netById(global.user.ethNet.networkId).bridgeV2Distributor, global.user.web3 );
     tx.distributor = 'bridge';
 
     const brightRewardsAddress = NetConfig.netById(global.user.ethNet.networkId).brightTreasury;
@@ -174,8 +175,6 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
   }
 
     insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();
-
-    console.log("insuraceAddress", insuraceAddress);
 
     return await new Promise((resolve, reject) => {
       _getInsuraceDistributorsContract(insuraceAddress)

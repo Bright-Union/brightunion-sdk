@@ -48,14 +48,10 @@ export default class NexusApi {
       .then(async (response:any) => {
 
         let basePrice = toBN(response.data.price);
-        let distributor:any;
 
-        if(global.user.ethNet.networkId === 1 ){
-          distributor =  await _getNexusDistributor(NetConfig.netById(global.user.ethNet.networkId).nexusDistributor)
-        }else{
-          const sideChainAddress = await _getDistributorsContract().methods.getDistributorAddress('nexus').call();
-          distributor = await _getNexusDistributorsContract(sideChainAddress);
-        }
+        const sideChainAddress = await _getDistributorsContract().methods.getDistributorAddress('nexus').call();
+        const distributor = await _getNexusDistributorsContract(sideChainAddress);
+
         let fee:any = await distributor.methods.feePercentage().call();
         fee = toBN(fee);
         let priceWithFee:any = basePrice.mul(fee).div(toBN(10000)).add(basePrice);

@@ -18,8 +18,6 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
 
   if(_quoteProtocol.distributorName == 'bridge'){
 
-    // return await buyOnBridge(_quoteProtocol);
-
     return await buyOnBridgeV2(_quoteProtocol);
 
   }else if(_quoteProtocol.distributorName == 'nexus'){
