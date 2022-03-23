@@ -1,4 +1,6 @@
 import Web3 from 'web3';
+const { createAlchemyWeb3 } = require("@alch/alchemy-web3");
+
 
 const VUE_APP_MAINNET_MODULES='BRIGHT_TOKEN UNISWAP BRIDGE_MUTUAL NEXUS_MUTUAL INSURACE'
 const VUE_APP_KOVAN_MODULES='BRIGHT_TOKEN NEXUS_MUTUAL BRI_INDEX'
@@ -164,7 +166,8 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         symbol: 'POLYGON',
         defaultCurrency: "MATIC",
         explorer: 'https://polygonscan.com',
-        provider: 'https://polygon-rpc.com',
+        provider: 'https://polygon-mainnet.g.alchemy.com/v2/VeWz_iAaRaHf6zqmDnNkFcls6FrXd3Fm',
+        // provider: 'https://polygon-rpc.com',
         modules: VUE_APP_POLYGON_MODULES.split(' '),
         bridgeRegistry: '',
         nexusDistributor: '',
@@ -279,7 +282,18 @@ const sixDecimalCurrencies:any = {
   80001:['USDT' , 'USDC'],//POLYGON Test
 }
 
+
 class NetConfig{
+
+  public static createWeb3Provider(provider:any){
+    let web3 = null;
+    if(provider.includes("alchemy")){
+      web3 =  createAlchemyWeb3(provider);
+    } else {
+      web3 = new Web3(new Web3.providers.HttpProvider(provider));
+    }
+    return web3;
+  };
 
   public static async createWeb3Passives() {
 
@@ -299,7 +313,7 @@ class NetConfig{
         account: global.user.account,
         networkId: net,
         symbol: this.netById(net).symbol,
-        web3Instance: await new Web3(new Web3.providers.HttpProvider(this.netById(net).provider)),
+        web3Instance: this.createWeb3Provider(this.netById(net).provider),
         readOnly: true,
       });
     }
