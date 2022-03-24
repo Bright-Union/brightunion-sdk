@@ -96,68 +96,19 @@ export async function buyCover(
 
   } else if(_distributorName == 'bridge'){
 
-
-    // const bridgeAddress = await _getDistributorsContract().methods.getDistributorAddress('bridge').call();
-    //
-    // const bridgeV2 = _getBridgeV2Distributor( bridgeAddress, global.user.web3 );
-    // tx.distributor = 'bridge';
-    //
-    // const brightRewardsAddress = NetConfig.netById(global.user.ethNet.networkId).brightTreasury;
-    // const policyBook = await  _getBridgeV2PolicyBookContract( _contractAddress, global.user.web3 );
-    //
-    // // convert period from days to bridge epochs (weeks)
-    // let epochs = Math.min(52, Math.ceil(_coverPeriod / 7));
-    //
-    // console.log('2' ,
-    //   policyBook._address,
-    //   epochs,
-    //   fromWei(_sumAssured.toString()),
-    //   global.user.account,
-    //   brightRewardsAddress,
-    //   // _maxPriceWithFee,
-    //   fromWei(_maxPriceWithFee.toString()),
-    //   _data
-    // );
-    //
-    // return await new Promise((resolve, reject) => {
-    //   bridgeV2.methods.buyCover(
-    //     policyBook._address,
-    //     epochs,
-    //     fromWei(_sumAssured.toString()),
-    //     global.user.account,
-    //     brightRewardsAddress,
-    //     toBN(fromWei(_maxPriceWithFee.toString())),
-    //     _data
-    //   )
-    //   .send({from: global.user.account})
-
-    console.log("caling bridge ")
-
-    console.log("NetConfig.netById(global.user.ethNet.networkId).bridgeV2Distributor", "\n",
-                 NetConfig.netById(global.user.ethNet.networkId).bridgeV2Distributor);
-
-    let bridgeV2 = _getBridgeV2Distributor(NetConfig.netById(global.user.ethNet.networkId).bridgeV2Distributor, global.user.web3 );
-
-
-    console.log("bridgeV2: ", bridgeV2)
-
+    const bridgeV2 = _getBridgeV2Distributor(NetConfig.netById(global.user.ethNet.networkId).bridgeV2Distributor, global.user.web3 );
     tx.distributor = 'bridge';
-
     const brightRewardsAddress = NetConfig.netById(global.user.ethNet.networkId).brightTreasury;
-
     const policyBook = await  _getBridgeV2PolicyBookContract( _contractAddress, global.user.web3 );
 
     const policyBookFacadeAddress = await  policyBook.methods.policyBookFacade().call();
-
-    // const policyBookFacade = _getBridgeV2PolicyBookFacade( policyBookFacadeAddress, global.user.web3 );
+    const policyBookFacade = _getBridgeV2PolicyBookFacade( policyBookFacadeAddress, global.user.web3 );
 
     // convert period from days to bridge epochs (weeks)
     let epochs = Math.min(52, Math.ceil(_coverPeriod / 7));
     const data = global.user.web3.eth.abi.encodeParameters(['uint'],[_sumAssured] );
 
     return await new Promise((resolve, reject) => {
-      // policyBookFacade.methods.buyPolicy( epochs, _sumAssured )
-      // policyBookFacade.methods.buyPolicyFromDistributorFor( global.user.account, epochs, _sumAssured, brightRewardsAddress )
       console.log(
         "policyBook: ", policyBook._address, "\n",
         "epochs: ", epochs, "\n",
@@ -166,30 +117,32 @@ export async function buyCover(
         "_maxPriceWithFee: ", _maxPriceWithFee, "\n",
         "data: ", data, "\n",
       )
-  /**
-   * /**
- * Solidity method
- *
- function buyCover (
-  address _bridgeProductAddress,
-  uint256 _epochsNumber,
-  uint16  _sumAssured,
-  address _buyerAddress,
-  address _treasuryAddress,
-  uint256 _premium,
-  bytes calldata _interfaceCompliant4
-external payable nonReentrant {
- */
 
-      bridgeV2.methods.buyCover(
-        policyBook._address,
-        epochs,
-        fromWei(_sumAssured.toString()),
-        global.user.account,
-        brightRewardsAddress,
-        _maxPriceWithFee, //  this might be the conversion Tether should signal to metamask 10 ** 18
-        data
-      )
+      /**
+      * /**
+      * Solidity method
+      *
+      function buyCover (
+        address _bridgeProductAddress,
+        uint256 _epochsNumber,
+        uint16  _sumAssured,
+        address _buyerAddress,
+        address _treasuryAddress,
+        uint256 _premium,
+        bytes calldata _interfaceCompliant4
+        external payable nonReentrant {
+          */
+
+      // bridgeV2.methods.buyCover(
+      //   policyBook._address,
+      //   epochs,
+      //   fromWei(_sumAssured.toString()),
+      //   global.user.account,
+      //   brightRewardsAddress,
+      //   _maxPriceWithFee, //  this might be the conversion Tether should signal to metamask 10 ** 18
+      //   data
+      // )
+      policyBookFacade.methods.buyPolicyFromDistributorFor( global.user.account, epochs, _sumAssured, brightRewardsAddress )
       .send({from: global.user.account})
       .on('transactionHash', (transactionHash:any) => {
         tx.hash = transactionHash;

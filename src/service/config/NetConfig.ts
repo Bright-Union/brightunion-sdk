@@ -288,7 +288,6 @@ class NetConfig{
   public static createWeb3Provider(provider:any){
     let web3 = null;
     if(provider.includes("alchemy")){
-      console.log("alchemy - " , provider );
       web3 =  createAlchemyWeb3(provider);
     } else {
       web3 = new Web3(new Web3.providers.HttpProvider(provider));
