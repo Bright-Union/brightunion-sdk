@@ -368,19 +368,19 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 // }
 
 export async function callBridgeV2(_quoteProtocol:any){
-
+console.log("_quoteProtocol:  ",_quoteProtocol)
   return buyCover(
-    global.user.account,
-    'bridge',
-    _quoteProtocol.protocol.bridgeProductAddress, //bridge prod address
-    null,  // payment asset
-    _quoteProtocol.amount.toString(), // sum assured, compliant
-    _quoteProtocol.actualPeriod, // period
-    null, //coverType
-    null, // token amount to cover
-    null, // random data
-    null,
-    _quoteProtocol
+    global.user.account,//                            _ownerAddress                
+    'bridge',//                                       _distributorName    
+    _quoteProtocol.protocol.bridgeProductAddress, //  _contractAddress                                          
+    null,//                                           _coverAsset
+    _quoteProtocol.amount.toString(), //              _sumAssured                              
+    _quoteProtocol.actualPeriod, //                   _coverPeriod                        
+    null,//                                           _coverType
+    _quoteProtocol.price,//                           _maxPriceWithFee                
+    null,//                                           _data
+    null,//                                           buyingWithNetworkCurrency
+    _quoteProtocol//                                  _quoteProtocol          
   )
 
 }

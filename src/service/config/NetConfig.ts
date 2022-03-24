@@ -34,7 +34,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         modules: VUE_APP_MAINNET_MODULES.split(' '),
         bridgeRegistry: '0x8050c5a46FC224E3BCfa5D7B7cBacB1e4010118d',
         bridgeV2Registry: '0x45269F7e69EE636067835e0DfDd597214A1de6ea',
-        bridgeV2Distributor: '',
+        bridgeV2Distributor: '0x213FFAca158c4f8863c1980A41c25F34fB0B95e0',
         bridgeBrightReference: '0xAc0734C62B316041D190438d5d3e5D1359614407',
         nexusDistributor: '0x3756C3C9374f38e0d9aAcB637Fed1641504a5b28',
         nexusAPI: 'https://api.nexusmutual.io',

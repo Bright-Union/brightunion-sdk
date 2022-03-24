@@ -15,7 +15,7 @@ import {
 
 import ERC20Helper from '../helpers/ERC20Helper';
 import NetConfig from '../config/NetConfig';
-import { fromWei} from 'web3-utils'
+import { fromWei, toBN, toWei} from 'web3-utils'
 
 
 /**
@@ -131,7 +131,17 @@ export async function buyCover(
         }
 
   } else if(_distributorName == 'bridge'){
+        
+    console.log("caling bridge ")
+        
+    console.log("NetConfig.netById(global.user.ethNet.networkId).bridgeV2Distributor", "\n",
+                 NetConfig.netById(global.user.ethNet.networkId).bridgeV2Distributor);
+
     let bridgeV2 = _getBridgeDistributorV2(NetConfig.netById(global.user.ethNet.networkId).bridgeV2Distributor, global.user.web3 );
+
+
+    console.log("bridgeV2: ", bridgeV2)
+
     tx.distributor = 'bridge';
 
     const brightRewardsAddress = NetConfig.netById(global.user.ethNet.networkId).bridgeBrightReference;
@@ -144,18 +154,43 @@ export async function buyCover(
 
     // convert period from days to bridge epochs (weeks)
     let epochs = Math.min(52, Math.ceil(_coverPeriod / 7));
+    const data = global.user.web3.eth.abi.encodeParameters(['uint'],[_sumAssured] );
 
     return await new Promise((resolve, reject) => {
       // policyBookFacade.methods.buyPolicy( epochs, _sumAssured )
       // policyBookFacade.methods.buyPolicyFromDistributorFor( global.user.account, epochs, _sumAssured, brightRewardsAddress )
-      bridgeV2.buyCover(
-        policyBook.address,
-        epochs,
-        _sumAssured,
-        global.user.account,
-        brightRewardsAddress,
-        _maxPriceWithFee,
+      console.log(
+        "policyBook: ", policyBook._address, "\n",
+        "epochs: ", epochs, "\n",
+        "_sumAssured: ", _sumAssured, "\n",
+        "brightRewardsAddress: ", brightRewardsAddress, "\n",
+        "_maxPriceWithFee: ", _maxPriceWithFee, "\n",
+        "data: ", data, "\n",
       )
+  /**
+   * /**
+ * Solidity method
+ *   
+ function buyCover (
+  address _bridgeProductAddress,
+  uint256 _epochsNumber,
+  uint16  _sumAssured,
+  address _buyerAddress,
+  address _treasuryAddress,
+  uint256 _premium,
+  bytes calldata _interfaceCompliant4
+external payable nonReentrant {
+ */
+   
+      bridgeV2.methods.buyCover(        
+        policyBook._address,        
+        epochs,       
+        fromWei(_sumAssured.toString()),        
+        global.user.account,        
+        brightRewardsAddress,       
+        _maxPriceWithFee, //  this might be the conversion Tether should signal to metamask 10 ** 18
+        data        
+      )       
       .send({from: global.user.account})
       .on('transactionHash', (transactionHash:any) => {
         tx.hash = transactionHash;
