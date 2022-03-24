@@ -30,8 +30,8 @@ class GoogleEvents {
   static onBUInit = () => {
     if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
 
-        gtag('set', 'client_id', global.user.clientKey );
-        gtag('set', 'user_id', global.user.clientKey );
+        // gtag('set', 'client_id', global.user.clientKey );
+        // gtag('set', 'user_id', global.user.clientKey );
 
         gtag('event', 'login', {
           method: global.user.clientKey
@@ -115,7 +115,7 @@ class GoogleEvents {
   };
 
   static buy = (_quote:any) => {
-    console.log("GA buy" , _quote);
+    // console.log("GA buy" , _quote);
     if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
 
       let coverName = _quote.name ? _quote.name : _quote._protocol ? _quote._protocol.name : 'null';
@@ -210,7 +210,7 @@ class GoogleEvents {
 
   static onTxRejected = (tx:any) => {
 
-    console.log("onTxRejected" , tx)
+    // console.log("onTxRejected" , tx)
 
     if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
 

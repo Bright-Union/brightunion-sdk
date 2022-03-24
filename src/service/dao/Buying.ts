@@ -109,14 +109,14 @@ export async function buyCover(
     const data = global.user.web3.eth.abi.encodeParameters(['uint'],[_sumAssured] );
 
     return await new Promise((resolve, reject) => {
-      console.log(
-        "policyBook: ", policyBook._address, "\n",
-        "epochs: ", epochs, "\n",
-        "_sumAssured: ", _sumAssured, "\n",
-        "brightRewardsAddress: ", brightRewardsAddress, "\n",
-        "_maxPriceWithFee: ", _maxPriceWithFee, "\n",
-        "data: ", data, "\n",
-      )
+      // console.log(
+      //   "policyBook: ", policyBook._address, "\n",
+      //   "epochs: ", epochs, "\n",
+      //   "_sumAssured: ", _sumAssured, "\n",
+      //   "brightRewardsAddress: ", brightRewardsAddress, "\n",
+      //   "_maxPriceWithFee: ", _maxPriceWithFee, "\n",
+      //   "data: ", data, "\n",
+      // )
 
       /**
       * /**
