@@ -2,6 +2,7 @@ import GoogleEvents from '../config/GoogleEvents';
 import BuyReceipt from "../domain/BuyReceipt";
 import {
   _getDistributorsContract,
+  _getInsuraceDistributor,
   _getInsuraceDistributorsContract,
   _getNexusDistributorsContract,
   _getBridgeV2Distributor,

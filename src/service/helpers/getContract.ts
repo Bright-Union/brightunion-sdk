@@ -2,6 +2,7 @@ import DistributorsABI  from '../abi/Distributors.json';
 import IERC20ABI from '../abi/IERC20.json';
 
 import InsuraceDistributorABI from '../abi/insurace/InsuraceDistributor.json';
+import ICoverABI from '../abi/insurace/ICover.json';
 import InsuraceCoverDataABI from '../abi/insurace/ICoverData.json';
 import InsuraceProductABI from '../abi/insurace/IProduct.json';
 
@@ -90,6 +91,11 @@ function _getNexusDistributor(address:string) : any {
   return new web3.eth.Contract(distAbi, address );
 }
 
+function _getInsuraceDistributor(address:string, _web3:any) : any {
+  const distAbi:any = ICoverABI.abi;
+  return new _web3.eth.Contract(distAbi, address );
+}
+
 function _getInsurAceCoverDataContract(address:string, _web3:any) : any {
   // const web3:any = global.user.web3;
   const distAbi:any = InsuraceCoverDataABI.abi;
@@ -126,7 +132,7 @@ export  {
     _getBridgeV2Distributor,
 
     _getInsuraceDistributorsContract,
-    // _getInsuraceDistributor,
+    _getInsuraceDistributor,
     _getInsurAceCoverDataContract,
     _getInsurAceProductContract,
     _getNexusDistributorsContract,
