@@ -205,11 +205,11 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
 
     insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();
 
-    return await new Promise((resolve, reject) => {
+      return await new Promise((resolve, reject) => {
       _getInsuraceDistributorsContract(insuraceAddress)
       .methods
       .buyCoverInsurace(buyingObj)
-      .send({ from: buyingObj.owner, value: sendValue })
+      .send({ from: buyingObj.owner, value: sendValue, gasPrice: _quotes.gasPrice})
       .on('transactionHash', (res:any) => {
         tx.hash = res;
         global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
