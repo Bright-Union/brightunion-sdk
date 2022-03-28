@@ -204,31 +204,42 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
   }
 
     insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();
+     
+      const contractInstance = _getInsuraceDistributorsContract(insuraceAddress);
+      let gasEstimation : any;
+      
+      await contractInstance.methods.buyCoverInsurace(buyingObj).estimateGas({
+          from: buyingObj.owner, gas: _quotes.gasPrice, value:_quotes.price
+        }).then(function(gasAmount:any){ gasEstimation = gasAmount })
+        .catch(function(error:any){ console.error("Gas estimation: ",insuraceAddress, error) });
 
+        console.log("gasEstimation:  ",gasEstimation)
       return await new Promise((resolve, reject) => {
-      _getInsuraceDistributorsContract(insuraceAddress)
-      .methods
-      .buyCoverInsurace(buyingObj)
-      .send({ from: buyingObj.owner, value: sendValue, gasPrice: _quotes.gasPrice})
-      .on('transactionHash', (res:any) => {
-        tx.hash = res;
-        global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
-        GoogleEvents.onTxHash(tx);
-        resolve({success: res});
-      })
-      .on('error', (err:any, receipt:any) => {
-        global.events.emit("buy" , { status: "REJECTED" } );
-        GoogleEvents.onTxRejected(tx);
-        reject({error: err , receipt:receipt})
-      })
-      .on('confirmation', (confirmationNumber:any) => {
-        if (confirmationNumber === 0) {
-          global.events.emit("buy" , { status: "TX_CONFIRMED" } );
-          GoogleEvents.onTxConfirmation(tx);
-        }
-      });
-    });
-
+          contractInstance.methods
+          .buyCoverInsurace(buyingObj)
+          .send({ 
+            from: buyingObj.owner, 
+            value: sendValue, 
+            gas: gasEstimation
+           })
+          .on('transactionHash', (res:any) => {
+            tx.hash = res;
+            global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
+            GoogleEvents.onTxHash(tx);
+            resolve({success: res});
+          })
+          .on('error', (err:any, receipt:any) => {
+            global.events.emit("buy" , { status: "REJECTED" } );
+            GoogleEvents.onTxRejected(tx);
+            reject({error: err , receipt:receipt})
+          })
+          .on('confirmation', (confirmationNumber:any) => {
+            if (confirmationNumber === 0) {
+              global.events.emit("buy" , { status: "TX_CONFIRMED" } );
+              GoogleEvents.onTxConfirmation(tx);
+            }
+          });
+        });
 }
 
 
