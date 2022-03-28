@@ -44,12 +44,19 @@ export default class ERC20Helper {
                 erc20Instance.methods
                     .approve(spender, '0')
                     .send({from: global.user.account, spender})
+                    .on('transactionHash', () => {
+                        onTxHash();
+                    })
                     .on('confirmation', (confirmationNumber:any) => {
                         if (confirmationNumber === 0) {
                             //starting over again
                             ERC20Helper.approveAndCall(erc20Instance, spender, ERC20Helper.ERCtoUSDTDecimals(amount), onTxHash, onConfirmation, onError);
                         }
                     })
+                    .on('error', (err:any, receipt:any) => {
+                      onError(err, receipt);
+                    })
+
             } else {
                 ERC20Helper.approveAndCall(erc20Instance, spender, ERC20Helper.ERCtoUSDTDecimals(amount), onTxHash, onConfirmation, onError);
             }
