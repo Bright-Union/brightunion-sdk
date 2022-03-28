@@ -213,7 +213,6 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
         }).then(function(gasAmount:any){ gasEstimation = gasAmount })
         .catch(function(error:any){ console.error("Gas estimation: ",insuraceAddress, error) });
 
-        console.log("gasEstimation:  ",gasEstimation)
       return await new Promise((resolve, reject) => {
           contractInstance.methods
           .buyCoverInsurace(buyingObj)
