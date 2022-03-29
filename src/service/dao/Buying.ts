@@ -209,12 +209,12 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
       let gasEstimation : any;
 
       let gasPrice = Math.round(Number(_quotes.gasPrice));
-      let gasTest = toWei(await toBN(Number(gasPrice)), "gwei");
+      let estimatedGasPrice = toWei(await toBN(Number(gasPrice)), "gwei");
 
       try {
         await contractInstance.methods.buyCoverInsurace(buyingObj).estimateGas({
           from: buyingObj.owner, 
-          gas: gasTest, 
+          gas: estimatedGasPrice, 
           value:_quotes.price
         }).then(function(gasAmount:any){ gasEstimation = gasAmount })
           .catch(function(error:any){ console.error("Gas estimation: ",insuraceAddress, error) });
@@ -229,8 +229,7 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
             from: buyingObj.owner, 
             value: sendValue, 
             gas: gasEstimation,
-            gasLimit: 2500000,
-            gasPrice: gasTest
+            gasLimit: 2500000
            })
           .on('transactionHash', (res:any) => {
             tx.hash = res;
