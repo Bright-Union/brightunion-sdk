@@ -206,21 +206,20 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
     insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();
      
       const contractInstance = _getInsuraceDistributorsContract(insuraceAddress);
-      let gasEstimation : any;
+      let gasEstimationCost : any;
 
       let gasPrice = Math.round(Number(_quotes.gasPrice));
-      let estimatedGasPrice = toWei(await toBN(Number(gasPrice)), "gwei");
+      let estimatedGasPrice = toWei(await toBN(Number(gasPrice)), "gwei").toString();
 
-      try {
-        await contractInstance.methods.buyCoverInsurace(buyingObj).estimateGas({
+
+      await contractInstance.methods.buyCoverInsurace(buyingObj).estimateGas({
           from: buyingObj.owner, 
           gas: estimatedGasPrice, 
           value:_quotes.price
-        }).then(function(gasAmount:any){ gasEstimation = gasAmount })
-          .catch(function(error:any){ console.error("Gas estimation: ",insuraceAddress, error) });
-      }catch(err){
-        console.info("Simulated transaction to estimate gas costs", err)
-      }
+        }).then(function(gasAmount:any){ gasEstimationCost = gasAmount && gasAmount.toString() })
+          .catch(function(error:any){
+            console.info("Simulated transaction to estimate gas costs", error)
+          });
       
       return await new Promise((resolve, reject) => {
           contractInstance.methods
@@ -228,8 +227,9 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
           .send({ 
             from: buyingObj.owner, 
             value: sendValue, 
-            gas: gasEstimation,
-            gasLimit: 2500000
+            gas: gasEstimationCost,
+            gasLimit: 2500000,
+            gasPrice: estimatedGasPrice
            })
           .on('transactionHash', (res:any) => {
             tx.hash = res;
