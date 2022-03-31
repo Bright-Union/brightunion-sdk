@@ -46,7 +46,7 @@ export async function getQuote(
     _interfaceCompliant2 : string,
     _data : any,
 ) : Promise<any>  {
-  return await _getDistributorsContract() // SDK
+  return await _getDistributorsContract(global.user.web3) // SDK
                       .methods
                       .getQuote(
                         _distributorName,

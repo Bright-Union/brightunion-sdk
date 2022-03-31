@@ -49,7 +49,7 @@ export default class NexusApi {
 
         let basePrice = toBN(response.data.price);
 
-        const sideChainAddress = await _getDistributorsContract().methods.getDistributorAddress('nexus').call();
+        const sideChainAddress = await _getDistributorsContract(global.user.ethNet.web3Instance).methods.getDistributorAddress('nexus').call();
         const distributor = await _getNexusDistributorsContract(sideChainAddress);
 
         let fee:any = await distributor.methods.feePercentage().call();

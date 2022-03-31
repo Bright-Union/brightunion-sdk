@@ -33,11 +33,10 @@ import BridgeV2DistributorABI from '../abi/bridgeV2/BridgeDistributorV2.json'
  *    "Distributors"
  *    Get Contracts from Bright Union Protocol
  *  */
-function _getDistributorsContract() : any {
-  const web3:any = global.user.web3;
+function _getDistributorsContract(_web3:any) : any {
   const address: string = global.user.brightProtoAddress;
   const distAbi:any = DistributorsABI.abi;
-  return new web3.eth.Contract(distAbi, address );
+  return new _web3.eth.Contract(distAbi, address );
 }
 
 function _getNexusDistributorsContract(address:any) : any {
