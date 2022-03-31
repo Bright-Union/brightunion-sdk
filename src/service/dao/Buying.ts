@@ -14,6 +14,7 @@ import {
 import ERC20Helper from '../helpers/ERC20Helper';
 import NetConfig from '../config/NetConfig';
 import { fromWei, toBN, toWei} from 'web3-utils'
+import axios from 'axios'
 
 /**
 * Returns a transaction receipt.
@@ -205,30 +206,64 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
 
     insuraceAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('insurace').call();
 
-    return await new Promise((resolve, reject) => {
-      _getInsuraceDistributorsContract(insuraceAddress)
-      .methods
-      .buyCoverInsurace(buyingObj)
-      .send({ from: buyingObj.owner, value: sendValue })
-      .on('transactionHash', (res:any) => {
-        tx.hash = res;
-        global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
-        GoogleEvents.onTxHash(tx);
-        resolve({success: res});
-      })
-      .on('error', (err:any, receipt:any) => {
-        global.events.emit("buy" , { status: "REJECTED" } );
-        GoogleEvents.onTxRejected(tx);
-        reject({error: err , receipt:receipt})
-      })
-      .on('confirmation', (confirmationNumber:any) => {
-        if (confirmationNumber === 0) {
-          global.events.emit("buy" , { status: "TX_CONFIRMED" } );
-          GoogleEvents.onTxConfirmation(tx);
-        }
-      });
-    });
+      const contractInstance = _getInsuraceDistributorsContract(insuraceAddress);
+      let gasEstimationCost : any = null;
+      let estimatedGasPrice:any = null;
 
+      let buyTransactionData:any = {
+        from: buyingObj.owner,
+        value: sendValue,
+      }
+
+      if(global.user.networkId == 137 ){
+        let  gasPriceNow =  await axios.get("https://gasstation-mainnet.matic.network/")
+        .then((response:any) => {
+          return response.data.standard;
+        },
+        (error) => {
+          console.error('gasstation-mainnet.matic.network error - ', error);
+          return 50;
+        });
+
+        let gasPrice = Math.round(Number(gasPriceNow));
+        estimatedGasPrice = toWei(toBN(Number(gasPrice)), "gwei").toString();
+
+        await contractInstance.methods.buyCoverInsurace(buyingObj).estimateGas({
+          from: buyingObj.owner,
+          gas: estimatedGasPrice,
+          value:_quotes.price
+        }).then(function(gasAmount:any){ gasEstimationCost = gasAmount && gasAmount.toString() })
+        .catch(function(error:any){
+          console.info("Simulated transaction to estimate gas costs", error)
+        });
+
+        buyTransactionData.gas = gasEstimationCost;
+        buyTransactionData.gasLimit = 2500000;
+        buyTransactionData.gasPrice = estimatedGasPrice;
+      }
+
+      return await new Promise((resolve, reject) => {
+          contractInstance.methods
+          .buyCoverInsurace(buyingObj)
+          .send(buyTransactionData)
+          .on('transactionHash', (res:any) => {
+            tx.hash = res;
+            global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
+            GoogleEvents.onTxHash(tx);
+            resolve({success: res});
+          })
+          .on('error', (err:any, receipt:any) => {
+            global.events.emit("buy" , { status: "REJECTED" } );
+            GoogleEvents.onTxRejected(tx);
+            reject({error: err , receipt:receipt})
+          })
+          .on('confirmation', (confirmationNumber:any) => {
+            if (confirmationNumber === 0) {
+              global.events.emit("buy" , { status: "TX_CONFIRMED" } );
+              GoogleEvents.onTxConfirmation(tx);
+            }
+          });
+        });
 }
 
 
