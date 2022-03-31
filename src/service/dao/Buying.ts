@@ -63,7 +63,7 @@ export async function buyCover(
     const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
 
           return await new Promise( async (resolve, reject) => {
-            const nexusAddress = await _getDistributorsContract().methods.getDistributorAddress('nexus').call();
+            const nexusAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('nexus').call();
             _getNexusDistributorsContract(nexusAddress) // Nexus Call through Bright Protocol Distributors Layer
             .methods.buyCover(
               _contractAddress,
@@ -203,7 +203,7 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
     'period':_quotes.period,
   }
 
-    insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();
+    insuraceAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('insurace').call();
 
     return await new Promise((resolve, reject) => {
       _getInsuraceDistributorsContract(insuraceAddress)

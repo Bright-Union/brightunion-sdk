@@ -57,7 +57,7 @@ export async function buyMutipleOnInsurace (_quotes:any):Promise<any> {
     let account = global.user.account;
     let ercBalance  = await erc20Instance.methods.balanceOf(account).call();
 
-    const insuraceAddress:any =  await _getDistributorsContract().methods.getDistributorAddress('insurace').call();
+    const insuraceAddress:any =  await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('insurace').call();
 
     if (NetConfig.sixDecimalsCurrency(global.user.networkId, _quotes.currency.name) &&       //6 digits currency?
     Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(buyingObj.premium)) {
@@ -140,7 +140,7 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
 
   global.events.emit("buy" , { status: "INITIALIZED"} );
 
-  const insuraceAddress:any = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();
+  const insuraceAddress:any = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('insurace').call();
 
   if(NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency)){
     if (Number(netBalance) >= (Number)(_quoteProtocol.price)) {

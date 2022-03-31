@@ -44,7 +44,7 @@ export async function getCoversCount(
 
   }else{
 
-    return await _getDistributorsContract()
+    return await _getDistributorsContract(global.user.web3)
     .methods
     .getCoversCount(
       _distributorName,
@@ -90,7 +90,7 @@ export async function getCovers(
 
   // }else{
   //
-  //   return await _getDistributorsContract()
+  //   return await _getDistributorsContract(global.user.web3)
   //   .methods
   //   .getCovers(
   //     _distributorName,
