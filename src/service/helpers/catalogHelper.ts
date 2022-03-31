@@ -317,10 +317,6 @@ class CatalogHelper {
     return logosArr;
   }
 
-  public static getChainLogos() {
-
-  }
-
   public static descriptionByCategory (category: string) {
     let categoryFound = bridge_nexus_insurace_categories.find(cat => cat[3] === category);
     if (categoryFound) {
