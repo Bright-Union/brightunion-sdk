@@ -14,6 +14,7 @@ import {
 import ERC20Helper from '../helpers/ERC20Helper';
 import NetConfig from '../config/NetConfig';
 import { fromWei, toBN, toWei} from 'web3-utils'
+import axios from 'axios'
 
 /**
 * Returns a transaction receipt.
@@ -207,10 +208,21 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
 
       const contractInstance = _getInsuraceDistributorsContract(insuraceAddress);
       let gasEstimationCost : any;
+      let gasPriceNow:any = _quotes.gasPrice;
 
-      let gasPrice = Math.round(Number(_quotes.gasPrice));
-      let estimatedGasPrice = toWei(await toBN(Number(gasPrice)), "gwei").toString();
+      if(!gasPriceNow){
+        gasPriceNow =  await axios.get("https://gasstation-mainnet.matic.network/")
+        .then((response:any) => {
+          return response.data.standard;
+        },
+        (error) => {
+          console.error('gasstation-mainnet.matic.network error - ', error);
+          return 50;
+        });
+      }
 
+      let gasPrice = Math.round(Number(gasPriceNow));
+      let estimatedGasPrice = toWei(toBN(Number(gasPrice)), "gwei").toString();
 
       await contractInstance.methods.buyCoverInsurace(buyingObj).estimateGas({
           from: buyingObj.owner,
