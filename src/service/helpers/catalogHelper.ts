@@ -164,6 +164,35 @@ const catalogLogoLinks: any = [
   { name: "Universe.XYZ" , link:"https://app.bridgemutual.io/assets/icons/coins/universexyz.webp"},
 ];
 
+const chainLogos:any = [
+  { name: 'Ethereum', imgSrc: 'https://app.insurace.io/asset/chain/eth.png'},
+  { name: 'BSC', imgSrc: 'https://app.insurace.io/asset/chain/bsc.png'},
+  { name: 'Polygon', imgSrc: 'https://app.insurace.io/asset/chain/polygon.png'},
+  { name: 'Avalanche', imgSrc: 'https://app.insurace.io/asset/chain/avalanche.png'},
+  { name: 'Fantom', imgSrc: 'https://app.insurace.io/asset/chain/fantom.png'},
+  { name: 'Gnosis', imgSrc: 'https://app.insurace.io/asset/chain/gnosis.png'},
+  { name: 'Icon', imgSrc: 'https://app.insurace.io/asset/chain/icon.png'},
+  { name: 'Solana', imgSrc: 'https://app.insurace.io/asset/chain/solana.png'},
+  { name: 'Bifrost', imgSrc: 'https://app.insurace.io/asset/chain/fantom.png'},
+  { name: 'Arbitrum', imgSrc: 'https://app.insurace.io/asset/chain/arbitrum.png'},
+  { name: 'Harmony', imgSrc: 'https://app.insurace.io/asset/chain/harmony.png'},
+  { name: 'Moonriver', imgSrc: 'https://app.insurace.io/asset/chain/moonriver.png'},
+  { name: 'Celo', imgSrc: 'https://app.insurace.io/asset/chain/celo.png'},
+  { name: 'Xdai', imgSrc: 'https://app.nexusmutual.io/logos/xdai.png'},
+  { name: 'Boba', imgSrc: 'https://app.insurace.io/asset/chain/boba.png'},
+  { name: 'Heco', imgSrc: 'https://app.insurace.io/asset/chain/heco.png'},
+  { name: 'Ontology', imgSrc: 'https://app.insurace.io/asset/chain/ontology.png'},
+  { name: 'Fuse', imgSrc: 'https://app.nexusmutual.io/logos/fuse.svg'},
+  { name: 'Terra', imgSrc: 'https://app.insurace.io/asset/chain/terra.png'},
+  { name: 'Srarkware', imgSrc: 'https://app.nexusmutual.io/logos/starkware.svg'},
+  { name: 'Thorchain', imgSrc: 'https://app.nexusmutual.io/logos/thorchain.svg'},
+  { name: 'Metis', imgSrc: 'https://app.nexusmutual.io/logos/metis.svg'},
+  { name: 'Aurora', imgSrc: 'https://app.insurace.io/asset/chain/aurora.png'},
+  { name: 'Moonbeam', imgSrc: 'https://app.insurace.io/asset/chain/moonbeam.png'},
+  { name: 'Cronos', imgSrc: 'https://app.insurace.io/asset/chain/cronos.png'},
+  { name: 'Optimism', imgSrc: 'https://app.insurace.io/asset/chain/optimism.png'},
+]
+
 class CatalogHelper {
 
   public static getSpecialLogoName (_name:string){
@@ -183,6 +212,8 @@ class CatalogHelper {
 
   public static quoteFromCoverable (_distributorName:string, _coverable:any, obj:any, stats:object) {
 
+    const chainList = this.chainList(_distributorName, _coverable);
+
     return {
       distributorName: _distributorName,
       risk_protocol: _distributorName,
@@ -193,6 +224,7 @@ class CatalogHelper {
       period: obj.period,
       chain: obj.chain,
       chainId: obj.chainId,
+      chainList: chainList,
       actualPeriod: obj.actualPeriod ? obj.actualPeriod : obj.period,
       protocol: _coverable,
       price: obj.price,
@@ -228,6 +260,9 @@ class CatalogHelper {
       type: obj.type,
       typeDescription: obj.typeDescription,
       availableCounter: 1,
+      typeList: obj.typeList,
+      chainListInsurace: obj.chainListInsurace,
+      chainListNexus: obj.chainListNexus,
       rawDataNexus: obj.rawDataNexus,                                           //field will be increased if similar products found
       rawDataBridge: obj.rawDataBridge,                                           //field will be increased if similar products found
       rawDataInsurace: obj.rawDataInsurace,                                           //field will be increased if similar products found
@@ -261,6 +296,29 @@ class CatalogHelper {
       commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[2] === category});
     }
     return commonCategory ? commonCategory[3] : '' ;
+  }
+
+  public static chainList(_distributorName:string, coverable:any) {
+    let list:any = [];
+    const logosArr:any = [];
+    if (_distributorName == 'nexus') {
+      list = coverable.chainListNexus;
+    } else if (_distributorName == 'insurace') {
+      list = coverable.chainListInsurace;
+    } else {
+      list = ['Ethereum']
+    }
+    if (list) {
+      list.forEach((item:any) => {
+        const filteredItem = chainLogos.find((chain:any) => chain.name.toLowerCase() === item.toLowerCase());
+        logosArr.push(filteredItem)
+      })
+    }
+    return logosArr;
+  }
+
+  public static getChainLogos() {
+
   }
 
   public static descriptionByCategory (category: string) {

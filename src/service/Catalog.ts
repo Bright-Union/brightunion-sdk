@@ -98,6 +98,7 @@ export async function getNexusCoverables(): Promise<any[]> {
           typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
           source: 'nexus',
           rawDataNexus: value,
+          chainListNexus: value.supportedChains
         }))
 
       }
@@ -161,6 +162,7 @@ export async function getNexusCoverables(): Promise<any[]> {
             ['stats_'+netSymbol]: { "capacityRemaining": value.capacity_remaining, "unitCost":value.unit_cost_yearly },
             netSymbol:netSymbol,
             rawDataInsurace: value,
+            chainListInsurace: value.chain_type_list
           }))
 
         }
