@@ -207,11 +207,16 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
     insuraceAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('insurace').call();
 
       const contractInstance = _getInsuraceDistributorsContract(insuraceAddress);
-      let gasEstimationCost : any;
-      let gasPriceNow:any = _quotes.gasPrice;
+      let gasEstimationCost : any = null;
+      let estimatedGasPrice:any = null;
 
-      if(!gasPriceNow){
-        gasPriceNow =  await axios.get("https://gasstation-mainnet.matic.network/")
+      let buyTransactionData:any = {
+        from: buyingObj.owner,
+        value: sendValue,
+      }
+
+      if(global.user.networkId == 137 ){
+        let  gasPriceNow =  await axios.get("https://gasstation-mainnet.matic.network/")
         .then((response:any) => {
           return response.data.standard;
         },
@@ -219,30 +224,28 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
           console.error('gasstation-mainnet.matic.network error - ', error);
           return 50;
         });
-      }
 
-      let gasPrice = Math.round(Number(gasPriceNow));
-      let estimatedGasPrice = toWei(toBN(Number(gasPrice)), "gwei").toString();
+        let gasPrice = Math.round(Number(gasPriceNow));
+        estimatedGasPrice = toWei(toBN(Number(gasPrice)), "gwei").toString();
 
-      await contractInstance.methods.buyCoverInsurace(buyingObj).estimateGas({
+        await contractInstance.methods.buyCoverInsurace(buyingObj).estimateGas({
           from: buyingObj.owner,
           gas: estimatedGasPrice,
           value:_quotes.price
         }).then(function(gasAmount:any){ gasEstimationCost = gasAmount && gasAmount.toString() })
-          .catch(function(error:any){
-            console.info("Simulated transaction to estimate gas costs", error)
-          });
+        .catch(function(error:any){
+          console.info("Simulated transaction to estimate gas costs", error)
+        });
+
+        buyTransactionData.gas = gasEstimationCost;
+        buyTransactionData.gasLimit = 2500000;
+        buyTransactionData.gasPrice = estimatedGasPrice;
+      }
 
       return await new Promise((resolve, reject) => {
           contractInstance.methods
           .buyCoverInsurace(buyingObj)
-          .send({
-            from: buyingObj.owner,
-            value: sendValue,
-            gas: gasEstimationCost,
-            gasLimit: 2500000,
-            gasPrice: estimatedGasPrice
-           })
+          .send(buyTransactionData)
           .on('transactionHash', (res:any) => {
             tx.hash = res;
             global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
