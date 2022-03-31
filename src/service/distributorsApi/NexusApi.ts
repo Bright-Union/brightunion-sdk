@@ -49,8 +49,8 @@ export default class NexusApi {
 
         let basePrice = toBN(response.data.price);
 
-        const sideChainAddress = await _getDistributorsContract().methods.getDistributorAddress('nexus').call();
-        const distributor = await _getNexusDistributorsContract(sideChainAddress);
+        const distributor = await _getNexusDistributorsContract(NetConfig.netById(global.user.ethNet.networkId).nexusDistributor);
+        // hardcoded address, as Bright Distributors contract cannot be called by passive net - fix for Nexus Multichain Quotation
 
         let fee:any = await distributor.methods.feePercentage().call();
         fee = toBN(fee);

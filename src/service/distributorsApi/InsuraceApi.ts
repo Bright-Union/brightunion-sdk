@@ -181,7 +181,7 @@ class InsuraceApi {
             const insurPrice = CurrencyHelper.insurPrice();
             const cashbackInStable = cashbackInInsur * insurPrice;
             let cashBackPercent = (cashbackInStable / Number(fromWei(premium))) * 100;
-            if ( defaultCurrencySymbol == quoteData.currency.name) {
+            if ( defaultCurrencySymbol == quoteData.currency) {
               const premiumInUSD = Number(fromWei(CurrencyHelper.eth2usd(premium)));
               cashBackPercent = (cashbackInStable / premiumInUSD) * 100;
             }

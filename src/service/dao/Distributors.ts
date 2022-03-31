@@ -12,7 +12,7 @@ import {_getDistributorsContract} from "../helpers/getContract";
 export async function getDistributorAddress(
   _distributorName : string
   ) : Promise<string>  {
-  return await _getDistributorsContract()
+  return await _getDistributorsContract(global.user.web3)
               .methods
               .getDistributorAddress(_distributorName)
               .call();

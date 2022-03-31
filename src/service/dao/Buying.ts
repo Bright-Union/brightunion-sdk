@@ -63,7 +63,7 @@ export async function buyCover(
     const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
 
           return await new Promise( async (resolve, reject) => {
-            const nexusAddress = await _getDistributorsContract().methods.getDistributorAddress('nexus').call();
+            const nexusAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('nexus').call();
             _getNexusDistributorsContract(nexusAddress) // Nexus Call through Bright Protocol Distributors Layer
             .methods.buyCover(
               _contractAddress,
@@ -203,8 +203,8 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
     'period':_quotes.period,
   }
 
-    insuraceAddress = await _getDistributorsContract().methods.getDistributorAddress('insurace').call();
-     
+    insuraceAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('insurace').call();
+
       const contractInstance = _getInsuraceDistributorsContract(insuraceAddress);
       let gasEstimationCost : any;
 
@@ -213,20 +213,20 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
 
 
       await contractInstance.methods.buyCoverInsurace(buyingObj).estimateGas({
-          from: buyingObj.owner, 
-          gas: estimatedGasPrice, 
+          from: buyingObj.owner,
+          gas: estimatedGasPrice,
           value:_quotes.price
         }).then(function(gasAmount:any){ gasEstimationCost = gasAmount && gasAmount.toString() })
           .catch(function(error:any){
             console.info("Simulated transaction to estimate gas costs", error)
           });
-      
+
       return await new Promise((resolve, reject) => {
           contractInstance.methods
           .buyCoverInsurace(buyingObj)
-          .send({ 
-            from: buyingObj.owner, 
-            value: sendValue, 
+          .send({
+            from: buyingObj.owner,
+            value: sendValue,
             gas: gasEstimationCost,
             gasLimit: 2500000,
             gasPrice: estimatedGasPrice
