@@ -164,35 +164,6 @@ const catalogLogoLinks: any = [
   { name: "Universe.XYZ" , link:"https://app.bridgemutual.io/assets/icons/coins/universexyz.webp"},
 ];
 
-const chainLogos:any = [
-  { name: 'Ethereum', imgSrc: 'https://app.insurace.io/asset/chain/eth.png'},
-  { name: 'BSC', imgSrc: 'https://app.insurace.io/asset/chain/bsc.png'},
-  { name: 'Polygon', imgSrc: 'https://app.insurace.io/asset/chain/polygon.png'},
-  { name: 'Avalanche', imgSrc: 'https://app.insurace.io/asset/chain/avalanche.png'},
-  { name: 'Fantom', imgSrc: 'https://app.insurace.io/asset/chain/fantom.png'},
-  { name: 'Gnosis', imgSrc: 'https://app.insurace.io/asset/chain/gnosis.png'},
-  { name: 'Icon', imgSrc: 'https://app.insurace.io/asset/chain/icon.png'},
-  { name: 'Solana', imgSrc: 'https://app.insurace.io/asset/chain/solana.png'},
-  { name: 'Bifrost', imgSrc: 'https://app.insurace.io/asset/chain/fantom.png'},
-  { name: 'Arbitrum', imgSrc: 'https://app.insurace.io/asset/chain/arbitrum.png'},
-  { name: 'Harmony', imgSrc: 'https://app.insurace.io/asset/chain/harmony.png'},
-  { name: 'Moonriver', imgSrc: 'https://app.insurace.io/asset/chain/moonriver.png'},
-  { name: 'Celo', imgSrc: 'https://app.insurace.io/asset/chain/celo.png'},
-  { name: 'Xdai', imgSrc: 'https://app.nexusmutual.io/logos/xdai.png'},
-  { name: 'Boba', imgSrc: 'https://app.insurace.io/asset/chain/boba.png'},
-  { name: 'Heco', imgSrc: 'https://app.insurace.io/asset/chain/heco.png'},
-  { name: 'Ontology', imgSrc: 'https://app.insurace.io/asset/chain/ontology.png'},
-  { name: 'Fuse', imgSrc: 'https://app.nexusmutual.io/logos/fuse.svg'},
-  { name: 'Terra', imgSrc: 'https://app.insurace.io/asset/chain/terra.png'},
-  { name: 'Srarkware', imgSrc: 'https://app.nexusmutual.io/logos/starkware.svg'},
-  { name: 'Thorchain', imgSrc: 'https://app.nexusmutual.io/logos/thorchain.svg'},
-  { name: 'Metis', imgSrc: 'https://app.nexusmutual.io/logos/metis.svg'},
-  { name: 'Aurora', imgSrc: 'https://app.insurace.io/asset/chain/aurora.png'},
-  { name: 'Moonbeam', imgSrc: 'https://app.insurace.io/asset/chain/moonbeam.png'},
-  { name: 'Cronos', imgSrc: 'https://app.insurace.io/asset/chain/cronos.png'},
-  { name: 'Optimism', imgSrc: 'https://app.insurace.io/asset/chain/optimism.png'},
-]
-
 class CatalogHelper {
 
   public static getSpecialLogoName (_name:string){
@@ -202,6 +173,23 @@ class CatalogHelper {
     }else{
       return false;
     }
+  }
+
+  public static chainLogos (name:string) {
+    let transformedName = name.toLowerCase();
+    if (transformedName === 'ethereum') transformedName = 'eth';
+    const insuraceSrc = `https://app.insurace.io/asset/chain/${transformedName}.png`
+    const nexusPng = `https://app.nexusmutual.io/logos/${transformedName}.png`
+    const nexusSvg = `https://app.nexusmutual.io/logos/${transformedName}.svg`
+    let imgSrc = '';
+    if (transformedName == 'metis' || transformedName == 'thorchain' || transformedName == 'starkware' || transformedName == 'fuse') {
+      imgSrc = nexusSvg;
+    } else if (transformedName == 'xdai') {
+      imgSrc = nexusPng;
+    } else {
+      imgSrc = insuraceSrc;
+    }
+    return {name, imgSrc}
   }
 
   //Unify Cover object from Bright contract
@@ -310,8 +298,10 @@ class CatalogHelper {
     }
     if (list) {
       list.forEach((item:any) => {
-        const filteredItem = chainLogos.find((chain:any) => chain.name.toLowerCase() === item.toLowerCase());
-        logosArr.push(filteredItem)
+        const itemObj = this.chainLogos(item);
+        if (item.toLowerCase() === itemObj.name.toLowerCase()) {
+          logosArr.push(itemObj)
+        }
       })
     }
     return logosArr;
