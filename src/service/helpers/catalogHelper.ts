@@ -175,6 +175,23 @@ class CatalogHelper {
     }
   }
 
+  public static chainLogos (name:string) {
+    let transformedName = name.toLowerCase();
+    if (transformedName === 'ethereum') transformedName = 'eth';
+    const insuraceSrc = `https://app.insurace.io/asset/chain/${transformedName}.png`
+    const nexusPng = `https://app.nexusmutual.io/logos/${transformedName}.png`
+    const nexusSvg = `https://app.nexusmutual.io/logos/${transformedName}.svg`
+    let imgSrc = '';
+    if (transformedName == 'metis' || transformedName == 'thorchain' || transformedName == 'starkware' || transformedName == 'fuse') {
+      imgSrc = nexusSvg;
+    } else if (transformedName == 'xdai') {
+      imgSrc = nexusPng;
+    } else {
+      imgSrc = insuraceSrc;
+    }
+    return {name, imgSrc}
+  }
+
   //Unify Cover object from Bright contract
   public static coverFromData (_distributorName:string, _rawData:any ) {
     return{
@@ -182,6 +199,8 @@ class CatalogHelper {
   }
 
   public static quoteFromCoverable (_distributorName:string, _coverable:any, obj:any, stats:object) {
+
+    const chainList = this.chainList(_distributorName, _coverable);
 
     return {
       distributorName: _distributorName,
@@ -193,6 +212,7 @@ class CatalogHelper {
       period: obj.period,
       chain: obj.chain,
       chainId: obj.chainId,
+      chainList: chainList,
       actualPeriod: obj.actualPeriod ? obj.actualPeriod : obj.period,
       protocol: _coverable,
       price: obj.price,
@@ -228,6 +248,9 @@ class CatalogHelper {
       type: obj.type,
       typeDescription: obj.typeDescription,
       availableCounter: 1,
+      typeList: obj.typeList,
+      chainListInsurace: obj.chainListInsurace,
+      chainListNexus: obj.chainListNexus,
       rawDataNexus: obj.rawDataNexus,                                           //field will be increased if similar products found
       rawDataBridge: obj.rawDataBridge,                                           //field will be increased if similar products found
       rawDataInsurace: obj.rawDataInsurace,                                           //field will be increased if similar products found
@@ -261,6 +284,27 @@ class CatalogHelper {
       commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[2] === category});
     }
     return commonCategory ? commonCategory[3] : '' ;
+  }
+
+  public static chainList(_distributorName:string, coverable:any) {
+    let list:any = [];
+    const logosArr:any = [];
+    if (_distributorName == 'nexus') {
+      list = coverable.chainListNexus;
+    } else if (_distributorName == 'insurace') {
+      list = coverable.chainListInsurace;
+    } else {
+      list = ['Ethereum']
+    }
+    if (list) {
+      list.forEach((item:any) => {
+        const itemObj = this.chainLogos(item);
+        if (item.toLowerCase() === itemObj.name.toLowerCase()) {
+          logosArr.push(itemObj)
+        }
+      })
+    }
+    return logosArr;
   }
 
   public static descriptionByCategory (category: string) {
