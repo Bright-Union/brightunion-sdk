@@ -32,7 +32,7 @@ const bridge_nexus_insurace = [
   ['', 'DyDx Perpetual', 'DyDx', 'DyDx'],
   ['', 'ETH 2.0 (deposit contract)', 'ETH 2.0', 'ETH 2.0'],
   ['', 'OlympusDAO', 'Olympus DAO', 'Olympus DAO'],
-  ['', 'Abracadabra', 'Abracadabra.money', 'Abracadabra'],
+  ['Spell Token', 'Abracadabra', 'Abracadabra.money', 'Abracadabra'],
   ['Uniswap', 'Uniswap V1', '', 'Uniswap V1'],
   ['Uniswap', 'Uniswap V2', 'Uniswap V2', 'Uniswap V2'],
   ['Uniswap', 'Uniswap V3', 'Uniswap V3', 'Uniswap V3'],
