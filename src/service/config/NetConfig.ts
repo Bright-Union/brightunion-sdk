@@ -94,7 +94,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         explorer: 'https://kovan.etherscan.io',
         provider: 'https://eth-kovan.alchemyapi.io/v2/9r8lwXZcACNfMovcyYaquN_CNK81Cqxi',
         modules: VUE_APP_KOVAN_MODULES.split(' '),
-        nexusDistributor: '0x95454264489114534dD39D81E03Cf4003F948cA6',
+        nexusDistributor: '0xfd5Ec01f1b1F5e86174A4C5Ebb76AD62C449e191',
         nexusAPI: 'https://api.staging.nexusmutual.io',
         brightProtocol:'0x15E83c77857859C0Ab3E36c144c3225C4BacD7f7',
         brightContractRegistry: '0x269601a1825dB9194620477e2D251167Ae938117',
