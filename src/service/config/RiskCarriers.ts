@@ -10,10 +10,10 @@ const NEXUS:any = {
     cover: {
         kycDescription: 'Requirements for membership are payment of 0.002Eth and a KYC check',
         inclusions:'Code Failure & hacks, Economic & Governance attacks, oracle failures.',
-        exclusions: 'Phishing & malware at individual customer, Regpulls, Secret key theft of individual customers',
-        period:'30-365 days, specify per day',
+        exclusions: 'Phishing & malware at individual customer, rug pulls, secret key theft of individual customers.',
+        period:'30-365 days, specify per day.',
         minPeriod: 30,
-        capitalReq: 'Staked amount is at least 100% of the amount reserved by active covers ',
+        capitalReq: 'Staked amount is at least 100% of the amount reserved by active covers.',
         network: 'Ethereum',
         payment:' Single upfront payment'
     },
@@ -38,7 +38,7 @@ const BRIDGE:any = {
     cover: {
         kyc: 'Not required',
         inclusions:'Code Failure & hacks.',
-        exclusions: 'Phishing & malware at individual customer, Regpulls, Secret key theft of individual customers',
+        exclusions: 'Phishing & malware at individual customer, rug pulls, secret key theft of individual customers',
         period:'1-52 weeks',
         minPeriod: 7,
         capitalReq: 'Staked amount is at least 100% of the amount reserved by active covers ',
@@ -69,9 +69,9 @@ const INSURACE:any = {
     cover: {
         kyc: 'TODO',
         inclusions:'Code Failure & hacks.',
-        exclusions: 'Phishing & malware at individual customer, Regpulls, Secret key theft of \n' +
-            'individual customers Economic & governance attack, oracle failures',
-        period:'15-365 days',
+        exclusions: 'Phishing & malware at individual customer, rug pulls, secret key theft of \n' +
+            'individual customers Economic & governance attack, oracle failures.',
+        period:'15-365 days.',
         minPeriod: 15,
         capitalReq: 'TODO',
         network: 'Ethereum, BSC, Polygon',
@@ -111,9 +111,9 @@ const STAKE_NOTES:object = {
 
 
 const PROTOCOL_TYPES:object = {
-    protocol: 'In case the user has financial loss due to failure of the protocol caused by code, governance and oracle failures',
-    custodian: 'Protects against hacks and halted withdrawals at crypto wallets',
-    yield: 'In case the market price of a yield tokens deviates from the face value for a significant amount of time',
+    protocol: 'In case the user has financial loss due to failure of the protocol caused by code, governance and oracle failures.',
+    custodian: 'Protects against hacks and halted withdrawals at crypto wallets.',
+    yield: 'In case the market price of a yield tokens deviates from the face value for a significant amount of time.',
     ido:"tbd"
 }
 
