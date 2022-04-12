@@ -8,6 +8,16 @@ const appId = 'G-E5EN28CF28';
 // const appId = 'UA-189970983-1';// GA3 property ID
 install(appId);
 
+// Hereby the Google TagManager container code:
+//
+// <!-- Google Tag Manager -->
+// <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+// new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+// j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+// 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+// })(window,document,'script','dataLayer','GTM-WCCMKXR');</script>
+// <!-- End Google Tag Manager -->
+
 // https://en.wikipedia.org/wiki/ISO_4217#Active_codes
 const CURRENCIES: any = {
   'USD': 'USD',
@@ -30,8 +40,9 @@ class GoogleEvents {
   static onBUInit = () => {
     if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
 
-        // gtag('set', 'client_id', global.user.clientKey );
-        // gtag('set', 'user_id', global.user.clientKey );
+        gtag('set', 'user_properties', {
+          'account': global.user.account,
+        });
 
         gtag('event', 'login', {
           method: global.user.clientKey
@@ -81,6 +92,7 @@ class GoogleEvents {
             quantity: _quote.period,
             item_category: _quote._net ? _quote._net.symbol : global.user.symbol,
             item_category2: _type,
+            item_category3:  this.setFormatCurrency(_quote._currency),
           }
         ]
       });
@@ -103,7 +115,8 @@ class GoogleEvents {
             item_variant: fromWei(_items.params[2][i]),
             quantity: _items.params[1][i],
             item_category: global.user.symbol,
-            item_category2: "Multibuy"
+            item_category2: "Multibuy",
+            item_category3:   this.setFormatCurrency(_items.currency.name),
           })
       }
       gtag("event", "add_to_cart", {
@@ -134,6 +147,7 @@ class GoogleEvents {
             price: _quote.price,
             quantity: _quote.period,
             item_category: global.user.symbol,
+            item_category3:   this.setFormatCurrency(_quote.currency),
           }
         ]
       });
@@ -162,6 +176,7 @@ class GoogleEvents {
             item_category: global.user.symbol,
             item_category2: _quote.amounts ? "Multibuy" : "SingleBuy",
             item_category5: _message,
+            item_category3:   this.setFormatCurrency(_quote.currency),
           }
         ]
       });
@@ -193,6 +208,7 @@ class GoogleEvents {
             price: fromWei(tx.premium),
             quantity: tx.period,
             item_category: global.user.symbol,
+            item_category3:   this.setFormatCurrency(tx.currency),
           }]
         });
     }
@@ -230,6 +246,7 @@ class GoogleEvents {
             quantity: tx.period,
             item_category: global.user.symbol,
             item_category5: "REJECTED",
+            item_category3:   this.setFormatCurrency(tx.currency),
           }
         ]
       });
