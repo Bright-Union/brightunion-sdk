@@ -82,8 +82,6 @@ constructor(_config:any) {
 
 
 async initialize(): Promise<object>{
-      global.user.account = (await  global.user.web3.eth.getAccounts())[0];
-      if(!global.user.account) global.user.account = "0x0000000000000000000000000000000000000001";
       global.user.networkId = await global.user.web3.eth.net.getId();
 
       const activeNetOpt = NetConfig.netById(global.user.networkId);
@@ -92,14 +90,20 @@ async initialize(): Promise<object>{
         global.user.symbol =  activeNetOpt.symbol;
       }
 
-      global.user.web3Passive = await NetConfig.createWeb3Passives();
+      await Promise.all([
+        NetConfig.createWeb3Passives(),
+        global.user.web3.eth.getAccounts(),
+        CurrencyHelper.getETHDAIPrice(global.user.networkId),
+        CurrencyHelper.getInsureUSDCPrice(global.user.networkId),
+      ]).then((_data: any) => {
+        global.user.web3Passive = _data[0];
+        global.user.account = _data[1][0] ? _data[1][0] : "0x0000000000000000000000000000000000000001" ;
+      })
+
       global.user.ethNet =  NetConfig.getETHNetwork();
-      await CurrencyHelper.getETHDAIPrice();
-      await CurrencyHelper.getInsureUSDCPrice();
       this.initialized = true;
       global.events.emit("initialized" , { user: global.user } );
       GoogleEvents.onBUInit();
-      // await _loadAllABIs();
       return {initialized: this.initialized, message: 'Bright Union Initialized', user:global.user };
   }
 

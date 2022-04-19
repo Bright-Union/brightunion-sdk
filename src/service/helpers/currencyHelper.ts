@@ -9,13 +9,14 @@ class CurrencyHelper {
   public static eth_dai = '2000' //fallback to testnet ratio
   public static insur_usdc:any = '0.2'; //fallback
 
-  public static getInsureUSDCPrice(){
-    if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'UNISWAP')) {
+  public static getInsureUSDCPrice(_networkId:any){
+
+    if (CatalogHelper.availableOnNetwork(_networkId, 'UNISWAP')) {
       try {
         return UniswapV2Api.priceTokenAtoTokenB(
-          global.user.ethNet.networkId,
-          NetConfig.netById(global.user.ethNet.networkId).USDC,
-          NetConfig.netById(global.user.ethNet.networkId).INSUR
+          _networkId,
+          NetConfig.netById(_networkId).USDC,
+          NetConfig.netById(_networkId).INSUR
         ).then((price:any) => {
           this.insur_usdc = price
         })}catch(e) {
@@ -25,10 +26,10 @@ class CurrencyHelper {
       }
     }
 
-  public static getETHDAIPrice () {
-    if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'UNISWAP')) {
+  public static getETHDAIPrice (_networkId:any) {
+    if (CatalogHelper.availableOnNetwork(_networkId, 'UNISWAP')) {
       try {
-        return UniswapV2Api.priceTokenAtoETH(global.user.ethNet.networkId, NetConfig.netById(global.user.ethNet.networkId).DAI).then((price:any) => {
+        return UniswapV2Api.priceTokenAtoETH(_networkId, NetConfig.netById(_networkId).DAI).then((price:any) => {
           this.eth_dai =  price
         })} catch(e) {
           global.sentry.captureException(e)
