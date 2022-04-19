@@ -95,7 +95,7 @@ async initialize(): Promise<object>{
       global.user.web3Passive = await NetConfig.createWeb3Passives();
       global.user.ethNet =  NetConfig.getETHNetwork();
       await CurrencyHelper.getETHDAIPrice();
-      CurrencyHelper.getInsureUSDCPrice();
+      await CurrencyHelper.getInsureUSDCPrice();
       this.initialized = true;
       global.events.emit("initialized" , { user: global.user } );
       GoogleEvents.onBUInit();

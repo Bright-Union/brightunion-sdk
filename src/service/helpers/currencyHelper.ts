@@ -12,8 +12,11 @@ class CurrencyHelper {
   public static getInsureUSDCPrice(){
     if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'UNISWAP')) {
       try {
-        UniswapV2Api.priceTokenAtoTokenB(global.user.ethNet.networkId, NetConfig.netById(global.user.ethNet.networkId).USDC,
-        NetConfig.netById(global.user.ethNet.networkId).INSUR).then(price => {
+        return UniswapV2Api.priceTokenAtoTokenB(
+          global.user.ethNet.networkId,
+          NetConfig.netById(global.user.ethNet.networkId).USDC,
+          NetConfig.netById(global.user.ethNet.networkId).INSUR
+        ).then((price:any) => {
           this.insur_usdc = price
         })}catch(e) {
           global.sentry.captureException(e)
