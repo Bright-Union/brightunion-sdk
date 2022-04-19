@@ -66,9 +66,9 @@ export async function getBridgeV2Coverables(): Promise<any[]> {
 
       return BridgePolicyBookRegistryContract.methods.listWithStats(0, policyBookCounter).call()
       .then(({_policyBooksArr, _stats}:any) => {
-
-        return BridgeHelper.catalogDataFormat(_stats, _policyBooksArr, trustWalletAssets);
-
+        const coverablesArray =    BridgeHelper.catalogDataFormat(_stats, _policyBooksArr, trustWalletAssets);
+        global.events.emit("catalog" , { items: coverablesArray , distributor:"bridge" , itemCount: coverablesArray.length } );
+        return coverablesArray;
       })
 
     })
@@ -102,6 +102,9 @@ export async function getNexusCoverables(): Promise<any[]> {
         }))
 
       }
+
+      global.events.emit("catalog" , { items: coverablesArray , distributor:"nexus" , itemCount: coverablesArray.length } );
+
       return coverablesArray;
 
     })
@@ -166,6 +169,9 @@ export async function getNexusCoverables(): Promise<any[]> {
           }))
 
         }
+
+        global.events.emit("catalog" , { items: coverablesArray , distributor:"insurace" , itemCount: coverablesArray.length } );
+
         return coverablesArray;
       })
     }
