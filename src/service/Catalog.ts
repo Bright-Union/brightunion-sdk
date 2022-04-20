@@ -67,7 +67,7 @@ export async function getBridgeV2Coverables(): Promise<any[]> {
       return BridgePolicyBookRegistryContract.methods.listWithStats(0, policyBookCounter).call()
       .then(({_policyBooksArr, _stats}:any) => {
         const coverablesArray =    BridgeHelper.catalogDataFormat(_stats, _policyBooksArr, trustWalletAssets);
-        global.events.emit("catalog" , { items: coverablesArray , distributor:"bridge" , networkId: 1, itemCount: coverablesArray.length } );
+        global.events.emit("catalog" , { items: coverablesArray , distributorName:"bridge" , networkId: 1, itemsCount: coverablesArray.length } );
         return coverablesArray;
       })
 
@@ -103,7 +103,7 @@ export async function getNexusCoverables(): Promise<any[]> {
 
       }
 
-      global.events.emit("catalog" , { items: coverablesArray , distributor:"nexus" , networkId: 1, itemCount: coverablesArray.length } );
+      global.events.emit("catalog" , { items: coverablesArray , distributorName:"nexus" , networkId: 1, itemsCount: coverablesArray.length } );
 
       return coverablesArray;
 
@@ -170,7 +170,7 @@ export async function getNexusCoverables(): Promise<any[]> {
 
         }
 
-        global.events.emit("catalog" , { items: coverablesArray , distributor:"insurace" , networkId: netId, itemCount: coverablesArray.length } );
+        global.events.emit("catalog" , { items: coverablesArray , distributorName:"insurace" , networkId: netId, itemsCount: coverablesArray.length } );
 
         return coverablesArray;
       })

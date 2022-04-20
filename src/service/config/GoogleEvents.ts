@@ -92,7 +92,7 @@ class GoogleEvents {
             quantity: _quote.period,
             item_category: _quote._net ? _quote._net.symbol : global.user.symbol,
             item_category2: _type,
-            item_category3:  this.setFormatCurrency(_quote._currency),
+            item_category3:  _quote._currency,
           }
         ]
       });
@@ -116,7 +116,7 @@ class GoogleEvents {
             quantity: _items.params[1][i],
             item_category: global.user.symbol,
             item_category2: "Multibuy",
-            item_category3:   this.setFormatCurrency(_items.currency.name),
+            item_category3: _items.currency.name,
           })
       }
       gtag("event", "add_to_cart", {
@@ -147,7 +147,7 @@ class GoogleEvents {
             price: _quote.price,
             quantity: _quote.period,
             item_category: global.user.symbol,
-            item_category3:   this.setFormatCurrency(_quote.currency),
+            item_category3: _quote.currency,
           }
         ]
       });
@@ -176,7 +176,7 @@ class GoogleEvents {
             item_category: global.user.symbol,
             item_category2: _quote.amounts ? "Multibuy" : "SingleBuy",
             item_category5: _message,
-            item_category3:   this.setFormatCurrency(_quote.currency),
+            item_category3: _quote.currency,
           }
         ]
       });
@@ -208,7 +208,7 @@ class GoogleEvents {
             price: fromWei(tx.premium),
             quantity: tx.period,
             item_category: global.user.symbol,
-            item_category3:   this.setFormatCurrency(tx.currency),
+            item_category3: tx.currency,
           }]
         });
     }
@@ -246,7 +246,7 @@ class GoogleEvents {
             quantity: tx.period,
             item_category: global.user.symbol,
             item_category5: "REJECTED",
-            item_category3:   this.setFormatCurrency(tx.currency),
+            item_category3: tx.currency,
           }
         ]
       });
