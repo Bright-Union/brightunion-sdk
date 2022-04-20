@@ -200,7 +200,7 @@ class GoogleEvents {
         items: [
           {
             item_id: tx.productId,
-            item_name: tx.productId,
+            item_name: tx.name,
             affiliation: global.user.clientKey,
             currency: this.setFormatCurrency( tx.currency),
             item_brand: tx.distributor,
