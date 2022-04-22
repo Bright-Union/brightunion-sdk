@@ -120,6 +120,7 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
 }
 
 const catalogLogoLinks: any = [
+  { name: "Unagii (Vaults)" , link:"https://files.insurace.io/public/asset/product/Unagii.png"},
   { name: "Eth 2.0" , link:"https://app.insurace.io/asset/product/Eth2.0.png"},
   { name: "Beefy" , link:"https://app.insurace.io/asset/product/BeefyFinance.png"},
   { name: "Alchemix V1" , link:"https://app.bridgemutual.io/assets/icons/coins/Alchemix.webp"},
@@ -165,6 +166,60 @@ const catalogLogoLinks: any = [
 ];
 
 class CatalogHelper {
+
+  public static async getLogoUrl (_name:string, _address:string , _distributorName:any){
+
+    let logoUrl: string = null;
+    let trustWalletAssets: { [key: string]: any } = {};
+    trustWalletAssets = await this.getTrustWalletAssets()
+
+    let assetLogo: any = undefined;
+    Object.keys(trustWalletAssets).find((k: string) => {
+      if (trustWalletAssets[k].name && _address && trustWalletAssets[k].name.toUpperCase() == _address.toUpperCase()) {
+        assetLogo = trustWalletAssets[k].logoURI;
+      }
+    });
+
+    let specialLogo:any = CatalogHelper.getSpecialLogoName(_name);
+
+    if(assetLogo){
+      logoUrl = assetLogo;
+    }else if(specialLogo){
+      logoUrl = specialLogo;
+    }else{
+      if(_distributorName == 'Insurace'){
+        let name = _name + ' '; // needed for V1 regex to match
+        name = name.replace( '.' , "");
+        name = name.replace( "(", "");
+        name = name.replace( ")", "");
+        name = name.replace(/V.[^0-9]/g, "");
+        name = name.replace(/\s+/g, '')
+        logoUrl = `https://app.insurace.io/asset/product/${name}.png`
+      }
+      else if(_distributorName == 'bridge'){
+        logoUrl = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${_address}/logo.png`;
+        const missedLogos: any = [
+          { name: '0.exchange'},
+          { name: 'Keeper DAO'},
+          { name: 'Universe.XYZ'},
+          { name: 'Alchemix'},
+          { name: 'Anchor Protocol'}
+        ];
+        let missedLogoName = missedLogos.find((i:any) => i.name == name)
+        if(missedLogoName) {
+          let specialLogo:any = CatalogHelper.getSpecialLogoName(missedLogoName.name);
+          logoUrl = specialLogo
+        }
+      }
+      else if(_distributorName == 'nexus'){
+        logoUrl = `https://app.nexusmutual.io/logos/${_name}`;
+      }
+
+    }
+
+    return logoUrl;
+
+  }
 
   public static getSpecialLogoName (_name:string){
     const isSpecial = catalogLogoLinks.find((i:any) => i.name == _name); // find name in
@@ -314,117 +369,123 @@ class CatalogHelper {
     }
   }
 
+  public static trustWalletAssets:any = null;
+
   public static getTrustWalletAssets (): Promise<object[]> {
-    let url = "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/tokenlist.json"
-    return axios({ method: "GET", "url": url }).then( (result:any) => {
-      let assets = _.reduce(result.data.tokens, (dict:any, token) => {
-        dict[token.address] = token
-        return dict
-      }, {})
-      const wallets : object[] = { ...assets, ...CUSTOM_BRIDGE_PROTOCOLS }
-      return wallets;
-    })
+    if(this.trustWalletAssets){
+      return new Promise( async (resolve) => {
+        resolve(this.trustWalletAssets)
+      })
+    }else{
+      let url = "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/tokenlist.json"
+      return axios({ method: "GET", "url": url }).then( (result:any) => {
+        let assets = _.reduce(result.data.tokens, (dict:any, token) => {
+          dict[token.address] = token
+          return dict
+        }, {})
+        const wallets : object[] = { ...assets, ...CUSTOM_BRIDGE_PROTOCOLS }
+        this.trustWalletAssets = wallets;
+        return wallets;
+      })
     }
+  }
 
-      public static mergeCoverables(_catalog: any[]) : any[] {
+    public static mergeCoverables(_catalog: any[]) : any[] {
 
-        let coverablesNoDuplicates:any[] = [];
-        let duplicateIndexes:any[] = [];
-        for (let i = 0; i < _catalog.length; i++) { // compare every with every
-          if (!duplicateIndexes.includes(i)) {
-            let duplicates = 1;
-            let mergedCoverableObject:any = {};
-            for (let j = i + 1; j < _catalog.length; j++) {
-              const mergedName = this.coverableDuplicate(_catalog[i], _catalog[j]);
-              if (mergedName) {
-                //duplicate found. merge the fields
-                const mergedPair = _.mergeWith({}, _catalog[i], _catalog[j], (o, s) => _.isNull(s) ? o : s);
-                mergedCoverableObject = _.mergeWith({}, mergedCoverableObject, mergedPair, (o, s) => _.isNull(s) ? o : s);
+      let coverablesNoDuplicates:any[] = [];
+      let duplicateIndexes:any[] = [];
+      for (let i = 0; i < _catalog.length; i++) { // compare every with every
+        if (!duplicateIndexes.includes(i)) {
+          let duplicates = 1;
+          let mergedCoverableObject:any = {};
+          for (let j = i + 1; j < _catalog.length; j++) {
+            const mergedName = this.coverableDuplicate(_catalog[i], _catalog[j]);
+            if (mergedName) {
+              //duplicate found. merge the fields
+              const mergedPair = _.mergeWith({}, _catalog[i], _catalog[j], (o, s) => _.isNull(s) ? o : s);
+              mergedCoverableObject = _.mergeWith({}, mergedCoverableObject, mergedPair, (o, s) => _.isNull(s) ? o : s);
 
-                mergedCoverableObject.availableCounter = ++duplicates;
-                mergedCoverableObject.name = mergedName;
-                duplicateIndexes.push(j)
+              mergedCoverableObject.availableCounter = ++duplicates;
+              mergedCoverableObject.name = mergedName;
+              duplicateIndexes.push(j)
 
-              }
             }
-            if (duplicates > 1) {
-              coverablesNoDuplicates.push(mergedCoverableObject);
-            } else {
-              //no duplicate for it, leave it as is
-              if(_catalog[i].productId){
-                mergedCoverableObject.availableCounter += 2;
-              }
-              coverablesNoDuplicates.push(_catalog[i])
+          }
+          if (duplicates > 1) {
+            coverablesNoDuplicates.push(mergedCoverableObject);
+          } else {
+            //no duplicate for it, leave it as is
+            if(_catalog[i].productId){
+              mergedCoverableObject.availableCounter += 2;
             }
+            coverablesNoDuplicates.push(_catalog[i])
           }
         }
-        coverablesNoDuplicates = coverablesNoDuplicates.sort((first, second) => {
-          var nameA = first.name.toUpperCase();
-          var nameB = second.name.toUpperCase();
-          if (nameA < nameB) {
-            return -1;
-          }
-          if (nameA > nameB) {
-            return 1;
-          }
-          return 0;
-        });
-
-        return coverablesNoDuplicates;
-
-
       }
+      coverablesNoDuplicates = coverablesNoDuplicates.sort((first, second) => {
+        var nameA = first.name.toUpperCase();
+        var nameB = second.name.toUpperCase();
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+        return 0;
+      });
+
+      return coverablesNoDuplicates;
+
+    }
 
 
-      static coverableDuplicate (cov1:any, cov2:any) {
+    static coverableDuplicate (cov1:any, cov2:any) {
 
-        if (cov1.name.toUpperCase() === cov2.name.toUpperCase()) {
-          // name equals
-          return cov1.name;
-        } else if (cov1.protocolAddress && cov2.protocolAddress &&
-          cov1.protocolAddress.toUpperCase() === cov2.protocolAddress.toUpperCase()){
-            // BRIDGE address equals NEXUS address
-            return cov1.name;
+      if (cov1.name.toUpperCase() === cov2.name.toUpperCase()) {
+        // name equals
+        return cov1.name;
+      } else if (cov1.protocolAddress && cov2.protocolAddress && cov1.protocolAddress.toUpperCase() === cov2.protocolAddress.toUpperCase()){
+        // BRIDGE address equals NEXUS address
+        return cov1.name;
+      }
+      else if (cov1.source !== cov2.source){
+        let cov1SourceNameIndex;
+        if (cov1.source === 'bridge') {
+          cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[0].toUpperCase() === cov1.name.toUpperCase())
+        } else if(cov1.source === 'nexus') {
+          cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[1].toUpperCase() === cov1.name.toUpperCase())
+        } else if(cov1.source === 'insurace') {
+          cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[2].toUpperCase() === cov1.name.toUpperCase())
+        }
+        if (cov1SourceNameIndex > -1) {
+          let cov2SourceNameFound;
+          if (cov2.source === 'bridge') {
+            cov2SourceNameFound = bridge_nexus_insurace[cov1SourceNameIndex][0].toUpperCase() === cov2.name.toUpperCase();
+          } else if(cov2.source === 'nexus') {
+            cov2SourceNameFound = bridge_nexus_insurace[cov1SourceNameIndex][1].toUpperCase() === cov2.name.toUpperCase();
+          } else if(cov2.source === 'insurace') {
+            cov2SourceNameFound = bridge_nexus_insurace[cov1SourceNameIndex][2].toUpperCase() === cov2.name.toUpperCase();
           }
-          else if (cov1.source !== cov2.source){
-            let cov1SourceNameIndex;
-            if (cov1.source === 'bridge') {
-              cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[0].toUpperCase() === cov1.name.toUpperCase())
-            } else if(cov1.source === 'nexus') {
-              cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[1].toUpperCase() === cov1.name.toUpperCase())
-            } else if(cov1.source === 'insurace') {
-              cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[2].toUpperCase() === cov1.name.toUpperCase())
-            }
-            if (cov1SourceNameIndex > -1) {
-              let cov2SourceNameFound;
-              if (cov2.source === 'bridge') {
-                cov2SourceNameFound = bridge_nexus_insurace[cov1SourceNameIndex][0].toUpperCase() === cov2.name.toUpperCase();
-              } else if(cov2.source === 'nexus') {
-                cov2SourceNameFound = bridge_nexus_insurace[cov1SourceNameIndex][1].toUpperCase() === cov2.name.toUpperCase();
-              } else if(cov2.source === 'insurace') {
-                cov2SourceNameFound = bridge_nexus_insurace[cov1SourceNameIndex][2].toUpperCase() === cov2.name.toUpperCase();
-              }
-              if (cov2SourceNameFound) {
-                //both found in custom mapping
-                return bridge_nexus_insurace[cov1SourceNameIndex][3];
-              } else {
-                return;
-              }
-            } else {
-              return;
-            }
+          if (cov2SourceNameFound) {
+            //both found in custom mapping
+            return bridge_nexus_insurace[cov1SourceNameIndex][3];
           } else {
             return;
           }
+        } else {
+          return;
         }
-
-        static availableOnNetwork(networkId:number, module:string) {
-          if(!NetConfig.netById(networkId)) return false;
-          return NetConfig.netById(networkId).modules.find(mod => mod === module);
-        }
-
-
+      } else {
+        return;
       }
+    }
+
+    static availableOnNetwork(networkId:number, module:string) {
+      if(!NetConfig.netById(networkId)) return false;
+      return NetConfig.netById(networkId).modules.find(mod => mod === module);
+    }
 
 
-      export default CatalogHelper
+  }
+
+  export default CatalogHelper

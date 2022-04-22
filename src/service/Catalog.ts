@@ -65,8 +65,8 @@ export async function getBridgeV2Coverables(): Promise<any[]> {
     return BridgePolicyBookRegistryContract.methods.count().call().then((policyBookCounter:any) => {
 
       return BridgePolicyBookRegistryContract.methods.listWithStats(0, policyBookCounter).call()
-      .then(({_policyBooksArr, _stats}:any) => {
-        const coverablesArray =    BridgeHelper.catalogDataFormat(_stats, _policyBooksArr, trustWalletAssets);
+      .then( async ({_policyBooksArr, _stats}:any) => {
+        const coverablesArray =  await BridgeHelper.catalogDataFormat(_stats, _policyBooksArr, trustWalletAssets);
         global.events.emit("catalog" , { items: coverablesArray , distributorName:"bridge" , networkId: 1, itemsCount: coverablesArray.length } );
         return coverablesArray;
       })
@@ -78,7 +78,7 @@ export async function getBridgeV2Coverables(): Promise<any[]> {
 
 export async function getNexusCoverables(): Promise<any[]> {
 
-    return await NexusApi.fetchCoverables().then( (data:object) => {
+    return await NexusApi.fetchCoverables().then( async(data:object) => {
 
       const coverablesArray: any  = [];
       for ( const [ key, value ] of Object.entries(data) ) {
@@ -89,10 +89,13 @@ export async function getNexusCoverables(): Promise<any[]> {
         let type = CatalogHelper.commonCategory(value.type, 'nexus')
         let typeDescr = type ? type : 'protocol';
 
+        let logo:any = await CatalogHelper.getLogoUrl(value.logo, key , 'nexus');
+
         coverablesArray.push(CatalogHelper.createCoverable({
           protocolAddress: key,
           nexusCoverable: key,
-          logo: `https://app.nexusmutual.io/logos/${value.logo}`,
+          logo: logo,
+          // logo: `https://app.nexusmutual.io/logos/${value.logo}`,
           name: value.name,
           type: type,
           typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
@@ -118,39 +121,43 @@ export async function getNexusCoverables(): Promise<any[]> {
     let netSymbol = NetConfig.netById(netId) ? NetConfig.netById(netId).symbol : false;
     if(!netSymbol) return [];
 
-    return await InsuraceApi.fetchCoverables(netId).then((data:object) => {
+    return await InsuraceApi.fetchCoverables(netId).then( async (data:object) => {
 
       const coverablesArray = [];
       for (const [key, value] of Object.entries(data)) {
         if (value.status !== 'Enabled') {
           continue;
         }
-        let assetIndex: any = undefined;
-        Object.keys(trustWalletAssets).find((k: string) => {
-          if (trustWalletAssets[k].name && value.coingecko && trustWalletAssets[k].name.toUpperCase() == value.coingecko.token_id.toUpperCase()) {
-            assetIndex = trustWalletAssets[k].logoURI;
-          }
-        });
+        // let assetIndex: any = undefined;
+        // Object.keys(trustWalletAssets).find((k: string) => {
+        //   if (trustWalletAssets[k].name && value.coingecko && trustWalletAssets[k].name.toUpperCase() == value.coingecko.token_id.toUpperCase()) {
+        //     assetIndex = trustWalletAssets[k].logoURI;
+        //   }
+        // });
 
-        let logo: string = null;
 
-        if(assetIndex && value.name !== 'Pendle'){
-          logo = assetIndex;
-        }else{
-          let specialLogo:any = CatalogHelper.getSpecialLogoName(value.name);
-            if(specialLogo){
-              logo = specialLogo;
-            }else{
-              let name = value.name + ' '; // needed for V1 regex to match
-              name = name.replace( '.' , "");
-              name = name.replace( "(", "");
-              name = name.replace( ")", "");
-              name = name.replace(/V.[^0-9]/g, "");
-              name = name.replace(/\s+/g, '')
+        let logo:any = await CatalogHelper.getLogoUrl( value.name , null, 'insurace');
 
-              logo = `https://app.insurace.io/asset/product/${name}.png`
-            }
-        }
+
+        // let logo:string = '';
+        // if(assetIndex && value.name !== 'Pendle'){
+        //   logo = assetIndex;
+        // }else{
+        //   let specialLogo:any = CatalogHelper.getSpecialLogoName(value.name);
+        //     if(specialLogo){
+        //       logo = specialLogo;
+        //     }else{
+        //       let name = value.name + ' '; // needed for V1 regex to match
+        //       name = name.replace( '.' , "");
+        //       name = name.replace( "(", "");
+        //       name = name.replace( ")", "");
+        //       name = name.replace(/V.[^0-9]/g, "");
+        //       name = name.replace(/\s+/g, '')
+        //
+        //       logo = `https://app.insurace.io/asset/product/${name}.png`
+        //     }
+        // }
+
         let type = CatalogHelper.commonCategory(value.risk_type, 'insurace')
         let typeDescr = type ? type : 'protocol';
 

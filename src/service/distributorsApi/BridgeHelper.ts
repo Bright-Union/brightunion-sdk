@@ -7,7 +7,7 @@ import { toWei, hexToBytes, numberToHex } from "web3-utils"
 
 class BridgeHelper {
 
-  static catalogDataFormat(_stats :any, _policyBooksArr:any, trustWalletAssets:any ) {
+  static async catalogDataFormat(_stats :any, _policyBooksArr:any, trustWalletAssets:any ) {
 
     let policyBooksArray = [];
     for (let i = 0; i < _stats.length; i++) {
@@ -27,24 +27,32 @@ class BridgeHelper {
           asset = trustWalletAssets[key];
         }
       });
-      let logo: string = null;
+
+      // console.log("BridgeV2 logo d - " , _stats );
+
+      // let logo: string = null;
       const name = asset ? asset.name : _stats[i][0]
-      logo = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${_stats[i].insuredContract}/logo.png`;
-      const missedLogos: any = [
-        { name: '0.exchange'},
-        { name: 'Keeper DAO'},
-        { name: 'Universe.XYZ'},
-        { name: 'Alchemix'},
-        { name: 'Anchor Protocol'}
-      ];
-      let missedLogoName = missedLogos.find((i:any) => i.name == name)
-      if(missedLogoName) {
-        let specialLogo:any = CatalogHelper.getSpecialLogoName(missedLogoName.name);
-        logo = specialLogo
-      }
+      // logo = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${_stats[i].insuredContract}/logo.png`;
+      // const missedLogos: any = [
+      //   { name: '0.exchange'},
+      //   { name: 'Keeper DAO'},
+      //   { name: 'Universe.XYZ'},
+      //   { name: 'Alchemix'},
+      //   { name: 'Anchor Protocol'}
+      // ];
+      // let missedLogoName = missedLogos.find((i:any) => i.name == name)
+      // if(missedLogoName) {
+      //   let specialLogo:any = CatalogHelper.getSpecialLogoName(missedLogoName.name);
+      //   logo = specialLogo
+      // }
+
+
+      let logo =  await CatalogHelper.getLogoUrl(name, _stats[i].insuredContract, 'bridge');
+
+
       let type = CatalogHelper.commonCategory(_stats[i].contractType, 'bridge')
       let typeDescr = type ? type : 'protocol';
-      
+
         policyBooksArray.push(CatalogHelper.createCoverable({
           bridgeProductAddress: _policyBooksArr[i],
           bridgeCoverable: _stats[i].insuredContract,
