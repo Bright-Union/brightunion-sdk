@@ -48,9 +48,6 @@ export async function getCatalog(): Promise<any> {
 
 export async function getBridgeV2Coverables(): Promise<any[]> {
 
-  let trustWalletAssets: { [key: string]: any } = {};
-  trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
-
   if(!global.user.ethNet || !global.user.ethNet.networkId){
     return;
   }
@@ -66,7 +63,7 @@ export async function getBridgeV2Coverables(): Promise<any[]> {
 
       return BridgePolicyBookRegistryContract.methods.listWithStats(0, policyBookCounter).call()
       .then( async ({_policyBooksArr, _stats}:any) => {
-        const coverablesArray =  await BridgeHelper.catalogDataFormat(_stats, _policyBooksArr, trustWalletAssets);
+        const coverablesArray =  await BridgeHelper.catalogDataFormat(_stats, _policyBooksArr);
         global.events.emit("catalog" , { items: coverablesArray , distributorName:"bridge" , networkId: 1, itemsCount: coverablesArray.length } );
         return coverablesArray;
       })
@@ -95,7 +92,6 @@ export async function getNexusCoverables(): Promise<any[]> {
           protocolAddress: key,
           nexusCoverable: key,
           logo: logo,
-          // logo: `https://app.nexusmutual.io/logos/${value.logo}`,
           name: value.name,
           type: type,
           typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
@@ -115,8 +111,6 @@ export async function getNexusCoverables(): Promise<any[]> {
   }
 
   export async function getInsuraceCoverables(netId : string|number) : Promise<object[]> { // Daniel
-    let trustWalletAssets: { [key: string]: any } = {};
-    trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
 
     let netSymbol = NetConfig.netById(netId) ? NetConfig.netById(netId).symbol : false;
     if(!netSymbol) return [];
@@ -128,35 +122,8 @@ export async function getNexusCoverables(): Promise<any[]> {
         if (value.status !== 'Enabled') {
           continue;
         }
-        // let assetIndex: any = undefined;
-        // Object.keys(trustWalletAssets).find((k: string) => {
-        //   if (trustWalletAssets[k].name && value.coingecko && trustWalletAssets[k].name.toUpperCase() == value.coingecko.token_id.toUpperCase()) {
-        //     assetIndex = trustWalletAssets[k].logoURI;
-        //   }
-        // });
-
 
         let logo:any = await CatalogHelper.getLogoUrl( value.name , null, 'insurace');
-
-
-        // let logo:string = '';
-        // if(assetIndex && value.name !== 'Pendle'){
-        //   logo = assetIndex;
-        // }else{
-        //   let specialLogo:any = CatalogHelper.getSpecialLogoName(value.name);
-        //     if(specialLogo){
-        //       logo = specialLogo;
-        //     }else{
-        //       let name = value.name + ' '; // needed for V1 regex to match
-        //       name = name.replace( '.' , "");
-        //       name = name.replace( "(", "");
-        //       name = name.replace( ")", "");
-        //       name = name.replace(/V.[^0-9]/g, "");
-        //       name = name.replace(/\s+/g, '')
-        //
-        //       logo = `https://app.insurace.io/asset/product/${name}.png`
-        //     }
-        // }
 
         let type = CatalogHelper.commonCategory(value.risk_type, 'insurace')
         let typeDescr = type ? type : 'protocol';

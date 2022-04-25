@@ -90,25 +90,32 @@ export async function getQuoteFromBridgeV2(
 
       if(_protocol.rawDataBridge){
         stats = {
-          totalUSDTLiquidity: _protocol.rawDataBridge.totalUSDTLiquidity,
-          maxCapacity: _protocol.rawDataBridge.maxCapacity,
-          remainingCapacity:_protocol.rawDataBridge.maxCapacity,
-          stakedSTBL:  _protocol.rawDataBridge.stakedSTBL,
-          activeCovers:  _protocol.rawDataBridge.activeCovers,
-          utilizationRatio:  _protocol.rawDataBridge.utilizationRatio,
+          totalUSDTLiquidity: toBN(_protocol.rawDataBridge[3]),
+          maxCapacity: _protocol.rawDataBridge[3],
+          remainingCapacity:_protocol.rawDataBridge[4],
+          stakedSTBL:  _protocol.rawDataBridge[6],
+          // totalUSDTLiquidity: _protocol.rawDataBridge.totalUSDTLiquidity,
+          // maxCapacity: _protocol.rawDataBridge.maxCapacity,
+          // remainingCapacity:_protocol.rawDataBridge.maxCapacity,
+          // stakedSTBL:  _protocol.rawDataBridge.stakedSTBL,
+          // activeCovers:  _protocol.rawDataBridge.activeCovers,
+          // utilizationRatio:  _protocol.rawDataBridge.utilizationRatio,
         }
       }else{
-        await policyBookRegistryV2.methods.stats(_protocol.bridgeProductAddress).call().then(async(_stats:any) => {
+        await policyBookRegistryV2.methods.stats(_protocol.bridgeProductAddress).call().then((_stats:any) => {
+
           stats =  {
             totalUSDTLiquidity: toBN(_stats[3]),
             remainingCapacity:_stats[3],
             maxCapacity: _stats[3],
             stakedSTBL: _stats[6],
           }
+        }, (error:any) => {
+          console.error("policyBookRegistryV2 - " , error);
         })
       }
 
-      let capacity:any = stats.maxCapacity;
+      let capacity:any = stats.maxCapacity ? stats.maxCapacity : 0;
 
       await policyBookRegistryV2.methods.getPoliciesPrices( [ _protocol.bridgeProductAddress ] , [ _bridgeEpochs ] , [ _amountInWei ] ).call()
       .then((_priceData: any) => {
@@ -126,8 +133,10 @@ export async function getQuoteFromBridgeV2(
           _currency = "ETH"
         }
 
+        capacity = fromWei(capacity.toString());
+
         if (errorMsg.toLowerCase().includes("requiring more than there exists")) {
-          errorMsg = {message: "Maximum available capacity is " , currency:_initialBridgeCurrency, capacity:fromWei(capacity.toString()), errorType: "capacity"};
+          errorMsg = {message: "Maximum available capacity is " , currency:_initialBridgeCurrency, capacity: capacity, errorType: "capacity"};
         } else if (errorMsg.toLowerCase().includes("pb: wrong epoch duration")) {
           errorMsg = { message: "Minimum duration is 1 day. Maximum is 365" , errorType:"period"};
         } else if (errorMsg.toLowerCase().includes("pb: wrong cover")) {

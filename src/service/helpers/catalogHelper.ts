@@ -120,6 +120,7 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
 }
 
 const catalogLogoLinks: any = [
+  { name: "AAVE V3" , link:"https://files.insurace.io/public/asset/product/AaveV2.png"},
   { name: "Unagii (Vaults)" , link:"https://files.insurace.io/public/asset/product/Unagii.png"},
   { name: "Eth 2.0" , link:"https://app.insurace.io/asset/product/Eth2.0.png"},
   { name: "Beefy" , link:"https://app.insurace.io/asset/product/BeefyFinance.png"},
@@ -169,11 +170,11 @@ class CatalogHelper {
 
   public static async getLogoUrl (_name:string, _address:string , _distributorName:any){
 
-    let logoUrl: string = null;
+    let logoData: any = { url:null ,strongLogoData: false};
     let trustWalletAssets: { [key: string]: any } = {};
     trustWalletAssets = await this.getTrustWalletAssets()
 
-    let assetLogo: any = undefined;
+    let assetLogo: any = null;
     Object.keys(trustWalletAssets).find((k: string) => {
       if (trustWalletAssets[k].name && _address && trustWalletAssets[k].name.toUpperCase() == _address.toUpperCase()) {
         assetLogo = trustWalletAssets[k].logoURI;
@@ -183,21 +184,24 @@ class CatalogHelper {
     let specialLogo:any = CatalogHelper.getSpecialLogoName(_name);
 
     if(assetLogo){
-      logoUrl = assetLogo;
+      logoData.url = assetLogo;
+      logoData.strongLogoData = true;
     }else if(specialLogo){
-      logoUrl = specialLogo;
+      logoData.url = specialLogo;
+      logoData.strongLogoData = true;
     }else{
-      if(_distributorName == 'Insurace'){
+      if(_distributorName == 'insurace'){
         let name = _name + ' '; // needed for V1 regex to match
         name = name.replace( '.' , "");
         name = name.replace( "(", "");
         name = name.replace( ")", "");
         name = name.replace(/V.[^0-9]/g, "");
         name = name.replace(/\s+/g, '')
-        logoUrl = `https://app.insurace.io/asset/product/${name}.png`
+        // https://files.insurace.io/public/asset/product/BabySwap.png
+        logoData.url = `https://files.insurace.io/public/asset/product/${name}.png`
       }
       else if(_distributorName == 'bridge'){
-        logoUrl = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${_address}/logo.png`;
+        logoData.url = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${_address}/logo.png`;
         const missedLogos: any = [
           { name: '0.exchange'},
           { name: 'Keeper DAO'},
@@ -205,20 +209,21 @@ class CatalogHelper {
           { name: 'Alchemix'},
           { name: 'Anchor Protocol'}
         ];
-        let missedLogoName = missedLogos.find((i:any) => i.name == name)
+        let missedLogoName = missedLogos.find((i:any) => i.name == _name)
         if(missedLogoName) {
           let specialLogo:any = CatalogHelper.getSpecialLogoName(missedLogoName.name);
-          logoUrl = specialLogo
+          logoData.url = specialLogo;
+          logoData.strongLogoData = true;
         }
       }
       else if(_distributorName == 'nexus'){
-        logoUrl = `https://app.nexusmutual.io/logos/${_name}`;
+        logoData.url = `https://app.nexusmutual.io/logos/${_name}`;
+        logoData.strongLogoData = true;
       }
 
     }
 
-    return logoUrl;
-
+    return logoData;
   }
 
   public static getSpecialLogoName (_name:string){
@@ -405,10 +410,15 @@ class CatalogHelper {
               const mergedPair = _.mergeWith({}, _catalog[i], _catalog[j], (o, s) => _.isNull(s) ? o : s);
               mergedCoverableObject = _.mergeWith({}, mergedCoverableObject, mergedPair, (o, s) => _.isNull(s) ? o : s);
 
+              let mergedLogoUrl = mergedCoverableObject.logo.url;
+              if(_catalog[i].logo.strongLogoData) mergedLogoUrl =_catalog[i].logo.url;
+              if(_catalog[j].logo.strongLogoData) mergedLogoUrl = _catalog[j].logo.url;
+              if(mergedPair.logo.strongLogoData) mergedLogoUrl = mergedPair.logo.url;
+
               mergedCoverableObject.availableCounter = ++duplicates;
               mergedCoverableObject.name = mergedName;
+              mergedCoverableObject.logo = mergedLogoUrl;
               duplicateIndexes.push(j)
-
             }
           }
           if (duplicates > 1) {
@@ -418,6 +428,7 @@ class CatalogHelper {
             if(_catalog[i].productId){
               mergedCoverableObject.availableCounter += 2;
             }
+            _catalog[i].logo = _catalog[i].logo.url;
             coverablesNoDuplicates.push(_catalog[i])
           }
         }
