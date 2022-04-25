@@ -123,7 +123,7 @@ export async function getNexusCoverables(): Promise<any[]> {
           continue;
         }
 
-        let logo:any = await CatalogHelper.getLogoUrl( value.name , null, 'insurace');
+        let logo:any = await CatalogHelper.getLogoUrl( value.image_urls[0] , null, 'insurace');
 
         let type = CatalogHelper.commonCategory(value.risk_type, 'insurace')
         let typeDescr = type ? type : 'protocol';

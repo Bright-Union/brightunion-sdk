@@ -196,14 +196,16 @@ class CatalogHelper {
       logoData.strongLogoData = true;
     }else{
       if(_distributorName == 'insurace'){
-        let name = _name + ' '; // needed for V1 regex to match
-        name = name.replace( '.' , "");
-        name = name.replace( "(", "");
-        name = name.replace( ")", "");
-        name = name.replace(/V.[^0-9]/g, "");
-        name = name.replace(/\s+/g, '')
-        // https://files.insurace.io/public/asset/product/BabySwap.png
-        logoData.url = `https://files.insurace.io/public/asset/product/${name}.png`
+        // let name = _name + ' '; // needed for V1 regex to match
+        // name = name.replace( '.' , "");
+        // name = name.replace( "(", "");
+        // name = name.replace( ")", "");
+        // name = name.replace(/V.[^0-9]/g, "");
+        // name = name.replace(/\s+/g, '')
+        // // https://files.insurace.io/public/asset/product/BabySwap.png
+        // logoData.url = `https://files.insurace.io/public/asset/product/${name}.png`
+        logoData.url = _name;
+        logoData.strongLogoData = true;
       }
       else if(_distributorName == 'bridge'){
         logoData.url = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${_address}/logo.png`;
