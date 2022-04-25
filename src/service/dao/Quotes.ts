@@ -94,12 +94,8 @@ export async function getQuoteFromBridgeV2(
           maxCapacity: _protocol.rawDataBridge[3],
           remainingCapacity:_protocol.rawDataBridge[4],
           stakedSTBL:  _protocol.rawDataBridge[6],
-          // totalUSDTLiquidity: _protocol.rawDataBridge.totalUSDTLiquidity,
-          // maxCapacity: _protocol.rawDataBridge.maxCapacity,
-          // remainingCapacity:_protocol.rawDataBridge.maxCapacity,
-          // stakedSTBL:  _protocol.rawDataBridge.stakedSTBL,
-          // activeCovers:  _protocol.rawDataBridge.activeCovers,
-          // utilizationRatio:  _protocol.rawDataBridge.utilizationRatio,
+          utilizationRatio:  _protocol.rawDataBridge.utilizationRatio,
+          activeCovers:  _protocol.rawDataBridge.activeCovers,
         }
       }else{
         await policyBookRegistryV2.methods.stats(_protocol.bridgeProductAddress).call().then((_stats:any) => {

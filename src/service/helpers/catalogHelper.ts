@@ -120,7 +120,12 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
 }
 
 const catalogLogoLinks: any = [
+  { name: "FODL Finance" , link:"https://files.insurace.io/public/asset/product/FodlFinance.png"},
+  { name: "Vauld" , link:"https://files.insurace.io/public/asset/product/Vauld.png"},
+  { name: "BUSD De-Peg" , link:"https://files.insurace.io/public/asset/product/BUSDDepeg.png"},
+  { name: "Planet" , link:"https://files.insurace.io/public/asset/product/PlanetFinance.png"},
   { name: "AAVE V3" , link:"https://files.insurace.io/public/asset/product/AaveV2.png"},
+  { name: "RAMP V2" , link:"https://files.insurace.io/public/asset/product/RampV2.png"},
   { name: "Unagii (Vaults)" , link:"https://files.insurace.io/public/asset/product/Unagii.png"},
   { name: "Eth 2.0" , link:"https://app.insurace.io/asset/product/Eth2.0.png"},
   { name: "Beefy" , link:"https://app.insurace.io/asset/product/BeefyFinance.png"},
