@@ -40,6 +40,8 @@ export async function getCatalog(): Promise<any> {
       }
     }
 
+    console.log("CATALOG - merge");
+
     const mergedCoverables:any[] =  CatalogHelper.mergeCoverables(allCoverables)
     return { sorted: mergedCoverables, unSorted: allCoverables };
   })

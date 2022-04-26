@@ -194,14 +194,6 @@ class CatalogHelper {
       logoData.strongLogoData = true;
     }else{
       if(_distributorName == 'insurace'){
-        // let name = _name + ' '; // needed for V1 regex to match
-        // name = name.replace( '.' , "");
-        // name = name.replace( "(", "");
-        // name = name.replace( ")", "");
-        // name = name.replace(/V.[^0-9]/g, "");
-        // name = name.replace(/\s+/g, '')
-        // // https://files.insurace.io/public/asset/product/BabySwap.png
-        // logoData.url = `https://files.insurace.io/public/asset/product/${name}.png`
         logoData.url = _name;
         logoData.strongLogoData = true;
       }
@@ -322,23 +314,6 @@ class CatalogHelper {
     };
   }
 
-  public static createCoverItem(obj:any) {
-    return {
-      distributorName: obj.distributorName,
-      contractName: obj.contractName,
-      name: obj.name,
-      logo: obj.logo,
-      coverType: obj.coverType,
-      coverAmount: obj.coverAmount,
-      coverAsset: obj.coverAsset,
-      validUntil: obj.validUntil,
-      endTime: obj.endTime,
-      status: obj.status,
-      net: obj.net,
-      rawData: obj.response,
-    };
-  }
-
   public static commonCategory (category:string, provider:string) {
     let commonCategory:any = '';
     if (provider == 'nexus') {
@@ -402,6 +377,8 @@ class CatalogHelper {
 
     public static mergeCoverables(_catalog: any[]) : any[] {
 
+      console.log("merege 1");
+
       let coverablesNoDuplicates:any[] = [];
       let duplicateIndexes:any[] = [];
       for (let i = 0; i < _catalog.length; i++) { // compare every with every
@@ -410,6 +387,13 @@ class CatalogHelper {
           let mergedCoverableObject:any = {};
           for (let j = i + 1; j < _catalog.length; j++) {
             const mergedName = this.coverableDuplicate(_catalog[i], _catalog[j]);
+
+            console.log("merege");
+
+            if(mergedName.includes("Maker")){
+              console.log('Catalog - ' ,  mergedName, _catalog[i].name, _catalog[j].name);
+            }
+
             if (mergedName) {
               //duplicate found. merge the fields
               const mergedPair = _.mergeWith({}, _catalog[i], _catalog[j], (o, s) => _.isNull(s) ? o : s);
@@ -454,6 +438,23 @@ class CatalogHelper {
 
     }
 
+    static unifyCoverName( _coverName : any , _riskProtocol:any ) {
+      let cov1SourceNameIndex:any = false;
+
+      if (_riskProtocol === 'bridge') {
+        cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[0].toUpperCase() === _coverName.toUpperCase())
+      } else if(_riskProtocol === 'nexus') {
+        cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[1].toUpperCase() === _coverName.toUpperCase())
+      } else if(_riskProtocol === 'insurace') {
+        cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[2].toUpperCase() === _coverName.toUpperCase())
+      }
+
+      if(cov1SourceNameIndex && cov1SourceNameIndex > -1){
+        return bridge_nexus_insurace[cov1SourceNameIndex][3];
+      }else{
+        return _coverName
+      }
+    }
 
     static coverableDuplicate (cov1:any, cov2:any) {
 

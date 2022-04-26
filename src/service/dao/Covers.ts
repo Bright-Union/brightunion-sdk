@@ -119,7 +119,6 @@ export async function getCoversNexus():Promise<any>{
     cover.id = tokenId;
     cover.source = 'distributor';
     cover.risk_protocol = 'nexus';
-    // cover.logo = cover.logo || require('@/assets/img/nexus.png');
     cover.net = global.user.ethNet.networkId;
     covers.push(cover)
   }
@@ -140,7 +139,6 @@ export async function getCoversNexus():Promise<any>{
       cover.id = coverId;
       cover.source = 'nexus';
       cover.risk_protocol = 'nexus';
-      // cover.logo = cover.logo || require('@/assets/img/nexus.png')
       cover.net = global.user.ethNet.networkId;
       covers.push(cover)
     } catch (e) {
@@ -200,12 +198,14 @@ export async function getCoversInsurace(_web3:any):Promise<any>{
     await  Promise.all(coverDataPromises).then((_data:any) => {
 
       const [expiration, amount, currency, status, prodDetails, startTime] = _data;
+      let coverNameUnified = CatalogHelper.unifyCoverName(hexToUtf8(prodDetails['0']), 'insurace' );
+
+      console.log("insurace" , coverNameUnified , hexToUtf8(prodDetails['0']));
 
       allCovers.push(
         {
           risk_protocol: 'insurace',
-          contractName: hexToUtf8(prodDetails['0']),
-          logo: '',
+          contractName: coverNameUnified,
           coverType: hexToUtf8(prodDetails['1']),
           coverAmount: amount,
           coverAsset: currency,
@@ -259,8 +259,10 @@ export async function getCoversBridgeV2():Promise<any>{
     let asset = trustWalletAssets[Object.keys(trustWalletAssets)
       .find(key => key.toLowerCase() === policyBookinfo._insuredContract.toLowerCase())];
       let logo = asset ? asset.logoURI : 'logo link'
-      // let logo = asset ? asset.logoURI : require('@/assets/img/bridge.svg')
       let name = asset ? asset.name : policyBookinfo._symbol
+      let coverNameUnified = CatalogHelper.unifyCoverName(name, 'bridge' );
+
+      console.log("bridge" , coverNameUnified , name);
 
       let cover = {
         risk_protocol: 'bridge',
@@ -271,8 +273,7 @@ export async function getCoversBridgeV2():Promise<any>{
         endTime: info.endTime,
         premium: info.premium,
         startTime: info.startTime,
-        name: name,
-        logo: logo,
+        name: coverNameUnified,
         net: global.user.ethNet.networkId
       }
 
