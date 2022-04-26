@@ -3,20 +3,22 @@ import { fromWei} from 'web3-utils'
 
 const { gtag, install } = require("ga-gtag");
 
+const Analytics = require('analytics');
+const { googleTagManager } = require('@analytics/google-tag-manager');
+
+const analytics = Analytics({
+  app: 'bright-union-sdk',
+  plugins: [
+    googleTagManager({
+      containerId: 'GTM-WCCMKXR'
+    })
+  ]
+})
+
 const appId = 'G-E5EN28CF28';
 // const appId = 'G-KCNQQRKDP7'; //app - ui ID
 // const appId = 'UA-189970983-1';// GA3 property ID
 install(appId);
-
-// Hereby the Google TagManager container code:
-//
-// <!-- Google Tag Manager -->
-// <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-// new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-// j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-// 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-// })(window,document,'script','dataLayer','GTM-WCCMKXR');</script>
-// <!-- End Google Tag Manager -->
 
 // https://en.wikipedia.org/wiki/ISO_4217#Active_codes
 const CURRENCIES: any = {

@@ -53,8 +53,10 @@ const bridge_nexus_insurace_categories : string[][] = [
 ];
 
 const CUSTOM_BRIDGE_PROTOCOLS : object = {
+  // '0x111111111117dC0aa78b770fA6A738034120C302': {
+  //   name: '1Inch'
+  // },
   '0xF0939011a9bb95c3B791f0cb546377Ed2693a574': {
-    // logoURI: zeroExchange,
     name: '0.exchange'
   },
   '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9': {
@@ -62,11 +64,9 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
     name: 'Aave'
   },
   '0x0000000000000000000000000000000000000001': {
-    // logoURI: anchor,
     name: 'Anchor Protocol'
   },
   '0xdBdb4d16EdA451D0503b854CF79D55697F90c8DF': {
-    // logoURI: alchemix,
     name: 'Alchemix'
   },
   '0xa1faa113cbE53436Df28FF0aEe54275c13B40975': {
@@ -94,7 +94,6 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
     name: 'ICHI'
   },
   '0xfA5047c9c78B8877af97BDcb85Db743fD7313d4a': {
-    // logoURI: keeper,
     name: 'Keeper DAO'
   },
   '0x808507121b80c02388fad14726482e061b8da827': {
@@ -106,7 +105,6 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
     name: 'Sushi'
   },
   '0x618679dF9EfCd19694BB1daa8D00718Eacfa2883': {
-    // logoURI: universe,
     name: 'Universe.XYZ'
   },
   '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984': {
