@@ -3,17 +3,17 @@ import { fromWei} from 'web3-utils'
 
 const { gtag, install } = require("ga-gtag");
 
-const Analytics = require('analytics');
-const { googleTagManager } = require('@analytics/google-tag-manager');
-
-const analytics = Analytics({
-  app: 'bright-union-sdk',
-  plugins: [
-    googleTagManager({
-      containerId: 'GTM-WCCMKXR'
-    })
-  ]
-})
+// const Analytics = require('analytics');
+// const { googleTagManager } = require('@analytics/google-tag-manager');
+//
+// const analytics = Analytics({
+//   app: 'bright-union-sdk',
+//   plugins: [
+//     googleTagManager({
+//       containerId: 'GTM-WCCMKXR'
+//     })
+//   ]
+// })
 
 const appId = 'G-E5EN28CF28';
 // const appId = 'G-KCNQQRKDP7'; //app - ui ID
