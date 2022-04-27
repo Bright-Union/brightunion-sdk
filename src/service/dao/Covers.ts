@@ -200,8 +200,6 @@ export async function getCoversInsurace(_web3:any):Promise<any>{
       const [expiration, amount, currency, status, prodDetails, startTime] = _data;
       let coverNameUnified = CatalogHelper.unifyCoverName(hexToUtf8(prodDetails['0']), 'insurace' );
 
-      console.log("insurace" , coverNameUnified , hexToUtf8(prodDetails['0']));
-
       allCovers.push(
         {
           risk_protocol: 'insurace',
@@ -261,8 +259,6 @@ export async function getCoversBridgeV2():Promise<any>{
       let logo = asset ? asset.logoURI : 'logo link'
       let name = asset ? asset.name : policyBookinfo._symbol
       let coverNameUnified = CatalogHelper.unifyCoverName(name, 'bridge' );
-
-      console.log("bridge" , coverNameUnified , name);
 
       let cover = {
         risk_protocol: 'bridge',

@@ -377,8 +377,6 @@ class CatalogHelper {
 
     public static mergeCoverables(_catalog: any[]) : any[] {
 
-      console.log("merege 1");
-
       let coverablesNoDuplicates:any[] = [];
       let duplicateIndexes:any[] = [];
       for (let i = 0; i < _catalog.length; i++) { // compare every with every
@@ -388,13 +386,8 @@ class CatalogHelper {
           for (let j = i + 1; j < _catalog.length; j++) {
             const mergedName = this.coverableDuplicate(_catalog[i], _catalog[j]);
 
-            console.log("merege");
-
-            if(mergedName.includes("Maker")){
-              console.log('Catalog - ' ,  mergedName, _catalog[i].name, _catalog[j].name);
-            }
-
             if (mergedName) {
+
               //duplicate found. merge the fields
               const mergedPair = _.mergeWith({}, _catalog[i], _catalog[j], (o, s) => _.isNull(s) ? o : s);
               mergedCoverableObject = _.mergeWith({}, mergedCoverableObject, mergedPair, (o, s) => _.isNull(s) ? o : s);
@@ -459,8 +452,7 @@ class CatalogHelper {
     static coverableDuplicate (cov1:any, cov2:any) {
 
       if (cov1.name.toUpperCase() === cov2.name.toUpperCase()) {
-        // name equals
-        return cov1.name;
+        return  this.unifyCoverName(cov1.name , cov1.source);
       } else if (cov1.protocolAddress && cov2.protocolAddress && cov1.protocolAddress.toUpperCase() === cov2.protocolAddress.toUpperCase()){
         // BRIDGE address equals NEXUS address
         return cov1.name;

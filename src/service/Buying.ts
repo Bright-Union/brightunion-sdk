@@ -363,8 +363,6 @@ export async function callBridgeV2(_quoteProtocol:any){
     [_quoteProtocol.price, _quoteProtocol.period ],
   );
 
-  console.log(_quoteProtocol);
-
   return buyCover(
     global.user.account,
     'bridge',
