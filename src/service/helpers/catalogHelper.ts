@@ -452,10 +452,10 @@ class CatalogHelper {
     static coverableDuplicate (cov1:any, cov2:any) {
 
       if (cov1.name.toUpperCase() === cov2.name.toUpperCase()) {
-        return  this.unifyCoverName(cov1.name , cov1.source);
+        return  this.unifyCoverName(cov1.name , cov1.risk_protocol);
       } else if (cov1.protocolAddress && cov2.protocolAddress && cov1.protocolAddress.toUpperCase() === cov2.protocolAddress.toUpperCase()){
         // BRIDGE address equals NEXUS address
-        return cov1.name;
+        return  this.unifyCoverName(cov1.name , cov1.risk_protocol);
       }
       else if (cov1.source !== cov2.source){
         let cov1SourceNameIndex;
