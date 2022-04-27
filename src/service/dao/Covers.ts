@@ -111,6 +111,8 @@ export async function getCoversNexus():Promise<any>{
   const distributor = await _getNexusDistributor(NetConfig.netById(global.user.ethNet.networkId).nexusDistributor );
   const count = await distributor.methods.balanceOf(global.user.account).call();
 
+  global.events.emit("covers" , { itemsCount: count } );
+
   let covers = [];
   //fetch covers bought from Nexus Distributor
   for (let i = 0; i < Number(count); i++) {
@@ -134,6 +136,9 @@ export async function getCoversNexus():Promise<any>{
 
   //fetch covers bought from Nexus directly
   const coverIds = await nexusQuotationContract.methods.getAllCoversOfUser(global.user.account).call();
+
+  global.events.emit("covers" , { itemsCount: coverIds.length } );
+
   for (const coverId of coverIds) {
     try {
       const cover = await nexusGatewayContract.methods.getCover(coverId).call();
@@ -181,6 +186,8 @@ export async function getCoversInsurace(_web3:any):Promise<any>{
   const coverDataAddress = await insuraceCoverInstance.methods.data().call()
   const coverDataInstance = await _getInsurAceCoverDataContract(coverDataAddress, _web3.web3Instance);
   const count =  await coverDataInstance.methods.getCoverCount(_web3.account).call();
+
+  global.events.emit("covers" , { itemsCount: count } );
 
   for (let coverId = 1; coverId <= Number(count); coverId++) {
 
@@ -245,6 +252,8 @@ export async function getCoversBridgeV2():Promise<any>{
   let policies = []
 
   let limit = parseInt(nPolicies);
+
+  global.events.emit("covers" , { itemsCount: limit } );
 
   for (let i = 0; i < limit; i++) {
     if (mergedPolicyBooks[i] === '0x0000000000000000000000000000000000000000') {
