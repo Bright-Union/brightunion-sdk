@@ -3,17 +3,8 @@ import { fromWei} from 'web3-utils'
 
 const { gtag, install } = require("ga-gtag");
 
-// const Analytics = require('analytics');
-// const { googleTagManager } = require('@analytics/google-tag-manager');
-//
-// const analytics = Analytics({
-//   app: 'bright-union-sdk',
-//   plugins: [
-//     googleTagManager({
-//       containerId: 'GTM-WCCMKXR'
-//     })
-//   ]
-// })
+import Analytics from 'analytics'
+const googleTagManager:any = require('@analytics/google-tag-manager');
 
 const appId = 'G-E5EN28CF28';
 // const appId = 'G-KCNQQRKDP7'; //app - ui ID
@@ -41,16 +32,29 @@ class GoogleEvents {
 
   static InitTechManager = () => {
 
-    // (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    // new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    // j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    // 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    // })(window,document,'script','dataLayer','GTM-WCCMKXR');
+    const analytics = Analytics({
+      app: 'bright-union-sdk',
+      plugins: [
+        googleTagManager.default({
+          containerId: 'GTM-WCCMKXR'
+        })
+      ]
+    })
+
+    analytics.page();
+
+    // GTMSDKTEST
+    /* Track a custom event */
+    // analytics.track('GTMSDKTEST', {
+    //   item: 'test',
+    // })
 
   }
 
   static onBUInit = () => {
     if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
+
+      this.InitTechManager();
 
         gtag('set', 'user_properties', {
           'account': global.user.account,
