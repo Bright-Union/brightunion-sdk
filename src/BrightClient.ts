@@ -94,8 +94,8 @@ async initialize(): Promise<object>{
 
       await Promise.all([
         NetConfig.createWeb3Passives(),
-        CurrencyHelper.getETHDAIPrice(global.user.networkId),
-        CurrencyHelper.getInsureUSDCPrice(global.user.networkId),
+        CurrencyHelper.getETHDAIPrice(1),
+        CurrencyHelper.getInsureUSDCPrice(1),
       ]).then((_data: any) => {
         global.user.web3Passive = _data[0];
       })
