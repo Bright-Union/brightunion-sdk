@@ -44,7 +44,7 @@ class BridgeHelper {
           protocolAddress: _stats[i].insuredContract,
           bridgeAPY: Number(_stats[i].APY) / (10 ** 5),
           logo: logo,
-          name: name,
+          name: CatalogHelper.unifyCoverName(name, 'bridge' ),
           type: type,
           typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
           source: 'bridge',

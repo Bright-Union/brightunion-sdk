@@ -452,39 +452,12 @@ class CatalogHelper {
     static coverableDuplicate (cov1:any, cov2:any) {
 
       if (cov1.name.toUpperCase() === cov2.name.toUpperCase()) {
-        return  this.unifyCoverName(cov1.name , cov1.risk_protocol);
+        return cov1.name;
       } else if (cov1.protocolAddress && cov2.protocolAddress && cov1.protocolAddress.toUpperCase() === cov2.protocolAddress.toUpperCase()){
         // BRIDGE address equals NEXUS address
-        return  this.unifyCoverName(cov1.name , cov1.risk_protocol);
+        return cov1.name;
       }
-      else if (cov1.source !== cov2.source){
-        let cov1SourceNameIndex;
-        if (cov1.source === 'bridge') {
-          cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[0].toUpperCase() === cov1.name.toUpperCase())
-        } else if(cov1.source === 'nexus') {
-          cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[1].toUpperCase() === cov1.name.toUpperCase())
-        } else if(cov1.source === 'insurace') {
-          cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[2].toUpperCase() === cov1.name.toUpperCase())
-        }
-        if (cov1SourceNameIndex > -1) {
-          let cov2SourceNameFound;
-          if (cov2.source === 'bridge') {
-            cov2SourceNameFound = bridge_nexus_insurace[cov1SourceNameIndex][0].toUpperCase() === cov2.name.toUpperCase();
-          } else if(cov2.source === 'nexus') {
-            cov2SourceNameFound = bridge_nexus_insurace[cov1SourceNameIndex][1].toUpperCase() === cov2.name.toUpperCase();
-          } else if(cov2.source === 'insurace') {
-            cov2SourceNameFound = bridge_nexus_insurace[cov1SourceNameIndex][2].toUpperCase() === cov2.name.toUpperCase();
-          }
-          if (cov2SourceNameFound) {
-            //both found in custom mapping
-            return bridge_nexus_insurace[cov1SourceNameIndex][3];
-          } else {
-            return;
-          }
-        } else {
-          return;
-        }
-      } else {
+      else {
         return;
       }
     }

@@ -92,7 +92,7 @@ export async function getNexusCoverables(): Promise<any[]> {
           protocolAddress: key,
           nexusCoverable: key,
           logo: logo,
-          name: value.name,
+          name: CatalogHelper.unifyCoverName(value.name, 'nexus' ),
           type: type,
           typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
           source: 'nexus',
@@ -129,7 +129,7 @@ export async function getNexusCoverables(): Promise<any[]> {
         let typeDescr = type ? type : 'protocol';
 
         coverablesArray.push(CatalogHelper.createCoverable({
-            name: value.name.trim(),
+            name: CatalogHelper.unifyCoverName(value.name.trim(), 'insurace' ),
             logo: logo,
             type: type,
             typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
