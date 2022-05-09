@@ -10,32 +10,53 @@ class CurrencyHelper {
   public static insur_usdc:any = '0.2'; //fallback
 
   public static getInsureUSDCPrice(_networkId:any){
-
     if (CatalogHelper.availableOnNetwork(_networkId, 'UNISWAP')) {
-      try {
-        return UniswapV2Api.priceTokenAtoTokenB(
+
+      return new Promise( async (resolve) => {
+      let InsureUSDCPrice:any = localStorage.getItem('InsureUSDCPrice');
+
+        UniswapV2Api.priceTokenAtoTokenB(
           _networkId,
           NetConfig.netById(_networkId).USDC,
           NetConfig.netById(_networkId).INSUR
         ).then((price:any) => {
-          this.insur_usdc = price
-        })}catch(e) {
-          global.sentry.captureException(e)
+          console.log("UNI PRICE REQ - " , price);
+          this.insur_usdc = price;
+          localStorage.setItem('InsureUSDCPrice' , price);
+          resolve(price);
+        })
+
+        if(InsureUSDCPrice){
+          console.log("UNI PRICE LOCALE - " , InsureUSDCPrice);
+          this.insur_usdc = InsureUSDCPrice;
+          resolve(InsureUSDCPrice)
         }
+
+      })
 
       }
     }
 
-  public static getETHDAIPrice (_networkId:any) {
-    if (CatalogHelper.availableOnNetwork(_networkId, 'UNISWAP')) {
-      try {
-        return UniswapV2Api.priceTokenAtoETH(_networkId, NetConfig.netById(_networkId).DAI).then((price:any) => {
-          this.eth_dai =  price
-        })} catch(e) {
-          global.sentry.captureException(e)
+    public static getETHDAIPrice (_networkId:any) {
+      if (CatalogHelper.availableOnNetwork(_networkId, 'UNISWAP')) {
+        let ETHDAIPrice:any = localStorage.getItem('ETHDAIPrice');
+        if(ETHDAIPrice){
+          new Promise( async (resolve) => {
+            this.eth_dai = ETHDAIPrice;
+            resolve(ETHDAIPrice)
+          })
         }
+
+        try {
+          return UniswapV2Api.priceTokenAtoETH(_networkId, NetConfig.netById(_networkId).DAI).then((price:any) => {
+            this.eth_dai =  price;
+            localStorage.setItem('ETHDAIPrice' , price);
+          })} catch(e) {
+            global.sentry.captureException(e)
+          }
+        }
+
       }
-    }
 
     public static  eth2usd(eth:any) {
       return toBN(eth.toString().split('.')[0]).mul(toBN(this.eth_dai.toString().split('.')[0])).toString();
