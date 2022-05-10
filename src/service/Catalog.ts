@@ -160,10 +160,11 @@ export async function getNexusCoverables(): Promise<any[]> {
           .then(async (data:object) => {
             console.log(data)
           });
+      const easeData = await EaseApi.fetchCoverables();
       const coverablesArray: any  = [];
 
       // easeData.forEach(item => {
-      //   let logo:any = CatalogHelper.getLogoUrl( item.icon , null, 'ease');
+      //   const logo:any = CatalogHelper.getLogoUrl( item.icon , null, 'ease');
       //   coverablesArray.push(CatalogHelper.createCoverable({
       //     protocolAddress: item.address,
       //     logo: logo,
