@@ -28,8 +28,8 @@ export async function getCatalog(): Promise<any> {
   }
 
   // push EASE
-
-    catalogPromiseArray.push(getEaseCoverables())
+  console.log("before getEaseCoverables");
+  catalogPromiseArray.push(getEaseCoverables())
 
   for (let net of global.user.web3Passive) {
     catalogPromiseArray.push(getInsuraceCoverables(net.networkId))
@@ -156,9 +156,10 @@ export async function getNexusCoverables(): Promise<any[]> {
     }
 
     export async function getEaseCoverables() {
+      console.log("getEaseCoverables");
       return await EaseApi.fetchCoverables()
           .then(async (data:object) => {
-            console.log(data)
+            console.log("getEaseCoverables Data - " , data)
           });
       const coverablesArray: any  = [];
 
