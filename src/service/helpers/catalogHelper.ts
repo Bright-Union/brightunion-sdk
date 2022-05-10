@@ -196,8 +196,7 @@ class CatalogHelper {
       if(_distributorName == 'insurace'){
         logoData.url = _name;
         logoData.strongLogoData = true;
-      }
-      else if(_distributorName == 'bridge'){
+      } else if(_distributorName == 'bridge'){
         logoData.url = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${_address}/logo.png`;
         const missedLogos: any = [
           { name: '0.exchange'},
@@ -216,6 +215,10 @@ class CatalogHelper {
       else if(_distributorName == 'nexus'){
         logoData.url = `https://app.nexusmutual.io/logos/${_name}`;
         logoData.strongLogoData = true;
+      } else if(_distributorName == 'ease'){
+        logoData.url = _name;
+        logoData.strongLogoData = true;
+        console.log(logoData)
       }
 
     }
@@ -439,6 +442,8 @@ class CatalogHelper {
       } else if(_riskProtocol === 'nexus') {
         cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[1].toUpperCase() === _coverName.toUpperCase())
       } else if(_riskProtocol === 'insurace') {
+        cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[2].toUpperCase() === _coverName.toUpperCase())
+      } else if(_riskProtocol === 'ease') {
         cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[2].toUpperCase() === _coverName.toUpperCase())
       }
 

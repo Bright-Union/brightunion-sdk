@@ -9,6 +9,7 @@ import {
 } from './helpers/getContract';
 import NetConfig from './config/NetConfig';
 import GoogleEvents from './config/GoogleEvents';
+import EaseApi from "@/service/distributorsApi/EaseApi";
 
 export async function getCatalog(): Promise<any> {
 
@@ -25,6 +26,10 @@ export async function getCatalog(): Promise<any> {
   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL')) {
     catalogPromiseArray.push(getBridgeV2Coverables())
   }
+
+  // push EASE
+
+    catalogPromiseArray.push(getEaseCoverables())
 
   for (let net of global.user.web3Passive) {
     catalogPromiseArray.push(getInsuraceCoverables(net.networkId))
@@ -150,6 +155,27 @@ export async function getNexusCoverables(): Promise<any[]> {
       })
     }
 
+    export async function getEaseCoverables() {
+      return await EaseApi.fetchCoverables()
+          .then(async (data:object) => {
+            console.log(data)
+          });
+      const coverablesArray: any  = [];
+
+      // easeData.forEach(item => {
+      //   let logo:any = CatalogHelper.getLogoUrl( item.icon , null, 'ease');
+      //   coverablesArray.push(CatalogHelper.createCoverable({
+      //     protocolAddress: item.address,
+      //     logo: logo,
+      //     name: CatalogHelper.unifyCoverName(item.display_name, 'ease' ),
+      //     source: 'ease',
+      //     rawDataEase: item,
+      //     type: item.protocol_type,
+      //     stats: {"capacityRemaining": item.remaining_capacity, "unitCost":item.token.apy}
+      //   }))
+      // })
+      return coverablesArray;
+    }
 
 
 export default {
