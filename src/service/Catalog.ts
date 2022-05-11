@@ -28,8 +28,8 @@ export async function getCatalog(): Promise<any> {
   }
 
   // push EASE
-  console.log("before getEaseCoverables");
-  catalogPromiseArray.push(getEaseCoverables())
+  // catalogPromiseArray.push(getEaseCoverables())
+  getEaseCoverables();
 
   for (let net of global.user.web3Passive) {
     catalogPromiseArray.push(getInsuraceCoverables(net.networkId))
@@ -156,12 +156,11 @@ export async function getNexusCoverables(): Promise<any[]> {
     }
 
     export async function getEaseCoverables() {
-      console.log("getEaseCoverables");
-      return await EaseApi.fetchCoverables()
+       EaseApi.fetchCoverables()
           .then(async (data:object) => {
             console.log("getEaseCoverables Data - " , data)
           });
-      const coverablesArray: any  = [];
+      // const coverablesArray: any  = [];
 
       // easeData.forEach(item => {
       //   let logo:any = CatalogHelper.getLogoUrl( item.icon , null, 'ease');
@@ -175,7 +174,7 @@ export async function getNexusCoverables(): Promise<any[]> {
       //     stats: {"capacityRemaining": item.remaining_capacity, "unitCost":item.token.apy}
       //   }))
       // })
-      return coverablesArray;
+      // return coverablesArray;
     }
 
 
