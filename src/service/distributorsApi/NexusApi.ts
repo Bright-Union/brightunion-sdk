@@ -2,6 +2,7 @@ import axios from 'axios';
 import NetConfig from '../config/NetConfig'
 import RiskCarriers from '../config/RiskCarriers'
 import CatalogHelper from '../helpers/catalogHelper'
+import CurrencyHelper from '../helpers/currencyHelper';
 import BigNumber from 'bignumber.js'
 import {toBN, toWei, asciiToHex, fromWei} from 'web3-utils'
 import {  _getNexusDistributor,  _getNexusDistributorsContract, _getDistributorsContract, _getNexusQuotationContract , _getNexusMasterContract } from '../helpers/getContract'
@@ -47,7 +48,13 @@ export default class NexusApi {
        )
       .then(async (response:any) => {
 
+        // console.log("Nexus Q res- " , response.data , response.data.priceInNXM );
+
         let basePrice = toBN(response.data.price);
+        let priceInNXM = toBN(response.data.priceInNXM);
+        let priceInDAIFromNXM = CurrencyHelper.dai2nxm(priceInNXM);
+
+        console.log("priceInDAIFromNXM" , priceInDAIFromNXM);
 
         const distributor = await _getNexusDistributorsContract(NetConfig.netById(global.user.ethNet.networkId).nexusDistributor);
         // hardcoded address, as Bright Distributors contract cannot be called by passive net - fix for Nexus Multichain Quotation
@@ -55,6 +62,11 @@ export default class NexusApi {
         let fee:any = await distributor.methods.feePercentage().call();
         fee = toBN(fee);
         let priceWithFee:any = basePrice.mul(fee).div(toBN(10000)).add(basePrice);
+
+        let priceInNXMWithFee:any = priceInNXM.mul(fee).div(toBN(10000)).add(priceInNXM);
+
+        console.log("Q price - " , priceInNXM,  priceInNXMWithFee);
+
         let pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
 
         global.events.emit("quote" , {
@@ -90,6 +102,7 @@ export default class NexusApi {
           'nexus',
           protocol,
           {
+            priceInNXM: response.data.priceInNXM,
             amount: amountInWei,
             currency: currency,
             period: period,

@@ -96,6 +96,8 @@ async initialize(): Promise<object>{
         NetConfig.createWeb3Passives(),
         CurrencyHelper.getETHDAIPrice(1),
         CurrencyHelper.getInsureUSDCPrice(1),
+        CurrencyHelper.getETHNXMPrice(1),
+        CurrencyHelper.getDAINXMPrice(1),
       ]).then((_data: any) => {
         global.user.web3Passive = _data[0];
       })

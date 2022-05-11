@@ -14,6 +14,8 @@ import GoogleEvents from './config/GoogleEvents';
 
 export async function buyQuote(_quoteProtocol: any): Promise<any> {
 
+  console.log("buyQuote" , _quoteProtocol );
+
   GoogleEvents.buy(_quoteProtocol);
 
   if(_quoteProtocol.distributorName == 'bridge'){

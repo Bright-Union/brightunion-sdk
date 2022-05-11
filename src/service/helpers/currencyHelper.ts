@@ -8,6 +8,9 @@ class CurrencyHelper {
 
   public static eth_dai = '2000' //fallback to testnet ratio
   public static insur_usdc:any = '0.2'; //fallback
+  public static eth_nxm:any = '0.2'; //fallback
+  public static dai_nxm:any = '0.2'; //fallback
+
 
   public static getInsureUSDCPrice(_networkId:any){
     if (CatalogHelper.availableOnNetwork(_networkId, 'UNISWAP')) {
@@ -53,6 +56,64 @@ class CurrencyHelper {
     }
 
   }
+
+  public static getETHNXMPrice (_networkId:any) {
+    if (CatalogHelper.availableOnNetwork(_networkId, 'UNISWAP')) {
+
+      UniswapV2Api.priceTokenAtoTokenB(
+        _networkId,
+        NetConfig.netById(_networkId).ETH,
+        NetConfig.netById(_networkId).NXM
+      ).then((price:any) => {
+
+        console.log("getETHNXMPrice -  x - " , price);
+
+        this.eth_nxm =  price;
+        localStorage.setItem('ETHNXMPrice' , price);
+      })
+
+      const ETHNXMPrice:any = localStorage.getItem('ETHNXMPrice');
+      if(ETHNXMPrice){
+        new Promise( async (resolve) => {
+          this.eth_nxm = ETHNXMPrice;
+          resolve(ETHNXMPrice)
+        })
+      }
+    }
+
+  }
+
+  public static getDAINXMPrice (_networkId:any) {
+    if (CatalogHelper.availableOnNetwork(_networkId, 'UNISWAP')) {
+
+      UniswapV2Api.priceTokenAtoTokenB(
+        _networkId,
+        NetConfig.netById(_networkId).DAI,
+        NetConfig.netById(_networkId).NXM
+      ).then((price:any) => {
+        console.log("getDAINXMPrice - x - " , price);
+        this.dai_nxm =  price;
+        localStorage.setItem('DAINXMPrice' , price);
+      })
+
+      const DAINXMPrice:any = localStorage.getItem('DAINXMPrice');
+      if(DAINXMPrice){
+        new Promise( async (resolve) => {
+          this.dai_nxm = DAINXMPrice;
+          resolve(DAINXMPrice)
+        })
+      }
+    }
+
+  }
+
+    public static  eth2nxm(eth:any) {
+      return toBN(eth.toString().split('.')[0]).mul(toBN(this.eth_nxm.toString().split('.')[0])).toString();
+    }
+
+    public static  dai2nxm(eth:any) {
+      return toBN(eth.toString().split('.')[0]).mul(toBN(this.dai_nxm.toString().split('.')[0])).toString();
+    }
 
     public static  eth2usd(eth:any) {
       return toBN(eth.toString().split('.')[0]).mul(toBN(this.eth_dai.toString().split('.')[0])).toString();
