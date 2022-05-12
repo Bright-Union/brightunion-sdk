@@ -23,8 +23,6 @@ export default class NexusApi {
 
     static setNXMBasedquotePrice ( priceInNXM:any , quoteCurrency: string, fee:any ){
 
-      console.log("setNXMBasedquotePrice - " , quoteCurrency );
-
       let priceInNXMWithFee:any = priceInNXM.mul(fee).div(toBN(10000)).add(priceInNXM);
       let priceInCurrencyFromNXM:any = null;
 
@@ -34,11 +32,11 @@ export default class NexusApi {
         priceInCurrencyFromNXM = CurrencyHelper.nxm2dai(priceInNXMWithFee);
       }
 
-      console.log("priceInCurrencyFromNXM 1  - " , priceInCurrencyFromNXM );
-      const BrightFee = 0.2;
-      console.log("priceInCurrencyFromNXM 2  - " , priceInCurrencyFromNXM.mul( 1 + BrightFee) );
+      const BrightFeeCoef:any = toBN('120').div(toBN(100)); // Margin added - 20%
 
-      return priceInCurrencyFromNXM.mul( 1 + BrightFee);
+      let finalPrice:any = toBN(priceInCurrencyFromNXM).mul(BrightFeeCoef).toString();
+
+      return finalPrice;
     }
 
     static fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<any> {
@@ -80,15 +78,18 @@ export default class NexusApi {
 
         let nxmBasedPriceWithFee:any = NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee ) //toBN(priceInNXM);
 
-        console.log("Q price - " , fromWei(nxmBasedPriceWithFee) );
+        console.log("Q price - " , fromWei(priceWithFee) ,  fromWei(nxmBasedPriceWithFee) );
 
+        let pricePercentNXM = new BigNumber(nxmBasedPriceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
         let pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
 
         global.events.emit("quote" , {
           status: "INITIAL_DATA" ,
           distributorName:"nexus",
-          price: priceWithFee ,
-          pricePercent:pricePercent,
+          priceOrigin: priceWithFee,
+          price: nxmBasedPriceWithFee,
+          pricePercentOrigin:pricePercent,
+          pricePercent:pricePercentNXM,
           amount:amount,
           currency:currency,
           period:period,
