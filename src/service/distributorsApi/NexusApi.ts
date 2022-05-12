@@ -21,6 +21,26 @@ export default class NexusApi {
             });
     }
 
+    static setNXMBasedquotePrice ( priceInNXM:any , quoteCurrency: string, fee:any ){
+
+      console.log("setNXMBasedquotePrice - " , quoteCurrency );
+
+      let priceInNXMWithFee:any = priceInNXM.mul(fee).div(toBN(10000)).add(priceInNXM);
+      let priceInCurrencyFromNXM:any = null;
+
+      if(quoteCurrency == "ETH"){
+        priceInCurrencyFromNXM = CurrencyHelper.nxm2eth(priceInNXMWithFee);
+      }else if(quoteCurrency == "DAI"){
+        priceInCurrencyFromNXM = CurrencyHelper.nxm2dai(priceInNXMWithFee);
+      }
+
+      console.log("priceInCurrencyFromNXM 1  - " , priceInCurrencyFromNXM );
+      const BrightFee = 0.2;
+      console.log("priceInCurrencyFromNXM 2  - " , priceInCurrencyFromNXM.mul( 1 + BrightFee) );
+
+      return priceInCurrencyFromNXM.mul( 1 + BrightFee);
+    }
+
     static fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<any> {
 
       let capacityETH:any = null;
@@ -48,11 +68,7 @@ export default class NexusApi {
        )
       .then(async (response:any) => {
 
-        // console.log("Nexus Q res- " , response.data , response.data.priceInNXM );
-
         let basePrice = toBN(response.data.price);
-        let priceInNXM = toBN(response.data.priceInNXM);
-        let priceInDAIFromNXM = CurrencyHelper.dai2nxm(priceInNXM);
 
         const distributor = await _getNexusDistributorsContract(NetConfig.netById(global.user.ethNet.networkId).nexusDistributor);
         // hardcoded address, as Bright Distributors contract cannot be called by passive net - fix for Nexus Multichain Quotation
@@ -60,14 +76,11 @@ export default class NexusApi {
         let fee:any = await distributor.methods.feePercentage().call();
         fee = toBN(fee);
 
-        console.log("fee Percent - " ,  fee.toString() );
-
         let priceWithFee:any = basePrice.mul(fee).div(toBN(10000)).add(basePrice);
 
-        let priceInNXMWithFee:any = priceInNXM.mul(fee).div(toBN(10000)).add(priceInNXM);
+        let nxmBasedPriceWithFee:any = NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee ) //toBN(priceInNXM);
 
-        console.log("Q price - " , fromWei(priceInNXM.toString()),  fromWei(priceInNXMWithFee.toString()) );
-
+        console.log("Q price - " , fromWei(nxmBasedPriceWithFee) );
 
         let pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
 

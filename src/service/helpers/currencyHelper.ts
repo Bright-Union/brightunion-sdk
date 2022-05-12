@@ -67,7 +67,8 @@ class CurrencyHelper {
 
       return new Promise( async (resolve) => {
 
-        UniswapV2Api.priceTokenAtoETH(
+        UniswapV2Api.priceETHtoTokenB(
+        // UniswapV2Api.priceTokenAtoETH(
           _networkId,
           // NetConfig.netById(_networkId).ETH,
           NetConfig.netById(_networkId).WNXM
@@ -122,12 +123,12 @@ class CurrencyHelper {
 
   }
 
-    public static  eth2nxm(eth:any) {
-      return toBN(eth.toString().split('.')[0]).mul(toBN(this.eth_nxm.toString().split('.')[0])).toString();
+    public static  nxm2eth(nxm:any) {
+      return toBN(nxm.toString().split('.')[0]).div(toBN(this.eth_nxm.toString().split('.')[0])).toString();
     }
 
-    public static  dai2nxm(eth:any) {
-      return toBN(eth.toString().split('.')[0]).mul(toBN(this.dai_nxm.toString().split('.')[0])).toString();
+    public static  nxm2dai(nxm:any) {
+      return toBN(nxm.toString().split('.')[0]).div(toBN(this.dai_nxm.toString().split('.')[0])).toString();
     }
 
     public static  eth2usd(eth:any) {
