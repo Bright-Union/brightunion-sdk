@@ -40,6 +40,7 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         USDC: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
         INSUR:'0x544c42fbb96b39b21df61cf322b5edc285ee7429',
         NXM:'0xd7c49cee7e9188cca6ad8ff264c1da2e69d4cf3b',
+        WNXM:'0x0d438F3b5175Bebc262bF23753C1E53d03432bDE',
     },
     {
         name: 'Ropsten',

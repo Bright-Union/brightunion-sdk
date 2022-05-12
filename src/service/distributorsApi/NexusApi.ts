@@ -54,18 +54,20 @@ export default class NexusApi {
         let priceInNXM = toBN(response.data.priceInNXM);
         let priceInDAIFromNXM = CurrencyHelper.dai2nxm(priceInNXM);
 
-        console.log("priceInDAIFromNXM" , priceInDAIFromNXM);
-
         const distributor = await _getNexusDistributorsContract(NetConfig.netById(global.user.ethNet.networkId).nexusDistributor);
         // hardcoded address, as Bright Distributors contract cannot be called by passive net - fix for Nexus Multichain Quotation
 
         let fee:any = await distributor.methods.feePercentage().call();
         fee = toBN(fee);
+
+        console.log("fee Percent - " ,  fee.toString() );
+
         let priceWithFee:any = basePrice.mul(fee).div(toBN(10000)).add(basePrice);
 
         let priceInNXMWithFee:any = priceInNXM.mul(fee).div(toBN(10000)).add(priceInNXM);
 
-        console.log("Q price - " , priceInNXM,  priceInNXMWithFee);
+        console.log("Q price - " , fromWei(priceInNXM.toString()),  fromWei(priceInNXMWithFee.toString()) );
+
 
         let pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
 

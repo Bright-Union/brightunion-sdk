@@ -41,18 +41,23 @@ class CurrencyHelper {
   public static getETHDAIPrice (_networkId:any) {
     if (CatalogHelper.availableOnNetwork(_networkId, 'UNISWAP')) {
 
-      UniswapV2Api.priceTokenAtoETH(_networkId, NetConfig.netById(_networkId).DAI).then((price:any) => {
-        this.eth_dai =  price;
-        localStorage.setItem('ETHDAIPrice' , price);
+      return new Promise( async (resolve) => {
+
+        UniswapV2Api.priceTokenAtoETH(_networkId, NetConfig.netById(_networkId).DAI).then((price:any) => {
+          this.eth_dai =  price;
+          localStorage.setItem('ETHDAIPrice' , price);
+          resolve(price)
+        })
+
+        const ETHDAIPrice:any = localStorage.getItem('ETHDAIPrice');
+        if(ETHDAIPrice){
+          new Promise( async (resolve) => {
+            this.eth_dai = ETHDAIPrice;
+            resolve(ETHDAIPrice)
+          })
+        }
       })
 
-      const ETHDAIPrice:any = localStorage.getItem('ETHDAIPrice');
-      if(ETHDAIPrice){
-        new Promise( async (resolve) => {
-          this.eth_dai = ETHDAIPrice;
-          resolve(ETHDAIPrice)
-        })
-      }
     }
 
   }
@@ -60,25 +65,27 @@ class CurrencyHelper {
   public static getETHNXMPrice (_networkId:any) {
     if (CatalogHelper.availableOnNetwork(_networkId, 'UNISWAP')) {
 
-      UniswapV2Api.priceTokenAtoTokenB(
-        _networkId,
-        NetConfig.netById(_networkId).ETH,
-        NetConfig.netById(_networkId).NXM
-      ).then((price:any) => {
+      return new Promise( async (resolve) => {
 
-        console.log("getETHNXMPrice -  x - " , price);
+        UniswapV2Api.priceTokenAtoETH(
+          _networkId,
+          // NetConfig.netById(_networkId).ETH,
+          NetConfig.netById(_networkId).WNXM
+        ).then((price:any) => {
+          this.eth_nxm =  price;
+          localStorage.setItem('ETHNXMPrice' , price);
+          resolve(price);
+        })
 
-        this.eth_nxm =  price;
-        localStorage.setItem('ETHNXMPrice' , price);
+        const ETHNXMPrice:any = localStorage.getItem('ETHNXMPrice');
+        if(ETHNXMPrice){
+          new Promise( async (resolve) => {
+            this.eth_nxm = ETHNXMPrice;
+            resolve(ETHNXMPrice)
+          })
+        }
       })
 
-      const ETHNXMPrice:any = localStorage.getItem('ETHNXMPrice');
-      if(ETHNXMPrice){
-        new Promise( async (resolve) => {
-          this.eth_nxm = ETHNXMPrice;
-          resolve(ETHNXMPrice)
-        })
-      }
     }
 
   }
@@ -86,23 +93,31 @@ class CurrencyHelper {
   public static getDAINXMPrice (_networkId:any) {
     if (CatalogHelper.availableOnNetwork(_networkId, 'UNISWAP')) {
 
-      UniswapV2Api.priceTokenAtoTokenB(
-        _networkId,
-        NetConfig.netById(_networkId).DAI,
-        NetConfig.netById(_networkId).NXM
-      ).then((price:any) => {
-        console.log("getDAINXMPrice - x - " , price);
-        this.dai_nxm =  price;
-        localStorage.setItem('DAINXMPrice' , price);
+      console.log("getDAINXMPrice - 1 - ",  NetConfig.netById(_networkId).DAI,  NetConfig.netById(_networkId).WNXM );
+
+      return new Promise( async (resolve) => {
+
+        UniswapV2Api.priceTokenAtoTokenB(
+          _networkId,
+          NetConfig.netById(_networkId).WNXM,
+          NetConfig.netById(_networkId).ETH,
+        ).then((price:any) => {
+          console.log("getDAINXMPrice - x - " , price);
+          this.dai_nxm =  price;
+          localStorage.setItem('DAINXMPrice' , price);
+          resolve(price);
+
+        })
+
+        const DAINXMPrice:any = localStorage.getItem('DAINXMPrice');
+        if(DAINXMPrice){
+          new Promise( async (resolve) => {
+            this.dai_nxm = DAINXMPrice;
+            resolve(DAINXMPrice)
+          })
+        }
       })
 
-      const DAINXMPrice:any = localStorage.getItem('DAINXMPrice');
-      if(DAINXMPrice){
-        new Promise( async (resolve) => {
-          this.dai_nxm = DAINXMPrice;
-          resolve(DAINXMPrice)
-        })
-      }
     }
 
   }

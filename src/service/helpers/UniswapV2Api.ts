@@ -17,8 +17,8 @@ class UniswapV2Api {
         const TokenB = new Token(Number(chainId), tokenB, 18);
 
         return Fetcher.fetchPairData(TokenA, TokenB).then((pair:any) => {
-            const route = new Route([pair], TokenB)
-            return route.midPrice.toSignificant(6);
+          const route = new Route([pair], TokenB)
+          return route.midPrice.toSignificant(6);
         })
     }
 }
