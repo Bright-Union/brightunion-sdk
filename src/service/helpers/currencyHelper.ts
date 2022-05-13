@@ -68,9 +68,7 @@ class CurrencyHelper {
       return new Promise( async (resolve) => {
 
         UniswapV2Api.priceETHtoTokenB(
-        // UniswapV2Api.priceTokenAtoETH(
           _networkId,
-          // NetConfig.netById(_networkId).ETH,
           NetConfig.netById(_networkId).WNXM
         ).then((price:any) => {
           this.eth_nxm =  price;
@@ -101,7 +99,7 @@ class CurrencyHelper {
         UniswapV2Api.priceTokenAtoTokenB(
           _networkId,
           NetConfig.netById(_networkId).WNXM,
-          NetConfig.netById(_networkId).ETH,
+          NetConfig.netById(_networkId).DAI,
         ).then((price:any) => {
           console.log("getDAINXMPrice - x - " , price);
           this.dai_nxm =  price;
