@@ -83,6 +83,9 @@ export default class NexusApi {
         let pricePercentNXM = new BigNumber(nxmBasedPriceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
         let pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
 
+        // console.log("Q price %%%- " , pricePercent ,  pricePercentNXM );
+        // "webpack": "^5.58.2",
+
         global.events.emit("quote" , {
           status: "INITIAL_DATA" ,
           distributorName:"nexus",
@@ -118,14 +121,16 @@ export default class NexusApi {
           'nexus',
           protocol,
           {
+            priceOrigin: priceWithFee.toString(),
+            price: nxmBasedPriceWithFee,
+            pricePercentOrigin:pricePercent,
+            pricePercent:pricePercentNXM,
             priceInNXM: response.data.priceInNXM,
             amount: amountInWei,
             currency: currency,
             period: period,
             chain: 'ETH',
             chainId: global.user.ethNet.networkId,
-            price: priceWithFee.toString(),
-            pricePercent: pricePercent,
             response: response.data,
             defaultCurrencySymbol:defaultCurrencySymbol,
             errorMsg: nexusMaxCapacityError,
@@ -172,8 +177,10 @@ export default class NexusApi {
                                 period: period,
                                 chain: 'ETH',
                                 chainId: global.user.ethNet.networkId,
+                                priceOrigin: 0,
                                 price: 0,
-                                pricePercent: 0,
+                                pricePercentOrigin:0,
+                                pricePercent:0,
                                 errorMsg: errorMsg,
                                 response: {error:error},
                                 minimumAmount: minimumAmount,

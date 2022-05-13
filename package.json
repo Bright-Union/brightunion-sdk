@@ -7,6 +7,7 @@
     "test": "mocha -r ts-node/register src/tests/**/*.spec.ts --timeout 5000",
     "lint": "eslint . --ext .ts",
     "build-dev": "webpack --env local --mode production --watch",
+    "serve": "webpack --env local --mode development --watch",
     "build": "webpack --mode production"
   },
   "repository": {
