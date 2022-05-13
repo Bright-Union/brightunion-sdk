@@ -1,6 +1,7 @@
 import NetConfig from '../config/NetConfig';
 import CatalogHelper from './catalogHelper';
 import UniswapV2Api from './UniswapV2Api';
+import UniswapV3Api from './UniswapV3Api';
 import {toBN, fromWei} from 'web3-utils'
 // import * as Sentry from "@sentry/browser";
 
@@ -63,6 +64,9 @@ class CurrencyHelper {
   }
 
   public static getETHNXMPrice (_networkId:any) {
+
+    UniswapV3Api.priceTokenAtoTokenB();
+
     if (CatalogHelper.availableOnNetwork(_networkId, 'UNISWAP')) {
 
       return new Promise( async (resolve) => {
@@ -92,7 +96,7 @@ class CurrencyHelper {
   public static getDAINXMPrice (_networkId:any) {
     if (CatalogHelper.availableOnNetwork(_networkId, 'UNISWAP')) {
 
-      console.log("getDAINXMPrice - 1 - ",  NetConfig.netById(_networkId).DAI,  NetConfig.netById(_networkId).WNXM );
+      // console.log("getDAINXMPrice - 1 - ",  NetConfig.netById(_networkId).DAI,  NetConfig.netById(_networkId).WNXM );
 
       return new Promise( async (resolve) => {
 
@@ -101,7 +105,7 @@ class CurrencyHelper {
           NetConfig.netById(_networkId).WNXM,
           NetConfig.netById(_networkId).DAI,
         ).then((price:any) => {
-          console.log("getDAINXMPrice - x - " , price);
+          // console.log("getDAINXMPrice - x - " , price);
           this.dai_nxm =  price;
           localStorage.setItem('DAINXMPrice' , price);
           resolve(price);

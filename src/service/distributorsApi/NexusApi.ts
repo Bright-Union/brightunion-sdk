@@ -29,7 +29,8 @@ export default class NexusApi {
       if(quoteCurrency == "ETH"){
         priceInCurrencyFromNXM = CurrencyHelper.nxm2eth(priceInNXMWithFee);
       }else if(quoteCurrency == "DAI"){
-        priceInCurrencyFromNXM = CurrencyHelper.nxm2dai(priceInNXMWithFee);
+        priceInCurrencyFromNXM = CurrencyHelper.nxm2eth(priceInNXMWithFee);
+        // priceInCurrencyFromNXM = CurrencyHelper.nxm2dai(priceInNXMWithFee);
       }
 
       const BrightFeeCoef:any = toBN('120').div(toBN(100)); // Margin added - 20%
@@ -76,16 +77,16 @@ export default class NexusApi {
 
         let priceWithFee:any = basePrice.mul(fee).div(toBN(10000)).add(basePrice);
 
-        console.log("Q price 111 ");
+        // console.log("Q price 111 ");
 
         let nxmBasedPriceWithFee:any = NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee ) //toBN(priceInNXM);
 
-        console.log("Q price - " , fromWei(priceWithFee) ,  fromWei(nxmBasedPriceWithFee) );
+        // console.log("Q price - " , fromWei(priceWithFee) ,  fromWei(nxmBasedPriceWithFee) );
 
         let pricePercentNXM = new BigNumber(nxmBasedPriceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
         let pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
 
-        console.log("Q price %%%- " , pricePercent ,  pricePercentNXM );
+        // console.log("Q price %%%- " , pricePercent ,  pricePercentNXM );
 
         global.events.emit("quote" , {
           status: "INITIAL_DATA" ,
