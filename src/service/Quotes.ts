@@ -36,6 +36,7 @@ export async function getQuotes(
   quotesPromiseArray.push(getQuoteFrom('nexus', _amount, _currency, _period, _protocol, null ))
   quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, global.user.web3 ))
   quotesPromiseArray.push(getQuoteFrom('bridge' , _amount, _currency, _period, _protocol, null ))
+  quotesPromiseArray.push(getQuoteFrom('ease' , _amount, _currency, _period, _protocol, null ))
 
   for (let net of global.user.web3Passive) {
     quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, net))
@@ -78,9 +79,9 @@ export async function getQuoteFrom(
   }else if(_distributorName == 'insurace'){
     return await getInsuraceQuote( _net , _amount,_currency,_period,_protocol);
   }
-  // else if(_distributorName == 'ease'){
-  //   return await getEaseQuote(_amount,_currency,_period,_protocol );
-  // }
+  else if(_distributorName == 'ease'){
+    return await getEaseQuote(_amount,_currency,_period,_protocol );
+  }
   else {
     return  {error: 'supported distributor names are: bridge, insurace, nexus'}
   }
@@ -191,17 +192,15 @@ export async function getInsuraceQuotes( _arrayOfQuotes:any ) : Promise<object> 
   }
 }
 
-// export async function getEaseQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
-//   // if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'NEXUS_MUTUAL')){
-//     if(_protocol.source === 'ease'){
-//       return await EaseApi.fetchQuote( _amount , _currency, _period, _protocol);
-//     }else{
-//       return {error: "Please provide Ease address in protocol object"}
-//     }
-//   // }else{
-//   //   return {error: "Not supported network for Nexus"}
-//   // }
-// }
+export async function getEaseQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
+  // if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'NEXUS_MUTUAL')){
+  if(_protocol.rawDataEase) {
+    return await EaseApi.fetchQuote( _amount , _currency, _period, _protocol);
+  }
+  // }else{
+  //   return {error: "Not supported network for Nexus"}
+  // }
+}
 
 export default {
   getQuoteFrom,

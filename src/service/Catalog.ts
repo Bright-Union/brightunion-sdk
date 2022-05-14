@@ -157,25 +157,23 @@ export async function getNexusCoverables(): Promise<any[]> {
 
     export async function getEaseCoverables() {
       return await EaseApi.fetchCoverables()
-          .then(async (data:object) => {
-            console.log(data)
+          .then(async (data:any) => {
+            const coverablesArray: any  = [];
+            data.forEach((item: any) => {
+                const protocolName = item.token.name.split(" ")[0].split("-")[0];
+              coverablesArray.push(CatalogHelper.createCoverable({
+                protocolAddress: item.address,
+                name: CatalogHelper.unifyCoverName(protocolName, 'ease' ),
+                source: 'ease',
+                logo: item.icon,
+                rawDataEase: item,
+                type: item.protocol_type,
+                stats: {"capacityRemaining": item.remaining_capacity, "unitCost":item.token.apy, "priceETH": item.token.priceETH, "priceUSD": item.token.priceUSD}
+              }))
+              })
+            global.events.emit("catalog" , { items: coverablesArray , distributorName:"ease" , networkId: 1, itemsCount: coverablesArray.length } );
+            return coverablesArray;
           });
-      const easeData = await EaseApi.fetchCoverables();
-      const coverablesArray: any  = [];
-
-      // easeData.forEach(item => {
-      //   const logo:any = CatalogHelper.getLogoUrl( item.icon , null, 'ease');
-      //   coverablesArray.push(CatalogHelper.createCoverable({
-      //     protocolAddress: item.address,
-      //     logo: logo,
-      //     name: CatalogHelper.unifyCoverName(item.display_name, 'ease' ),
-      //     source: 'ease',
-      //     rawDataEase: item,
-      //     type: item.protocol_type,
-      //     stats: {"capacityRemaining": item.remaining_capacity, "unitCost":item.token.apy}
-      //   }))
-      // })
-      return coverablesArray;
     }
 
 

@@ -6,38 +6,38 @@ import {hexToUtf8} from 'web3-utils';
 
 
 const bridge_nexus_insurace = [
-  // BRIDGE NAME, NEXUS NAME, INSURACE NAME, COMMON NAME
-  ['88mph.app', '88mph', '88mph V2', '88mph V2'],
-  ['88mph.app', '88mph', '88mph V3', '88mph V3'],
-  ['1INCH Token', '1Inch (DEX & Liquidity Pools)', '1Inch', '1Inch'],
-  ['Aave', 'Aave V2', 'Aave V2', 'Aave V2'],
-  ['Aave', 'Aave V1', '', 'Aave V1'],
-  ['Anchor Protocol', 'Anchor Protocol', 'Anchor', 'Anchor'],
-  ['Alchemix', 'Alchemix V1', '', 'Alchemix V1'],
-  ['BadgerDAO', 'BadgerDAO', 'Badger Finance', 'BadgerDAO'],
-  ['BarnBridge', 'Barnbridge Smart Yield V1', '', 'Barnbridge V1'],
-  ['Compound', 'Compound V2', 'Compound V2', 'Compound V2'],
-  ['', 'Enzyme v3', 'Enzyme Finance', 'Enzyme'],
-  ['Cream', 'C.R.E.A.M. V1', '', 'C.R.E.A.M.'],
-  ['', 'Curve All Pools (incl staking)', 'Curve (All Pools)', 'Curve (All Pools)'],
-  ['', 'DODO Exchange', 'DODO', 'DODO'],
-  ['Maker', 'MakerDAO MCD', 'MakerDAO MCD', 'MakerDAO'],
-  ['', 'Pancakeswap V1', 'PancakeSwap', 'PancakeSwap'],
-  ['Perpetual', 'Perpetual Protocol', 'Perpetual Protocol', 'Perpetual Protocol'],
-  ['bmiV2PendleFinanceCover', 'Pendle', "Pendle", "Pendle"],
-  ['Synthetix Network Token', 'Synthetix', '', 'Synthetix'],
-  ['Sushi', 'SushiSwap V1', '', 'Sushi'],
-  ['Keeper DAO', 'Keeper DAO', 'KeeperDAO', 'KeeperDAO'],
-  ['', 'Kyber (Katalyst)', 'Kyber', 'Kyber'],
-  ['', 'DyDx Perpetual', 'DyDx', 'DyDx'],
-  ['', 'ETH 2.0 (deposit contract)', 'ETH 2.0', 'ETH 2.0'],
-  ['', 'OlympusDAO', 'Olympus DAO', 'Olympus DAO'],
-  ['Spell Token', 'Abracadabra', 'Abracadabra.money', 'Abracadabra'],
-  ['Uniswap', 'Uniswap V1', '', 'Uniswap V1'],
-  ['Uniswap', 'Uniswap V2', 'Uniswap V2', 'Uniswap V2'],
-  ['Uniswap', 'Uniswap V3', 'Uniswap V3', 'Uniswap V3'],
-  ['','Convex Finance V1','Convex', 'Convex'],
-  ['IceToken','Popsicle Finance','', 'IceToken']
+  // BRIDGE NAME, NEXUS NAME, INSURACE NAME, EASE, COMMON NAME
+  ['88mph.app', '88mph', '88mph V2', '', '88mph V2'],
+  ['88mph.app', '88mph', '88mph V3', '', '88mph V3'],
+  ['1INCH Token', '1Inch (DEX & Liquidity Pools)', '1Inch', '', '1Inch'],
+  ['Aave', 'Aave V2', 'Aave V2', 'Aave', 'Aave V2'],
+  ['Aave', 'Aave V1', '', '', 'Aave V1'],
+  ['Anchor Protocol', 'Anchor Protocol', 'Anchor', '', 'Anchor'],
+  ['Alchemix', 'Alchemix V1', '', '', 'Alchemix V1'],
+  ['BadgerDAO', 'BadgerDAO', 'Badger Finance', '', 'BadgerDAO'],
+  ['BarnBridge', 'Barnbridge Smart Yield V1', '', '', 'Barnbridge V1'],
+  ['Compound', 'Compound V2', 'Compound V2', 'Compound', 'Compound V2'],
+  ['', 'Enzyme v3', 'Enzyme Finance', '', 'Enzyme'],
+  ['Cream', 'C.R.E.A.M. V1', '', '', 'C.R.E.A.M.'],
+  ['', 'Curve All Pools (incl staking)', 'Curve (All Pools)', 'Curve', 'Curve (All Pools)'],
+  ['', 'DODO Exchange', 'DODO', '', 'DODO'],
+  ['Maker', 'MakerDAO MCD', 'MakerDAO MCD', '', 'MakerDAO'],
+  ['', 'Pancakeswap V1', 'PancakeSwap', '', 'PancakeSwap'],
+  ['Perpetual', 'Perpetual Protocol', 'Perpetual Protocol', '', 'Perpetual Protocol'],
+  ['bmiV2PendleFinanceCover', 'Pendle', "Pendle", '', "Pendle"],
+  ['Synthetix Network Token', 'Synthetix', '', '', 'Synthetix'],
+  ['Sushi', 'SushiSwap V1', '', '', 'Sushi'],
+  ['Keeper DAO', 'Keeper DAO', 'KeeperDAO', '', 'KeeperDAO'],
+  ['', 'Kyber (Katalyst)', 'Kyber', '', 'Kyber'],
+  ['', 'DyDx Perpetual', 'DyDx', '', 'DyDx'],
+  ['', 'ETH 2.0 (deposit contract)', 'ETH 2.0', '', 'ETH 2.0'],
+  ['', 'OlympusDAO', 'Olympus DAO', '', 'Olympus DAO'],
+  ['Spell Token', 'Abracadabra', 'Abracadabra.money', '', 'Abracadabra'],
+  ['Uniswap', 'Uniswap V1', '', '', 'Uniswap V1'],
+  ['Uniswap', 'Uniswap V2', 'Uniswap V2', '', 'Uniswap V2'],
+  ['Uniswap', 'Uniswap V3', 'Uniswap V3', '', 'Uniswap V3'],
+  ['','Convex Finance V1','Convex', 'Convex', 'Convex'],
+  ['IceToken','Popsicle Finance','', '', 'IceToken']
 ]
 
 
@@ -215,13 +215,8 @@ class CatalogHelper {
       else if(_distributorName == 'nexus'){
         logoData.url = `https://app.nexusmutual.io/logos/${_name}`;
         logoData.strongLogoData = true;
-      } else if(_distributorName == 'ease'){
-        logoData.url = _name;
-        logoData.strongLogoData = true;
       }
-
     }
-
     return logoData;
   }
 
@@ -313,6 +308,7 @@ class CatalogHelper {
       rawDataNexus: obj.rawDataNexus,                                           //field will be increased if similar products found
       rawDataBridge: obj.rawDataBridge,                                           //field will be increased if similar products found
       rawDataInsurace: obj.rawDataInsurace,                                           //field will be increased if similar products found
+      rawDataEase: obj.rawDataEase
     };
   }
 
@@ -324,8 +320,10 @@ class CatalogHelper {
       commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[0] === category});
     } else if (provider == 'insurace') {
       commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[2] === category});
+    } else if (provider == 'ease') {
+      commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[3] === category});
     }
-    return commonCategory ? commonCategory[3] : '' ;
+    return commonCategory ? commonCategory[4] : '' ;
   }
 
   public static chainList(_distributorName:string, coverable:any) {
@@ -443,11 +441,11 @@ class CatalogHelper {
       } else if(_riskProtocol === 'insurace') {
         cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[2].toUpperCase() === _coverName.toUpperCase())
       } else if(_riskProtocol === 'ease') {
-        cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[2].toUpperCase() === _coverName.toUpperCase())
+        cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[3].toUpperCase() === _coverName.toUpperCase())
       }
 
       if(cov1SourceNameIndex && cov1SourceNameIndex > -1){
-        return bridge_nexus_insurace[cov1SourceNameIndex][3];
+        return bridge_nexus_insurace[cov1SourceNameIndex][4];
       }else{
         return _coverName
       }
