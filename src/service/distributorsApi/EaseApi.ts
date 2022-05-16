@@ -24,7 +24,6 @@ export default class EaseApi {
             const protocolName = protocol.name.toLowerCase().split(" ")[0];
             const vault = response.data.filter((item: any) => item.token.name.toLowerCase().includes(protocolName));
             let capacityArr:any = [];
-            let price = currency === 'ETH' ? vault[0].token.priceETH : vault[0].token.priceUSD;
             vault.forEach((item: any) => {
                 capacityArr.push(item.remaining_capacity);
             })
@@ -35,20 +34,14 @@ export default class EaseApi {
                 global.events.emit("quote" , {
                     status: "INITIAL_DATA" ,
                     distributorName: "Ease",
-                    pricePercent:vault[0].token.apy,
                     amount:amount,
                     currency:currency,
                     period:period,
                     protocol:protocol,
                     chain: 'ETH',
-                    rawData: vault[0],
-                    protocolAddress: vault[0].address,
-                    logo: vault[0].icon,
                     name: CatalogHelper.unifyCoverName(vault[0].display_name, 'ease' ),
                     source: 'ease',
-                    rawDataEase: vault[0],
-                    type: vault[0].protocol_type,
-                    stats: {"capacityRemaining": vault[0].remaining_capacity, "unitCost":vault[0].token.apy, "priceETH": vault[0].token.priceETH, "priceUSD": vault[0].token.priceUSD}
+                    rawDataEase: vault,
                 } );
 
             return CatalogHelper.quoteFromCoverable(
@@ -60,24 +53,16 @@ export default class EaseApi {
                     period: period,
                     chain: 'ETH',
                     chainId: global.user.ethNet.networkId,
-                    price: price,
-                    pricePercent: vault[0].token.apy,
-                    response: [],
+                    price: 0,
+                    response: vault,
                     source: 'ease',
                     minimumAmount: 1,
+                    name: CatalogHelper.unifyCoverName(vault[0].display_name, 'ease' ),
                     errorMsg: errorMsg,
                     type: vault[0].protocol_type,
-                    typeDescription: vault[0].protocol_type,
                 },
                 {
                     capacity: capacityArr,
-                    // activeCoversETH: activeCoversETH,
-                    // activeCoversDAI: activeCoversDAI,
-                    // capacityETH: capacityETH,
-                    // capacityDAI: capacityDAI,
-                    // totalCovers: totalCovers,
-                    // totalActiveCoversDAI: totalActiveCoversDAI,
-                    // totalActiveCoversETH: totalActiveCoversETH,
                 }
             );
         })

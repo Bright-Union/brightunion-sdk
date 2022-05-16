@@ -191,14 +191,14 @@ export async function getInsuraceQuotes( _arrayOfQuotes:any ) : Promise<object> 
   }
 }
 
-export async function getEaseQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
-  // if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'NEXUS_MUTUAL')){
-  if(_protocol.rawDataEase) {
-    return await EaseApi.fetchQuote( _amount , _currency, _period, _protocol);
+export async function getEaseQuote(_amount: any, _currency: any, _period: any, _protocol: any): Promise<object> {
+  if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'EASE')) {
+    if (_protocol.rawDataEase) {
+      return await EaseApi.fetchQuote(_amount, _currency, _period, _protocol);
+    }
+  } else {
+    return {error: "Not supported network for Ease"}
   }
-  // }else{
-  //   return {error: "Not supported network for Nexus"}
-  // }
 }
 
 export default {
