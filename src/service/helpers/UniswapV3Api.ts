@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { Pool } from '@uniswap/v3-sdk'
-import { Token } from '@uniswap/sdk-core'
+import { Token , TradeType } from '@uniswap/sdk-core'
 import { abi as IUniswapV3PoolABI } from '@uniswap/v3-core/artifacts/contracts/interfaces/IUniswapV3Pool.sol/IUniswapV3Pool.json'
 import { abi as QuoterABI } from '@uniswap/v3-periphery/artifacts/contracts/lens/Quoter.sol/Quoter.json'
 const AlphaRouter = require('@uniswap/smart-order-router')
@@ -24,11 +24,11 @@ class UniswapV3Api {
 
     public  static async initUniswapV3() {
 
-      console.log("-> router - initUniswapV3 2" , global.user, this.router , AlphaRouter);
+      console.log("-> router - initUniswapV3 666" , global.user, provider );
 
-      this.router = new AlphaRouter.AlphaRouter({ chainId: 1, provider: provider }) //web3Provider
-      //
-      console.log("-> router - " , this.router , '//' );
+      this.router = await new AlphaRouter.AlphaRouter({ chainId: 1, provider: provider }) //web3Provider
+
+      this.getRoute();
 
       // const poolContract = new ethers.Contract(poolAddress, IUniswapV3PoolABI, provider)
       // this.poolContract = new ethers.Contract(poolAddress, IUniswapV3PoolABI, provider );
@@ -36,17 +36,19 @@ class UniswapV3Api {
 
     public  static async getRoute() {
 
-      console.log("getRoute");
+      console.log("getRoute ChainId - " , TradeType, this.router );
 
       const WETH = new Token(1, '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', 18, 'WETH', 'Wrapped Ether')
 
-      const USDC = new Token(1, '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 6, 'USDC', 'USD//C')
+      const USDC = new Token( 1 , '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 6, 'USDC', 'USD//C')
 
-      const route = await this.router.route( 10 , USDC, "EXACT_INPUT" , {
-        recipient: global.user.account,
-        slippageTolerance: "5%",
-        deadline: Math.floor(Date.now() / 1000 + 1800),
-      })
+      const route = await this.router.route( 3 , USDC, TradeType.EXACT_INPUT ,
+      {
+      //   recipient: global.user.account,
+      //   slippageTolerance: "5%",
+      //   deadline: Math.floor(Date.now() / 1000 + 1800),
+      }
+    )
 
       console.log("getRoute2 - " , route);
     }
