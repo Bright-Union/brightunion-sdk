@@ -11,6 +11,8 @@ import NetConfig from './service/config/NetConfig'
 import CurrencyHelper from './service/helpers/currencyHelper'
 import EventEmitter from 'events'
 import GoogleEvents from './service/config/GoogleEvents';
+import UniswapV3Api from './service/helpers/UniswapV3Api';
+
 
 import * as Sentry from "@sentry/browser";
 import { Integrations } from "@sentry/tracing";
@@ -94,6 +96,7 @@ async initialize(): Promise<object>{
 
       await Promise.all([
         NetConfig.createWeb3Passives(),
+        UniswapV3Api.initUniswapV3(),
         CurrencyHelper.getETHDAIPrice(1),
         CurrencyHelper.getInsureUSDCPrice(1),
         CurrencyHelper.getETHNXMPrice(1),

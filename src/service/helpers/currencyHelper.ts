@@ -65,7 +65,9 @@ class CurrencyHelper {
 
   public static getETHNXMPrice (_networkId:any) {
 
-    UniswapV3Api.priceTokenAtoTokenB();
+    // UniswapV3Api.getRoute();
+
+    // UniswapV3Api.priceTokenAtoTokenB();
 
     if (CatalogHelper.availableOnNetwork(_networkId, 'UNISWAP')) {
 
