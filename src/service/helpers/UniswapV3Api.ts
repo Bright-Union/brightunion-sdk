@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { Pool } from '@uniswap/v3-sdk'
-import { Token , TradeType } from '@uniswap/sdk-core'
+import { Token , TradeType, CurrencyAmount } from '@uniswap/sdk-core'
 import { abi as IUniswapV3PoolABI } from '@uniswap/v3-core/artifacts/contracts/interfaces/IUniswapV3Pool.sol/IUniswapV3Pool.json'
 import { abi as QuoterABI } from '@uniswap/v3-periphery/artifacts/contracts/lens/Quoter.sol/Quoter.json'
 const AlphaRouter = require('@uniswap/smart-order-router')
@@ -42,7 +42,13 @@ class UniswapV3Api {
 
       const USDC = new Token( 1 , '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 6, 'USDC', 'USD//C')
 
-      const route = await this.router.route( 3 , USDC, TradeType.EXACT_INPUT ,
+      const router = await new AlphaRouter.AlphaRouter({ chainId: 1, provider: provider }) //web3Provider
+
+      const wethAmount = await CurrencyAmount.fromRawAmount( WETH , 3 );
+
+      console.log("wethAmount - " , wethAmount);
+
+      const route = await this.router.route( wethAmount , USDC, TradeType.EXACT_INPUT ,
       {
       //   recipient: global.user.account,
       //   slippageTolerance: "5%",
@@ -51,6 +57,7 @@ class UniswapV3Api {
     )
 
       console.log("getRoute2 - " , route);
+
     }
 
     public  static async getPoolImmutables() {
