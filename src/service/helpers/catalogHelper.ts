@@ -26,7 +26,7 @@ const bridge_nexus_insurace = [
   ['Perpetual', 'Perpetual Protocol', 'Perpetual Protocol', '', 'Perpetual Protocol'],
   ['bmiV2PendleFinanceCover', 'Pendle', "Pendle", '', "Pendle"],
   ['Synthetix Network Token', 'Synthetix', '', '', 'Synthetix'],
-  ['Sushi', 'SushiSwap V1', '', '', 'Sushi'],
+  ['Sushi', 'SushiSwap V1', '', 'SushiSwap', 'Sushi'],
   ['Keeper DAO', 'Keeper DAO', 'KeeperDAO', '', 'KeeperDAO'],
   ['', 'Kyber (Katalyst)', 'Kyber', '', 'Kyber'],
   ['', 'DyDx Perpetual', 'DyDx', '', 'DyDx'],
@@ -320,10 +320,8 @@ class CatalogHelper {
       commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[0] === category});
     } else if (provider == 'insurace') {
       commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[2] === category});
-    } else if (provider == 'ease') {
-      commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[3] === category});
     }
-    return commonCategory ? commonCategory[4] : '' ;
+    return commonCategory ? commonCategory[3] : '' ;
   }
 
   public static chainList(_distributorName:string, coverable:any) {

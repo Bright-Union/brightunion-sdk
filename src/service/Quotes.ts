@@ -78,8 +78,7 @@ export async function getQuoteFrom(
     return await getNexusQuote(_amount,_currency,_period,_protocol );
   }else if(_distributorName == 'insurace'){
     return await getInsuraceQuote( _net , _amount,_currency,_period,_protocol);
-  }
-  else if(_distributorName == 'ease'){
+  }else if(_distributorName == 'ease'){
     return await getEaseQuote(_amount,_currency,_period,_protocol );
   }
   else {
