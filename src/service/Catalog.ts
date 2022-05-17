@@ -160,7 +160,7 @@ export async function getNexusCoverables(): Promise<any[]> {
           .then(async (data:any) => {
             const coverablesArray: any  = [];
             data.forEach((item: any) => {
-                const protocolName = item.token.name.split(" ")[0].split("-")[0];
+                const protocolName = item.top_protocol;
               coverablesArray.push(CatalogHelper.createCoverable({
                 protocolAddress: item.address,
                 name: CatalogHelper.unifyCoverName(protocolName, 'ease' ),
