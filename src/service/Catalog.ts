@@ -28,8 +28,7 @@ export async function getCatalog(): Promise<any> {
   }
 
   // push EASE
-
-    catalogPromiseArray.push(getEaseCoverables())
+  catalogPromiseArray.push(getEaseCoverables())
 
   for (let net of global.user.web3Passive) {
     catalogPromiseArray.push(getInsuraceCoverables(net.networkId))
