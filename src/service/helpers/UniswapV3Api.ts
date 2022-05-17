@@ -36,7 +36,7 @@ class UniswapV3Api {
 
     public  static async getRoute() {
 
-      console.log("getRoute ChainId - " , TradeType, this.router );
+      console.log("SDK getRoute- " , TradeType, this.router );
 
       const WETH = new Token(1, '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', 18, 'WETH', 'Wrapped Ether')
 
@@ -46,17 +46,17 @@ class UniswapV3Api {
 
       const wethAmount = await CurrencyAmount.fromRawAmount( WETH , 3 );
 
-      console.log("wethAmount - " , wethAmount);
+      console.log("SDK 2wethAmount - " , wethAmount);
 
-      const route = await this.router.route( wethAmount , USDC, TradeType.EXACT_INPUT ,
-      {
-      //   recipient: global.user.account,
-      //   slippageTolerance: "5%",
-      //   deadline: Math.floor(Date.now() / 1000 + 1800),
-      }
-    )
+      const route = await this.router.route(
+        wethAmount ,
+        USDC,
+        TradeType.EXACT_INPUT ,
+        undefined,
+        undefined
+      )
 
-      console.log("getRoute2 - " , route);
+      console.log("SDK getRoute3 - " , route);
 
     }
 
