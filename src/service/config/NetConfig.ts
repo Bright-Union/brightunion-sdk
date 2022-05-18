@@ -42,6 +42,7 @@ const INFURAID= '98d7e501879243c5877bac07a57cde7e';   //wallet connect
         INSUR:'0x544c42fbb96b39b21df61cf322b5edc285ee7429',
         NXM:'0xd7c49cee7e9188cca6ad8ff264c1da2e69d4cf3b',
         WNXM:'0x0d438F3b5175Bebc262bF23753C1E53d03432bDE',
+        WETH: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
     },
     {
         name: 'Ropsten',

@@ -7,6 +7,8 @@ import BigNumber from 'bignumber.js'
 import {toBN, toWei, asciiToHex, fromWei} from 'web3-utils'
 import {  _getNexusDistributor,  _getNexusDistributorsContract, _getDistributorsContract, _getNexusQuotationContract , _getNexusMasterContract } from '../helpers/getContract'
 import {getCoverMin} from "../helpers/cover_minimums"
+import UniswapV3Api from '../helpers/UniswapV3Api';
+
 
 export default class NexusApi {
 
@@ -21,17 +23,18 @@ export default class NexusApi {
             });
     }
 
-    static setNXMBasedquotePrice ( priceInNXM:any , quoteCurrency: string, fee:any ){
+    static async setNXMBasedquotePrice ( priceInNXM:any , quoteCurrency: string, fee:any ){
 
-      let priceInNXMWithFee:any = priceInNXM.mul(fee).div(toBN(10000)).add(priceInNXM);
+      let priceInNXMWithFee:any = fromWei(priceInNXM.mul(fee).div(toBN(10000)).add(priceInNXM));
       let priceInCurrencyFromNXM:any = null;
 
-      if(quoteCurrency == "ETH"){
-        priceInCurrencyFromNXM = CurrencyHelper.nxm2eth(priceInNXMWithFee);
-      }else if(quoteCurrency == "DAI"){
-        priceInCurrencyFromNXM = CurrencyHelper.nxm2eth(priceInNXMWithFee);
-        // priceInCurrencyFromNXM = CurrencyHelper.nxm2dai(priceInNXMWithFee);
-      }
+      priceInNXMWithFee = Number(priceInNXMWithFee);
+
+      console.log("priceInNXMWithFee 2" , typeof priceInNXMWithFee, priceInNXMWithFee);
+
+      priceInCurrencyFromNXM = await UniswapV3Api.getNXMPriceFor(quoteCurrency, priceInNXMWithFee );
+
+      console.log("SDKSDKSKDKSDKSDK - priceInCurrencyFromNXM xxxxxxxxxxxxxxxx1" , priceInCurrencyFromNXM, typeof priceInCurrencyFromNXM);
 
       const BrightFeeCoef:any = toBN('120').div(toBN(100)); // Margin added - 20%
 
@@ -79,7 +82,7 @@ export default class NexusApi {
 
         // console.log("Q price 111 ");
 
-        let nxmBasedPriceWithFee:any = NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee ) //toBN(priceInNXM);
+        let nxmBasedPriceWithFee:any = await NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee ) //toBN(priceInNXM);
 
         // console.log("Q price - " , fromWei(priceWithFee) ,  fromWei(nxmBasedPriceWithFee) );
 
