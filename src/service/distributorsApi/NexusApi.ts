@@ -30,14 +30,9 @@ export default class NexusApi {
 
       priceInNXMWithFee = Number(priceInNXMWithFee);
 
-      console.log("priceInNXMWithFee 2" , typeof priceInNXMWithFee, priceInNXMWithFee);
-
       priceInCurrencyFromNXM = await UniswapV3Api.getNXMPriceFor(quoteCurrency, priceInNXMWithFee );
 
-      console.log("SDKSDKSKDKSDKSDK - priceInCurrencyFromNXM xxxxxxxxxxxxxxxx1" , priceInCurrencyFromNXM, typeof priceInCurrencyFromNXM);
-
       const BrightFeeCoef:any = toBN('120').div(toBN(100)); // Margin added - 20%
-
       let finalPrice:any = toBN(priceInCurrencyFromNXM).mul(BrightFeeCoef);
 
       return finalPrice;
@@ -80,16 +75,10 @@ export default class NexusApi {
 
         let priceWithFee:any = basePrice.mul(fee).div(toBN(10000)).add(basePrice);
 
-        // console.log("Q price 111 ");
-
         let nxmBasedPriceWithFee:any = await NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee ) //toBN(priceInNXM);
-
-        // console.log("Q price - " , fromWei(priceWithFee) ,  fromWei(nxmBasedPriceWithFee) );
 
         let pricePercentNXM = new BigNumber(nxmBasedPriceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
         let pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
-
-        // console.log("Q price %%%- " , pricePercent ,  pricePercentNXM );
 
         global.events.emit("quote" , {
           status: "INITIAL_DATA" ,
