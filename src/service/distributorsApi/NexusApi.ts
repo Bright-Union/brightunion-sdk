@@ -35,7 +35,7 @@ export default class NexusApi {
       const BrightFeeCoef:any = toBN('120').div(toBN(100)); // Margin added - 20%
       let finalPrice:any = toBN(priceInCurrencyFromNXM).mul(BrightFeeCoef);
 
-      return finalPrice;
+      return [ finalPrice, toBN(priceInCurrencyFromNXM) ] ;
     }
 
     static fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<any> {
@@ -75,16 +75,17 @@ export default class NexusApi {
 
         let priceWithFee:any = basePrice.mul(fee).div(toBN(10000)).add(basePrice);
 
-        let nxmBasedPriceWithFee:any = await NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee ) //toBN(priceInNXM);
+        const [ nxmBasedPrice, nxmBasedPriceNoMargin] = await NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee );
 
-        let pricePercentNXM = new BigNumber(nxmBasedPriceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
+        let pricePercentNXM = new BigNumber(nxmBasedPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
         let pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
 
         global.events.emit("quote" , {
           status: "INITIAL_DATA" ,
           distributorName:"nexus",
           priceOrigin: priceWithFee,
-          price: nxmBasedPriceWithFee,
+          price: nxmBasedPrice,
+          priceNoMargin: nxmBasedPriceNoMargin,
           pricePercentOrigin:pricePercent,
           pricePercent:pricePercentNXM,
           amount:amount,
@@ -116,7 +117,8 @@ export default class NexusApi {
           protocol,
           {
             priceOrigin: priceWithFee.toString(),
-            price: nxmBasedPriceWithFee,
+            price: nxmBasedPrice,
+            priceNoMargin: nxmBasedPriceNoMargin,
             pricePercentOrigin:pricePercent,
             pricePercent:pricePercentNXM,
             priceInNXM: response.data.priceInNXM,
