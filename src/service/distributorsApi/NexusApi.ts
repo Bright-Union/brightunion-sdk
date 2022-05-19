@@ -26,16 +26,16 @@ export default class NexusApi {
     static async setNXMBasedquotePrice ( priceInNXM:any , quoteCurrency: string, fee:any ){
 
       let priceInNXMWithFee:any = fromWei(priceInNXM.mul(fee).div(toBN(10000)).add(priceInNXM));
-      let priceInCurrencyFromNXM:any = null;
+      // let priceInCurrencyFromNXM:any = null;
 
       priceInNXMWithFee = Number(priceInNXMWithFee);
 
-      priceInCurrencyFromNXM = await UniswapV3Api.getNXMPriceFor(quoteCurrency, priceInNXMWithFee );
+      let [ priceInCurrencyFromNXM, routeData ]: any = await UniswapV3Api.getNXMPriceFor(quoteCurrency, priceInNXMWithFee );
 
       const BrightFeeCoef:any = toBN(120); // Margin added - 20%
       let finalPrice:any = toBN(priceInCurrencyFromNXM).mul(BrightFeeCoef).div(toBN(100))
 
-      return [ finalPrice, toBN(priceInCurrencyFromNXM) ] ;
+      return [ finalPrice, toBN(priceInCurrencyFromNXM),routeData ] ;
     }
 
     static fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<any> {
@@ -75,10 +75,24 @@ export default class NexusApi {
 
         let priceWithFee:any = basePrice.mul(fee).div(toBN(10000)).add(basePrice);
 
-        const [ nxmBasedPrice, nxmBasedPriceNoMargin] = await NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee );
+        const [ nxmBasedPrice, nxmBasedPriceNoMargin, routeData] = await NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee );
 
         let pricePercentNXM = new BigNumber(nxmBasedPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
         let pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
+
+        const buyData = {
+          // address _tokenA,
+          // address _intermediary token usually WETH
+          // address _tokenB,
+          // address _recipient,
+          // uint256 _amountIn,
+          // uint256 _amountOutMinimum,
+          // uint24 _poolFeeA,
+          // uint24 _poolFeeB
+          tokenA: routeData
+        }
+
+        console.log("routeData - ", routeData , "buyData - " ,  buyData );
 
         global.events.emit("quote" , {
           status: "INITIAL_DATA" ,
@@ -131,6 +145,7 @@ export default class NexusApi {
             defaultCurrencySymbol:defaultCurrencySymbol,
             errorMsg: nexusMaxCapacityError,
             minimumAmount: minimumAmount,
+            buyData: buyData,
           },
           {
             activeCoversETH: activeCoversETH,

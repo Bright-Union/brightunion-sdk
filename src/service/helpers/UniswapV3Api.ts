@@ -45,7 +45,9 @@ class UniswapV3Api {
         {
           slippageTolerance: new Percent(5, 1000), // 0.5%
         },
-        { protocols: ["V3"] }
+        {
+          protocols: ["V3"]
+        }
       )
 
       let finalPrice = null;
@@ -53,7 +55,7 @@ class UniswapV3Api {
         finalPrice  = route.route[0].rawQuote.toString();
       }
 
-      return finalPrice;
+      return [finalPrice, route];
     }
 
   }

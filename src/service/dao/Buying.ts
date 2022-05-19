@@ -63,37 +63,37 @@ export async function buyCover(
     tx.distributor  = 'nexus';
     const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
 
-          return await new Promise( async (resolve, reject) => {
-            const nexusAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('nexus').call();
-            _getNexusDistributorsContract(nexusAddress) // Nexus Call through Bright Protocol Distributors Layer
-            .methods.buyCover(
-              _contractAddress,
-              _coverAsset,
-              _sumAssured,
-              _coverPeriod,
-              _coverType,
-              _maxPriceWithFee,
-              _data,
-            ).send({ from: _ownerAddress, value: sendValue })
-            .on('transactionHash', (res:any) => {
-              tx.hash = res
-                global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
-                GoogleEvents.onTxHash(tx);
-                resolve({success:res});
-            })
-            .on('error', (err:any, receipt:any) => {
-              global.events.emit("buy" , { status: "REJECTED" } );
-              GoogleEvents.onTxRejected(tx);
-              reject( {error: err, receipt:receipt})
-            })
-            .on('confirmation', (confirmationNumber:any) => {
-              if (confirmationNumber === 0) {
-               GoogleEvents.onTxConfirmation(tx);
-                global.events.emit("buy" , { status: "TX_CONFIRMED" } );
+    return await new Promise( async (resolve, reject) => {
+      const nexusAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('nexus').call();
+      _getNexusDistributorsContract(nexusAddress) // Nexus Call through Bright Protocol Distributors Layer
+      .methods.buyCover(
+        _contractAddress,
+        _coverAsset,
+        _sumAssured,
+        _coverPeriod,
+        _coverType,
+        _maxPriceWithFee,
+        _data,
+      ).send({ from: _ownerAddress, value: sendValue })
+      .on('transactionHash', (res:any) => {
+        tx.hash = res
+        global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
+        GoogleEvents.onTxHash(tx);
+        resolve({success:res});
+      })
+      .on('error', (err:any, receipt:any) => {
+        global.events.emit("buy" , { status: "REJECTED" } );
+        GoogleEvents.onTxRejected(tx);
+        reject( {error: err, receipt:receipt})
+      })
+      .on('confirmation', (confirmationNumber:any) => {
+        if (confirmationNumber === 0) {
+          GoogleEvents.onTxConfirmation(tx);
+          global.events.emit("buy" , { status: "TX_CONFIRMED" } );
 
-              }
-            });
-          });
+        }
+      });
+    });
 
   } else if(_distributorName == 'bridge'){
 
@@ -110,39 +110,6 @@ export async function buyCover(
     const data = global.user.web3.eth.abi.encodeParameters(['uint'],[_sumAssured] );
 
     return await new Promise((resolve, reject) => {
-      // console.log(
-      //   "policyBook: ", policyBook._address, "\n",
-      //   "epochs: ", epochs, "\n",
-      //   "_sumAssured: ", _sumAssured, "\n",
-      //   "brightRewardsAddress: ", brightRewardsAddress, "\n",
-      //   "_maxPriceWithFee: ", _maxPriceWithFee, "\n",
-      //   "data: ", data, "\n",
-      // )
-
-      /**
-      * /**
-      * Solidity method
-      *
-      function buyCover (
-        address _bridgeProductAddress,
-        uint256 _epochsNumber,
-        uint16  _sumAssured,
-        address _buyerAddress,
-        address _treasuryAddress,
-        uint256 _premium,
-        bytes calldata _interfaceCompliant4
-        external payable nonReentrant {
-          */
-
-      // bridgeV2.methods.buyCover(
-      //   policyBook._address,
-      //   epochs,
-      //   fromWei(_sumAssured.toString()),
-      //   global.user.account,
-      //   brightRewardsAddress,
-      //   _maxPriceWithFee, //  this might be the conversion Tether should signal to metamask 10 ** 18
-      //   data
-      // )
       policyBookFacade.methods.buyPolicyFromDistributorFor( global.user.account, epochs, _sumAssured, brightRewardsAddress )
       .send({from: global.user.account})
       .on('transactionHash', (transactionHash:any) => {
@@ -166,6 +133,10 @@ export async function buyCover(
     });
 
   }
+}
+
+export async function buyCoverNexus(buyingObj:any , buyingWithNetworkCurrency:boolean, _quotes:any) {
+
 }
 
 
