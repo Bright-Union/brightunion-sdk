@@ -48,7 +48,7 @@ class UniswapV3Api {
 
       let finalPrice = null;
       if(route && route.route[0]){
-        finalPrice  = Number(route.route[0].rawQuote.toString());
+        finalPrice  = route.route[0].rawQuote.toString();
       }
 
       return finalPrice;
