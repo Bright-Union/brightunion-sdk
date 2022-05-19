@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import { Token , TradeType, CurrencyAmount } from '@uniswap/sdk-core'
+import { Token , TradeType, CurrencyAmount, Percent } from '@uniswap/sdk-core'
 const AlphaRouter = require('@uniswap/smart-order-router')
 
 import NetConfig from '../../service/config/NetConfig'
@@ -42,7 +42,9 @@ class UniswapV3Api {
         amountNXMOut,
         currencyIn,
         TradeType.EXACT_OUTPUT,
-        undefined,
+        {
+          slippageTolerance: new Percent(5, 1000), // 0.5%
+        },
         { protocols: ["V3"] }
       )
 
