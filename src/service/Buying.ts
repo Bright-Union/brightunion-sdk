@@ -6,15 +6,13 @@ import {
   _getBridgeV2PolicyRegistry,
 
 } from './helpers/getContract';
-import { buyCoverInsurace, buyCover } from "./dao/Buying";
+import { buyCoverNexus, buyCoverInsurace, buyCoverBridge } from "./dao/Buying";
 import NetConfig from './config/NetConfig';
 import InsuraceApi from './distributorsApi/InsuraceApi';
 import ERC20Helper from './helpers/ERC20Helper';
 import GoogleEvents from './config/GoogleEvents';
 
 export async function buyQuote(_quoteProtocol: any): Promise<any> {
-
-  console.log("buyQuote" , _quoteProtocol );
 
   GoogleEvents.buy(_quoteProtocol);
 
@@ -281,12 +279,13 @@ export async function callNexus(_quoteProtocol:any , buyingWithNetworkCurrency: 
       let net:any = NetConfig.netById(global.user.networkId);
       let asset = net[_quoteProtocol.rawData.currency]
 
-    return buyCover(
+    return buyCoverNexus(
       global.user.account,
       'nexus',
       _quoteProtocol.rawData.contract,
       asset,  // payment asset
       _quoteProtocol.amount.toString(), // sum assured, compliant
+      _quoteProtocol.priceInNXM,
       _quoteProtocol.rawData.period, // period
       0, //coverType
       _quoteProtocol.price.toString(), // token amount to cover with FEE
@@ -365,7 +364,7 @@ export async function callBridgeV2(_quoteProtocol:any){
     [_quoteProtocol.price, _quoteProtocol.period ],
   );
 
-  return buyCover(
+  return buyCoverBridge(
     global.user.account,
     'bridge',
     _quoteProtocol.protocol.bridgeProductAddress, //bridge prod address

@@ -80,24 +80,11 @@ export default class NexusApi {
         let pricePercentNXM = new BigNumber(nxmBasedPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
         let pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
 
-        const buyData = {
-          // address _tokenA,
-          // address _intermediary token usually WETH
-          // address _tokenB,
-          // address _recipient,
-          // uint256 _amountIn,
-          // uint256 _amountOutMinimum,
-          // uint24 _poolFeeA,
-          // uint24 _poolFeeB
-          tokenA: routeData
-        }
-
-        console.log("routeData - ", routeData , "buyData - " ,  buyData );
-
         global.events.emit("quote" , {
           status: "INITIAL_DATA" ,
           distributorName:"nexus",
           priceOrigin: priceWithFee,
+          priceInNXM: response.data.priceInNXM,
           price: nxmBasedPrice,
           priceNoMargin: nxmBasedPriceNoMargin,
           pricePercentOrigin:pricePercent,
@@ -145,7 +132,6 @@ export default class NexusApi {
             defaultCurrencySymbol:defaultCurrencySymbol,
             errorMsg: nexusMaxCapacityError,
             minimumAmount: minimumAmount,
-            buyData: buyData,
           },
           {
             activeCoversETH: activeCoversETH,

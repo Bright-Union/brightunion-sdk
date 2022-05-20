@@ -218,7 +218,6 @@ class CatalogHelper {
       } else if(_distributorName == 'ease'){
         logoData.url = _name;
         logoData.strongLogoData = true;
-        console.log(logoData)
       }
 
     }
