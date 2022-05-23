@@ -268,33 +268,41 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
  *  Buy on Nexus Mutual
  * @param _quoteProtocol Quote to buy
  */
-export async function callNexus(_quoteProtocol:any , buyingWithNetworkCurrency: boolean){
+ export async function callNexus(_quoteProtocol:any , buyingWithNetworkCurrency: boolean){
 
-    const data = global.user.web3.eth.abi.encodeParameters(
-      ['uint', 'uint', 'uint', 'uint', 'uint8', 'bytes32', 'bytes32'],
-      [_quoteProtocol.rawData.price, _quoteProtocol.rawData.priceInNXM, _quoteProtocol.rawData.expiresAt,
-        _quoteProtocol.rawData.generatedAt, _quoteProtocol.rawData.v, _quoteProtocol.rawData.r, _quoteProtocol.rawData.s],
-      );
+   const route =  _quoteProtocol.uniSwapRouteData.route[0] ? _quoteProtocol.uniSwapRouteData.route[0].route : false ;
+   if(!route){
+     return {error: "no swap route found"}
+   }
+   const swapVia = route.tokenPath.length > 2 ? route.tokenPath[1].address : "0x0000000000000000000000000000000000000000";
+   const poolFeeA = route.pools[0].fee;
+   const poolFeeB = route.pools[1] ? route.pools[1].fee : poolFeeA;
 
-      let net:any = NetConfig.netById(global.user.networkId);
-      let asset = net[_quoteProtocol.rawData.currency]
+   const data = global.user.web3.eth.abi.encodeParameters(
+     ['address','uint24','uint24','uint', 'uint', 'uint', 'uint', 'uint8', 'bytes32', 'bytes32'],
+     [ swapVia, poolFeeA, poolFeeB, _quoteProtocol.rawData.price, _quoteProtocol.rawData.priceInNXM, _quoteProtocol.rawData.expiresAt,
+       _quoteProtocol.rawData.generatedAt, _quoteProtocol.rawData.v, _quoteProtocol.rawData.r, _quoteProtocol.rawData.s],
+     );
 
-    return buyCoverNexus(
-      global.user.account,
-      'nexus',
-      _quoteProtocol.rawData.contract,
-      asset,  // payment asset
-      _quoteProtocol.amount.toString(), // sum assured, compliant
-      _quoteProtocol.priceInNXM,
-      _quoteProtocol.rawData.period, // period
-      0, //coverType
-      _quoteProtocol.price.toString(), // token amount to cover with FEE
-      data ,// random data
-      buyingWithNetworkCurrency,
-      _quoteProtocol,
-    )
+     let net:any = NetConfig.netById(global.user.networkId);
+     let asset = net[_quoteProtocol.rawData.currency]
 
-}
+     return buyCoverNexus(
+       global.user.account,
+       'nexus',
+       _quoteProtocol.rawData.contract,
+       asset,  // payment asset
+       _quoteProtocol.amount.toString(), // sum assured, compliant
+       _quoteProtocol.priceInNXM,
+       _quoteProtocol.rawData.period, // period
+       0, //coverType
+       _quoteProtocol.price.toString(), // token amount to cover with FEE
+       data ,// random data
+       buyingWithNetworkCurrency,
+       _quoteProtocol,
+     )
+
+   }
 
 export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 

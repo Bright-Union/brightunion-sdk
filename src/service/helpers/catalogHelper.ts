@@ -285,6 +285,7 @@ class CatalogHelper {
       rawData: obj.response,
       stats: stats,
       minimumAmount: obj.minimumAmount,
+      uniSwapRouteData: obj.uniSwapRouteData,
     }
   }
 

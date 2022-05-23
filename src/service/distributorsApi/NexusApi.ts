@@ -132,6 +132,7 @@ export default class NexusApi {
             defaultCurrencySymbol:defaultCurrencySymbol,
             errorMsg: nexusMaxCapacityError,
             minimumAmount: minimumAmount,
+            uniSwapRouteData: routeData,
           },
           {
             activeCoversETH: activeCoversETH,

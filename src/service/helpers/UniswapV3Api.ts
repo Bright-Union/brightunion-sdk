@@ -46,7 +46,8 @@ class UniswapV3Api {
           slippageTolerance: new Percent(5, 1000), // 0.5%
         },
         {
-          protocols: ["V3"]
+          protocols: ["V3"],
+          maxSwapsPerPath: 2,
         }
       )
 
