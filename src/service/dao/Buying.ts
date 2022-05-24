@@ -118,7 +118,20 @@ export async function buyCoverNexus(
     'period': _quoteProtocol.period,
   }
 
-  const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
+  console.log("buyCoverNexus" ,
+  _contractAddress,
+  _coverAsset,
+  _sumAssured,
+  _amountOut,
+  _coverPeriod,
+  _coverType,
+  _maxPriceWithFee,
+  _data,
+);
+
+const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
+
+  console.log("buyCoverNexus sendValue:" , sendValue );
 
   return await new Promise( async (resolve, reject) => {
     const nexusAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('nexus').call();

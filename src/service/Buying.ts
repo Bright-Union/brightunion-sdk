@@ -274,6 +274,9 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
    if(!route){
      return {error: "no swap route found"}
    }
+
+   console.log("route" , route);
+
    const swapVia = route.tokenPath.length > 2 ? route.tokenPath[1].address : "0x0000000000000000000000000000000000000000";
    const poolFeeA = route.pools[0].fee;
    const poolFeeB = route.pools[1] ? route.pools[1].fee : poolFeeA;
@@ -284,8 +287,11 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
        _quoteProtocol.rawData.generatedAt, _quoteProtocol.rawData.v, _quoteProtocol.rawData.r, _quoteProtocol.rawData.s],
      );
 
+     console.log("Params data" , data);
+
      let net:any = NetConfig.netById(global.user.networkId);
      let asset = net[_quoteProtocol.rawData.currency]
+
 
      return buyCoverNexus(
        global.user.account,
