@@ -6,6 +6,7 @@ import ICoverABI from '../abi/insurace/ICover.json';
 import InsuraceCoverDataABI from '../abi/insurace/ICoverData.json';
 import InsuraceProductABI from '../abi/insurace/IProduct.json';
 
+// import NexusDistributorABI from '../abi/nexus/NexusDistributor_old.json';
 import NexusDistributorABI from '../abi/nexus/NexusDistributor.json';
 import DistributorNexusABI from '../abi/nexus/Distributor.json';
 import NexusQuotationABI from '../abi/nexus/IQuotationData.json';
