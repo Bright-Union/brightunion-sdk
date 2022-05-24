@@ -329,8 +329,6 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
     const erc20Instance = await _getIERC20Contract(asset);
     const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
-    console.log( "BALANCE- ercBalance - " , Number(ercBalance) , _quoteProtocol );
-
     if (Number(ercBalance) >= (Number)(_quoteProtocol.price)) {
 
       const onSuccess =  () => {
