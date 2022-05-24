@@ -3,7 +3,7 @@ import {
   _getIERC20Contract,
   _getDistributorsContract,
   _getBridgeV2RegistryContract,
-  _getBridgeV2PolicyRegistry,
+  _getBridgeV2PolicyRegistry, _getEaseContract,
 
 } from './helpers/getContract';
 import { buyCoverInsurace, buyCover } from "./dao/Buying";
@@ -11,6 +11,7 @@ import NetConfig from './config/NetConfig';
 import InsuraceApi from './distributorsApi/InsuraceApi';
 import ERC20Helper from './helpers/ERC20Helper';
 import GoogleEvents from './config/GoogleEvents';
+import axios from "axios";
 
 export async function buyQuote(_quoteProtocol: any): Promise<any> {
 
@@ -27,6 +28,10 @@ export async function buyQuote(_quoteProtocol: any): Promise<any> {
   }else if(_quoteProtocol.distributorName == 'insurace'){
 
     return await buyOnInsurace(_quoteProtocol);
+
+  }else if(_quoteProtocol.distributorName == 'ease'){
+
+    return await buyOnEase(_quoteProtocol);
 
   }
 }
@@ -437,6 +442,78 @@ export async function buyOnBridgeV2(_quoteProtocol:any) : Promise<any>{
     global.events.emit("buy" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
     return {error: "You have insufficient funds to continue with this transaction"};
   }
+
+}
+
+export async function buyOnEase(_quoteProtocol: any) : Promise<any> {
+  global.events.emit("buy" , { status: "INITIALIZED"} );
+  if(!NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency)){
+    const erc20Instance = await _getIERC20Contract(_quoteProtocol.asset);
+    // const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
+    return callEase(_quoteProtocol, false);
+
+    // if (Number(ercBalance) >= (Number)(_quoteProtocol.amount)) {
+    //   console.log(_quoteProtocol.amount)
+    //   const onSuccess =  () => {
+    //     global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
+    //     console.log('success')
+    //     return callEase(_quoteProtocol, false);
+    //   };
+    //   const onTXHash =  () => {
+    //     global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
+    //     console.log('txHash')
+    //     return callEase(_quoteProtocol, false);
+    //   };
+    //   const onError =  (err:any) => {
+    //     GoogleEvents.buyRejected('REJECTED' , _quoteProtocol );
+    //     global.events.emit("buy" , { status: "REJECTED" } );
+    //     return {error : "Confirmation rejected"};
+    //   }
+    //
+    //   global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
+    //
+    //   return await ERC20Helper.approveAndCall( erc20Instance,  NetConfig.netById(global.user.networkId).nexusDistributor,  _quoteProtocol.amount, onTXHash, onSuccess, onError);
+    //
+    // } else {
+    //   GoogleEvents.buyRejected('You have insufficient funds to continue with this transaction' , _quoteProtocol );
+    //   global.events.emit("buy" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
+    //   return{ error: "You have insufficient funds to continue with this transaction" }
+    // }
+    // console.log(ercBalance)
+  }
+
+}
+
+export async function callEase(_quoteProtocol:any , buyingWithNetworkCurrency: boolean){
+console.log(_quoteProtocol)
+const data = {
+  chainId: _quoteProtocol.chainId,
+  vault: _quoteProtocol.vault.address,
+  user: global.user.account,
+  amount: _quoteProtocol.amount,
+  nonce: 1
+}
+
+  return axios.post('https://app.ease.org/api/v1/permits', data)
+      .then((response) => {
+        return buyCover(
+            global.user.account,
+            'ease',
+            _quoteProtocol.vault.address,
+            _quoteProtocol.vault.token.symbol,  // payment asset
+            _quoteProtocol.amount.toString(), // sum assured, compliant
+            null, // period
+            0, //coverType
+            null, // token amount to cover with FEE
+            response.data ,// random data
+            buyingWithNetworkCurrency,
+            _quoteProtocol,
+        )
+        // return response.data;
+      }).catch(error => {
+        // this.errorMessage = error.message;
+        console.error("There was an error!", error);
+      });
 
 }
 

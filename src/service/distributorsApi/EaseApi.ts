@@ -7,6 +7,7 @@ export default class EaseApi {
     static fetchCoverables() {
         return axios.get('https://app.ease.org/api/v1/vaults')
             .then((response) => {
+                console.log(response.data)
                 return response.data;
             }).catch(error => {
                 return [];
@@ -30,7 +31,6 @@ export default class EaseApi {
             capacityArr = this.rangeArray(capacityArr);
             const exceedsCapacity = currency === 'USD' ? amount > capacityArr[1] :  amount > Number(CurrencyHelper.usd2eth(capacityArr[1]));
             const errorMsg = exceedsCapacity ? { message: `Maximum available capacity is `, currency: currency, errorType:"capacity"} : null;
-
                 global.events.emit("quote" , {
                     status: "INITIAL_DATA" ,
                     distributorName: "Ease",
@@ -42,6 +42,8 @@ export default class EaseApi {
                     name: CatalogHelper.unifyCoverName(vault[0].display_name, 'ease' ),
                     source: 'ease',
                     rawDataEase: vault,
+                    type: vault[0].protocol_type,
+                    typeDescription: CatalogHelper.descriptionByCategory(vault[0].protocol_type),
                 } );
 
             return CatalogHelper.quoteFromCoverable(
@@ -60,6 +62,7 @@ export default class EaseApi {
                     name: CatalogHelper.unifyCoverName(vault[0].display_name, 'ease' ),
                     errorMsg: errorMsg,
                     type: vault[0].protocol_type,
+                    typeDescription: CatalogHelper.descriptionByCategory(vault[0].protocol_type),
                 },
                 {
                     capacity: capacityArr,

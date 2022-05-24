@@ -160,13 +160,16 @@ export async function getNexusCoverables(): Promise<any[]> {
             const coverablesArray: any  = [];
             data.forEach((item: any) => {
                 const protocolName = item.top_protocol;
+              const type = CatalogHelper.commonCategory(item.protocol_type, 'ease')
+              const typeDescr = type ? type : 'protocol';
               coverablesArray.push(CatalogHelper.createCoverable({
                 protocolAddress: item.address,
                 name: CatalogHelper.unifyCoverName(protocolName, 'ease' ),
                 source: 'ease',
                 logo: item.icon,
                 rawDataEase: item,
-                type: item.protocol_type,
+                type: type,
+                typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
                 stats: {"capacityRemaining": item.remaining_capacity, "unitCost":item.token.apy, "priceETH": item.token.priceETH, "priceUSD": item.token.priceUSD}
               }))
               })

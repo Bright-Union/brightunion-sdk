@@ -12,6 +12,7 @@ import NexusQuotationABI from '../abi/nexus/IQuotationData.json';
 import NexusGatewayABI from '../abi/nexus/IGateway.json';
 import NexusClaimsDataABI from '../abi/nexus/IClaimsData.json';
 import NexusMasterABI from '../abi/nexus/INXMaster.json';
+import EaseContractABI from '../abi/ease/EaseContract.json';
 
 // BridgeV2
 import BridgeV2RegistryContractABI from '../abi/bridgeV2/ContractRegistry.json'
@@ -101,6 +102,12 @@ function _getInsurAceCoverDataContract(address:string, _web3:any) : any {
   return new _web3.eth.Contract(distAbi, address );
 }
 
+function _getEaseContract(address:string) : any {
+  const web3:any = global.user.ethNet.web3Instance;
+  const distAbi:any = EaseContractABI .abi;
+  return new web3.eth.Contract(distAbi, address );
+}
+
 // BridgeV2
 const _getBridgeV2RegistryContract          =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2RegistryContractABI, address , web3);
 const _getBridgeV2PolicyBookRegistryContract  =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2PolicyBookRegistryABI, address , web3);
@@ -140,6 +147,7 @@ export  {
     _getNexusGatewayContract,
     _getNexusClaimsDataContract,
     _getNexusMasterContract,
+    _getEaseContract
 
     // _loadAllABIs
 
