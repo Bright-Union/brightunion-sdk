@@ -283,7 +283,7 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
 
    const data = global.user.web3.eth.abi.encodeParameters(
      ['address','uint24','uint24','uint', 'uint', 'uint', 'uint', 'uint8', 'bytes32', 'bytes32'],
-     [ swapVia, poolFeeA, poolFeeB, _quoteProtocol.rawData.price, _quoteProtocol.rawData.priceInNXM, _quoteProtocol.rawData.expiresAt,
+     [ swapVia, poolFeeA, poolFeeB, _quoteProtocol.price, _quoteProtocol.rawData.priceInNXM, _quoteProtocol.rawData.expiresAt,
        _quoteProtocol.rawData.generatedAt, _quoteProtocol.rawData.v, _quoteProtocol.rawData.r, _quoteProtocol.rawData.s],
      );
 
@@ -329,7 +329,9 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
     const erc20Instance = await _getIERC20Contract(asset);
     const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
-    if (Number(ercBalance) >= (Number)(_quoteProtocol.rawData.price)) {
+    console.log( "BALANCE- ercBalance - " , Number(ercBalance) , _quoteProtocol );
+
+    if (Number(ercBalance) >= (Number)(_quoteProtocol.price)) {
 
       const onSuccess =  () => {
         global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
@@ -347,7 +349,7 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
       global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
 
-      return await ERC20Helper.approveAndCall( erc20Instance,  NetConfig.netById(global.user.networkId).nexusDistributor,  _quoteProtocol.rawData.price, onTXHash, onSuccess, onError);
+      return await ERC20Helper.approveAndCall( erc20Instance,  NetConfig.netById(global.user.networkId).nexusDistributor,  _quoteProtocol.price, onTXHash, onSuccess, onError);
 
     } else {
       GoogleEvents.buyRejected('You have insufficient funds to continue with this transaction' , _quoteProtocol );
@@ -358,7 +360,8 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
   }else{
 
     const netBalance = await global.user.web3.eth.getBalance(global.user.account);
-    if (Number(netBalance) >= (Number)(_quoteProtocol.rawData.price)) {
+
+    if (Number(netBalance) >= (Number)(_quoteProtocol.price)) {
       global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:1 , current:1 } );
 
       return callNexus(_quoteProtocol, true);
