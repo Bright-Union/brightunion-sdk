@@ -275,8 +275,6 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
      return {error: "no swap route found"}
    }
 
-   console.log("route" , route);
-
    const swapVia = route.tokenPath.length > 2 ? route.tokenPath[1].address : "0x0000000000000000000000000000000000000000";
    const poolFeeA = route.pools[0].fee;
    const poolFeeB = route.pools[1] ? route.pools[1].fee : poolFeeA;
@@ -287,11 +285,8 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
        _quoteProtocol.rawData.generatedAt, _quoteProtocol.rawData.v, _quoteProtocol.rawData.r, _quoteProtocol.rawData.s],
      );
 
-     console.log("Params data" , data);
-
      let net:any = NetConfig.netById(global.user.networkId);
      let asset = net[_quoteProtocol.rawData.currency]
-
 
      return buyCoverNexus(
        global.user.account,
@@ -323,6 +318,53 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
   }
 
   global.events.emit("buy" , { status: "INITIALIZED"} );
+
+  // ******************************
+  // TEST START
+  // ******************************
+
+  const route =  _quoteProtocol.uniSwapRouteData.route[0] ? _quoteProtocol.uniSwapRouteData.route[0].route : false ;
+  if(!route){
+    return {error: "no swap route found"}
+  }
+
+  const swapVia = route.tokenPath.length > 2 ? route.tokenPath[1].address : "0x0000000000000000000000000000000000000000";
+  const poolFeeA = route.pools[0].fee;
+  const poolFeeB = route.pools[1] ? route.pools[1].fee : poolFeeA;
+
+  const data = global.user.web3.eth.abi.encodeParameters(
+    ['address','uint24','uint24','uint', 'uint', 'uint', 'uint', 'uint8', 'bytes32', 'bytes32'],
+    [ swapVia, poolFeeA, poolFeeB, _quoteProtocol.price, _quoteProtocol.rawData.priceInNXM, _quoteProtocol.rawData.expiresAt,
+      _quoteProtocol.rawData.generatedAt, _quoteProtocol.rawData.v, _quoteProtocol.rawData.r, _quoteProtocol.rawData.s],
+    );
+
+    let net:any = NetConfig.netById(global.user.networkId);
+    let assetTest = net[_quoteProtocol.rawData.currency]
+
+    console.log( "buyCoverNexus-> ",
+    "\n_contractAddress: ",
+    _quoteProtocol.rawData.contract,
+    "\n_coverAsset: " ,
+    assetTest,  // payment asset
+    "\n_sumAssured: ",
+    _quoteProtocol.amount.toString(), // sum assured, compliant
+    "\n_amountOut:" ,
+    _quoteProtocol.priceInNXM,
+    "\n_coverPeriod",
+    _quoteProtocol.rawData.period, // period
+    "\n_coverType: ",
+    0, //coverType
+    "\n_maxPriceWithFee: ",
+    _quoteProtocol.price.toString(), // token amount to cover with FEE
+    "\n_data: ",
+    data ,// random data
+  );
+
+  // ******************************
+  // TEST END
+  // ******************************
+
+
 
   if(!NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.rawData.currency)){
 
