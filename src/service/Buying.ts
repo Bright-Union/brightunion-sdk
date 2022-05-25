@@ -3,7 +3,7 @@ import {
   _getIERC20Contract,
   _getDistributorsContract,
   _getBridgeV2RegistryContract,
-  _getBridgeV2PolicyRegistry, _getEaseContract,
+  _getBridgeV2PolicyRegistry, _getPermitContract,
 
 } from './helpers/getContract';
 import { buyCoverInsurace, buyCover } from "./dao/Buying";
@@ -12,6 +12,7 @@ import InsuraceApi from './distributorsApi/InsuraceApi';
 import ERC20Helper from './helpers/ERC20Helper';
 import GoogleEvents from './config/GoogleEvents';
 import axios from "axios";
+import {fromWei, toWei} from 'web3-utils';
 
 export async function buyQuote(_quoteProtocol: any): Promise<any> {
 
@@ -484,18 +485,20 @@ export async function buyOnEase(_quoteProtocol: any) : Promise<any> {
 
 }
 
-export async function callEase(_quoteProtocol:any , buyingWithNetworkCurrency: boolean){
-console.log(_quoteProtocol)
-const data = {
-  chainId: _quoteProtocol.chainId,
-  vault: _quoteProtocol.vault.address,
-  user: global.user.account,
-  amount: _quoteProtocol.amount,
-  nonce: 1
-}
+export async function callEase(_quoteProtocol: any, buyingWithNetworkCurrency: boolean) {
 
+  const nonce = await _getPermitContract('0xEA5edEF1A7106D9e2024240299DF3D00C7D94767').methods.nonces(global.user.account).call();
+  const data = {
+    chainId: _quoteProtocol.chainId,
+    vault: _quoteProtocol.vault.address,
+    user: global.user.account,
+    amount: _quoteProtocol.amount.toString(),
+    nonce: nonce
+  }
+console.log(_quoteProtocol.amount.toString())
   return axios.post('https://app.ease.org/api/v1/permits', data)
       .then((response) => {
+        console.log(response)
         return buyCover(
             global.user.account,
             'ease',

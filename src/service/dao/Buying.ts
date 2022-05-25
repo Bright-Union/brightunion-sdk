@@ -48,15 +48,15 @@ export async function buyCover(
   _quoteProtocol:any,
 ):Promise<any>{
   // let txHash : any;
-  console.log(_data)
   let tx:any;
+  console.log(_data)
 
 if(_distributorName === 'ease') {
   tx = {
     'hash': null,
     'distributor': _quoteProtocol.distributorName,
     'name': _quoteProtocol.name,
-    'amount':  _quoteProtocol.amount,
+    'amount':  _data.amount,
     'currency': _quoteProtocol.asset,
   }
 } else {
@@ -101,7 +101,6 @@ if(_distributorName === 'ease') {
               if (confirmationNumber === 0) {
                GoogleEvents.onTxConfirmation(tx);
                 global.events.emit("buy" , { status: "TX_CONFIRMED" } );
-
               }
             });
           });
@@ -109,19 +108,18 @@ if(_distributorName === 'ease') {
   } else if(_distributorName == 'ease'){
     tx.distributor  = 'ease';
     const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
-    return await new Promise( (resolve, reject) => {
-      _getEaseContract('0xEA5eDEf14d71337C9B55eF50B0767FA89cd10eCF')
-          .methods.mintTo(
-          _data.chainId,
+    return await new Promise( async (resolve, reject) => {
+     await _getEaseContract(_quoteProtocol.vault.address).methods.mintTo(
           _data.user,
-          _data.vault,
-          tx.amount,
-          _data.nonce,
+          NetConfig.NETWORK_CONFIG[0].brightTreasury,
+         _quoteProtocol.amount.toString(),
           _data.expiry,
-          _data._signature,
-          _data._r,
-          _data._s
-      ).send()
+          _data.vInt,
+          _data.r,
+          _data.s,
+          _quoteProtocol.vault.liquidation_amount,
+          _quoteProtocol.vault.liquidation_proof
+      ).send({ from: _data.user, value: sendValue  })
           .on('transactionHash', (res:any) => {
             tx.hash = res
             console.log('transactionHash')
