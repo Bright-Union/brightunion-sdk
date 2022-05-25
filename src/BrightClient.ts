@@ -99,8 +99,6 @@ async initialize(): Promise<object>{
         UniswapV3Api.initUniswapV3(),
         CurrencyHelper.getETHDAIPrice(1),
         CurrencyHelper.getInsureUSDCPrice(1),
-        CurrencyHelper.getETHNXMPrice(1),
-        // CurrencyHelper.getDAINXMPrice(1),
       ]).then((_data: any) => {
         global.user.web3Passive = _data[0];
       })
