@@ -41,7 +41,7 @@ class UniswapV3Api {
         return {error: "wrong quote currency"};
       }
 
-      console.log("currencyIn SDK" , currencyIn, _currency);
+      console.log("currencyIn SDK _amountOfNXM - " , currencyIn, _currency, _amountOfNXM.toString());
 
       const nxmAmoutInWei = toWei( _amountOfNXM.toString() ).split('.')[0];
       const amountNXMOut = CurrencyAmount.fromRawAmount( WNXM , nxmAmoutInWei );
@@ -50,13 +50,13 @@ class UniswapV3Api {
         amountNXMOut,
         currencyIn,
         TradeType.EXACT_OUTPUT,
-        // undefined,
+        undefined,
+        // {
+        //   slippageTolerance: new Percent(5, 1000), // 0.5%
+        // },
         // undefined,
         {
-          slippageTolerance: new Percent(5, 1000), // 0.5%
-        },
-        {
-          protocols: ["V3"],
+          // protocols: ["V3"],
           maxSwapsPerPath: 3,
         }
       ).then(
