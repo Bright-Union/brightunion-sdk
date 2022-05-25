@@ -277,16 +277,10 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
    const swapVia = route.tokenPath.length > 2 ? route.tokenPath[1].address : "0x0000000000000000000000000000000000000000";
    const poolFeeA = route.pools[0].fee;
    const poolFeeB = route.pools[1] ? route.pools[1].fee : poolFeeA;
-
-   const data = global.user.web3.eth.abi.encodeParameters(
-     ['address','uint24','uint24','uint', 'uint', 'uint', 'uint', 'uint8', 'bytes32', 'bytes32'],
-     [ swapVia, poolFeeA, poolFeeB, _quoteProtocol.rawData.price, _quoteProtocol.rawData.priceInNXM, _quoteProtocol.rawData.expiresAt,
-       _quoteProtocol.rawData.generatedAt, _quoteProtocol.rawData.v, _quoteProtocol.rawData.r, _quoteProtocol.rawData.s],
-     );
-
-     let net:any = NetConfig.netById(global.user.networkId);
-     let asset = net[_quoteProtocol.rawData.currency]
-
+   
+   let net:any = NetConfig.netById(global.user.networkId);
+   let asset = net[_quoteProtocol.rawData.currency]
+   
      return buyCoverNexus(
        global.user.account,
        'nexus',
@@ -297,9 +291,11 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
        _quoteProtocol.rawData.period, // period
        0, //coverType
        _quoteProtocol.price.toString(), // token amount to cover with FEE
-       data ,// random data
        buyingWithNetworkCurrency,
        _quoteProtocol,
+       swapVia,
+       poolFeeA,
+       poolFeeB,
      )
 
    }
