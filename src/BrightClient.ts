@@ -96,7 +96,7 @@ async initialize(): Promise<object>{
 
       await Promise.all([
         NetConfig.createWeb3Passives(),
-        UniswapV3Api.initUniswapV3(),
+        // UniswapV3Api.initUniswapV3(),
         CurrencyHelper.getETHDAIPrice(1),
         CurrencyHelper.getInsureUSDCPrice(1),
       ]).then((_data: any) => {

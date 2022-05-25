@@ -123,18 +123,8 @@ export async function buyCoverNexus(
 const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
 
   return await new Promise( async (resolve, reject) => {
-    const nexusAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('nexus').call();
-
-    console.log(
-      "nexusAddressContract: ", nexusAddress,
-      "_contractAddress: ",_contractAddress,
-      "_coverAsset: ",  _coverAsset,
-      "_sumAssured: ",       _sumAssured,
-      "_amountOut: ",       _amountOut,
-      "_coverPeriod: ",       _coverPeriod,
-      "_coverType: ",       _coverType,
-      "_maxPriceWithFee: ",       _maxPriceWithFee,
-    )
+    // const nexusAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('nexus').call();
+    const nexusAddress = NetConfig.netById(1).nexusDistributor;
 
    const _data = global.user.web3.eth.abi.encodeParameters(
      ['address','address','uint256',
