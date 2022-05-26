@@ -14,7 +14,7 @@ object-assign
 /*!
  * URI.js - Mutating URLs
  *
- * Version: 1.19.10
+ * Version: 1.19.11
  *
  * Author: Rodney Rehm
  * Web: http://medialize.github.io/URI.js/
@@ -28,7 +28,7 @@ object-assign
  * URI.js - Mutating URLs
  * IPv6 Support
  *
- * Version: 1.19.10
+ * Version: 1.19.11
  *
  * Author: Rodney Rehm
  * Web: http://medialize.github.io/URI.js/
@@ -42,7 +42,7 @@ object-assign
  * URI.js - Mutating URLs
  * Second Level Domain (SLD) Support
  *
- * Version: 1.19.10
+ * Version: 1.19.11
  *
  * Author: Rodney Rehm
  * Web: http://medialize.github.io/URI.js/
