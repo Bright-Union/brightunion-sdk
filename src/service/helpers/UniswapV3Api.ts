@@ -5,8 +5,6 @@ import JSBI from 'jsbi';
 
 import NetConfig from '../../service/config/NetConfig'
 
-// const provider = new ethers.providers.JsonRpcProvider('https://mainnet.infura.io/v3/' +  NetConfig.getInfuraId() );
-// const provider = new ethers.providers.JsonRpcProvider( NetConfig.getQuickNodeProvider() );
 import {toWei} from "web3-utils";
 
 class UniswapV3Api {
@@ -21,11 +19,45 @@ class UniswapV3Api {
       return true;
     }
 
-    public  static async getNXMPriceFor(_currency:any, _amountOfNXM: number) {
+    public static chooseRouteAndSetPrice(_routeData: any) {
 
-      // const provider = new ethers.providers.JsonRpcProvider('https://mainnet.infura.io/v3/' +  NetConfig.getInfuraId() );
-      // const provider = new ethers.providers.JsonRpcProvider( NetConfig.getQuickNodeProvider() );
-      // const router = await new AlphaRouter.AlphaRouter({ chainId: 1, provider: provider }) //web3Provider
+      let routeDataFormated = {
+        swapVia: "0x0000000000000000000000000000000000000000",
+        swapVia2: "0x0000000000000000000000000000000000000000",
+        poolFeeA: 0,
+        poolFeeB: 0,
+        poolFeeC: 0,
+      }
+
+      let amountIn = null;
+
+      if(_routeData && _routeData.route && _routeData.route[0] ){
+
+        let routeChosen =  _routeData.route[0];
+
+        for (var i = 0; i < _routeData.route.length; i++) {
+          if(  _routeData.route[i].protocol == "V3" ){
+            routeChosen =  _routeData.route[i];
+          }
+        }
+
+        routeDataFormated.swapVia = routeChosen.tokenPath.length > 2 ? routeChosen.tokenPath[1].address : "0x0000000000000000000000000000000000000000";
+        routeDataFormated.swapVia2 = routeChosen.tokenPath.length > 3 ? routeChosen.tokenPath[2].address : "0x0000000000000000000000000000000000000000";
+        if(routeChosen && routeChosen.protocol == "V3"){
+          const pools = routeChosen.route.pools;
+          routeDataFormated.poolFeeA = pools[0].fee;
+          routeDataFormated.poolFeeB = pools[1] ? pools[1].fee : 0;
+          routeDataFormated.poolFeeC = pools[2] ? pools[2].fee : 0;
+        }
+
+        amountIn  = routeChosen.rawQuote.toString();
+      }
+
+      return [amountIn, routeDataFormated];
+    }
+
+
+    public  static async getNXMPriceFor(_currency:any, _amountOfNXM: number) {
 
       const WETH = new Token( 1 , NetConfig.netById(1).WETH, 18, 'WETH', 'Wrapped Ether')
       const DAI = new Token( 1 , NetConfig.netById(1).DAI, 6, 'DAI', 'DAI')
@@ -42,8 +74,6 @@ class UniswapV3Api {
         return {error: "wrong quote currency"};
       }
 
-      console.log("currencyIn SDK _amountOfNXM - " , currencyIn, _currency, _amountOfNXM.toString());
-
       const nxmAmoutInWei = toWei( _amountOfNXM.toString() ).split('.')[0];
       const amountNXMOut = CurrencyAmount.fromRawAmount( WNXM , nxmAmoutInWei );
 
@@ -51,38 +81,20 @@ class UniswapV3Api {
         amountNXMOut,
         currencyIn,
         TradeType.EXACT_OUTPUT,
-        undefined,
-        // {
-        //   slippageTolerance: new Percent(5, 1000), // 0.5%
-        // },
-        // undefined,
         {
-          // protocols: ["V3"],
-          // maxSwapsPerPath: 4,
+          slippageTolerance: new Percent(5, 1000), // 0.5%
+        },
+        {
+          maxSwapsPerPath: 4,
         }
-      )
-      // .then(
-      //   (res:any) => {console.log("res SDK - " , res ); return res;} ,
-      //   (error:any) => { console.log("error SDK" , typeof error , error ) } );
+      ).then(
+        (res:any) => { return res;} ,
+        (error:any) => { return error }
+      );
 
-        // console.log('route - ' , route );
+      const [ amountIn, routeDataFormated ] = this.chooseRouteAndSetPrice(route);
 
-        
-
-
-      if(route){
-        console.log( "rawQuote SDK" , route.route[0]  );
-        if(route.route[1]){
-          console.log( "rawQuote2 SDK" ,  route.route[1] );
-        }
-      }
-
-      let finalPrice = null;
-      if(route && route.route[0]){
-        finalPrice  = route.route[0].rawQuote.toString();
-      }
-
-      return [finalPrice, route];
+      return [amountIn, routeDataFormated];
     }
 
   }

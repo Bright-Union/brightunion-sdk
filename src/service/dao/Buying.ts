@@ -106,8 +106,10 @@ export async function buyCoverNexus(
   buyingWithNetworkCurrency:boolean,
   _quoteProtocol:any,
   _swapVia : any,
+  _swapVia2 : any,
   _poolFeeA : any,
   _poolFeeB : any,
+  _poolFeeC : any,
 ) {
 
   let tx:any = {
@@ -126,23 +128,19 @@ const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
     // const nexusAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('nexus').call();
     const nexusAddress = NetConfig.netById(1).nexusDistributor;
 
-   const _data = global.user.web3.eth.abi.encodeParameters(
-     ['address','address','uint256',
-      'uint256', 'uint16', 'uint8','uint256',
-      'address', 'uint24', 'uint24'],
-
-      [ _contractAddress,
-        _coverAsset,
-        _sumAssured,
-        _amountOut,
-        _coverPeriod,
-        _coverType,
-        _maxPriceWithFee,
-        _swapVia,
-        _poolFeeA,
-        _poolFeeB,
-      ],
-     );
+     const data = global.user.web3.eth.abi.encodeParameters(
+  ['address', 'address', 'uint24', 'uint24' ,'uint24',
+  'uint256', 'uint256', 'uint256',
+  'uint256', 'uint8', 'bytes32', 'bytes32'],
+  [  _swapVia, _swapVia2, _poolFeeA, _poolFeeB, _poolFeeC ,
+    _quoteProtocol.rawData.price,
+    _quoteProtocol.rawData.priceInNXM,
+    _quoteProtocol.rawData.expiresAt,
+    _quoteProtocol.rawData.generatedAt,
+    _quoteProtocol.rawData.v,
+    _quoteProtocol.rawData.r,
+    _quoteProtocol.rawData.s
+  ]);
 
     _getNexusDistributorsContract(nexusAddress) // Nexus Call through Bright Protocol Distributors Layer
     .methods.buyCover(
@@ -153,7 +151,7 @@ const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
       _coverPeriod,
       _coverType,
       _maxPriceWithFee,
-      _data,
+      data,
     ).send({ from: _ownerAddress, value: sendValue })
     .on('transactionHash', (res:any) => {
       tx.hash = res
