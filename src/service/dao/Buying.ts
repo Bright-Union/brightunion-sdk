@@ -47,9 +47,7 @@ export async function buyCover(
   buyingWithNetworkCurrency:boolean,
   _quoteProtocol:any,
 ):Promise<any>{
-  // let txHash : any;
   let tx:any;
-  console.log(_data)
 
 if(_distributorName === 'ease') {
   tx = {
@@ -107,37 +105,30 @@ if(_distributorName === 'ease') {
 
   } else if(_distributorName == 'ease'){
     tx.distributor  = 'ease';
-    const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
     return await new Promise( async (resolve, reject) => {
      await _getEaseContract(_quoteProtocol.vault.address).methods.mintTo(
           _data.user,
-          NetConfig.NETWORK_CONFIG[0].brightTreasury,
-         _quoteProtocol.amount.toString(),
+         NetConfig.NETWORK_CONFIG[0].brightTreasury,
+         _data.amount,
           _data.expiry,
           _data.vInt,
           _data.r,
           _data.s,
           _quoteProtocol.vault.liquidation_amount,
           _quoteProtocol.vault.liquidation_proof
-      ).send({ from: _data.user, value: sendValue  })
+      ).send({ from: _data.user})
           .on('transactionHash', (res:any) => {
             tx.hash = res
-            console.log('transactionHash')
-            console.log(res)
             global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
             GoogleEvents.onTxHash(tx);
             resolve({success:res});
           })
           .on('error', (err:any, receipt:any) => {
-            console.log('error')
-            console.log(err)
             global.events.emit("buy" , { status: "REJECTED" } );
             GoogleEvents.onTxRejected(tx);
             reject( {error: err, receipt:receipt})
           })
           .on('confirmation', (confirmationNumber:any) => {
-            console.log('confirmation')
-            console.log(confirmationNumber)
             if (confirmationNumber === 0) {
               GoogleEvents.onTxConfirmation(tx);
               global.events.emit("buy" , { status: "TX_CONFIRMED" } );

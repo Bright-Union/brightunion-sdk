@@ -299,25 +299,24 @@ export async function getCoversCountBridge():Promise<any>{
 }
 
 export async function getCoversEase():Promise<any>{
-  let policies = []
-  let cover = {
-    risk_protocol: 'ease',
-    status: 0,
-    coverAmount: "10000000000000000000",
-    vaultCurrency: 'DAI',
-    coverAsset: 'aDAI',
-    validUntil: Date.now(),
-    endTime: Date.now(),
-    startTime: Date.now(),
-    name: 'Sushi',
-    net: global.user.ethNet.networkId,
-    type: 'Protocol'
-  }
-
-  global.events.emit("covers" , { coverItem: cover} );
-
-  policies.push(cover)
-  console.log(policies)
+  let policies:any = []
+  // let cover = {
+  //   risk_protocol: 'ease',
+  //   status: 0,
+  //   coverAmount: "10000000000000000000",
+  //   vaultCurrency: 'DAI',
+  //   coverAsset: 'aDAI',
+  //   validUntil: Date.now(),
+  //   endTime: Date.now(),
+  //   startTime: Date.now(),
+  //   name: 'Sushi',
+  //   net: global.user.ethNet.networkId,
+  //   type: 'Protocol'
+  // }
+  //
+  // global.events.emit("covers" , { coverItem: cover} );
+  //
+  // policies.push(cover)
 return policies;
 }
 

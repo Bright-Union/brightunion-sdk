@@ -7,7 +7,6 @@ export default class EaseApi {
     static fetchCoverables() {
         return axios.get('https://app.ease.org/api/v1/vaults')
             .then((response) => {
-                console.log(response.data)
                 return response.data;
             }).catch(error => {
                 return [];
