@@ -31,6 +31,8 @@ class UniswapV3Api {
 
       let amountIn = null;
 
+      console.log("pure Uni Output Rout Data 0 " , _routeData);
+
       if(_routeData && _routeData.route && _routeData.route[0] ){
 
         let routeChosen =  _routeData.route[0];

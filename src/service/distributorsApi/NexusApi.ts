@@ -69,16 +69,21 @@ export default class NexusApi {
 
         const distributor = await _getNexusDistributorsContract(NetConfig.netById(global.user.ethNet.networkId).nexusDistributor);
         // hardcoded address, as Bright Distributors contract cannot be called by passive net - fix for Nexus Multichain Quotation
-
         let fee:any = await distributor.methods.feePercentage().call();
         fee = toBN(fee);
 
         let priceWithFee:any = basePrice.mul(fee).div(toBN(10000)).add(basePrice);
 
-        const [ nxmBasedPrice, nxmBasedPriceNoMargin, routeData] = await NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee );
+        const nexusMaxCapacityError = this.checkNexusCapacity(currency, amountInWei.toString(), capacityETH, capacityDAI);
 
-        let pricePercentNXM = new BigNumber(nxmBasedPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
-        let pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
+        let pricePercentNXM:any = 0;
+        let pricePercent:any = 0;
+        let [ nxmBasedPrice, nxmBasedPriceNoMargin, routeData] = [ 0, 0, {} ];
+        if(!nexusMaxCapacityError){
+          [ nxmBasedPrice, nxmBasedPriceNoMargin, routeData] = await NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee );
+          pricePercentNXM = new BigNumber(nxmBasedPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
+          pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
+        }
 
         global.events.emit("quote" , {
           status: "INITIAL_DATA" ,
@@ -111,7 +116,6 @@ export default class NexusApi {
         const totalActiveCoversDAI = await quotationContract.methods.getTotalSumAssured(asciiToHex('DAI')).call();
 
         let defaultCurrencySymbol = NetConfig.netById(global.user.ethNet.networkId).defaultCurrency;
-        const nexusMaxCapacityError = this.checkNexusCapacity(currency, amountInWei.toString(), capacityETH, capacityDAI);
 
         return CatalogHelper.quoteFromCoverable(
           'nexus',
