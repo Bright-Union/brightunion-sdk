@@ -276,12 +276,14 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
    }
 
    const swapVia = route.tokenPath.length > 2 ? route.tokenPath[1].address : "0x0000000000000000000000000000000000000000";
+   const swapVia2 = route.tokenPath.length > 3 ? route.tokenPath[2].address : "0x0000000000000000000000000000000000000000";
    const poolFeeA = route.pools[0].fee;
-   const poolFeeB = route.pools[1] ? route.pools[1].fee : poolFeeA;
+   const poolFeeB = route.pools[1] ? route.pools[1].fee : 0;
+   const poolFeeC = route.pools[2] ? route.pools[2].fee : 0;
 
    let net:any = NetConfig.netById(global.user.networkId);
    let asset = net[_quoteProtocol.rawData.currency]
-   
+
      return buyCoverNexus(
        global.user.account,
        'nexus',

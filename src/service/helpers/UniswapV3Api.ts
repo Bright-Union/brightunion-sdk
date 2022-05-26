@@ -6,7 +6,7 @@ import JSBI from 'jsbi';
 import NetConfig from '../../service/config/NetConfig'
 
 // const provider = new ethers.providers.JsonRpcProvider('https://mainnet.infura.io/v3/' +  NetConfig.getInfuraId() );
-const provider = new ethers.providers.JsonRpcProvider( NetConfig.getQuickNodeProvider() );
+// const provider = new ethers.providers.JsonRpcProvider( NetConfig.getQuickNodeProvider() );
 import {toWei} from "web3-utils";
 
 class UniswapV3Api {
@@ -15,16 +15,17 @@ class UniswapV3Api {
     public  static poolContractInited:any = false;
     public  static router:any = false;
 
-    // public  static async initUniswapV3() {
-    //   this.router = await new AlphaRouter.AlphaRouter({ chainId: 1, provider: provider }) //web3Provider
-    //   return true;
-    // }
+    public  static async initUniswapV3() {
+      const provider = new ethers.providers.JsonRpcProvider( NetConfig.getQuickNodeProvider() );
+      this.router = await new AlphaRouter.AlphaRouter({ chainId: 1, provider: provider }) //web3Provider
+      return true;
+    }
 
     public  static async getNXMPriceFor(_currency:any, _amountOfNXM: number) {
 
       // const provider = new ethers.providers.JsonRpcProvider('https://mainnet.infura.io/v3/' +  NetConfig.getInfuraId() );
-      const provider = new ethers.providers.JsonRpcProvider( NetConfig.getQuickNodeProvider() );
-      const router = await new AlphaRouter.AlphaRouter({ chainId: 1, provider: provider }) //web3Provider
+      // const provider = new ethers.providers.JsonRpcProvider( NetConfig.getQuickNodeProvider() );
+      // const router = await new AlphaRouter.AlphaRouter({ chainId: 1, provider: provider }) //web3Provider
 
       const WETH = new Token( 1 , NetConfig.netById(1).WETH, 18, 'WETH', 'Wrapped Ether')
       const DAI = new Token( 1 , NetConfig.netById(1).DAI, 6, 'DAI', 'DAI')
@@ -46,7 +47,7 @@ class UniswapV3Api {
       const nxmAmoutInWei = toWei( _amountOfNXM.toString() ).split('.')[0];
       const amountNXMOut = CurrencyAmount.fromRawAmount( WNXM , nxmAmoutInWei );
 
-      const route = await router.route(
+      const route = await this.router.route(
         amountNXMOut,
         currencyIn,
         TradeType.EXACT_OUTPUT,
@@ -57,13 +58,17 @@ class UniswapV3Api {
         // undefined,
         {
           // protocols: ["V3"],
-          maxSwapsPerPath: 3,
+          // maxSwapsPerPath: 4,
         }
-      ).then(
-        (res:any) => {console.log("res SDK - " , res ); return res;} ,
-        (error:any) => { console.log("error SDK" , typeof error , error ) } );
+      )
+      // .then(
+      //   (res:any) => {console.log("res SDK - " , res ); return res;} ,
+      //   (error:any) => { console.log("error SDK" , typeof error , error ) } );
 
-        console.log('route - ' , route );
+        // console.log('route - ' , route );
+
+        
+
 
       if(route){
         console.log( "rawQuote SDK" , route.route[0]  );
