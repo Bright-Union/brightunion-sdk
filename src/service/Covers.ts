@@ -30,6 +30,7 @@ export async function getAllCovers(
   coversPromiseArray.push(getInsuraceCovers(global.user.web3))
   coversPromiseArray.push(getBridgeCovers())
   coversPromiseArray.push(getNexusCovers())
+  coversPromiseArray.push(getEaseCovers())
 
   for (let net of global.user.web3Passive) {
     coversPromiseArray.push( getInsuraceCovers(net))
@@ -62,6 +63,12 @@ export  function getNexusCovers(): Promise<any[]> {
   }
 }
 
+export  function getEaseCovers(): Promise<any[]> {
+  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'EASE')) {
+    return  getCovers( null, 'ease' , global.user.account , false, 50);
+  }
+}
+
 export  function getInsuraceCovers(_web3:any) : Promise<any[]> {
 
   if(!_web3.networkId){ // if not passive net
@@ -91,6 +98,9 @@ export async function getAllCoversCount(
   }
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'INSURACE')) {
     coversPromiseArray.push(getCoversCount('insurace', global.user.account, false))
+  }
+  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'EASE')) {
+    coversPromiseArray.push(getCoversCount('ease', global.user.account, false))
   }
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL')) {
     coversPromiseArray.push(getCoversCount('bridge', global.user.account, false))
