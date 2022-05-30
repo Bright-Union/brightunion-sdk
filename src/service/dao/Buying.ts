@@ -165,6 +165,7 @@ export async function buyCoverNexus(
   _poolFeeA : any,
   _poolFeeB : any,
   _poolFeeC : any,
+  _uniProtocol: any,
 ) {
 
   let tx:any = {
@@ -184,10 +185,10 @@ const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
     const nexusAddress = NetConfig.netById(1).nexusDistributor;
 
      const data = global.user.web3.eth.abi.encodeParameters(
-  ['address', 'address', 'uint24', 'uint24' ,'uint24',
+  ['address', 'address', 'uint24', 'uint24' ,'uint24', 'string',
   'uint256', 'uint256', 'uint256',
   'uint256', 'uint8', 'bytes32', 'bytes32'],
-  [  _swapVia, _swapVia2, _poolFeeA, _poolFeeB, _poolFeeC ,
+  [  _swapVia, _swapVia2, _poolFeeA, _poolFeeB, _poolFeeC, _uniProtocol,
     _quoteProtocol.rawData.price,
     _quoteProtocol.rawData.priceInNXM,
     _quoteProtocol.rawData.expiresAt,

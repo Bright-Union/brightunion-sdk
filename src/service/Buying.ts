@@ -296,6 +296,7 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
        _quoteProtocol.uniSwapRouteData.poolFeeA,
        _quoteProtocol.uniSwapRouteData.poolFeeB,
        _quoteProtocol.uniSwapRouteData.poolFeeC,
+       _quoteProtocol.uniSwapRouteData.protocol,
      )
 
    }

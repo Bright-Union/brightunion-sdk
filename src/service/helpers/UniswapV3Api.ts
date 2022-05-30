@@ -27,6 +27,7 @@ class UniswapV3Api {
         poolFeeA: 0,
         poolFeeB: 0,
         poolFeeC: 0,
+        protocol: 'V3',
       }
 
       let amountIn = null;
@@ -45,6 +46,7 @@ class UniswapV3Api {
 
         routeDataFormated.swapVia = routeChosen.tokenPath.length > 2 ? routeChosen.tokenPath[1].address : "0x0000000000000000000000000000000000000000";
         routeDataFormated.swapVia2 = routeChosen.tokenPath.length > 3 ? routeChosen.tokenPath[2].address : "0x0000000000000000000000000000000000000000";
+        routeDataFormated.protocol = routeChosen.protocol;
         if(routeChosen && routeChosen.protocol == "V3"){
           const pools = routeChosen.route.pools;
           routeDataFormated.poolFeeA = pools[0].fee;
