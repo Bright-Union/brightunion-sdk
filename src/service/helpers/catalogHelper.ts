@@ -43,14 +43,14 @@ const bridge_nexus_insurace = [
 
 
 const bridge_nexus_insurace_categories : string[][] = [
-  // BRIDGE CATEGORY, NEXUS CATEGORY, INSURACE, COMMON CATEGORY, DESCRIPTION
-  ['0' /*CONTRACT*/, 'protocol', 'Smart Contract Vulnerability', 'protocol', 'Protocol hack and failure'],
-  ['2', /*SERVICE*/ 'custodian', '', 'custodian', 'Custodian cover'],
-  ['1' /*STABLECOIN*/, '', 'Stablecoin De-Peg', 'stable', 'Stable token de-pegging'],
-  ['', 'token', '', 'yield', 'Yield de-pegging'],
-  ['3' /*EXCHANGE*/, 'custodian', 'Custodian Risk', 'custodian'],
-  ['' , '', 'IDO Event Risk', 'ido', 'IDO Event Risk'],
-  ['' , '', 'Bundled Cover', 'bundled', 'Bundled cover'],
+  // BRIDGE CATEGORY, NEXUS CATEGORY, INSURACE, EASE, COMMON CATEGORY, DESCRIPTION
+  ['0' /*CONTRACT*/, 'protocol', 'Smart Contract Vulnerability', 'Lending Protocol', 'protocol', 'Protocol hack and failure'],
+  ['2', /*SERVICE*/ 'custodian', '', '', 'custodian', 'Custodian cover'],
+  ['1' /*STABLECOIN*/, '', 'Stablecoin De-Peg', '', 'stable', 'Stable token de-pegging'],
+  ['', 'token', '', '', 'yield', 'Yield de-pegging'],
+  ['3' /*EXCHANGE*/, 'custodian', '', 'Custodian Risk', 'custodian'],
+  ['' , '', 'IDO Event Risk', '', 'ido', 'IDO Event Risk'],
+  ['' , '', 'Bundled Cover', '', 'bundled', 'Bundled cover'],
 ];
 
 const CUSTOM_BRIDGE_PROTOCOLS : object = {
@@ -329,8 +329,10 @@ class CatalogHelper {
       commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[0] === category});
     } else if (provider == 'insurace') {
       commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[2] === category});
+    } else if (provider == 'ease') {
+      commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[3] === category});
     }
-    return commonCategory ? commonCategory[3] : '' ;
+    return commonCategory ? commonCategory[4] : '' ;
   }
 
   public static chainList(_distributorName:string, coverable:any) {

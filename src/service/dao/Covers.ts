@@ -86,6 +86,8 @@ export async function getCovers(
       return await getCoversBridgeV2();
     }else if(_distributorName == 'nexus'){
       return await getCoversNexus();
+    }else if(_distributorName == 'ease'){
+      return await getCoversEase();
     }
 
   // }else{
@@ -294,6 +296,28 @@ export async function getCoversCountBridge():Promise<any>{
 
 
   return [];
+}
+
+export async function getCoversEase():Promise<any>{
+  let policies:any = []
+  // let cover = {
+  //   risk_protocol: 'ease',
+  //   status: 0,
+  //   coverAmount: "10000000000000000000",
+  //   vaultCurrency: 'DAI',
+  //   coverAsset: 'aDAI',
+  //   validUntil: Date.now(),
+  //   endTime: Date.now(),
+  //   startTime: Date.now(),
+  //   name: 'Sushi',
+  //   net: global.user.ethNet.networkId,
+  //   type: 'Protocol'
+  // }
+  //
+  // global.events.emit("covers" , { coverItem: cover} );
+  //
+  // policies.push(cover)
+return policies;
 }
 
 export default {

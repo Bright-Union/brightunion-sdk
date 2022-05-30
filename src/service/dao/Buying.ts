@@ -8,6 +8,7 @@ import {
   _getBridgeV2Distributor,
   _getBridgeV2PolicyBookContract,
   _getBridgeV2PolicyBookFacade,
+  _getEaseContract,
 
 } from "../helpers/getContract";
 
@@ -47,9 +48,8 @@ export async function buyCoverBridge(
   buyingWithNetworkCurrency:boolean,
   _quoteProtocol:any,
 ):Promise<any>{
-  // let txHash : any;
-
-  let tx:any = {
+  let tx:any;
+  tx = {
     'hash': null,
     'distributor': "bridge",
     'premium': fromWei(_quoteProtocol.price),
@@ -90,6 +90,61 @@ export async function buyCoverBridge(
         }
       });
     });
+
+}
+
+export async function buyCoverEase(
+  _ownerAddress : string,
+  _contractAddress : string,
+  _coverAsset : string,
+  _sumAssured : number,
+  _coverPeriod : number,
+  _coverType : any,
+  _maxPriceWithFee : number,
+  _data : any,
+  _quoteProtocol:any,
+):Promise<any>{
+
+  let tx:any;
+  tx = {
+    'hash': null,
+    'distributor': "ease",
+    'name': _quoteProtocol.name,
+    'amount':  _data.amount,
+    'currency': _quoteProtocol.asset,
+  }
+
+  return await new Promise( async (resolve, reject) => {
+    await _getEaseContract(_quoteProtocol.vault.address).methods.mintTo(
+      _data.user,
+      NetConfig.NETWORK_CONFIG[0].brightTreasury,
+      _data.amount,
+      _data.expiry,
+      _data.vInt,
+      _data.r,
+      _data.s,
+      _quoteProtocol.vault.liquidation_amount,
+      _quoteProtocol.vault.liquidation_proof
+    ).send({ from: _data.user})
+    .on('transactionHash', (res:any) => {
+      tx.hash = res
+      global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
+      GoogleEvents.onTxHash(tx);
+      resolve({success:res});
+    })
+    .on('error', (err:any, receipt:any) => {
+      global.events.emit("buy" , { status: "REJECTED" } );
+      GoogleEvents.onTxRejected(tx);
+      reject( {error: err, receipt:receipt})
+    })
+    .on('confirmation', (confirmationNumber:any) => {
+      if (confirmationNumber === 0) {
+        GoogleEvents.onTxConfirmation(tx);
+        global.events.emit("buy" , { status: "TX_CONFIRMED" } );
+
+      }
+    });
+  });
 
 }
 
@@ -274,5 +329,5 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
 
 
 export default {
-  buyCoverBridge, buyCoverInsurace, buyCoverNexus
+  buyCoverBridge, buyCoverInsurace, buyCoverNexus, buyCoverEase
 }
