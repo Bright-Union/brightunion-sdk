@@ -17,9 +17,10 @@ import {
   _getNexusGatewayContract,
   _getNexusClaimsDataContract,
   _getNexusDistributor,
-  _getNexusMasterContract,
+  _getNexusMasterContract, _getIERC20Contract, _getEaseContract,
 } from "../helpers/getContract";
-import {hexToUtf8, asciiToHex} from 'web3-utils';
+import {hexToUtf8, asciiToHex, fromWei} from 'web3-utils';
+import EaseApi from "@/service/distributorsApi/EaseApi";
 
 /**
  * Returns the total cover count owned by an address
@@ -299,25 +300,36 @@ export async function getCoversCountBridge():Promise<any>{
 }
 
 export async function getCoversEase():Promise<any>{
-  let policies:any = []
-  // let cover = {
-  //   risk_protocol: 'ease',
-  //   status: 0,
-  //   coverAmount: "10000000000000000000",
-  //   vaultCurrency: 'DAI',
-  //   coverAsset: 'aDAI',
-  //   validUntil: Date.now(),
-  //   endTime: Date.now(),
-  //   startTime: Date.now(),
-  //   name: 'Sushi',
-  //   net: global.user.ethNet.networkId,
-  //   type: 'Protocol'
-  // }
-  //
-  // global.events.emit("covers" , { coverItem: cover} );
-  //
-  // policies.push(cover)
-return policies;
+  return await EaseApi.fetchCoverables()
+      .then((data:any) => {
+        let policies: any = []
+        data.forEach(async(vault: any) => {
+          let protocol = await _getIERC20Contract(vault.token.address);
+          let instance = await _getEaseContract(vault.address);
+          protocol.methods.balanceOf(global.user.account).call().then((balance: any) => {
+            if (balance > 0) {
+              vault.tokenBalance = fromWei(balance);
+              let cover = {
+                risk_protocol: 'ease',
+                status: 0,
+                coverAmount: balance,
+                vaultCurrency: vault.symbol,
+                coverAsset: vault.display_name,
+                validUntil: Date.now(),
+                endTime: Date.now(),
+                startTime: Date.now(),
+                name: CatalogHelper.unifyCoverName(vault.top_protocol, 'ease'),
+                net: global.user.ethNet.networkId,
+                type: vault.protocol_type,
+                instance: instance
+              }
+              global.events.emit("covers", {coverItem: cover});
+              policies.push(cover)
+            }
+          })
+        });
+        return policies;
+      })
 }
 
 export default {
