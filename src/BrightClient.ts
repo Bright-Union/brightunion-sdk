@@ -83,6 +83,8 @@ constructor(_config:any) {
 
 async initialize(): Promise<object>{
       global.user.networkId = await global.user.web3.eth.net.getId();
+      global.user.account = (await  global.user.web3.eth.getAccounts())[0];
+      if(!global.user.account) global.user.account = "0x0000000000000000000000000000000000000001";
 
       const activeNetOpt = NetConfig.netById(global.user.networkId);
       if(activeNetOpt){
@@ -92,12 +94,10 @@ async initialize(): Promise<object>{
 
       await Promise.all([
         NetConfig.createWeb3Passives(),
-        global.user.web3.eth.getAccounts(),
-        CurrencyHelper.getETHDAIPrice(global.user.networkId),
-        CurrencyHelper.getInsureUSDCPrice(global.user.networkId),
+        CurrencyHelper.getETHDAIPrice(1),
+        CurrencyHelper.getInsureUSDCPrice(1),
       ]).then((_data: any) => {
         global.user.web3Passive = _data[0];
-        global.user.account = _data[1][0] ? _data[1][0] : "0x0000000000000000000000000000000000000001" ;
       })
 
       global.user.ethNet =  NetConfig.getETHNetwork();

@@ -6,55 +6,58 @@ import {hexToUtf8} from 'web3-utils';
 
 
 const bridge_nexus_insurace = [
-  // BRIDGE NAME, NEXUS NAME, INSURACE NAME, COMMON NAME
-  ['88mph.app', '88mph', '88mph V2', '88mph V2'],
-  ['88mph.app', '88mph', '88mph V3', '88mph V3'],
-  ['1INCH Token', '1Inch (DEX & Liquidity Pools)', '1Inch', '1Inch'],
-  ['Aave', 'Aave V2', 'Aave V2', 'Aave V2'],
-  ['Aave', 'Aave V1', '', 'Aave V1'],
-  ['Anchor Protocol', 'Anchor Protocol', 'Anchor', 'Anchor'],
-  ['Alchemix', 'Alchemix V1', '', 'Alchemix V1'],
-  ['BadgerDAO', 'BadgerDAO', 'Badger Finance', 'BadgerDAO'],
-  ['BarnBridge', 'Barnbridge Smart Yield V1', '', 'Barnbridge V1'],
-  ['Compound', 'Compound V2', 'Compound V2', 'Compound V2'],
-  ['', 'Enzyme v3', 'Enzyme Finance', 'Enzyme'],
-  ['Cream', 'C.R.E.A.M. V1', '', 'C.R.E.A.M.'],
-  ['', 'Curve All Pools (incl staking)', 'Curve (All Pools)', 'Curve (All Pools)'],
-  ['', 'DODO Exchange', 'DODO', 'DODO'],
-  ['Maker', 'MakerDAO MCD', 'MakerDAO MCD', 'MakerDAO'],
-  ['', 'Pancakeswap V1', 'PancakeSwap', 'PancakeSwap'],
-  ['Perpetual', 'Perpetual Protocol', 'Perpetual Protocol', 'Perpetual Protocol'],
-  ['bmiV2PendleFinanceCover', 'Pendle', "Pendle", "Pendle"],
-  ['Synthetix Network Token', 'Synthetix', '', 'Synthetix'],
-  ['Sushi', 'SushiSwap V1', '', 'Sushi'],
-  ['Keeper DAO', 'Keeper DAO', 'KeeperDAO', 'KeeperDAO'],
-  ['', 'Kyber (Katalyst)', 'Kyber', 'Kyber'],
-  ['', 'DyDx Perpetual', 'DyDx', 'DyDx'],
-  ['', 'ETH 2.0 (deposit contract)', 'ETH 2.0', 'ETH 2.0'],
-  ['', 'OlympusDAO', 'Olympus DAO', 'Olympus DAO'],
-  ['Spell Token', 'Abracadabra', 'Abracadabra.money', 'Abracadabra'],
-  ['Uniswap', 'Uniswap V1', '', 'Uniswap V1'],
-  ['Uniswap', 'Uniswap V2', 'Uniswap V2', 'Uniswap V2'],
-  ['Uniswap', 'Uniswap V3', 'Uniswap V3', 'Uniswap V3'],
-  ['','Convex Finance V1','Convex', 'Convex'],
-  ['IceToken','Popsicle Finance','', 'IceToken']
+  // BRIDGE NAME, NEXUS NAME, INSURACE NAME, EASE, COMMON NAME
+  ['88mph.app', '88mph', '88mph V2', '', '88mph V2'],
+  ['88mph.app', '88mph', '88mph V3', '', '88mph V3'],
+  ['1INCH Token', '1Inch (DEX & Liquidity Pools)', '1Inch', '', '1Inch'],
+  ['Aave', 'Aave V2', 'Aave V2', 'Aave', 'Aave V2'],
+  ['Aave', 'Aave V1', '', '', 'Aave V1'],
+  ['Anchor Protocol', 'Anchor Protocol', 'Anchor', '', 'Anchor'],
+  ['Alchemix', 'Alchemix V1', '', '', 'Alchemix V1'],
+  ['BadgerDAO', 'BadgerDAO', 'Badger Finance', '', 'BadgerDAO'],
+  ['BarnBridge', 'Barnbridge Smart Yield V1', '', '', 'Barnbridge V1'],
+  ['Compound', 'Compound V2', 'Compound V2', 'Compound', 'Compound V2'],
+  ['', 'Enzyme v3', 'Enzyme Finance', '', 'Enzyme'],
+  ['Cream', 'C.R.E.A.M. V1', '', '', 'C.R.E.A.M.'],
+  ['', 'Curve All Pools (incl staking)', 'Curve (All Pools)', 'Curve', 'Curve (All Pools)'],
+  ['', 'DODO Exchange', 'DODO', '', 'DODO'],
+  ['Maker', 'MakerDAO MCD', 'MakerDAO MCD', '', 'MakerDAO'],
+  ['', 'Pancakeswap V1', 'PancakeSwap', '', 'PancakeSwap'],
+  ['Perpetual', 'Perpetual Protocol', 'Perpetual Protocol', '', 'Perpetual Protocol'],
+  ['bmiV2PendleFinanceCover', 'Pendle', "Pendle", '', "Pendle"],
+  ['Synthetix Network Token', 'Synthetix', '', '', 'Synthetix'],
+  ['Sushi', 'SushiSwap V1', '', 'SushiSwap', 'Sushi'],
+  ['Keeper DAO', 'Keeper DAO', 'KeeperDAO', '', 'KeeperDAO'],
+  ['', 'Kyber (Katalyst)', 'Kyber', '', 'Kyber'],
+  ['', 'DyDx Perpetual', 'DyDx', '', 'DyDx'],
+  ['', 'ETH 2.0 (deposit contract)', 'ETH 2.0', '', 'ETH 2.0'],
+  ['', 'OlympusDAO', 'Olympus DAO', '', 'Olympus DAO'],
+  ['Spell Token', 'Abracadabra', 'Abracadabra.money', '', 'Abracadabra'],
+  ['Uniswap', 'Uniswap V1', '', '', 'Uniswap V1'],
+  ['Uniswap', 'Uniswap V2', 'Uniswap V2', '', 'Uniswap V2'],
+  ['Uniswap', 'Uniswap V3', 'Uniswap V3', '', 'Uniswap V3'],
+  ['','Convex Finance V1','Convex', 'Convex', 'Convex'],
+  ['IceToken','Popsicle Finance','', '', 'IceToken'],
+  ['Yearn Finance (all vaults)','Yearn Finance (all vaults)','Yearn Finance (all vaults)', 'yearn', 'Yearn Finance (all vaults)']
 ]
 
 
 const bridge_nexus_insurace_categories : string[][] = [
-  // BRIDGE CATEGORY, NEXUS CATEGORY, INSURACE, COMMON CATEGORY, DESCRIPTION
-  ['0' /*CONTRACT*/, 'protocol', 'Smart Contract Vulnerability', 'protocol', 'Protocol hack and failure'],
-  ['2', /*SERVICE*/ 'custodian', '', 'custodian', 'Custodian cover'],
-  ['1' /*STABLECOIN*/, '', 'Stablecoin De-Peg', 'stable', 'Stable token de-pegging'],
-  ['', 'token', '', 'yield', 'Yield de-pegging'],
-  ['3' /*EXCHANGE*/, 'custodian', 'Custodian Risk', 'custodian'],
-  ['' , '', 'IDO Event Risk', 'ido', 'IDO Event Risk'],
-  ['' , '', 'Bundled Cover', 'bundled', 'Bundled cover'],
+  // BRIDGE CATEGORY, NEXUS CATEGORY, INSURACE, EASE, COMMON CATEGORY, DESCRIPTION
+  ['0' /*CONTRACT*/, 'protocol', 'Smart Contract Vulnerability', 'Lending Protocol', 'protocol', 'Protocol hack and failure'],
+  ['2', /*SERVICE*/ 'custodian', '', '', 'custodian', 'Custodian cover'],
+  ['1' /*STABLECOIN*/, '', 'Stablecoin De-Peg', '', 'stable', 'Stable token de-pegging'],
+  ['', 'token', '', '', 'yield', 'Yield de-pegging'],
+  ['3' /*EXCHANGE*/, 'custodian', '', 'Custodian Risk', 'custodian'],
+  ['' , '', 'IDO Event Risk', '', 'ido', 'IDO Event Risk'],
+  ['' , '', 'Bundled Cover', '', 'bundled', 'Bundled cover'],
 ];
 
 const CUSTOM_BRIDGE_PROTOCOLS : object = {
+  // '0x111111111117dC0aa78b770fA6A738034120C302': {
+  //   name: '1Inch'
+  // },
   '0xF0939011a9bb95c3B791f0cb546377Ed2693a574': {
-    // logoURI: zeroExchange,
     name: '0.exchange'
   },
   '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9': {
@@ -62,11 +65,9 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
     name: 'Aave'
   },
   '0x0000000000000000000000000000000000000001': {
-    // logoURI: anchor,
     name: 'Anchor Protocol'
   },
   '0xdBdb4d16EdA451D0503b854CF79D55697F90c8DF': {
-    // logoURI: alchemix,
     name: 'Alchemix'
   },
   '0xa1faa113cbE53436Df28FF0aEe54275c13B40975': {
@@ -94,7 +95,6 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
     name: 'ICHI'
   },
   '0xfA5047c9c78B8877af97BDcb85Db743fD7313d4a': {
-    // logoURI: keeper,
     name: 'Keeper DAO'
   },
   '0x808507121b80c02388fad14726482e061b8da827': {
@@ -106,7 +106,6 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
     name: 'Sushi'
   },
   '0x618679dF9EfCd19694BB1daa8D00718Eacfa2883': {
-    // logoURI: universe,
     name: 'Universe.XYZ'
   },
   '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984': {
@@ -120,6 +119,13 @@ const CUSTOM_BRIDGE_PROTOCOLS : object = {
 }
 
 const catalogLogoLinks: any = [
+  { name: "FODL Finance" , link:"https://files.insurace.io/public/asset/product/FodlFinance.png"},
+  { name: "Vauld" , link:"https://files.insurace.io/public/asset/product/Vauld.png"},
+  { name: "BUSD De-Peg" , link:"https://files.insurace.io/public/asset/product/BUSDDepeg.png"},
+  { name: "Planet" , link:"https://files.insurace.io/public/asset/product/PlanetFinance.png"},
+  { name: "AAVE V3" , link:"https://files.insurace.io/public/asset/product/AaveV2.png"},
+  { name: "RAMP V2" , link:"https://files.insurace.io/public/asset/product/RampV2.png"},
+  { name: "Unagii (Vaults)" , link:"https://files.insurace.io/public/asset/product/Unagii.png"},
   { name: "Eth 2.0" , link:"https://app.insurace.io/asset/product/Eth2.0.png"},
   { name: "Beefy" , link:"https://app.insurace.io/asset/product/BeefyFinance.png"},
   { name: "Alchemix V1" , link:"https://app.bridgemutual.io/assets/icons/coins/Alchemix.webp"},
@@ -165,6 +171,55 @@ const catalogLogoLinks: any = [
 ];
 
 class CatalogHelper {
+
+  public static async getLogoUrl (_name:string, _address:string , _distributorName:any){
+
+    let logoData: any = { url:null ,strongLogoData: false};
+    let trustWalletAssets: { [key: string]: any } = {};
+    trustWalletAssets = await this.getTrustWalletAssets()
+
+    let assetLogo: any = null;
+    Object.keys(trustWalletAssets).find((k: string) => {
+      if (trustWalletAssets[k].name && _address && trustWalletAssets[k].name.toUpperCase() == _address.toUpperCase()) {
+        assetLogo = trustWalletAssets[k].logoURI;
+      }
+    });
+
+    let specialLogo:any = CatalogHelper.getSpecialLogoName(_name);
+
+    if(assetLogo){
+      logoData.url = assetLogo;
+      logoData.strongLogoData = true;
+    }else if(specialLogo){
+      logoData.url = specialLogo;
+      logoData.strongLogoData = true;
+    }else{
+      if(_distributorName == 'insurace'){
+        logoData.url = _name;
+        logoData.strongLogoData = true;
+      } else if(_distributorName == 'bridge'){
+        logoData.url = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${_address}/logo.png`;
+        const missedLogos: any = [
+          { name: '0.exchange'},
+          { name: 'Keeper DAO'},
+          { name: 'Universe.XYZ'},
+          { name: 'Alchemix'},
+          { name: 'Anchor Protocol'}
+        ];
+        let missedLogoName = missedLogos.find((i:any) => i.name == _name)
+        if(missedLogoName) {
+          let specialLogo:any = CatalogHelper.getSpecialLogoName(missedLogoName.name);
+          logoData.url = specialLogo;
+          logoData.strongLogoData = true;
+        }
+      }
+      else if(_distributorName == 'nexus'){
+        logoData.url = `https://app.nexusmutual.io/logos/${_name}`;
+        logoData.strongLogoData = true;
+      }
+    }
+    return logoData;
+  }
 
   public static getSpecialLogoName (_name:string){
     const isSpecial = catalogLogoLinks.find((i:any) => i.name == _name); // find name in
@@ -254,23 +309,7 @@ class CatalogHelper {
       rawDataNexus: obj.rawDataNexus,                                           //field will be increased if similar products found
       rawDataBridge: obj.rawDataBridge,                                           //field will be increased if similar products found
       rawDataInsurace: obj.rawDataInsurace,                                           //field will be increased if similar products found
-    };
-  }
-
-  public static createCoverItem(obj:any) {
-    return {
-      distributorName: obj.distributorName,
-      contractName: obj.contractName,
-      name: obj.name,
-      logo: obj.logo,
-      coverType: obj.coverType,
-      coverAmount: obj.coverAmount,
-      coverAsset: obj.coverAsset,
-      validUntil: obj.validUntil,
-      endTime: obj.endTime,
-      status: obj.status,
-      net: obj.net,
-      rawData: obj.response,
+      rawDataEase: obj.rawDataEase
     };
   }
 
@@ -282,8 +321,10 @@ class CatalogHelper {
       commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[0] === category});
     } else if (provider == 'insurace') {
       commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[2] === category});
+    } else if (provider == 'ease') {
+      commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[3] === category});
     }
-    return commonCategory ? commonCategory[3] : '' ;
+    return commonCategory ? commonCategory[4] : '' ;
   }
 
   public static chainList(_distributorName:string, coverable:any) {
@@ -314,117 +355,122 @@ class CatalogHelper {
     }
   }
 
+  public static trustWalletAssets:any = null;
+
   public static getTrustWalletAssets (): Promise<object[]> {
-    let url = "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/tokenlist.json"
-    return axios({ method: "GET", "url": url }).then( (result:any) => {
-      let assets = _.reduce(result.data.tokens, (dict:any, token) => {
-        dict[token.address] = token
-        return dict
-      }, {})
-      const wallets : object[] = { ...assets, ...CUSTOM_BRIDGE_PROTOCOLS }
-      return wallets;
-    })
+    if(this.trustWalletAssets){
+      return new Promise( async (resolve) => {
+        resolve(this.trustWalletAssets)
+      })
+    }else{
+      let url = "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/tokenlist.json"
+      return axios({ method: "GET", "url": url }).then( (result:any) => {
+        let assets = _.reduce(result.data.tokens, (dict:any, token) => {
+          dict[token.address] = token
+          return dict
+        }, {})
+        const wallets : object[] = { ...assets, ...CUSTOM_BRIDGE_PROTOCOLS }
+        this.trustWalletAssets = wallets;
+        return wallets;
+      })
+    }
+  }
+
+    public static mergeCoverables(_catalog: any[]) : any[] {
+
+      let coverablesNoDuplicates:any[] = [];
+      let duplicateIndexes:any[] = [];
+      for (let i = 0; i < _catalog.length; i++) { // compare every with every
+        if (!duplicateIndexes.includes(i)) {
+          let duplicates = 1;
+          let mergedCoverableObject:any = {};
+          for (let j = i + 1; j < _catalog.length; j++) {
+            const mergedName = this.coverableDuplicate(_catalog[i], _catalog[j]);
+
+            if (mergedName) {
+
+              //duplicate found. merge the fields
+              const mergedPair = _.mergeWith({}, _catalog[i], _catalog[j], (o, s) => _.isNull(s) ? o : s);
+              mergedCoverableObject = _.mergeWith({}, mergedCoverableObject, mergedPair, (o, s) => _.isNull(s) ? o : s);
+
+              let mergedLogoUrl = mergedCoverableObject.logo.url;
+              if(_catalog[i].logo.strongLogoData) mergedLogoUrl =_catalog[i].logo.url;
+              if(_catalog[j].logo.strongLogoData) mergedLogoUrl = _catalog[j].logo.url;
+              if(mergedPair.logo.strongLogoData) mergedLogoUrl = mergedPair.logo.url;
+
+              mergedCoverableObject.availableCounter = ++duplicates;
+              mergedCoverableObject.name = mergedName;
+              mergedCoverableObject.logo = mergedLogoUrl;
+              duplicateIndexes.push(j)
+            }
+          }
+          if (duplicates > 1) {
+            coverablesNoDuplicates.push(mergedCoverableObject);
+          } else {
+            //no duplicate for it, leave it as is
+            if(_catalog[i].productId){
+              mergedCoverableObject.availableCounter += 2;
+            }
+            _catalog[i].logo = _catalog[i].logo.url;
+            coverablesNoDuplicates.push(_catalog[i])
+          }
+        }
+      }
+      coverablesNoDuplicates = coverablesNoDuplicates.sort((first, second) => {
+        var nameA = first.name.toUpperCase();
+        var nameB = second.name.toUpperCase();
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+        return 0;
+      });
+
+      return coverablesNoDuplicates;
+
     }
 
-      public static mergeCoverables(_catalog: any[]) : any[] {
+    static unifyCoverName( _coverName : any , _riskProtocol:any ) {
+      let cov1SourceNameIndex:any = false;
 
-        let coverablesNoDuplicates:any[] = [];
-        let duplicateIndexes:any[] = [];
-        for (let i = 0; i < _catalog.length; i++) { // compare every with every
-          if (!duplicateIndexes.includes(i)) {
-            let duplicates = 1;
-            let mergedCoverableObject:any = {};
-            for (let j = i + 1; j < _catalog.length; j++) {
-              const mergedName = this.coverableDuplicate(_catalog[i], _catalog[j]);
-              if (mergedName) {
-                //duplicate found. merge the fields
-                const mergedPair = _.mergeWith({}, _catalog[i], _catalog[j], (o, s) => _.isNull(s) ? o : s);
-                mergedCoverableObject = _.mergeWith({}, mergedCoverableObject, mergedPair, (o, s) => _.isNull(s) ? o : s);
-
-                mergedCoverableObject.availableCounter = ++duplicates;
-                mergedCoverableObject.name = mergedName;
-                duplicateIndexes.push(j)
-
-              }
-            }
-            if (duplicates > 1) {
-              coverablesNoDuplicates.push(mergedCoverableObject);
-            } else {
-              //no duplicate for it, leave it as is
-              if(_catalog[i].productId){
-                mergedCoverableObject.availableCounter += 2;
-              }
-              coverablesNoDuplicates.push(_catalog[i])
-            }
-          }
-        }
-        coverablesNoDuplicates = coverablesNoDuplicates.sort((first, second) => {
-          var nameA = first.name.toUpperCase();
-          var nameB = second.name.toUpperCase();
-          if (nameA < nameB) {
-            return -1;
-          }
-          if (nameA > nameB) {
-            return 1;
-          }
-          return 0;
-        });
-
-        return coverablesNoDuplicates;
-
-
+      if (_riskProtocol === 'bridge') {
+        cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[0].toUpperCase() === _coverName.toUpperCase())
+      } else if(_riskProtocol === 'nexus') {
+        cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[1].toUpperCase() === _coverName.toUpperCase())
+      } else if(_riskProtocol === 'insurace') {
+        cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[2].toUpperCase() === _coverName.toUpperCase())
+      } else if(_riskProtocol === 'ease') {
+        cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[3].toUpperCase() === _coverName.toUpperCase())
       }
 
-
-      static coverableDuplicate (cov1:any, cov2:any) {
-
-        if (cov1.name.toUpperCase() === cov2.name.toUpperCase()) {
-          // name equals
-          return cov1.name;
-        } else if (cov1.protocolAddress && cov2.protocolAddress &&
-          cov1.protocolAddress.toUpperCase() === cov2.protocolAddress.toUpperCase()){
-            // BRIDGE address equals NEXUS address
-            return cov1.name;
-          }
-          else if (cov1.source !== cov2.source){
-            let cov1SourceNameIndex;
-            if (cov1.source === 'bridge') {
-              cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[0].toUpperCase() === cov1.name.toUpperCase())
-            } else if(cov1.source === 'nexus') {
-              cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[1].toUpperCase() === cov1.name.toUpperCase())
-            } else if(cov1.source === 'insurace') {
-              cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[2].toUpperCase() === cov1.name.toUpperCase())
-            }
-            if (cov1SourceNameIndex > -1) {
-              let cov2SourceNameFound;
-              if (cov2.source === 'bridge') {
-                cov2SourceNameFound = bridge_nexus_insurace[cov1SourceNameIndex][0].toUpperCase() === cov2.name.toUpperCase();
-              } else if(cov2.source === 'nexus') {
-                cov2SourceNameFound = bridge_nexus_insurace[cov1SourceNameIndex][1].toUpperCase() === cov2.name.toUpperCase();
-              } else if(cov2.source === 'insurace') {
-                cov2SourceNameFound = bridge_nexus_insurace[cov1SourceNameIndex][2].toUpperCase() === cov2.name.toUpperCase();
-              }
-              if (cov2SourceNameFound) {
-                //both found in custom mapping
-                return bridge_nexus_insurace[cov1SourceNameIndex][3];
-              } else {
-                return;
-              }
-            } else {
-              return;
-            }
-          } else {
-            return;
-          }
-        }
-
-        static availableOnNetwork(networkId:number, module:string) {
-          if(!NetConfig.netById(networkId)) return false;
-          return NetConfig.netById(networkId).modules.find(mod => mod === module);
-        }
-
-
+      if(cov1SourceNameIndex && cov1SourceNameIndex > -1){
+        return bridge_nexus_insurace[cov1SourceNameIndex][4];
+      }else{
+        return _coverName
       }
+    }
+
+    static coverableDuplicate (cov1:any, cov2:any) {
+
+      if (cov1.name.toUpperCase() === cov2.name.toUpperCase()) {
+        return cov1.name;
+      } else if (cov1.protocolAddress && cov2.protocolAddress && cov1.protocolAddress.toUpperCase() === cov2.protocolAddress.toUpperCase()){
+        // BRIDGE address equals NEXUS address
+        return cov1.name;
+      }
+      else {
+        return;
+      }
+    }
+
+    static availableOnNetwork(networkId:number, module:string) {
+      if(!NetConfig.netById(networkId)) return false;
+      return NetConfig.netById(networkId).modules.find(mod => mod === module);
+    }
 
 
-      export default CatalogHelper
+  }
+
+  export default CatalogHelper

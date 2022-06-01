@@ -7,7 +7,7 @@ import {
   _getNexusDistributorsContract,
   _getBridgeV2Distributor,
   _getBridgeV2PolicyBookContract,
-  _getBridgeV2PolicyBookFacade,
+  _getBridgeV2PolicyBookFacade, _getEaseContract,
 
 } from "../helpers/getContract";
 
@@ -47,9 +47,18 @@ export async function buyCover(
   buyingWithNetworkCurrency:boolean,
   _quoteProtocol:any,
 ):Promise<any>{
-  // let txHash : any;
+  let tx:any;
 
-  let tx:any = {
+if(_distributorName === 'ease') {
+  tx = {
+    'hash': null,
+    'distributor': _quoteProtocol.distributorName,
+    'name': _quoteProtocol.name,
+    'amount':  _data.amount,
+    'currency': _quoteProtocol.asset,
+  }
+} else {
+  tx = {
     'hash': null,
     'distributor': _quoteProtocol.distributorName,
     'premium': fromWei(_quoteProtocol.price),
@@ -58,7 +67,7 @@ export async function buyCover(
     'currency': _quoteProtocol.currency,
     'period': _quoteProtocol.period,
   }
-
+}
   if(_distributorName == 'nexus'){
     tx.distributor  = 'nexus';
     const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
@@ -90,11 +99,43 @@ export async function buyCover(
               if (confirmationNumber === 0) {
                GoogleEvents.onTxConfirmation(tx);
                 global.events.emit("buy" , { status: "TX_CONFIRMED" } );
-
               }
             });
           });
 
+  } else if(_distributorName == 'ease'){
+    tx.distributor  = 'ease';
+    return await new Promise( async (resolve, reject) => {
+     await _getEaseContract(_quoteProtocol.vault.address).methods.mintTo(
+          _data.user,
+         NetConfig.NETWORK_CONFIG[0].brightTreasury,
+         _data.amount,
+          _data.expiry,
+          _data.vInt,
+          _data.r,
+          _data.s,
+          _quoteProtocol.vault.liquidation_amount,
+          _quoteProtocol.vault.liquidation_proof
+      ).send({ from: _data.user})
+          .on('transactionHash', (res:any) => {
+            tx.hash = res
+            global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
+            GoogleEvents.onTxHash(tx);
+            resolve({success:res});
+          })
+          .on('error', (err:any, receipt:any) => {
+            global.events.emit("buy" , { status: "REJECTED" } );
+            GoogleEvents.onTxRejected(tx);
+            reject( {error: err, receipt:receipt})
+          })
+          .on('confirmation', (confirmationNumber:any) => {
+            if (confirmationNumber === 0) {
+              GoogleEvents.onTxConfirmation(tx);
+              global.events.emit("buy" , { status: "TX_CONFIRMED" } );
+
+            }
+          });
+    });
   } else if(_distributorName == 'bridge'){
 
     const bridgeV2 = _getBridgeV2Distributor(NetConfig.netById(global.user.ethNet.networkId).bridgeV2Distributor, global.user.web3 );

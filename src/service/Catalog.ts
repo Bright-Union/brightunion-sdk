@@ -9,6 +9,7 @@ import {
 } from './helpers/getContract';
 import NetConfig from './config/NetConfig';
 import GoogleEvents from './config/GoogleEvents';
+import EaseApi from "@/service/distributorsApi/EaseApi";
 
 export async function getCatalog(): Promise<any> {
 
@@ -25,6 +26,9 @@ export async function getCatalog(): Promise<any> {
   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL')) {
     catalogPromiseArray.push(getBridgeV2Coverables())
   }
+
+  // push EASE
+  catalogPromiseArray.push(getEaseCoverables())
 
   for (let net of global.user.web3Passive) {
     catalogPromiseArray.push(getInsuraceCoverables(net.networkId))
@@ -48,9 +52,6 @@ export async function getCatalog(): Promise<any> {
 
 export async function getBridgeV2Coverables(): Promise<any[]> {
 
-  let trustWalletAssets: { [key: string]: any } = {};
-  trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
-
   if(!global.user.ethNet || !global.user.ethNet.networkId){
     return;
   }
@@ -65,9 +66,9 @@ export async function getBridgeV2Coverables(): Promise<any[]> {
     return BridgePolicyBookRegistryContract.methods.count().call().then((policyBookCounter:any) => {
 
       return BridgePolicyBookRegistryContract.methods.listWithStats(0, policyBookCounter).call()
-      .then(({_policyBooksArr, _stats}:any) => {
-        const coverablesArray =    BridgeHelper.catalogDataFormat(_stats, _policyBooksArr, trustWalletAssets);
-        global.events.emit("catalog" , { items: coverablesArray , distributor:"bridge" , itemCount: coverablesArray.length } );
+      .then( async ({_policyBooksArr, _stats}:any) => {
+        const coverablesArray =  await BridgeHelper.catalogDataFormat(_stats, _policyBooksArr);
+        global.events.emit("catalog" , { items: coverablesArray , distributorName:"bridge" , networkId: 1, itemsCount: coverablesArray.length } );
         return coverablesArray;
       })
 
@@ -78,7 +79,7 @@ export async function getBridgeV2Coverables(): Promise<any[]> {
 
 export async function getNexusCoverables(): Promise<any[]> {
 
-    return await NexusApi.fetchCoverables().then( (data:object) => {
+    return await NexusApi.fetchCoverables().then( async(data:object) => {
 
       const coverablesArray: any  = [];
       for ( const [ key, value ] of Object.entries(data) ) {
@@ -89,11 +90,13 @@ export async function getNexusCoverables(): Promise<any[]> {
         let type = CatalogHelper.commonCategory(value.type, 'nexus')
         let typeDescr = type ? type : 'protocol';
 
+        let logo:any = await CatalogHelper.getLogoUrl(value.logo, key , 'nexus');
+
         coverablesArray.push(CatalogHelper.createCoverable({
           protocolAddress: key,
           nexusCoverable: key,
-          logo: `https://app.nexusmutual.io/logos/${value.logo}`,
-          name: value.name,
+          logo: logo,
+          name: CatalogHelper.unifyCoverName(value.name, 'nexus' ),
           type: type,
           typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
           source: 'nexus',
@@ -103,7 +106,7 @@ export async function getNexusCoverables(): Promise<any[]> {
 
       }
 
-      global.events.emit("catalog" , { items: coverablesArray , distributor:"nexus" , itemCount: coverablesArray.length } );
+      global.events.emit("catalog" , { items: coverablesArray , distributorName:"nexus" , networkId: 1, itemsCount: coverablesArray.length } );
 
       return coverablesArray;
 
@@ -112,50 +115,25 @@ export async function getNexusCoverables(): Promise<any[]> {
   }
 
   export async function getInsuraceCoverables(netId : string|number) : Promise<object[]> { // Daniel
-    let trustWalletAssets: { [key: string]: any } = {};
-    trustWalletAssets = await CatalogHelper.getTrustWalletAssets();
 
     let netSymbol = NetConfig.netById(netId) ? NetConfig.netById(netId).symbol : false;
     if(!netSymbol) return [];
 
-    return await InsuraceApi.fetchCoverables(netId).then((data:object) => {
+    return await InsuraceApi.fetchCoverables(netId).then( async (data:object) => {
 
       const coverablesArray = [];
       for (const [key, value] of Object.entries(data)) {
         if (value.status !== 'Enabled') {
           continue;
         }
-        let assetIndex: any = undefined;
-        Object.keys(trustWalletAssets).find((k: string) => {
-          if (trustWalletAssets[k].name && value.coingecko && trustWalletAssets[k].name.toUpperCase() == value.coingecko.token_id.toUpperCase()) {
-            assetIndex = trustWalletAssets[k].logoURI;
-          }
-        });
 
-        let logo: string = null;
+        let logo:any = await CatalogHelper.getLogoUrl( value.image_urls[0] , null, 'insurace');
 
-        if(assetIndex && value.name !== 'Pendle'){
-          logo = assetIndex;
-        }else{
-          let specialLogo:any = CatalogHelper.getSpecialLogoName(value.name);
-            if(specialLogo){
-              logo = specialLogo;
-            }else{
-              let name = value.name + ' '; // needed for V1 regex to match
-              name = name.replace( '.' , "");
-              name = name.replace( "(", "");
-              name = name.replace( ")", "");
-              name = name.replace(/V.[^0-9]/g, "");
-              name = name.replace(/\s+/g, '')
-
-              logo = `https://app.insurace.io/asset/product/${name}.png`
-            }
-        }
         let type = CatalogHelper.commonCategory(value.risk_type, 'insurace')
         let typeDescr = type ? type : 'protocol';
 
         coverablesArray.push(CatalogHelper.createCoverable({
-            name: value.name.trim(),
+            name: CatalogHelper.unifyCoverName(value.name.trim(), 'insurace' ),
             logo: logo,
             type: type,
             typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
@@ -170,12 +148,35 @@ export async function getNexusCoverables(): Promise<any[]> {
 
         }
 
-        global.events.emit("catalog" , { items: coverablesArray , distributor:"insurace" , itemCount: coverablesArray.length } );
+        global.events.emit("catalog" , { items: coverablesArray , distributorName:"insurace" , networkId: netId, itemsCount: coverablesArray.length } );
 
         return coverablesArray;
       })
     }
 
+    export async function getEaseCoverables() {
+      return await EaseApi.fetchCoverables()
+          .then(async (data:any) => {
+            const coverablesArray: any  = [];
+            data.forEach((item: any) => {
+                const protocolName = item.top_protocol;
+              const type = CatalogHelper.commonCategory(item.protocol_type, 'ease')
+              const typeDescr = type ? type : 'protocol';
+              coverablesArray.push(CatalogHelper.createCoverable({
+                protocolAddress: item.address,
+                name: CatalogHelper.unifyCoverName(protocolName, 'ease' ),
+                source: 'ease',
+                logo: item.icon,
+                rawDataEase: item,
+                type: type,
+                typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
+                stats: {"capacityRemaining": item.remaining_capacity, "unitCost":item.token.apy, "priceETH": item.token.priceETH, "priceUSD": item.token.priceUSD}
+              }))
+              })
+            global.events.emit("catalog" , { items: coverablesArray , distributorName:"ease" , networkId: 1, itemsCount: coverablesArray.length } );
+            return coverablesArray;
+          });
+    }
 
 
 export default {

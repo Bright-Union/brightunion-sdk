@@ -17,9 +17,10 @@ import {
   _getNexusGatewayContract,
   _getNexusClaimsDataContract,
   _getNexusDistributor,
-  _getNexusMasterContract,
+  _getNexusMasterContract, _getIERC20Contract, _getEaseContract,
 } from "../helpers/getContract";
-import {hexToUtf8, asciiToHex} from 'web3-utils';
+import {hexToUtf8, asciiToHex, fromWei} from 'web3-utils';
+import EaseApi from "@/service/distributorsApi/EaseApi";
 
 /**
  * Returns the total cover count owned by an address
@@ -86,6 +87,8 @@ export async function getCovers(
       return await getCoversBridgeV2();
     }else if(_distributorName == 'nexus'){
       return await getCoversNexus();
+    }else if(_distributorName == 'ease'){
+      return await getCoversEase();
     }
 
   // }else{
@@ -111,6 +114,8 @@ export async function getCoversNexus():Promise<any>{
   const distributor = await _getNexusDistributor(NetConfig.netById(global.user.ethNet.networkId).nexusDistributor );
   const count = await distributor.methods.balanceOf(global.user.account).call();
 
+  global.events.emit("covers" , { itemsCount: count } );
+
   let covers = [];
   //fetch covers bought from Nexus Distributor
   for (let i = 0; i < Number(count); i++) {
@@ -119,8 +124,8 @@ export async function getCoversNexus():Promise<any>{
     cover.id = tokenId;
     cover.source = 'distributor';
     cover.risk_protocol = 'nexus';
-    // cover.logo = cover.logo || require('@/assets/img/nexus.png');
     cover.net = global.user.ethNet.networkId;
+    global.events.emit("covers" , { coverItem: cover} );
     covers.push(cover)
   }
 
@@ -134,14 +139,17 @@ export async function getCoversNexus():Promise<any>{
 
   //fetch covers bought from Nexus directly
   const coverIds = await nexusQuotationContract.methods.getAllCoversOfUser(global.user.account).call();
+
+  global.events.emit("covers" , { itemsCount: coverIds.length } );
+
   for (const coverId of coverIds) {
     try {
       const cover = await nexusGatewayContract.methods.getCover(coverId).call();
       cover.id = coverId;
       cover.source = 'nexus';
       cover.risk_protocol = 'nexus';
-      // cover.logo = cover.logo || require('@/assets/img/nexus.png')
       cover.net = global.user.ethNet.networkId;
+      global.events.emit("covers" , { coverItem: cover} );
       covers.push(cover)
     } catch (e) {
       //ignore this cover
@@ -182,6 +190,8 @@ export async function getCoversInsurace(_web3:any):Promise<any>{
   const coverDataInstance = await _getInsurAceCoverDataContract(coverDataAddress, _web3.web3Instance);
   const count =  await coverDataInstance.methods.getCoverCount(_web3.account).call();
 
+  global.events.emit("covers" , { itemsCount: count } );
+
   for (let coverId = 1; coverId <= Number(count); coverId++) {
 
     const expirationP = coverDataInstance.methods.getCoverEndTimestamp(_web3.account, coverId.toString()).call();
@@ -200,23 +210,25 @@ export async function getCoversInsurace(_web3:any):Promise<any>{
     await  Promise.all(coverDataPromises).then((_data:any) => {
 
       const [expiration, amount, currency, status, prodDetails, startTime] = _data;
+      let coverNameUnified = CatalogHelper.unifyCoverName(hexToUtf8(prodDetails['0']), 'insurace' );
 
-      allCovers.push(
-        {
-          risk_protocol: 'insurace',
-          contractName: hexToUtf8(prodDetails['0']),
-          logo: '',
-          coverType: hexToUtf8(prodDetails['1']),
-          coverAmount: amount,
-          coverAsset: currency,
-          startTime: startTime,
-          validUntil: expiration,
-          endTime: expiration,
-          status: status,
-          net: _web3.networkId,
-          rawData: prodDetails,
-        }
-      )
+      let cover = {
+        risk_protocol: 'insurace',
+        contractName: coverNameUnified,
+        coverType: hexToUtf8(prodDetails['1']),
+        coverAmount: amount,
+        coverAsset: currency,
+        startTime: startTime,
+        validUntil: expiration,
+        endTime: expiration,
+        status: status,
+        net: _web3.networkId,
+        rawData: prodDetails,
+      }
+
+      global.events.emit("covers" , { coverItem: cover} );
+
+      allCovers.push(cover);
 
     });
 
@@ -244,37 +256,37 @@ export async function getCoversBridgeV2():Promise<any>{
 
   let limit = parseInt(nPolicies);
 
+  global.events.emit("covers" , { itemsCount: limit } );
+
   for (let i = 0; i < limit; i++) {
-    let info = mergedPolicyInfos[i];
-    let policyBookAddress = mergedPolicyBooks[i];
-    if (policyBookAddress === '0x0000000000000000000000000000000000000000') {
+    if (mergedPolicyBooks[i] === '0x0000000000000000000000000000000000000000') {
       //Bridge BUG, means no actual policy info
       limit++;
       continue;
     }
-    let policyBook = await _getBridgeV2PolicyBookContract(policyBookAddress, global.user.ethNet.web3Instance);
+    let policyBook = await _getBridgeV2PolicyBookContract(mergedPolicyBooks[i], global.user.ethNet.web3Instance);
     let policyBookinfo = await policyBook.methods.info().call();
     let claimStatus = mergedPolicyStatuses[i];
 
     let asset = trustWalletAssets[Object.keys(trustWalletAssets)
       .find(key => key.toLowerCase() === policyBookinfo._insuredContract.toLowerCase())];
-      let logo = asset ? asset.logoURI : 'logo link'
-      // let logo = asset ? asset.logoURI : require('@/assets/img/bridge.svg')
-      let name = asset ? asset.name : policyBookinfo._symbol
+
+      let coverNameUnified = CatalogHelper.unifyCoverName( asset ? asset.name : policyBookinfo._symbol , 'bridge' );
 
       let cover = {
         risk_protocol: 'bridge',
-        policyBookAddr: policyBookAddress,
+        policyBookAddr: mergedPolicyBooks[i],
         status: claimStatus,
-        coverAmount: info.coverAmount,
-        validUntil: info.endTime,
-        endTime: info.endTime,
-        premium: info.premium,
-        startTime: info.startTime,
-        name: name,
-        logo: logo,
+        coverAmount: mergedPolicyInfos[i].coverAmount,
+        validUntil: mergedPolicyInfos[i].endTime,
+        endTime: mergedPolicyInfos[i].endTime,
+        premium: mergedPolicyInfos[i].premium,
+        startTime: mergedPolicyInfos[i].startTime,
+        name: coverNameUnified,
         net: global.user.ethNet.networkId
       }
+
+      global.events.emit("covers" , { coverItem: cover} );
 
       policies.push(cover)
     }
@@ -285,6 +297,39 @@ export async function getCoversCountBridge():Promise<any>{
 
 
   return [];
+}
+
+export async function getCoversEase():Promise<any>{
+  return await EaseApi.fetchCoverables()
+      .then((data:any) => {
+        let policies: any = []
+        data.forEach(async(vault: any) => {
+          let protocol = await _getIERC20Contract(vault.token.address);
+          let instance = await _getEaseContract(vault.address);
+          protocol.methods.balanceOf(global.user.account).call().then((balance: any) => {
+            if (balance > 0) {
+              vault.tokenBalance = fromWei(balance);
+              let cover = {
+                risk_protocol: 'ease',
+                status: 0,
+                coverAmount: balance,
+                vaultCurrency: vault.symbol,
+                coverAsset: vault.display_name,
+                validUntil: Date.now(),
+                endTime: Date.now(),
+                startTime: Date.now(),
+                name: CatalogHelper.unifyCoverName(vault.top_protocol, 'ease'),
+                net: global.user.ethNet.networkId,
+                type: vault.protocol_type,
+                instance: instance
+              }
+              global.events.emit("covers", {coverItem: cover});
+              policies.push(cover)
+            }
+          })
+        });
+        return policies;
+      })
 }
 
 export default {

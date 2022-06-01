@@ -10,6 +10,7 @@ import { toWei, hexToBytes, numberToHex } from "web3-utils"
 import {getCoverMin} from "./helpers/cover_minimums"
 import GoogleEvents from './config/GoogleEvents';
 import BridgeHelper from './distributorsApi/BridgeHelper';
+import EaseApi from "@/service/distributorsApi/EaseApi";
 
 
 /**
@@ -35,6 +36,7 @@ export async function getQuotes(
   quotesPromiseArray.push(getQuoteFrom('nexus', _amount, _currency, _period, _protocol, null ))
   quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, global.user.web3 ))
   quotesPromiseArray.push(getQuoteFrom('bridge' , _amount, _currency, _period, _protocol, null ))
+  quotesPromiseArray.push(getQuoteFrom('ease' , _amount, _currency, _period, _protocol, null ))
 
   for (let net of global.user.web3Passive) {
     quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, net))
@@ -76,7 +78,10 @@ export async function getQuoteFrom(
     return await getNexusQuote(_amount,_currency,_period,_protocol );
   }else if(_distributorName == 'insurace'){
     return await getInsuraceQuote( _net , _amount,_currency,_period,_protocol);
-  }else {
+  }else if(_distributorName == 'ease'){
+    return await getEaseQuote(_amount,_currency,_period,_protocol );
+  }
+  else {
     return  {error: 'supported distributor names are: bridge, insurace, nexus'}
   }
 }
@@ -183,6 +188,16 @@ export async function getInsuraceQuotes( _arrayOfQuotes:any ) : Promise<object> 
     return await InsuraceApi.getMultipleCoverPremiums( newWeb3Instance , amounts , currency, periods, protocolIds);
   }else{
     return { error: "Please switch to Insurace supported network" }
+  }
+}
+
+export async function getEaseQuote(_amount: any, _currency: any, _period: any, _protocol: any): Promise<object> {
+  if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'EASE')) {
+    if (_protocol.rawDataEase) {
+      return await EaseApi.fetchQuote(_amount, _currency, _period, _protocol);
+    }
+  } else {
+    return {error: "Not supported network for Ease"}
   }
 }
 

@@ -3,20 +3,13 @@ import { fromWei} from 'web3-utils'
 
 const { gtag, install } = require("ga-gtag");
 
+import Analytics from 'analytics'
+const googleTagManager:any = require('@analytics/google-tag-manager');
+
 const appId = 'G-E5EN28CF28';
 // const appId = 'G-KCNQQRKDP7'; //app - ui ID
 // const appId = 'UA-189970983-1';// GA3 property ID
 install(appId);
-
-// Hereby the Google TagManager container code:
-//
-// <!-- Google Tag Manager -->
-// <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-// new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-// j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-// 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-// })(window,document,'script','dataLayer','GTM-WCCMKXR');</script>
-// <!-- End Google Tag Manager -->
 
 // https://en.wikipedia.org/wiki/ISO_4217#Active_codes
 const CURRENCIES: any = {
@@ -37,8 +30,31 @@ const CURRENCIES: any = {
 
 class GoogleEvents {
 
+  static InitTechManager = () => {
+
+    const analytics = Analytics({
+      app: 'bright-union-sdk',
+      plugins: [
+        googleTagManager.default({
+          containerId: 'GTM-WCCMKXR'
+        })
+      ]
+    })
+
+    analytics.page();
+
+    // GTMSDKTEST
+    /* Track a custom event */
+    // analytics.track('GTMSDKTEST', {
+    //   item: 'test',
+    // })
+
+  }
+
   static onBUInit = () => {
     if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
+
+      this.InitTechManager();
 
         gtag('set', 'user_properties', {
           'account': global.user.account,
@@ -92,7 +108,7 @@ class GoogleEvents {
             quantity: _quote.period,
             item_category: _quote._net ? _quote._net.symbol : global.user.symbol,
             item_category2: _type,
-            item_category3:  this.setFormatCurrency(_quote._currency),
+            item_category3:  _quote._currency,
           }
         ]
       });
@@ -116,7 +132,7 @@ class GoogleEvents {
             quantity: _items.params[1][i],
             item_category: global.user.symbol,
             item_category2: "Multibuy",
-            item_category3:   this.setFormatCurrency(_items.currency.name),
+            item_category3: _items.currency.name,
           })
       }
       gtag("event", "add_to_cart", {
@@ -147,7 +163,7 @@ class GoogleEvents {
             price: _quote.price,
             quantity: _quote.period,
             item_category: global.user.symbol,
-            item_category3:   this.setFormatCurrency(_quote.currency),
+            item_category3: _quote.currency,
           }
         ]
       });
@@ -176,7 +192,7 @@ class GoogleEvents {
             item_category: global.user.symbol,
             item_category2: _quote.amounts ? "Multibuy" : "SingleBuy",
             item_category5: _message,
-            item_category3:   this.setFormatCurrency(_quote.currency),
+            item_category3: _quote.currency,
           }
         ]
       });
@@ -200,7 +216,7 @@ class GoogleEvents {
         items: [
           {
             item_id: tx.productId,
-            item_name: tx.productId,
+            item_name: tx.name,
             affiliation: global.user.clientKey,
             currency: this.setFormatCurrency( tx.currency),
             item_brand: tx.distributor,
@@ -208,7 +224,7 @@ class GoogleEvents {
             price: fromWei(tx.premium),
             quantity: tx.period,
             item_category: global.user.symbol,
-            item_category3:   this.setFormatCurrency(tx.currency),
+            item_category3: tx.currency,
           }]
         });
     }
@@ -246,7 +262,7 @@ class GoogleEvents {
             quantity: tx.period,
             item_category: global.user.symbol,
             item_category5: "REJECTED",
-            item_category3:   this.setFormatCurrency(tx.currency),
+            item_category3: tx.currency,
           }
         ]
       });

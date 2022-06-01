@@ -10,6 +10,7 @@ declare interface  Cover {
         expiration          ? : number ;
         status              ? : number ;
         refAddress          ? : string ;
+        instance          ? : object ;
 }
 
 // declare interface CoversArray {
