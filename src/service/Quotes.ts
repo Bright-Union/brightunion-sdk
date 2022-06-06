@@ -11,6 +11,7 @@ import {getCoverMin} from "./helpers/cover_minimums"
 import GoogleEvents from './config/GoogleEvents';
 import BridgeHelper from './distributorsApi/BridgeHelper';
 import EaseApi from "@/service/distributorsApi/EaseApi";
+import UnslashedAPI from "@/service/distributorsApi/UnslashedAPI";
 
 
 /**
@@ -37,6 +38,7 @@ export async function getQuotes(
   quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, global.user.web3 ))
   quotesPromiseArray.push(getQuoteFrom('bridge' , _amount, _currency, _period, _protocol, null ))
   quotesPromiseArray.push(getQuoteFrom('ease' , _amount, _currency, _period, _protocol, null ))
+  quotesPromiseArray.push(getQuoteFrom('unslashed' , _amount, _currency, _period, _protocol, null ))
 
   for (let net of global.user.web3Passive) {
     quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, net))
@@ -80,6 +82,8 @@ export async function getQuoteFrom(
     return await getInsuraceQuote( _net , _amount,_currency,_period,_protocol);
   }else if(_distributorName == 'ease'){
     return await getEaseQuote(_amount,_currency,_period,_protocol );
+  }else if(_distributorName == 'unslashed'){
+    return await getUnslashedQuote(_amount,_currency,_period,_protocol );
   }
   else {
     return  {error: 'supported distributor names are: bridge, insurace, nexus'}
@@ -199,6 +203,16 @@ export async function getEaseQuote(_amount: any, _currency: any, _period: any, _
   } else {
     return {error: "Not supported network for Ease"}
   }
+}
+
+export async function getUnslashedQuote(_amount: any, _currency: any, _period: any, _protocol: any): Promise<object> {
+  // if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'UNSLASHED')) {
+    // if (_protocol.rawDataUnslashed) {
+      return await UnslashedAPI.fetchQuote(_amount, _currency, _period, _protocol);
+  //   // }
+  // } else {
+  //   return {error: "Not supported network for Ease"}
+  // }
 }
 
 export default {

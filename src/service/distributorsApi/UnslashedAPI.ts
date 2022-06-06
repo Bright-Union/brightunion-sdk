@@ -1,0 +1,89 @@
+import axios from 'axios';
+import {_getUnslashedContract} from "@/service/helpers/getContract";
+import CatalogHelper from '../helpers/catalogHelper';
+import {fromWei, toBN} from "web3-utils";
+
+
+export default class UnslashedAPI {
+    static fetchCoverables() {
+
+        return axios.get(`https://static.unslashed.finance/networks/1.json`)
+            .then((response) => {
+                return response.data;
+            }).catch(error => {
+                return [];
+            });
+    }
+
+    static fetchQuote(amount: number, currency: string, period: number, protocol: any) {
+        return this.fetchCoverables()
+            .then(async (data: any) => {
+                let cover = data.BasketableMarket.data;
+                let coverArr = Object.values(cover);
+                let addressArr = Object.keys(cover);
+                let fullCover:any = [];
+                for (let i = 0; i < coverArr.length; i ++) {
+                    let coverObj = {
+                        address: addressArr[i],
+                        cover: coverArr[i]
+                    }
+                    fullCover.push(coverObj);
+                }
+                const protocolName = protocol.name.toLowerCase().split(" ")[0];
+                const quote = fullCover.find((item: any) => item.cover.static.name.toLowerCase().includes(protocolName));
+                const unslashedInstance = await _getUnslashedContract(quote.address);
+                console.log(unslashedInstance.methods)
+                console.log(quote)
+                let apy = await unslashedInstance.methods.getDynamicPricePerYear18eRatio().call().then((pricePerYear:any) => {
+                    return fromWei(pricePerYear);
+                })
+                let price = await unslashedInstance.methods.getPremium().call().then((premium:any) => {
+                    return premium;
+                })
+               // unslashedInstance.methods.getCollateralAvailableForCover().call().then((capacity:any) => {
+               //     console.log(fromWei(capacity))
+               //  })
+                if(quote) {
+                    const errorMsg = quote.cover.static.soldOut ? {message: `Sold out`, errorType: "capacity"} : null;
+                    global.events.emit("quote", {
+                        status: "INITIAL_DATA",
+                        distributorName: "Unslashed",
+                        amount: amount,
+                        currency: currency,
+                        period: period,
+                        protocol: protocol,
+                        chain: 'ETH',
+                        name: quote.cover.name,
+                        source: 'ease',
+                        rawDataUnslashed: quote.cover.static,
+                        type: quote.cover.type,
+                    });
+
+                    return CatalogHelper.quoteFromCoverable(
+                        'unslashed',
+                        protocol,
+                        {
+                            amount: amount,
+                            currency: currency,
+                            period: period,
+                            chain: 'ETH',
+                            chainId: global.user.ethNet.networkId,
+                            price: price,
+                            pricePercent: Number(apy) * 100,
+                            response: quote.cover.static,
+                            source: 'unslashed',
+                            minimumAmount: 1,
+                            name: quote.cover.static.name,
+                            errorMsg: errorMsg,
+                            type: quote.cover.static.type,
+                        },
+                        {
+                            capacity: quote.cover.static.soldOut ? 0 : 100000,
+                        }
+                    );
+                }
+                // return {}
+                })
+
+    }
+}
