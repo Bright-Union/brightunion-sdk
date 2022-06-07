@@ -1,7 +1,8 @@
 import axios from 'axios';
-import {_getUnslashedContract} from "@/service/helpers/getContract";
+import {_getUnslashedCapasityContract, _getUnslashedContract} from "@/service/helpers/getContract";
 import CatalogHelper from '../helpers/catalogHelper';
-import {fromWei, toBN} from "web3-utils";
+import {fromWei, toWei} from "web3-utils";
+import CurrencyHelper from "@/service/helpers/currencyHelper";
 
 
 export default class UnslashedAPI {
@@ -29,20 +30,28 @@ export default class UnslashedAPI {
                     }
                     fullCover.push(coverObj);
                 }
+                console.log(currency)
+                if(currency === 'USD') {
+                    amount = Number(CurrencyHelper.usd2eth(amount))
+                }
                 const protocolName = protocol.name.toLowerCase().split(" ")[0];
                 const quote = fullCover.find((item: any) => item.cover.static.name.toLowerCase().includes(protocolName));
                 const unslashedInstance = await _getUnslashedContract(quote.address);
-                console.log(unslashedInstance.methods)
-                console.log(quote)
+                const unslashedCapacityInstance = await _getUnslashedCapasityContract(quote.address);
                 let apy = await unslashedInstance.methods.getDynamicPricePerYear18eRatio().call().then((pricePerYear:any) => {
                     return fromWei(pricePerYear);
                 })
-                let price = await unslashedInstance.methods.getPremium().call().then((premium:any) => {
-                    return premium;
+                let price = await unslashedInstance.methods.coverToPremium(toWei(String(amount))).call().then((premium:any) => {
+                  return premium;
                 })
-               // unslashedInstance.methods.getCollateralAvailableForCover().call().then((capacity:any) => {
-               //     console.log(fromWei(capacity))
-               //  })
+                    price = currency === 'USD' ? Number(fromWei(CurrencyHelper.eth2usd(price))) : fromWei(price)
+                console.log(amount)
+                console.log(price)
+                // console.log(unslashedCapacityInstance.methods)
+                // unslashedCapacityInstance.methods.coverToPremium(toWei(String(amount))).call().then((premium:any) => {
+                //     // console.log(fromWei(premium, 'ether'));
+                //     console.log(premium);
+                // })
                 if(quote) {
                     const errorMsg = quote.cover.static.soldOut ? {message: `Sold out`, errorType: "capacity"} : null;
                     global.events.emit("quote", {

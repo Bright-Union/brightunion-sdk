@@ -28,7 +28,7 @@ export default class EaseApi {
                 capacityArr.push(item.remaining_capacity);
             })
             capacityArr = this.rangeArray(capacityArr);
-            const exceedsCapacity = currency === 'USD' ? amount > capacityArr[capacityArr.let - 1] :  amount > Number(CurrencyHelper.usd2eth(capacityArr[capacityArr.let - 1]));
+            const exceedsCapacity = currency === 'USD' ? amount > capacityArr[capacityArr.length - 1] :  amount > Number(CurrencyHelper.usd2eth(capacityArr[capacityArr.length - 1]));
             const errorMsg = exceedsCapacity ? { message: `Maximum available capacity is `, currency: currency, errorType:"capacity"} : null;
                 global.events.emit("quote" , {
                     status: "INITIAL_DATA" ,
