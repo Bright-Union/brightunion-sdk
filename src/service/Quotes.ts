@@ -206,13 +206,13 @@ export async function getEaseQuote(_amount: any, _currency: any, _period: any, _
 }
 
 export async function getUnslashedQuote(_amount: any, _currency: any, _period: any, _protocol: any): Promise<object> {
-  // if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'UNSLASHED')) {
-    // if (_protocol.rawDataUnslashed) {
+  if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'UNSLASHED')) {
+    if (_protocol.rawDataUnslashed) {
       return await UnslashedAPI.fetchQuote(_amount, _currency, _period, _protocol);
-  //   // }
-  // } else {
-  //   return {error: "Not supported network for Ease"}
-  // }
+    }
+  } else {
+    return {error: "Not supported network for Unslashed"}
+  }
 }
 
 export default {

@@ -183,32 +183,39 @@ export async function getNexusCoverables(): Promise<any[]> {
     }
 
     export async function getUnslashedCoverables() {
-  return await UnslashedAPI.fetchCoverables()
-      .then(async (data:any) => {
-        const coverablesArray: any  = [];
-        let cover = data.BasketableMarket.data;
-        let coverArr = Object.values(cover);
-        coverArr.forEach(async (item:any) => {
-          const protocolName = item.static.name;
-          const type = item.static.type
-          const typeDescr = type ? type : 'protocol';
-          if(!item.static.hide) {
-            coverablesArray.push(CatalogHelper.createCoverable({
-              protocolAddress: item.static.address,
-              name: CatalogHelper.unifyCoverName(protocolName, 'unslashed' ),
-              source: 'unslashed',
-              logo: item.static.icon,
-              rawDataUnslashed: item.static,
-              type: type,
-              typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
-              stats: {}
-            }))
-          }
-        })
-        global.events.emit("catalog" , { items: coverablesArray , distributorName:"unslashed" , networkId: 1, itemsCount: coverablesArray.length } );
-        return coverablesArray;
-      })
-    }
+      return await UnslashedAPI.fetchCoverables()
+          .then(async (data: any) => {
+            const coverablesArray: any = [];
+            let cover = data.BasketableMarket.data;
+            let coverArr = Object.values(cover);
+
+            coverArr.forEach(async(item: any) => {
+              const protocolName = item.static.name;
+              const type = item.static.type
+              const typeDescr = type ? type : 'protocol';
+              let logo:any = await CatalogHelper.getLogoUrl( item.static.name , null, 'unslashed');
+              if (!item.static.hide) {
+                coverablesArray.push(CatalogHelper.createCoverable({
+                  protocolAddress: item.static.address,
+                  name: CatalogHelper.unifyCoverName(protocolName, 'unslashed'),
+                  source: 'unslashed',
+                  logo: logo,
+                  rawDataUnslashed: item.static,
+                  type: type,
+                  typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
+                  stats: {}
+                }))
+              }
+            })
+            global.events.emit("catalog", {
+              items: coverablesArray,
+              distributorName: "unslashed",
+              networkId: 1,
+              itemsCount: coverablesArray.length
+            });
+            return coverablesArray;
+          })
+}
 
 
 export default {

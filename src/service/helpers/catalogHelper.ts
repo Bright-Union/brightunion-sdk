@@ -26,7 +26,7 @@ const bridge_nexus_insurace = [
   ['', 'DODO Exchange', 'DODO', '', '', 'DODO'],
   ['Coinbase', '', 'Coinbase', '', 'Coinbase Exchange', 'Coinbase'],
   ['', 'Harvest Finance', 'Harvest Finance', '', 'Harvest', 'Harvest Finance'],
-  ['Maker', 'MakerDAO MCD', 'MakerDAO MCD', '', 'MakerDAO', 'MakerDAO'],
+  ['Maker', 'MakerDAO MCD', 'MakerDAO MCD', '', 'Maker DAO', 'MakerDAO'],
   ['', 'Pancakeswap V1', 'PancakeSwap', '', '', 'PancakeSwap'],
   ['Perpetual', 'Perpetual Protocol', 'Perpetual Protocol', '', 'Perpetual Protocol', 'Perpetual Protocol'],
   ['bmiV2PendleFinanceCover', 'Pendle', "Pendle", '', '', "Pendle"],
@@ -36,7 +36,11 @@ const bridge_nexus_insurace = [
   ['', 'Kyber (Katalyst)', 'Kyber', '', 'Kyber', 'Kyber'],
   ['', 'DyDx Perpetual', 'DyDx', '', '', 'DyDx'],
   ['', 'ETH 2.0 (deposit contract)', 'ETH 2.0', '', '', 'ETH 2.0'],
-  ['', 'OlympusDAO', 'Olympus DAO', '', '', 'Olympus DAO'],
+  ['', 'OlympusDAO', 'Olympus DAO', '', 'Olympus', 'Olympus DAO'],
+  ['','Paraswap v1','', '', 'Paraswap', 'Paraswap'],
+  ['','','UST De-Peg', '', 'UST Peg', 'UST De-Peg'],
+  ['','','USDT De-Peg', '', 'USDT Peg', 'USDT De-Peg'],
+  ['','','', '', '', ''],
   ['Spell Token', 'Abracadabra', 'Abracadabra.money', '', '', 'Abracadabra'],
   ['Uniswap', 'Uniswap V1', '', '', '', 'Uniswap V1'],
   ['Uniswap', 'Uniswap V2', 'Uniswap V2', '', 'Uniswap V2 & V3', 'Uniswap V2'],
@@ -174,6 +178,11 @@ const catalogLogoLinks: any = [
   { name: "0.exchange" , link:"https://app.bridgemutual.io/assets/icons/coins/0.webp"},
   { name: "Keeper DAO" , link:"https://app.bridgemutual.io/assets/icons/coins/keeper_dao_logo.webp"},
   { name: "Universe.XYZ" , link:"https://app.bridgemutual.io/assets/icons/coins/universexyz.webp"},
+  { name: "Vires Finance + USDN" , link:"https://app.unslashed.finance/logos/vires-usdn.svg"},
+  { name: "Solv Protocol" , link:"https://app.unslashed.finance/logos/solv.svg"},
+  { name: "Old Lido ETH 2.0" , link:"https://app.unslashed.finance/logos/Lido@2x.png"},
+  { name: "Neutrino + USDN Peg" , link:"https://app.unslashed.finance/logos/WavesNeutrino%2BUSDNPeg.svg"},
+  { name: "Instadapp" , link:"https://app.unslashed.finance/logos/instadapp@2x.png"},
 ];
 
 class CatalogHelper {
@@ -190,7 +199,6 @@ class CatalogHelper {
         assetLogo = trustWalletAssets[k].logoURI;
       }
     });
-
     let specialLogo:any = CatalogHelper.getSpecialLogoName(_name);
 
     if(assetLogo){
@@ -315,7 +323,8 @@ class CatalogHelper {
       rawDataNexus: obj.rawDataNexus,                                           //field will be increased if similar products found
       rawDataBridge: obj.rawDataBridge,                                           //field will be increased if similar products found
       rawDataInsurace: obj.rawDataInsurace,                                           //field will be increased if similar products found
-      rawDataEase: obj.rawDataEase
+      rawDataEase: obj.rawDataEase,
+      rawDataUnslashed: obj.rawDataUnslashed
     };
   }
 
