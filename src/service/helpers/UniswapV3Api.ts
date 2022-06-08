@@ -20,38 +20,38 @@ class UniswapV3Api {
     }
 
     public static chooseRouteAndSetPrice(_routeData: any) {
-
-      let routeDataFormated = {
-        swapVia: "0x0000000000000000000000000000000000000000",
-        swapVia2: "0x0000000000000000000000000000000000000000",
-        poolFeeA: 0,
-        poolFeeB: 0,
-        poolFeeC: 0,
-        protocol: 'V3',
+      // "0x0000000000000000000000000000000000000000",
+      let routeDataFormated:any = {
+        swapVia: [],
+        poolFees: [],
+        protocol: null,
       }
 
       let amountIn = null;
 
-      console.log("pure Uni Output Rout Data 0 " , _routeData);
+      console.log("pure Uni Output Rout Data 1 " , _routeData);
 
       if(_routeData && _routeData.route && _routeData.route[0] ){
 
-        let routeChosen =  _routeData.route[0];
+        let routeChosen = _routeData.route[0];
 
         for (var i = 0; i < _routeData.route.length; i++) {
           if(  _routeData.route[i].protocol == "V3" ){
-            routeChosen =  _routeData.route[i];
+            routeChosen = _routeData.route[i];
           }
         }
 
-        routeDataFormated.swapVia = routeChosen.tokenPath.length > 2 ? routeChosen.tokenPath[1].address : "0x0000000000000000000000000000000000000000";
-        routeDataFormated.swapVia2 = routeChosen.tokenPath.length > 3 ? routeChosen.tokenPath[2].address : "0x0000000000000000000000000000000000000000";
         routeDataFormated.protocol = routeChosen.protocol;
-        if(routeChosen && routeChosen.protocol == "V3"){
+
+        for (var i = 0; i < routeChosen.tokenPath.length; i++) {
+          routeDataFormated.swapVia.push( routeChosen.tokenPath[i].address );
+        }
+
+        if(  routeChosen.protocol == "V3" ){
           const pools = routeChosen.route.pools;
-          routeDataFormated.poolFeeA = pools[0].fee;
-          routeDataFormated.poolFeeB = pools[1] ? pools[1].fee : 0;
-          routeDataFormated.poolFeeC = pools[2] ? pools[2].fee : 0;
+          for (var i = 0; i < pools.length; i++) {
+            routeDataFormated.poolFees.push(pools[i].fee);
+          }
         }
 
         amountIn  = routeChosen.rawQuote.toString();
@@ -89,7 +89,7 @@ class UniswapV3Api {
           slippageTolerance: new Percent(5, 1000), // 0.5%
         },
         {
-          maxSwapsPerPath: 4,
+          maxSwapsPerPath: 5,
         }
       ).then(
         (res:any) => { return res;} ,

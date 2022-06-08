@@ -291,12 +291,6 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
        _quoteProtocol.price.toString(), // token amount to cover with FEE
        buyingWithNetworkCurrency,
        _quoteProtocol,
-       _quoteProtocol.uniSwapRouteData.swapVia,
-       _quoteProtocol.uniSwapRouteData.swapVia2,
-       _quoteProtocol.uniSwapRouteData.poolFeeA,
-       _quoteProtocol.uniSwapRouteData.poolFeeB,
-       _quoteProtocol.uniSwapRouteData.poolFeeC,
-       _quoteProtocol.uniSwapRouteData.protocol,
      )
 
    }
@@ -319,25 +313,30 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
   // TEST START
   // ******************************
 
-  const route =  _quoteProtocol.uniSwapRouteData.route[0] ? _quoteProtocol.uniSwapRouteData.route[0].route : false ;
-  if(!route){
-    return {error: "no swap route found"}
-  }
-
-  const swapVia = route.tokenPath.length > 2 ? route.tokenPath[1].address : "0x0000000000000000000000000000000000000000";
-  const poolFeeA = route.pools[0].fee;
-  const poolFeeB = route.pools[1] ? route.pools[1].fee : poolFeeA;
-
   const data = global.user.web3.eth.abi.encodeParameters(
-    ['address','uint24','uint24','uint', 'uint', 'uint', 'uint', 'uint8', 'bytes32', 'bytes32'],
-    [ swapVia, poolFeeA, poolFeeB, _quoteProtocol.price, _quoteProtocol.rawData.priceInNXM, _quoteProtocol.rawData.expiresAt,
-      _quoteProtocol.rawData.generatedAt, _quoteProtocol.rawData.v, _quoteProtocol.rawData.r, _quoteProtocol.rawData.s],
-    );
+    [
+      'address[]', 'uint24[]', 'string',
+      'uint256', 'uint256', 'uint256',
+      'uint256', 'uint8', 'bytes32', 'bytes32'
+    ],
+    [
+      _quoteProtocol.uniSwapRouteData.swapVia,
+      _quoteProtocol.uniSwapRouteData.poolFees,
+      _quoteProtocol.uniSwapRouteData.protocol,
+      _quoteProtocol.rawData.price,
+      _quoteProtocol.rawData.priceInNXM,
+      _quoteProtocol.rawData.expiresAt,
+      _quoteProtocol.rawData.generatedAt,
+      _quoteProtocol.rawData.v,
+      _quoteProtocol.rawData.r,
+      _quoteProtocol.rawData.s
+    ]
+  );
 
     let net:any = NetConfig.netById(global.user.networkId);
     let assetTest = net[_quoteProtocol.rawData.currency]
 
-    console.log( "buyCoverNexus-> ",
+    console.log( "buyCoverNexus --> ",
     "\n_contractAddress: ",
     _quoteProtocol.rawData.contract,
     "\n_coverAsset: " ,
