@@ -30,31 +30,8 @@ const CURRENCIES: any = {
 
 class GoogleEvents {
 
-  // static InitTechManager = () => {
-  //
-  //   const analytics = Analytics({
-  //     app: 'bright-union-sdk',
-  //     plugins: [
-  //       googleTagManager.default({
-  //         containerId: 'GTM-WCCMKXR'
-  //       })
-  //     ]
-  //   })
-  //
-  //   analytics.page();
-  //
-  //   // GTMSDKTEST
-  //   /* Track a custom event */
-  //   // analytics.track('GTMSDKTEST', {
-  //   //   item: 'test',
-  //   // })
-  //
-  // }
-
   static onBUInit = () => {
     if(NetConfig.isMainNetwork(global.user.networkId) && global.user.googleEventsEnabled ){
-
-      // this.InitTechManager();
 
         gtag('set', 'user_properties', {
           'account': global.user.account,
