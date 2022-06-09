@@ -57,6 +57,9 @@ class UniswapV3Api {
         amountIn  = routeChosen.rawQuote.toString();
       }
 
+      if(routeDataFormated.swapVia.length == 0) routeDataFormated.swapVia.push("0x0000000000000000000000000000000000000000");
+      if(routeDataFormated.poolFees.length == 0) routeDataFormated.poolFees.push(0);
+
       return [amountIn, routeDataFormated];
     }
 
@@ -90,6 +93,7 @@ class UniswapV3Api {
         },
         {
           maxSwapsPerPath: 5,
+          distributionPercent: 100,
         }
       ).then(
         (res:any) => { return res;} ,

@@ -73,7 +73,7 @@ export async function buyCoverBridge(
       .send({from: global.user.account})
       .on('transactionHash', (transactionHash:any) => {
         tx.hash = transactionHash;
-        global.events.emit("buy" , { status: "TX_GENERATED" , data: transactionHash } );
+        global.events.emit("buy" , { status: "TX_GENERATED" , data: tx } );
         GoogleEvents.onTxHash(tx);
         resolve({success: transactionHash});
       })
@@ -86,7 +86,6 @@ export async function buyCoverBridge(
         if (confirmationNumber === 0) {
           GoogleEvents.onTxConfirmation(tx);
           global.events.emit("buy" , { status: "TX_CONFIRMED" } );
-
         }
       });
     });
@@ -128,7 +127,7 @@ export async function buyCoverEase(
     ).send({ from: _data.user})
     .on('transactionHash', (res:any) => {
       tx.hash = res
-      global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
+      global.events.emit("buy" , { status: "TX_GENERATED" , data: tx } );
       GoogleEvents.onTxHash(tx);
       resolve({success:res});
     })
@@ -211,7 +210,7 @@ const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
     ).send({ from: _ownerAddress, value: sendValue })
     .on('transactionHash', (res:any) => {
       tx.hash = res
-      global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
+      global.events.emit("buy" , { status: "TX_GENERATED" , data: tx } );
       GoogleEvents.onTxHash(tx);
       resolve({success:res});
     })
@@ -310,7 +309,7 @@ export async function buyCoverInsurace(buyingObj:any , buyingWithNetworkCurrency
           .send(buyTransactionData)
           .on('transactionHash', (res:any) => {
             tx.hash = res;
-            global.events.emit("buy" , { status: "TX_GENERATED" , data: res } );
+            global.events.emit("buy" , { status: "TX_GENERATED" , data: tx } );
             GoogleEvents.onTxHash(tx);
             resolve({success: res});
           })
