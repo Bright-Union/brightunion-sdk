@@ -6,39 +6,48 @@ import {hexToUtf8} from 'web3-utils';
 
 
 const bridge_nexus_insurace = [
-  // BRIDGE NAME, NEXUS NAME, INSURACE NAME, EASE, COMMON NAME
-  ['88mph.app', '88mph', '88mph V2', '', '88mph V2'],
-  ['88mph.app', '88mph', '88mph V3', '', '88mph V3'],
-  ['1INCH Token', '1Inch (DEX & Liquidity Pools)', '1Inch', '', '1Inch'],
-  ['Aave', 'Aave V2', 'Aave V2', 'Aave', 'Aave V2'],
-  ['Aave', 'Aave V1', '', '', 'Aave V1'],
-  ['Anchor Protocol', 'Anchor Protocol', 'Anchor', '', 'Anchor'],
-  ['Alchemix', 'Alchemix V1', '', '', 'Alchemix V1'],
-  ['BadgerDAO', 'BadgerDAO', 'Badger Finance', '', 'BadgerDAO'],
-  ['BarnBridge', 'Barnbridge Smart Yield V1', '', '', 'Barnbridge V1'],
-  ['Compound', 'Compound V2', 'Compound V2', 'Compound', 'Compound V2'],
-  ['', 'Enzyme v3', 'Enzyme Finance', '', 'Enzyme'],
-  ['Cream', 'C.R.E.A.M. V1', '', '', 'C.R.E.A.M.'],
-  ['', 'Curve All Pools (incl staking)', 'Curve (All Pools)', 'Curve', 'Curve (All Pools)'],
-  ['', 'DODO Exchange', 'DODO', '', 'DODO'],
-  ['Maker', 'MakerDAO MCD', 'MakerDAO MCD', '', 'MakerDAO'],
-  ['', 'Pancakeswap V1', 'PancakeSwap', '', 'PancakeSwap'],
-  ['Perpetual', 'Perpetual Protocol', 'Perpetual Protocol', '', 'Perpetual Protocol'],
-  ['bmiV2PendleFinanceCover', 'Pendle', "Pendle", '', "Pendle"],
-  ['Synthetix Network Token', 'Synthetix', '', '', 'Synthetix'],
-  ['Sushi', 'SushiSwap V1', '', 'SushiSwap', 'Sushi'],
-  ['Keeper DAO', 'Keeper DAO', 'KeeperDAO', '', 'KeeperDAO'],
-  ['', 'Kyber (Katalyst)', 'Kyber', '', 'Kyber'],
-  ['', 'DyDx Perpetual', 'DyDx', '', 'DyDx'],
-  ['', 'ETH 2.0 (deposit contract)', 'ETH 2.0', '', 'ETH 2.0'],
-  ['', 'OlympusDAO', 'Olympus DAO', '', 'Olympus DAO'],
-  ['Spell Token', 'Abracadabra', 'Abracadabra.money', '', 'Abracadabra'],
-  ['Uniswap', 'Uniswap V1', '', '', 'Uniswap V1'],
-  ['Uniswap', 'Uniswap V2', 'Uniswap V2', '', 'Uniswap V2'],
-  ['Uniswap', 'Uniswap V3', 'Uniswap V3', '', 'Uniswap V3'],
-  ['','Convex Finance V1','Convex', 'Convex', 'Convex'],
-  ['IceToken','Popsicle Finance','', '', 'IceToken'],
-  ['Yearn Finance (all vaults)','Yearn Finance (all vaults)','Yearn Finance (all vaults)', 'yearn', 'Yearn Finance (all vaults)']
+  // BRIDGE NAME, NEXUS NAME, INSURACE NAME, EASE, UNSLASHED, COMMON NAME
+  ['88mph.app', '88mph', '88mph V2', '', '', '88mph V2'],
+  ['88mph.app', '88mph', '88mph V3', '', '', '88mph V3'],
+  ['1INCH Token', '1Inch (DEX & Liquidity Pools)', '1Inch', '', '', '1Inch'],
+  ['Aave', 'Aave V1', '', '', '', 'Aave V1'],
+  ['Aave', 'Aave V2', 'Aave V2', 'aave', '', 'Aave V2'],
+  ['Balancer v1', 'Balancer v1', 'Balancer v1', 'Balancer v1', 'Balancer V1 & V2', 'Balancer v1'],
+  ['Balancer v2', 'Balancer v2', 'Balancer v2', 'Balancer v2', 'Balancer V1 & V2', 'Balancer v2'],
+  ['Anchor Protocol', 'Anchor Protocol', 'Anchor', '', '', 'Anchor'],
+  ['', '', '', 'ANC + UST De-Peg', 'Anchor + UST Peg', 'ANC + UST De-Peg'],
+  ['Alchemix', 'Alchemix V1', '', '', '', 'Alchemix V1'],
+  ['BadgerDAO', 'BadgerDAO', 'Badger Finance', '', '', 'BadgerDAO'],
+  ['BarnBridge', 'Barnbridge Smart Yield V1', '', '', '', 'Barnbridge V1'],
+  ['Compound', 'Compound V2', 'Compound V2', 'Compound', 'Compound', 'Compound V2'],
+  ['', 'Enzyme v3', 'Enzyme Finance', '', '', 'Enzyme'],
+  ['Cream', 'C.R.E.A.M. V1', '', '', '', 'C.R.E.A.M.'],
+  ['', 'Curve All Pools (incl staking)', 'Curve (All Pools)', 'Curve', '', 'Curve (All Pools)'],
+  ['', 'DODO Exchange', 'DODO', '', '', 'DODO'],
+  ['Coinbase', '', 'Coinbase', '', 'Coinbase Exchange', 'Coinbase'],
+  ['', 'Harvest Finance', 'Harvest Finance', '', 'Harvest', 'Harvest Finance'],
+  ['Maker', 'MakerDAO MCD', 'MakerDAO MCD', '', 'Maker DAO', 'MakerDAO'],
+  ['', 'Pancakeswap V1', 'PancakeSwap', '', '', 'PancakeSwap'],
+  ['Perpetual', 'Perpetual Protocol', 'Perpetual Protocol', '', 'Perpetual Protocol', 'Perpetual Protocol'],
+  ['bmiV2PendleFinanceCover', 'Pendle', "Pendle", '', '', "Pendle"],
+  ['Synthetix Network Token', 'Synthetix', '', '', '', 'Synthetix'],
+  ['Sushi', 'SushiSwap V1', '', 'SushiSwap', '', 'Sushi'],
+  ['Keeper DAO', 'Keeper DAO', 'KeeperDAO', '', '', 'KeeperDAO'],
+  ['', 'Kyber (Katalyst)', 'Kyber', '', 'Kyber', 'Kyber'],
+  ['', 'DyDx Perpetual', 'DyDx', '', '', 'DyDx'],
+  ['', 'ETH 2.0 (deposit contract)', 'ETH 2.0', '', '', 'ETH 2.0'],
+  ['', 'OlympusDAO', 'Olympus DAO', '', 'Olympus', 'Olympus DAO'],
+  ['','Paraswap v1','', '', 'Paraswap', 'Paraswap'],
+  ['','','UST De-Peg', '', 'UST Peg', 'UST De-Peg'],
+  ['','','USDT De-Peg', '', 'USDT Peg', 'USDT De-Peg'],
+  ['','','', '', '', ''],
+  ['Spell Token', 'Abracadabra', 'Abracadabra.money', '', '', 'Abracadabra'],
+  ['Uniswap', 'Uniswap V1', '', '', '', 'Uniswap V1'],
+  ['Uniswap', 'Uniswap V2', 'Uniswap V2', '', 'Uniswap V2 & V3', 'Uniswap V2'],
+  ['Uniswap', 'Uniswap V3', 'Uniswap V3', '', 'Uniswap V2 & V3', 'Uniswap V3'],
+  ['','Convex Finance V1','Convex', 'Convex', '', 'Convex'],
+  ['IceToken','Popsicle Finance','', '', '', 'IceToken'],
+  ['Yearn Finance (all vaults)','Yearn Finance (all vaults)','Yearn Finance (all vaults)', 'yearn', 'Yearn', 'Yearn Finance (all vaults)']
 ]
 
 
@@ -133,6 +142,7 @@ const catalogLogoLinks: any = [
   { name: "Aldrin DEX" , link:"https://app.insurace.io/asset/product/Aldrin.png"},
   { name: "ANC + UST De-Peg" , link:"https://app.insurace.io/asset/product/AnchorProtocol.png"},
   { name: "ANC + MIR + UST De-Peg" , link:"https://app.insurace.io/asset/product/AnchorProtocol.png"},
+  { name: "BitMEX" , link:"https://app.unslashed.finance/logos/bitmex@2x.png"},
   { name: "Convex" , link:"https://app.insurace.io/asset/product/ConvexFinance.png"},
   { name: "Gains Network (DAI Vault)" , link:"https://app.insurace.io/asset/product/GainsNetwork.png"},
   { name: "CRV+CVX" , link:"https://app.insurace.io/asset/product/CurveAllPools.png"},
@@ -168,6 +178,11 @@ const catalogLogoLinks: any = [
   { name: "0.exchange" , link:"https://app.bridgemutual.io/assets/icons/coins/0.webp"},
   { name: "Keeper DAO" , link:"https://app.bridgemutual.io/assets/icons/coins/keeper_dao_logo.webp"},
   { name: "Universe.XYZ" , link:"https://app.bridgemutual.io/assets/icons/coins/universexyz.webp"},
+  { name: "Vires Finance + USDN" , link:"https://app.unslashed.finance/logos/vires-usdn.svg"},
+  { name: "Solv Protocol" , link:"https://app.unslashed.finance/logos/solv.svg"},
+  { name: "Old Lido ETH 2.0" , link:"https://app.unslashed.finance/logos/Lido@2x.png"},
+  { name: "Neutrino + USDN Peg" , link:"https://app.unslashed.finance/logos/WavesNeutrino%2BUSDNPeg.svg"},
+  { name: "Instadapp" , link:"https://app.unslashed.finance/logos/instadapp@2x.png"},
 ];
 
 class CatalogHelper {
@@ -184,7 +199,6 @@ class CatalogHelper {
         assetLogo = trustWalletAssets[k].logoURI;
       }
     });
-
     let specialLogo:any = CatalogHelper.getSpecialLogoName(_name);
 
     if(assetLogo){
@@ -309,7 +323,8 @@ class CatalogHelper {
       rawDataNexus: obj.rawDataNexus,                                           //field will be increased if similar products found
       rawDataBridge: obj.rawDataBridge,                                           //field will be increased if similar products found
       rawDataInsurace: obj.rawDataInsurace,                                           //field will be increased if similar products found
-      rawDataEase: obj.rawDataEase
+      rawDataEase: obj.rawDataEase,
+      rawDataUnslashed: obj.rawDataUnslashed
     };
   }
 
@@ -443,10 +458,12 @@ class CatalogHelper {
         cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[2].toUpperCase() === _coverName.toUpperCase())
       } else if(_riskProtocol === 'ease') {
         cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[3].toUpperCase() === _coverName.toUpperCase())
+      } else if(_riskProtocol === 'unslashed') {
+        cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[4].toUpperCase() === _coverName.toUpperCase())
       }
 
       if(cov1SourceNameIndex && cov1SourceNameIndex > -1){
-        return bridge_nexus_insurace[cov1SourceNameIndex][4];
+        return bridge_nexus_insurace[cov1SourceNameIndex][5];
       }else{
         return _coverName
       }
