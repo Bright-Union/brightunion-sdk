@@ -35,15 +35,9 @@ class UniswapV3Api {
 
         let routeChosen = _routeData.route[0];
 
-        for (var i = 0; i < _routeData.route.length; i++) {
-          if(  _routeData.route[i].protocol == "V3" ){
-            routeChosen = _routeData.route[i];
-          }
-        }
-
         routeDataFormated.protocol = routeChosen.protocol;
 
-        for (var i = 0; i < routeChosen.tokenPath.length; i++) {
+        for (var i = 1; i < routeChosen.tokenPath.length - 1; i++) {
           routeDataFormated.swapVia.push( routeChosen.tokenPath[i].address );
         }
 
@@ -101,6 +95,8 @@ class UniswapV3Api {
       );
 
       const [ amountIn, routeDataFormated ] = this.chooseRouteAndSetPrice(route);
+
+      console.log("routeDataFormated" , routeDataFormated);
 
       return [amountIn, routeDataFormated];
     }
