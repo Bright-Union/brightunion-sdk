@@ -16,6 +16,49 @@ export default class UnoReApi {
             });
     }
 
+    static fetchCoverPrice(cover:any, amount: number, period: number) {
+        cover.id = `Smart Contract Cover-${cover.address}-txHash`;
+        cover.coverAmount = amount.toString();
+        cover.usdcAmount = amount.toString();
+        cover.coverDuration = Number(period);
+        cover.coverDurType = "Year"
+        // {"id": `Smart Contract Cover-${cover.address}-txHash`,
+        //     "name": cover.name,
+        //     "premium_factor": cover.premium_factor,
+        //     "product_type": cover.product_type,
+        //     "status": cover.status,
+        //     "address": cover.address,
+        //     "symbol": cover.symbol,
+        //     "url": cover.url,
+        //     "description": cover.description,
+        //     "chain":"Multi-Chain",
+        //     "logo": cover.logo,
+        //     "audits": cover.audits,
+        //     "audit_note": cover.audit_note,
+        //     "gecko_id": cover.gecko_id,
+        //     "cmcId": cover.cmcId,
+        //     "category": cover.category,
+        //     "chains":cover.chains,
+        //     "coverDuration":period,
+        //     "coverDurType":"Year",
+        //     "coverAmount":amount,
+        //     "usdcAmount": amount,
+        //     "openDropdown":false,
+        //     "coverType": cover.coverType,
+        //     "premiumFactor": cover.premium_factor,
+        //     "assetAddress": cover.address}
+
+        const body = {"data": [cover]}
+        console.log(body)
+
+        return axios.post(`https://cover.unore.io/api/getcoverusdprice`, body)
+            .then((response) => {
+                return response.data;
+            }).catch(error => {
+                return [];
+            });
+    }
+
     static fetchQuote(amount: number, currency: string, period: number, protocol: any) {
         return this.fetchCoverables()
             .then(async (data: any) => {
@@ -25,7 +68,10 @@ export default class UnoReApi {
                 }
                 const protocolName = protocol.name.toLowerCase().split(" ")[0];
                 const quote = cover.find((item: any) => item.name.toLowerCase().includes(protocolName));
-
+                let price = await this.fetchCoverPrice(quote, amount, period).then((res:any) => {
+                    console.log(res.data.premium)
+                    return res.data.premium
+                })
                 if(quote) {
                     // const errorMsg = quote.cover.static.soldOut ? {message: `Sold out`, errorType: "capacity"} : null;
                     global.events.emit("quote", {
@@ -51,7 +97,7 @@ export default class UnoReApi {
                             period: period,
                             chain: 'ETH',
                             chainId: global.user.ethNet.networkId,
-                            price: 0,
+                            price: price,
                             pricePercent: Number(quote.premium_factor) * 100,
                             response: quote,
                             source: 'unore',
