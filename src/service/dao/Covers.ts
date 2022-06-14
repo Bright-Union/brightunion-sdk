@@ -304,7 +304,7 @@ export async function getCoversEase():Promise<any>{
       .then((data:any) => {
         let policies: any = []
         data.forEach(async(vault: any) => {
-          let protocol = await _getIERC20Contract(vault.token.address);
+          let protocol = await _getIERC20Contract(vault.address);
           let instance = await _getEaseContract(vault.address);
           protocol.methods.balanceOf(global.user.account).call().then((balance: any) => {
             if (balance > 0) {
@@ -314,13 +314,12 @@ export async function getCoversEase():Promise<any>{
                 status: 0,
                 coverAmount: balance,
                 vaultCurrency: vault.symbol,
-                coverAsset: vault.display_name,
+                coverAsset: vault.symbol,
                 validUntil: Date.now(),
                 endTime: Date.now(),
                 startTime: Date.now(),
                 name: CatalogHelper.unifyCoverName(vault.top_protocol, 'ease'),
                 net: global.user.ethNet.networkId,
-                type: vault.protocol_type,
                 instance: instance
               }
               global.events.emit("covers", {coverItem: cover});
