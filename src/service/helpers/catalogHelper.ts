@@ -6,48 +6,54 @@ import {hexToUtf8} from 'web3-utils';
 
 
 const bridge_nexus_insurace = [
-  // BRIDGE NAME, NEXUS NAME, INSURACE NAME, EASE, UNSLASHED, COMMON NAME
-  ['88mph.app', '88mph', '88mph V2', '', '', '88mph V2'],
-  ['88mph.app', '88mph', '88mph V3', '', '', '88mph V3'],
-  ['1INCH Token', '1Inch (DEX & Liquidity Pools)', '1Inch', '', '', '1Inch'],
-  ['Aave', 'Aave V1', '', '', '', 'Aave V1'],
-  ['Aave', 'Aave V2', 'Aave V2', 'aave', '', 'Aave V2'],
-  ['Balancer v1', 'Balancer v1', 'Balancer v1', 'Balancer v1', 'Balancer V1 & V2', 'Balancer v1'],
-  ['Balancer v2', 'Balancer v2', 'Balancer v2', 'Balancer v2', 'Balancer V1 & V2', 'Balancer v2'],
-  ['Anchor Protocol', 'Anchor Protocol', 'Anchor', '', '', 'Anchor'],
-  ['', '', '', 'ANC + UST De-Peg', 'Anchor + UST Peg', 'ANC + UST De-Peg'],
-  ['Alchemix', 'Alchemix V1', '', '', '', 'Alchemix V1'],
-  ['BadgerDAO', 'BadgerDAO', 'Badger Finance', '', '', 'BadgerDAO'],
-  ['BarnBridge', 'Barnbridge Smart Yield V1', '', '', '', 'Barnbridge V1'],
-  ['Compound', 'Compound V2', 'Compound V2', 'Compound', 'Compound', 'Compound V2'],
-  ['', 'Enzyme v3', 'Enzyme Finance', '', '', 'Enzyme'],
-  ['Cream', 'C.R.E.A.M. V1', '', '', '', 'C.R.E.A.M.'],
-  ['', 'Curve All Pools (incl staking)', 'Curve (All Pools)', 'Curve', '', 'Curve (All Pools)'],
-  ['', 'DODO Exchange', 'DODO', '', '', 'DODO'],
-  ['Coinbase', '', 'Coinbase', '', 'Coinbase Exchange', 'Coinbase'],
-  ['', 'Harvest Finance', 'Harvest Finance', '', 'Harvest', 'Harvest Finance'],
-  ['Maker', 'MakerDAO MCD', 'MakerDAO MCD', '', 'Maker DAO', 'MakerDAO'],
-  ['', 'Pancakeswap V1', 'PancakeSwap', '', '', 'PancakeSwap'],
-  ['Perpetual', 'Perpetual Protocol', 'Perpetual Protocol', '', 'Perpetual Protocol', 'Perpetual Protocol'],
-  ['bmiV2PendleFinanceCover', 'Pendle', "Pendle", '', '', "Pendle"],
-  ['Synthetix Network Token', 'Synthetix', '', '', '', 'Synthetix'],
-  ['Sushi', 'SushiSwap V1', '', 'SushiSwap', '', 'Sushi'],
-  ['Keeper DAO', 'Keeper DAO', 'KeeperDAO', '', '', 'KeeperDAO'],
-  ['', 'Kyber (Katalyst)', 'Kyber', '', 'Kyber', 'Kyber'],
-  ['', 'DyDx Perpetual', 'DyDx', '', '', 'DyDx'],
-  ['', 'ETH 2.0 (deposit contract)', 'ETH 2.0', '', '', 'ETH 2.0'],
-  ['', 'OlympusDAO', 'Olympus DAO', '', 'Olympus', 'Olympus DAO'],
-  ['','Paraswap v1','', '', 'Paraswap', 'Paraswap'],
-  ['','','UST De-Peg', '', 'UST Peg', 'UST De-Peg'],
-  ['','','USDT De-Peg', '', 'USDT Peg', 'USDT De-Peg'],
-  ['','','', '', '', ''],
-  ['Spell Token', 'Abracadabra', 'Abracadabra.money', '', '', 'Abracadabra'],
-  ['Uniswap', 'Uniswap V1', '', '', '', 'Uniswap V1'],
-  ['Uniswap', 'Uniswap V2', 'Uniswap V2', '', 'Uniswap V2 & V3', 'Uniswap V2'],
-  ['Uniswap', 'Uniswap V3', 'Uniswap V3', '', 'Uniswap V2 & V3', 'Uniswap V3'],
-  ['','Convex Finance V1','Convex', 'Convex', '', 'Convex'],
-  ['IceToken','Popsicle Finance','', '', '', 'IceToken'],
-  ['Yearn Finance (all vaults)','Yearn Finance (all vaults)','Yearn Finance (all vaults)', 'yearn', 'Yearn', 'Yearn Finance (all vaults)']
+  // BRIDGE NAME, NEXUS NAME, INSURACE NAME, EASE, UNSLASHED, UNORE, COMMON NAME
+  ['88mph.app', '88mph', '88mph V2', '', '', '88mph.app', '88mph V2'],
+  ['88mph.app', '88mph', '88mph V3', '', '', '88mph.app', '88mph V3'],
+  ['1INCH Token', '1Inch (DEX & Liquidity Pools)', '1Inch', '', '', '1inch Network', '1Inch'],
+  ['Aave', 'Aave V1', '', '', '', '', 'Aave V1'],
+  ['Aave', 'Aave V2', 'Aave V2', 'aave', '', 'AAVE', 'Aave V2'],
+  ['Balancer v1', 'Balancer v1', 'Balancer v1', 'Balancer v1', 'Balancer V1 & V2', 'Balancer', 'Balancer v1'],
+  ['Balancer v2', 'Balancer v2', 'Balancer v2', 'Balancer v2', 'Balancer V1 & V2', 'Balancer', 'Balancer v2'],
+  ['Anchor Protocol', 'Anchor Protocol', 'Anchor', '', '', '', 'Anchor'],
+  ['', '', '', 'ANC + UST De-Peg', 'Anchor + UST Peg', '', 'ANC + UST De-Peg'],
+  ['Alchemix', 'Alchemix V1', '', '', '', 'Alchemix', 'Alchemix V1'],
+  ['BadgerDAO', 'BadgerDAO', 'Badger Finance', '', '', '', 'BadgerDAO'],
+  ['BarnBridge', 'Barnbridge Smart Yield V1', '', '', '', '', 'Barnbridge V1'],
+  ['Compound', 'Compound V2', 'Compound V2', 'Compound', 'Compound', 'Compound', 'Compound V2'],
+  ['', 'Enzyme v3', 'Enzyme Finance', '', '', 'Enzyme Finance', 'Enzyme'],
+  ['Cream', 'CREAM v1', '', '', '', 'Cream finance', 'C.R.E.A.M.'],
+  ['', 'Curve All Pools (incl staking)', 'Curve (All Pools)', 'Curve', '', '', 'Curve (All Pools)'],
+  ['', 'DODO Exchange', 'DODO', '', '', '', 'DODO'],
+  ['Coinbase', '', 'Coinbase', '', 'Coinbase Exchange', '', 'Coinbase'],
+  ['', 'Harvest Finance', 'Harvest Finance', '', 'Harvest', '', 'Harvest Finance'],
+  ['Maker', 'MakerDAO MCD', 'MakerDAO MCD', '', 'Maker DAO', '', 'MakerDAO'],
+  ['', 'Pancakeswap V1', 'PancakeSwap', '', '', '', 'PancakeSwap'],
+  ['Perpetual', 'Perpetual Protocol', 'Perpetual Protocol', '', 'Perpetual Protocol', '', 'Perpetual Protocol'],
+  ['bmiV2PendleFinanceCover', 'Pendle', "Pendle", '', '', '', "Pendle"],
+  ['Synthetix Network Token', 'Synthetix', '', '', '', '', 'Synthetix'],
+  ['Sushi', 'SushiSwap V1', '', 'SushiSwap', '', 'SushiSwap', 'Sushi'],
+  ['Keeper DAO', 'Keeper DAO', 'KeeperDAO', '', '', '', 'KeeperDAO'],
+  ['', 'Kyber (Katalyst)', 'Kyber', '', 'Kyber', 'Kyber Swap', 'Kyber'],
+  ['', 'DyDx Perpetual', 'DyDx', '', '', '', 'DyDx'],
+  ['', 'ETH 2.0 (deposit contract)', 'ETH 2.0', '', '', '', 'ETH 2.0'],
+  ['', 'OlympusDAO', 'Olympus DAO', '', 'Olympus', '', 'Olympus DAO'],
+  ['','Paraswap v1','', '', 'Paraswap', '', 'Paraswap'],
+  ['','','UST De-Peg', '', 'UST Peg', '', 'UST De-Peg'],
+  ['','','USDT De-Peg', '', 'USDT Peg', '', 'USDT De-Peg'],
+  ['','','USDT De-Peg', '', 'USDT Peg', 'USDT', 'USDT De-Peg'],
+  ['','','USDC De-Peg', '', '', 'USDC', 'USDC De-Peg'],
+  ['','','MIM De-Peg', '', '', 'MIM', 'MIM De-Peg'],
+  ['','UMA','UMA', '', '', 'UMA Protocol', 'UMA'],
+  ['','Stake DAO','Stake DAO', '', '', 'StakeDAO', 'Stake DAO'],
+  ['','','Frax Finance', '', '', 'FRAX', 'Frax Finance'],
+  ['','','BUSD De-Peg', '', '', 'BUSD', 'BUSD De-Peg'],
+  ['Spell Token', 'Abracadabra', 'Abracadabra.money', '', '', '', 'Abracadabra'],
+  ['Uniswap', 'Uniswap V1', '', '', '', '', 'Uniswap V1'],
+  ['Uniswap', 'Uniswap V2', 'Uniswap V2', '', 'Uniswap V2 & V3', 'Uniswap', 'Uniswap V2'],
+  ['Uniswap', 'Uniswap V3', 'Uniswap V3', '', 'Uniswap V2 & V3', '', 'Uniswap V3'],
+  ['','Convex Finance V1','Convex', 'Convex', '', 'Convex Finance', 'Convex'],
+  ['IceToken','Popsicle Finance','', '', '', '', 'IceToken'],
+  ['Yearn Finance (all vaults)','Yearn Finance (all vaults)','Yearn Finance (all vaults)', 'yearn', 'Yearn', 'Yearn Finance', 'Yearn Finance (all vaults)']
 ]
 
 
@@ -132,32 +138,62 @@ const catalogLogoLinks: any = [
   { name: "Vauld" , link:"https://files.insurace.io/public/asset/product/Vauld.png"},
   { name: "BUSD De-Peg" , link:"https://files.insurace.io/public/asset/product/BUSDDepeg.png"},
   { name: "Planet" , link:"https://files.insurace.io/public/asset/product/PlanetFinance.png"},
+  { name: "Autobahn Network" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/7024.png"},
   { name: "AAVE V3" , link:"https://files.insurace.io/public/asset/product/AaveV2.png"},
   { name: "RAMP V2" , link:"https://files.insurace.io/public/asset/product/RampV2.png"},
   { name: "Unagii (Vaults)" , link:"https://files.insurace.io/public/asset/product/Unagii.png"},
   { name: "Eth 2.0" , link:"https://app.insurace.io/asset/product/Eth2.0.png"},
   { name: "Beefy" , link:"https://app.insurace.io/asset/product/BeefyFinance.png"},
+  { name: "Babylons" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/10714.png"},
+  { name: "Berry Data" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/8483.png"},
+  { name: "Bot Planet " , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/16238.png"},
   { name: "Alchemix V1" , link:"https://app.bridgemutual.io/assets/icons/coins/Alchemix.webp"},
   { name: "Anchor" , link:"https://app.insurace.io/asset/product/AnchorProtocol.png"},
+  { name: "Arcade Network" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/13933.png"},
+  { name: "Alpha Token" , link:"https://assets.coingecko.com/coins/images/12738/large/AlphaToken_256x256.png?1617160876"},
   { name: "Aldrin DEX" , link:"https://app.insurace.io/asset/product/Aldrin.png"},
   { name: "ANC + UST De-Peg" , link:"https://app.insurace.io/asset/product/AnchorProtocol.png"},
   { name: "ANC + MIR + UST De-Peg" , link:"https://app.insurace.io/asset/product/AnchorProtocol.png"},
   { name: "BitMEX" , link:"https://app.unslashed.finance/logos/bitmex@2x.png"},
   { name: "Convex" , link:"https://app.insurace.io/asset/product/ConvexFinance.png"},
+  { name: "Curate" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/7942.png"},
+  { name: "DAO Maker" , link:"https://icons.llama.fi/dao-maker.jpg"},
+  { name: "DAI" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png"},
+  { name: "Gamerse" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/11086.png"},
+  { name: "Fortknoxster" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/3241.png"},
+  { name: "Fear NFT" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/9866.png"},
   { name: "Gains Network (DAI Vault)" , link:"https://app.insurace.io/asset/product/GainsNetwork.png"},
   { name: "CRV+CVX" , link:"https://app.insurace.io/asset/product/CurveAllPools.png"},
+  { name: "Curve DAO Token" , link:"https://app.insurace.io/asset/product/CurveAllPools.png"},
   { name: "Vesper" , link:"https://app.insurace.io/asset/product/Vesper.png"},
   { name: "Idle V4" , link:"https://app.insurace.io/asset/product/IdleFinance.png"},
   { name: "Kyber" , link:"https://app.insurace.io/asset/product/KyberNetwork.png"},
+  { name: "Closed Sea" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/13716.png"},
+  { name: "Cere Network" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/4710.png"},
+  { name: "Collateral DeFi" , link:"https://assets.coingecko.com/coins/images/14682/small/cpay.jpg?1617767452"},
+  { name: "Kephi Gallery" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/11247.png"},
   { name: "Maple" , link:"https://app.insurace.io/asset/product/MapleFinance.png"},
   { name: "MCDex" , link:"https://app.insurace.io/asset/product/MCDEX.png"},
+  { name: "DeFi 11" , link:"https://assets.coingecko.com/coins/images/18174/small/wjuVH0sC_400x400.jpg?1631267074"},
+  { name: "DeFi For you" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/9179.png"},
   { name: "Abracadabra.money" , link:"https://app.insurace.io/asset/product/AbracadabraMoney.png"},
   { name: "Mushrooms" , link:"https://app.insurace.io/asset/product/MushroomsFinance.png"},
+  { name: "Netvrk" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/9954.png"},
+  { name: "Nord finance" , link:" https://s2.coinmarketcap.com/static/img/coins/64x64/8143.png"},
   { name: "NAOS Finance Formation V2" , link:"https://app.insurace.io/asset/product/NaosFinance.png"},
   { name: "PancakeSwap" , link:"https://app.insurace.io/asset/product/PancakeSwapV1.png"},
   { name: "CAKE+ALPACA" , link:"https://app.insurace.io/asset/product/PancakeSwapV1.png"},
   { name: "Pendle" , link:"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x808507121B80c02388fAd14726482e061B8da827/logo.png"},
+  { name: "PolkaInsure" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/8169.png"},
+  { name: "TribeOne" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/10526.png"},
+  { name: "Popsicle Finance" , link:"https://icons.llama.fi/popsicle-finance.jpg"},
+  { name: "Polychain Monsters" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/8968.png"},
+  { name: "Orion Protocol" , link:"https://icons.llama.fi/orion-protocol.jpg"},
   { name: "Orion Money + UST De-Peg" , link:"https://app.insurace.io/asset/product/OrionMoney.png"},
+  { name: "OwlDAO" , link:"https://polygonscan.com/token/images/owldao_32.png"},
+  { name: "StepHero Multiverse" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/11067.png"},
+  { name: "RefinedApe" , link:"https://rabp.io/ggo-1b-1.png"},
+  { name: "RocketVault" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/9176.png"},
   { name: "MIM De-Peg" , link:"https://app.insurace.io/asset/product/MIMDepeg.png"},
   { name: "MIR + UST De-Peg" , link:"https://app.insurace.io/asset/product/MirrorFinance.png"},
   { name: "Yield YAK" , link:"https://app.insurace.io/asset/product/YieldYak.png"},
@@ -168,6 +204,7 @@ const catalogLogoLinks: any = [
   { name: "Venus" , link:"https://app.insurace.io/asset/product/Venus.png"},
   { name: "VVS Finance" , link:"https://app.insurace.io/asset/product/VVSFinance.png"},
   { name: "UST De-Peg" , link:"https://app.insurace.io/asset/product/USTDepeg.png"},
+  { name: "USDC De-Peg" , link:"https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png"},
   { name: "USDT De-Peg" , link:"https://app.insurace.io/asset/product/USDTDepeg.png"},
   { name: "Trader JOE" , link:"https://app.insurace.io/asset/product/TraderJoe.png"},
   { name: "SPELL + MIM De-Peg" , link:"https://app.insurace.io/asset/product/SPELLDepeg.png"},
@@ -183,6 +220,8 @@ const catalogLogoLinks: any = [
   { name: "Old Lido ETH 2.0" , link:"https://app.unslashed.finance/logos/Lido@2x.png"},
   { name: "Neutrino + USDN Peg" , link:"https://app.unslashed.finance/logos/WavesNeutrino%2BUSDNPeg.svg"},
   { name: "Instadapp" , link:"https://app.unslashed.finance/logos/instadapp@2x.png"},
+  { name: "Visor Finance" , link:"https://assets.coingecko.com/coins/images/14381/small/visor_logo.png?1615782828"},
+  { name: "Wall Street Games" , link:"https://assets.coingecko.com/coins/images/15872/small/X3Awe42.png?1622181358"},
 ];
 
 class CatalogHelper {
@@ -320,10 +359,12 @@ class CatalogHelper {
       typeList: obj.typeList,
       chainListInsurace: obj.chainListInsurace,
       chainListNexus: obj.chainListNexus,
+      chainListUnore: obj.chainListUnore,
       rawDataNexus: obj.rawDataNexus,                                           //field will be increased if similar products found
       rawDataBridge: obj.rawDataBridge,                                           //field will be increased if similar products found
       rawDataInsurace: obj.rawDataInsurace,                                           //field will be increased if similar products found
       rawDataEase: obj.rawDataEase,
+      rawDataUnore: obj.rawDataUnore,
       rawDataUnslashed: obj.rawDataUnslashed
     };
   }
@@ -349,6 +390,8 @@ class CatalogHelper {
       list = coverable.chainListNexus;
     } else if (_distributorName == 'insurace') {
       list = coverable.chainListInsurace;
+    } else if (_distributorName == 'unore') {
+      list = coverable.chainListUnore;
     } else {
       list = ['Ethereum']
     }
@@ -460,17 +503,18 @@ class CatalogHelper {
         cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[3].toUpperCase() === _coverName.toUpperCase())
       } else if(_riskProtocol === 'unslashed') {
         cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[4].toUpperCase() === _coverName.toUpperCase())
+      }else if(_riskProtocol === 'unore') {
+        cov1SourceNameIndex = bridge_nexus_insurace.findIndex(element => element[5].toUpperCase() === _coverName.toUpperCase())
       }
 
       if(cov1SourceNameIndex && cov1SourceNameIndex > -1){
-        return bridge_nexus_insurace[cov1SourceNameIndex][5];
+        return bridge_nexus_insurace[cov1SourceNameIndex][6];
       }else{
         return _coverName
       }
     }
 
     static coverableDuplicate (cov1:any, cov2:any) {
-
       if (cov1.name.toUpperCase() === cov2.name.toUpperCase()) {
         return cov1.name;
       } else if (cov1.protocolAddress && cov2.protocolAddress && cov1.protocolAddress.toUpperCase() === cov2.protocolAddress.toUpperCase()){

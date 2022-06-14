@@ -11,6 +11,7 @@ import NetConfig from './config/NetConfig';
 import GoogleEvents from './config/GoogleEvents';
 import EaseApi from "@/service/distributorsApi/EaseApi";
 import UnslashedAPI from "@/service/distributorsApi/UnslashedAPI";
+import UnoReApi from "@/service/distributorsApi/UnoReApi";
 
 export async function getCatalog(): Promise<any> {
 
@@ -27,6 +28,9 @@ export async function getCatalog(): Promise<any> {
   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL')) {
     catalogPromiseArray.push(getBridgeV2Coverables())
   }
+  // if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'UNORE')) {
+    catalogPromiseArray.push(getUnoReCoverables())
+  // }
 
   // push EASE
   catalogPromiseArray.push(getEaseCoverables())
@@ -215,6 +219,32 @@ export async function getNexusCoverables(): Promise<any[]> {
             });
             return coverablesArray;
           })
+}
+
+export async function getUnoReCoverables() {
+  return await UnoReApi.fetchCoverables()
+      .then(async (data:any) => {
+        const coverablesArray: any  = [];
+        console.log(data.data.data)
+        data.data.data.forEach(async (item: any) => {
+          const type = CatalogHelper.commonCategory(item.type, 'unore')
+          const typeDescr = type ? type : 'protocol';
+            let logo:any = await CatalogHelper.getLogoUrl( item.name , null, 'unore');
+          coverablesArray.push(CatalogHelper.createCoverable({
+            protocolAddress: item.address,
+            name: CatalogHelper.unifyCoverName(item.name, 'unore' ),
+            source: 'unore',
+            logo: logo,
+            rawDataUnore: item,
+            type: type,
+              chainListUnore: item.chains,
+            // typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
+            stats: {}
+          }))
+        })
+        global.events.emit("catalog" , { items: coverablesArray , distributorName:"unore" , networkId: 1, itemsCount: coverablesArray.length } );
+        return coverablesArray;
+      });
 }
 
 
