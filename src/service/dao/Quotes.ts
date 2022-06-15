@@ -165,16 +165,7 @@ export async function getQuoteFromBridgeV2(
         actualPeriod = _period;
       }
 
-
       let quote:any = {};
-
-//       if(currency === 'ETH') {
-//   capacity = this.$store.getters.usd2eth(this.fromWei(this.stats.maxCapacity.toString()));
-// } else {
-//   capacity = this.fromWei(this.stats.maxCapacity.toString());
-// }
-
-console.log("capacity B - " , capacity);
 
     quote = CatalogHelper.quoteFromCoverable(
         'bridge',

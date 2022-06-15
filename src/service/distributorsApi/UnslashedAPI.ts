@@ -77,9 +77,10 @@ export default class UnslashedAPI {
                             name: quote.cover.static.name,
                             errorMsg: errorMsg,
                             type: quote.cover.static.type,
+                            capacity: quote.cover.static.soldOut ? 0 : "9999999999999999999999999999999999999999999999999999999",
                         },
                         {
-                            capacity: quote.cover.static.soldOut ? 0 : 100000,
+                            capacity: quote.cover.static.soldOut ? 0 : "9999999999999999999999999999999999999999999999999999999",
                         }
                     );
                 }

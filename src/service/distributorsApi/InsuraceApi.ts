@@ -130,6 +130,18 @@ class InsuraceApi {
 
     }
 
+    static formatCapacity(_currency:any, _quoteCapacity:any, _chain:any ){
+      if(_currency === 'ETH') {
+        return CurrencyHelper.usd2eth(ERC20Helper.USDTtoERCDecimals(_quoteCapacity ) )
+      } else {
+        if(_chain == "BSC"){
+          return _quoteCapacity;
+        }else {
+          return ERC20Helper.USDTtoERCDecimals(_quoteCapacity);
+        }
+      }
+    }
+
     static async fetchInsuraceQuote ( web3:any, amount:string | number, currency:string , period:number, protocol:any): Promise<object> {
 
       let quoteData = await this.formatQuoteDataforInsurace(amount, currency, web3, protocol);
@@ -186,16 +198,7 @@ class InsuraceApi {
               cashBackPercent = (cashbackInStable / premiumInUSD) * 100;
             }
 
-            let quoteCapacity:any = protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0;
-            if(currency === 'ETH') {
-              quoteCapacity = CurrencyHelper.usd2eth(ERC20Helper.USDTtoERCDecimals(quoteCapacity ) )
-            } else {
-              if(web3.symbol == "BSC"){
-                quoteCapacity = quoteCapacity;
-              }else {
-                quoteCapacity = ERC20Helper.USDTtoERCDecimals(quoteCapacity);
-              }
-            }
+            const quoteCapacity:any = this.formatCapacity( currency , protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0 , web3.symbol );
 
             const quote = CatalogHelper.quoteFromCoverable(
                 'insurace',
@@ -227,6 +230,8 @@ class InsuraceApi {
                 let errorMsg:any = { message: e.response && e.response.data ? e.response.data.message : e.message }
 
                 let defaultCapacity = protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0;
+                const quoteCapacity:any = this.formatCapacity( currency , protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0 , web3.symbol );
+
 
                 if (errorMsg.message.match('GP: 4') || errorMsg.message.includes('cover duration is either too small or')) {
                   errorMsg = {message:"Minimum duration is 15 days. Maximum is 365" , errorType: "period" }
@@ -249,6 +254,7 @@ class InsuraceApi {
                         estimatedGasPrice: 0,
                         errorMsg: errorMsg,
                         minimumAmount: minimumAmount,
+                        capacity: quoteCapacity,
 
                     }, {
                         remainingCapacity: defaultCapacity,

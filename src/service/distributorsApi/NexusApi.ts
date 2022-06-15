@@ -25,10 +25,15 @@ export default class NexusApi {
       let capacityETH:any = null;
       let capacityDAI:any = null;
 
+      let quoteCapacity:any = null;
+
      this.fetchCapacity(protocol.nexusCoverable).then((capacity:any) => {
         capacityETH = capacity.capacityETH;
         capacityDAI = capacity.capacityDAI;
+        quoteCapacity = currency === 'ETH' ? capacityETH : capacityDAI;
       })
+
+
 
       const amountInWei:any = toBN(toWei(amount.toString(), 'ether'));
 
@@ -85,8 +90,6 @@ export default class NexusApi {
 
         let defaultCurrencySymbol = NetConfig.netById(global.user.ethNet.networkId).defaultCurrency;
         const nexusMaxCapacityError = this.checkNexusCapacity(currency, amountInWei.toString(), capacityETH, capacityDAI);
-
-        const quoteCapacity:any = currency === 'ETH' ? capacityETH : capacityDAI;
 
         return CatalogHelper.quoteFromCoverable(
           'nexus',
@@ -151,6 +154,7 @@ export default class NexusApi {
                                 errorMsg: errorMsg,
                                 response: {error:error},
                                 minimumAmount: minimumAmount,
+                                capacity: quoteCapacity,
                             },
                             {
                                 capacityETH: capacityETH,

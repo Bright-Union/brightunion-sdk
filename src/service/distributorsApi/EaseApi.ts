@@ -30,6 +30,12 @@ export default class EaseApi {
             capacityArr = this.rangeArray(capacityArr);
             const exceedsCapacity = currency === 'USD' ? amount > capacityArr[capacityArr.length - 1] :  amount > Number(CurrencyHelper.usd2eth(capacityArr[capacityArr.length - 1]));
             const errorMsg = exceedsCapacity ? { message: `Maximum available capacity is `, currency: currency, errorType:"capacity"} : null;
+
+            let quoteCapacity = capacityArr
+            if(currency === 'ETH') {
+              quoteCapacity = CurrencyHelper.usd2eth(quoteCapacity);
+            }
+
                 global.events.emit("quote" , {
                     status: "INITIAL_DATA" ,
                     distributorName: "Ease",
@@ -63,6 +69,7 @@ export default class EaseApi {
                     errorMsg: errorMsg,
                     type: vault[0].protocol_type,
                     typeDescription: CatalogHelper.descriptionByCategory(vault[0].protocol_type),
+                    capacity:quoteCapacity,
                 },
                 {
                     capacity: capacityArr,
@@ -71,4 +78,3 @@ export default class EaseApi {
         })
     }
 }
-
