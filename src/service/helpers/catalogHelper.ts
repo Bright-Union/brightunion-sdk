@@ -292,6 +292,7 @@ class CatalogHelper {
       rawData: obj.response,
       stats: stats,
       minimumAmount: obj.minimumAmount,
+      capacity: obj.capacity,
     }
   }
 

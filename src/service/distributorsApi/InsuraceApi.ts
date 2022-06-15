@@ -186,6 +186,17 @@ class InsuraceApi {
               cashBackPercent = (cashbackInStable / premiumInUSD) * 100;
             }
 
+            let quoteCapacity:any = protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0;
+            if(currency === 'ETH') {
+              quoteCapacity = CurrencyHelper.usd2eth(ERC20Helper.USDTtoERCDecimals(quoteCapacity ) )
+            } else {
+              if(web3.symbol == "BSC"){
+                quoteCapacity = quoteCapacity;
+              }else {
+                quoteCapacity = ERC20Helper.USDTtoERCDecimals(quoteCapacity);
+              }
+            }
+
             const quote = CatalogHelper.quoteFromCoverable(
                 'insurace',
                 protocol,
@@ -202,6 +213,7 @@ class InsuraceApi {
                     response: response,
                     defaultCurrencySymbol: defaultCurrencySymbol,
                     minimumAmount: minimumAmount,
+                    capacity: quoteCapacity,
                 },
                 {
                     remainingCapacity: protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0

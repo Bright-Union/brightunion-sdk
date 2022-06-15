@@ -86,6 +86,8 @@ export default class NexusApi {
         let defaultCurrencySymbol = NetConfig.netById(global.user.ethNet.networkId).defaultCurrency;
         const nexusMaxCapacityError = this.checkNexusCapacity(currency, amountInWei.toString(), capacityETH, capacityDAI);
 
+        const quoteCapacity:any = currency === 'ETH' ? capacityETH : capacityDAI;
+
         return CatalogHelper.quoteFromCoverable(
           'nexus',
           protocol,
@@ -101,6 +103,7 @@ export default class NexusApi {
             defaultCurrencySymbol:defaultCurrencySymbol,
             errorMsg: nexusMaxCapacityError,
             minimumAmount: minimumAmount,
+            capacity: quoteCapacity,
           },
           {
             activeCoversETH: activeCoversETH,
