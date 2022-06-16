@@ -189,14 +189,16 @@ class InsuraceApi {
               minimumAmount: minimumAmount,
             } );
 
+
             const cashbackInInsur = Number(fromWei(response.ownerInsurReward));
-            const insurPrice = CurrencyHelper.insurPrice();
-            const cashbackInStable = cashbackInInsur * insurPrice;
-            let cashBackPercent:number = (cashbackInStable / Number(fromWei(premium))) * 100;
-            if ( defaultCurrencySymbol == quoteData.currency) {
-              const premiumInUSD = Number(fromWei(CurrencyHelper.eth2usd(premium)));
-              cashBackPercent = (cashbackInStable / premiumInUSD) * 100;
+            let cashbackInQuoteCurrency:any = cashbackInInsur * CurrencyHelper.insurPrice();
+
+            if (quoteData.currency == "ETH") {
+              cashbackInQuoteCurrency = fromWei(CurrencyHelper.usd2eth(toWei(cashbackInQuoteCurrency.toString())));
             }
+
+            let cashBackPercent:number = (cashbackInQuoteCurrency / Number(fromWei(premium))) * 100;
+
             cashBackPercent = cashBackPercent ? Number(cashBackPercent.toFixed(1)) : 7.5;
 
             const quoteCapacity:any = this.formatCapacity( currency , protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0 , web3.symbol );
@@ -212,7 +214,7 @@ class InsuraceApi {
                     chainId: web3.networkId,
                     price: premium,
                     cashBackPercent: cashBackPercent,
-                    cashBack: [ cashbackInInsur , cashbackInStable ],
+                    cashBack: [ cashbackInInsur , cashbackInQuoteCurrency ],
                     pricePercent: pricePercent,  //%, annualize
                     response: response,
                     defaultCurrencySymbol: defaultCurrencySymbol,
