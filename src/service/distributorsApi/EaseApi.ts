@@ -1,7 +1,7 @@
 import axios from "axios";
 import CatalogHelper from "@/service/helpers/catalogHelper";
 import CurrencyHelper from "@/service/helpers/currencyHelper";
-
+import {toWei} from 'web3-utils';
 
 export default class EaseApi {
     static fetchCoverables() {
@@ -25,13 +25,22 @@ export default class EaseApi {
             const vault = response.data.filter((item: any) => item.token.name.toLowerCase().includes(protocolName));
             let capacityArr:any = [];
             vault.forEach((item: any) => {
-                capacityArr.push(item.remaining_capacity);
+              const capacity = item.remaining_capacity.toString().split('.')[0];
+                capacityArr.push(toWei(capacity));
             })
             capacityArr = this.rangeArray(capacityArr);
             const type = CatalogHelper.commonCategory(vault[0].protocol_type, 'ease')
             const typeDescr = type ? type : 'protocol';
             const exceedsCapacity = currency === 'USD' ? amount > capacityArr[capacityArr.length - 1] :  amount > Number(CurrencyHelper.usd2eth(capacityArr[capacityArr.length - 1]));
             const errorMsg = exceedsCapacity ? { message: `Maximum available capacity is `, currency: currency, errorType:"capacity"} : null;
+
+            if(currency === 'ETH') {
+              for (var i = 0; i < capacityArr.length; i++) {
+                capacityArr[i] = CurrencyHelper.usd2eth(capacityArr[i]);
+              }
+            }
+            let quoteCapacity = capacityArr[1];
+
                 global.events.emit("quote" , {
                     status: "INITIAL_DATA" ,
                     distributorName: "Ease",
@@ -63,6 +72,7 @@ export default class EaseApi {
                     minimumAmount: 1,
                     name: CatalogHelper.unifyCoverName(vault[0].display_name, 'ease' ),
                     errorMsg: errorMsg,
+                    capacity:quoteCapacity,
                     type: type,
                     typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
                 },
@@ -73,4 +83,3 @@ export default class EaseApi {
         })
     }
 }
-

@@ -129,10 +129,8 @@ export async function getQuoteFromBridgeV2(
           _currency = "ETH"
         }
 
-        capacity = fromWei(capacity.toString());
-
         if (errorMsg.toLowerCase().includes("requiring more than there exists")) {
-          errorMsg = {message: "Maximum available capacity is " , currency:_initialBridgeCurrency, capacity: capacity, errorType: "capacity"};
+          errorMsg = {message: "Maximum available capacity is " , currency:_initialBridgeCurrency, capacity: fromWei(capacity.toString()), errorType: "capacity"};
         } else if (errorMsg.toLowerCase().includes("pb: wrong epoch duration")) {
           errorMsg = { message: "Minimum duration is 1 day. Maximum is 365" , errorType:"period"};
         } else if (errorMsg.toLowerCase().includes("pb: wrong cover")) {
@@ -167,7 +165,6 @@ export async function getQuoteFromBridgeV2(
         actualPeriod = _period;
       }
 
-
       let quote:any = {};
 
     quote = CatalogHelper.quoteFromCoverable(
@@ -186,6 +183,7 @@ export async function getQuoteFromBridgeV2(
           errorMsg: errorMsg,
           rawData: rawPriceData,
           minimumAmount: minimumAmount,
+          capacity: capacity,
         },
         stats
       );

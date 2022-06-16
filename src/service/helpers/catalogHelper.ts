@@ -295,6 +295,7 @@ class CatalogHelper {
       type: obj.type,
       typeDescription: obj.typeDescription,
       minimumAmount: obj.minimumAmount,
+      capacity: obj.capacity,
     }
   }
 
