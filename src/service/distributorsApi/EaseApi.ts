@@ -31,10 +31,13 @@ export default class EaseApi {
             const exceedsCapacity = currency === 'USD' ? amount > capacityArr[capacityArr.length - 1] :  amount > Number(CurrencyHelper.usd2eth(capacityArr[capacityArr.length - 1]));
             const errorMsg = exceedsCapacity ? { message: `Maximum available capacity is `, currency: currency, errorType:"capacity"} : null;
 
-            let quoteCapacity = capacityArr
             if(currency === 'ETH') {
-              quoteCapacity = CurrencyHelper.usd2eth(quoteCapacity);
+              for (var i = 0; i < capacityArr.length; i++) {
+                capacityArr[i] = CurrencyHelper.usd2eth(capacityArr[i]);
+              }
             }
+
+            let quoteCapacity = capacityArr[1];
 
                 global.events.emit("quote" , {
                     status: "INITIAL_DATA" ,
