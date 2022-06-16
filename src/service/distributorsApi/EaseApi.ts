@@ -41,6 +41,8 @@ export default class EaseApi {
 
             let quoteCapacity = capacityArr[1];
 
+            console.log("quoteCapacity" , quoteCapacity, capacityArr);
+
                 global.events.emit("quote" , {
                     status: "INITIAL_DATA" ,
                     distributorName: "Ease",
@@ -72,7 +74,7 @@ export default class EaseApi {
                     minimumAmount: 1,
                     name: CatalogHelper.unifyCoverName(vault[0].display_name, 'ease' ),
                     errorMsg: errorMsg,
-                    capacity:quoteCapacity,
+                    capacity: quoteCapacity,
                     type: type,
                     typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
                 },

@@ -192,11 +192,12 @@ class InsuraceApi {
             const cashbackInInsur = Number(fromWei(response.ownerInsurReward));
             const insurPrice = CurrencyHelper.insurPrice();
             const cashbackInStable = cashbackInInsur * insurPrice;
-            let cashBackPercent = (cashbackInStable / Number(fromWei(premium))) * 100;
+            let cashBackPercent:number = (cashbackInStable / Number(fromWei(premium))) * 100;
             if ( defaultCurrencySymbol == quoteData.currency) {
               const premiumInUSD = Number(fromWei(CurrencyHelper.eth2usd(premium)));
               cashBackPercent = (cashbackInStable / premiumInUSD) * 100;
             }
+            cashBackPercent = cashBackPercent ? Number(cashBackPercent.toFixed(1)) : 7.5;
 
             const quoteCapacity:any = this.formatCapacity( currency , protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0 , web3.symbol );
 
