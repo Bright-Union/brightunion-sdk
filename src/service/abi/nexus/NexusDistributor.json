@@ -220,20 +220,6 @@
     },
     {
       "inputs": [],
-      "name": "exchangeAdapter",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [],
       "name": "feePercentage",
       "outputs": [
         {
@@ -622,6 +608,34 @@
     },
     {
       "inputs": [],
+      "name": "uniswapV2Adapter",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "uniswapV3Adapter",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
       "name": "wEthToken",
       "outputs": [
         {
@@ -696,9 +710,9 @@
           "type": "string"
         },
         {
-          "internalType": "address",
-          "name": "_exchangeAdapterAddress",
-          "type": "address"
+          "internalType": "address[]",
+          "name": "_exchangeAdapters",
+          "type": "address[]"
         }
       ],
       "name": "__NexusDistributor_init",
