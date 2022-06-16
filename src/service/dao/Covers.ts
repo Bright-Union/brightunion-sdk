@@ -306,15 +306,17 @@ export async function getCoversEase():Promise<any>{
         data.forEach(async(vault: any) => {
           let protocol = await _getIERC20Contract(vault.address);
           let instance = await _getEaseContract(vault.address);
-          protocol.methods.balanceOf(global.user.account).call().then((balance: any) => {
+          protocol.methods.balanceOf(global.user.account).call().then(async(balance: any) => {
             if (balance > 0) {
+              let rcaValue = await instance.methods.rcaValue(balance, vault.liquidation_amount).call()
+              let convertedAmount = await instance.methods.uValue(rcaValue, vault.liquidation_amount, vault.percent_reserved).call()
               vault.tokenBalance = fromWei(balance);
               let cover = {
                 risk_protocol: 'ease',
                 status: 0,
-                coverAmount: balance,
+                coverAmount: convertedAmount,
                 vaultCurrency: vault.symbol,
-                coverAsset: vault.symbol,
+                coverAsset: vault.display_name,
                 validUntil: Date.now(),
                 endTime: Date.now(),
                 startTime: Date.now(),
