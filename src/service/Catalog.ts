@@ -190,7 +190,7 @@ export async function getNexusCoverables(): Promise<any[]> {
       return await UnslashedAPI.fetchCoverables()
           .then(async (data: any) => {
             const coverablesArray: any = [];
-            let cover = data.BasketableMarket.data;
+            let cover = data.BasketMarket.data;
             let coverArr = Object.values(cover);
 
             coverArr.forEach(async(item: any) => {

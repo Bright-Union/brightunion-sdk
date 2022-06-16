@@ -16,40 +16,25 @@ export default class UnoReApi {
             });
     }
 
-    static fetchCoverPrice(cover:any, amount: number, period: number) {
+    static async fetchUSDCPrice() {
+        return axios.get(`https://cover.unore.io/api/usdc-price`)
+            .then((response) => {
+                return response.data;
+            }).catch(error => {
+                return [];
+            });
+    }
+
+    static fetchCoverPrice(cover:any, amount: number, period: number, usdcPrice:number) {
         cover.id = `Smart Contract Cover-${cover.address}-txHash`;
         cover.coverAmount = amount.toString();
-        cover.usdcAmount = amount.toString();
+        cover.usdcAmount = usdcPrice * amount;
         cover.coverDuration = Number(period);
-        cover.coverDurType = "Year"
-        // {"id": `Smart Contract Cover-${cover.address}-txHash`,
-        //     "name": cover.name,
-        //     "premium_factor": cover.premium_factor,
-        //     "product_type": cover.product_type,
-        //     "status": cover.status,
-        //     "address": cover.address,
-        //     "symbol": cover.symbol,
-        //     "url": cover.url,
-        //     "description": cover.description,
-        //     "chain":"Multi-Chain",
-        //     "logo": cover.logo,
-        //     "audits": cover.audits,
-        //     "audit_note": cover.audit_note,
-        //     "gecko_id": cover.gecko_id,
-        //     "cmcId": cover.cmcId,
-        //     "category": cover.category,
-        //     "chains":cover.chains,
-        //     "coverDuration":period,
-        //     "coverDurType":"Year",
-        //     "coverAmount":amount,
-        //     "usdcAmount": amount,
-        //     "openDropdown":false,
-        //     "coverType": cover.coverType,
-        //     "premiumFactor": cover.premium_factor,
-        //     "assetAddress": cover.address}
+        cover.coverDurType = "Year";
+        cover.coverType = cover.product_type;
+        cover.premiumFactor = cover.premium_factor;
 
         const body = {"data": [cover]}
-        console.log(body)
 
         return axios.post(`https://cover.unore.io/api/getcoverusdprice`, body)
             .then((response) => {
@@ -59,17 +44,19 @@ export default class UnoReApi {
             });
     }
 
-    static fetchQuote(amount: number, currency: string, period: number, protocol: any) {
+    static async fetchQuote(amount: number, currency: string, period: number, protocol: any) {
+        const usdcPrice = await this.fetchUSDCPrice().then((res:any) => {
+            return res.data.usdcAmtForOneDollar;
+        })
         return this.fetchCoverables()
             .then(async (data: any) => {
                 let cover = data.data.data;
-                if(currency === 'USD') {
-                    amount = Number(CurrencyHelper.usd2eth(amount))
-                }
+                // if(currency === 'USD') {
+                //     amount = Number(CurrencyHelper.usd2eth(amount))
+                // }
                 const protocolName = protocol.name.toLowerCase().split(" ")[0];
                 const quote = cover.find((item: any) => item.name.toLowerCase().includes(protocolName));
-                let price = await this.fetchCoverPrice(quote, amount, period).then((res:any) => {
-                    console.log(res.data.premium)
+                let price = await this.fetchCoverPrice(quote, amount, period, usdcPrice).then((res:any) => {
                     return res.data.premium
                 })
                 if(quote) {

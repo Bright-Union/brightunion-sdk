@@ -19,7 +19,7 @@ export default class UnslashedAPI {
     static fetchQuote(amount: number, currency: string, period: number, protocol: any) {
         return this.fetchCoverables()
             .then(async (data: any) => {
-                let cover = data.BasketableMarket.data;
+                let cover = data.BasketMarket.data;
                 let coverArr = Object.values(cover);
                 let addressArr = Object.keys(cover);
                 let fullCover:any = [];
