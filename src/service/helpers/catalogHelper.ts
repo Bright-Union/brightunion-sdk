@@ -303,6 +303,7 @@ class CatalogHelper {
       typeDescription: obj.typeDescription,
       minimumAmount: obj.minimumAmount,
       uniSwapRouteData: obj.uniSwapRouteData,
+      capacity: obj.capacity,
     }
   }
 
