@@ -14,6 +14,8 @@ export async function getCoversFrom(
       return getInsuraceCovers(global.user.web3);
     }else if(_distributorName == "nexus"){
       return getNexusCovers();
+    }else if(_distributorName == "ease"){
+      return getEaseCovers();
     }else{
       return { error: "Wrong distributor name" }
     }

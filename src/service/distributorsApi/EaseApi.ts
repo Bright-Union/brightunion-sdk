@@ -28,6 +28,8 @@ export default class EaseApi {
                 capacityArr.push(item.remaining_capacity);
             })
             capacityArr = this.rangeArray(capacityArr);
+            const type = CatalogHelper.commonCategory(vault[0].protocol_type, 'ease')
+            const typeDescr = type ? type : 'protocol';
             const exceedsCapacity = currency === 'USD' ? amount > capacityArr[capacityArr.length - 1] :  amount > Number(CurrencyHelper.usd2eth(capacityArr[capacityArr.length - 1]));
             const errorMsg = exceedsCapacity ? { message: `Maximum available capacity is `, currency: currency, errorType:"capacity"} : null;
 
@@ -50,8 +52,8 @@ export default class EaseApi {
                     name: CatalogHelper.unifyCoverName(vault[0].display_name, 'ease' ),
                     source: 'ease',
                     rawDataEase: vault,
-                    type: vault[0].protocol_type,
-                    typeDescription: CatalogHelper.descriptionByCategory(vault[0].protocol_type),
+                    type: type,
+                    typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
                 } );
 
             return CatalogHelper.quoteFromCoverable(
@@ -70,9 +72,9 @@ export default class EaseApi {
                     minimumAmount: 1,
                     name: CatalogHelper.unifyCoverName(vault[0].display_name, 'ease' ),
                     errorMsg: errorMsg,
-                    type: vault[0].protocol_type,
-                    typeDescription: CatalogHelper.descriptionByCategory(vault[0].protocol_type),
                     capacity:quoteCapacity,
+                    type: type,
+                    typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
                 },
                 {
                     capacity: capacityArr,
