@@ -61,8 +61,8 @@ class UniswapV3Api {
     public  static async getNXMPriceFor(_currency:any, _amountOfNXM: number) {
 
       const WETH = new Token( 1 , NetConfig.netById(1).WETH, 18, 'WETH', 'Wrapped Ether')
-      const DAI = new Token( 1 , NetConfig.netById(1).DAI, 6, 'DAI', 'DAI')
-      const WNXM = new Token( 1 , NetConfig.netById(1).WNXM , 6, 'WNXM', 'Wrapped NXM');
+      const DAI = new Token( 1 , NetConfig.netById(1).DAI, 18, 'DAI', 'DAI')
+      const WNXM = new Token( 1 , NetConfig.netById(1).WNXM , 18, 'WNXM', 'Wrapped NXM');
 
       let currencyIn:any = null;
       if(_currency == "ETH"){
@@ -76,10 +76,10 @@ class UniswapV3Api {
       }
 
       const nxmAmoutInWei = toWei( _amountOfNXM.toString() ).split('.')[0];
-      const amountNXMOut = CurrencyAmount.fromRawAmount( WNXM , nxmAmoutInWei );
+      const amountWNXMOut = CurrencyAmount.fromRawAmount( WNXM , nxmAmoutInWei );
 
       const route = await this.router.route(
-        amountNXMOut,
+        amountWNXMOut,
         currencyIn,
         TradeType.EXACT_OUTPUT,
         {
@@ -88,7 +88,7 @@ class UniswapV3Api {
         {
           maxSwapsPerPath: 5,
           distributionPercent: 100,
-          // protocols:['V3']
+          protocols:['V3']
         }
       ).then(
         (res:any) => { return res;} ,
