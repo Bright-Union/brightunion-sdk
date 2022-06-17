@@ -1,7 +1,6 @@
 import { ethers } from 'ethers'
 import { Token , TradeType, CurrencyAmount, Percent } from '@uniswap/sdk-core'
 const AlphaRouter = require('@uniswap/smart-order-router')
-import JSBI from 'jsbi';
 
 import NetConfig from '../../service/config/NetConfig'
 
@@ -88,7 +87,7 @@ class UniswapV3Api {
         {
           maxSwapsPerPath: 5,
           distributionPercent: 100,
-          protocols:['V3']
+          // protocols:['V2']
         }
       ).then(
         (res:any) => { return res;} ,
