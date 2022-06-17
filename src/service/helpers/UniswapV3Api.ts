@@ -88,6 +88,7 @@ class UniswapV3Api {
         {
           maxSwapsPerPath: 5,
           distributionPercent: 100,
+          // protocols:['V3']
         }
       ).then(
         (res:any) => { return res;} ,

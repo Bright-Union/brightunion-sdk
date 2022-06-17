@@ -355,6 +355,19 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
     data ,// random data
   );
 
+    console.log( "buyCoverNexus BEFORE ENCODING--> ",
+    "\nswapVia:" , _quoteProtocol.uniSwapRouteData.swapVia,
+    "\npoolFees:" ,_quoteProtocol.uniSwapRouteData.poolFees,
+    "\nprotocol:" ,_quoteProtocol.uniSwapRouteData.protocol,
+    "\nprice:" ,_quoteProtocol.rawData.price,
+    "\npriceInNXM:" ,_quoteProtocol.rawData.priceInNXM,
+    "\nexpiresAt:" ,_quoteProtocol.rawData.expiresAt,
+    "\ngeneratedAt:" ,_quoteProtocol.rawData.generatedAt,
+    "\nv:" ,_quoteProtocol.rawData.v,
+    "\nr:" ,_quoteProtocol.rawData.r,
+    "\ns:" ,_quoteProtocol.rawData.s
+  );
+
   // ******************************
   // TEST END
   // ******************************
