@@ -62,10 +62,11 @@ const bridge_nexus_insurace_categories : string[][] = [
   ['0' /*CONTRACT*/, 'protocol', 'Smart Contract Vulnerability', 'Lending Protocol', 'protocol', 'Protocol hack and failure'],
   ['2', /*SERVICE*/ 'custodian', '', '', 'custodian', 'Custodian cover'],
   ['1' /*STABLECOIN*/, '', 'Stablecoin De-Peg', '', 'stable', 'Stable token de-pegging'],
-  ['', 'token', '', '', 'yield', 'Yield de-pegging'],
-  ['3' /*EXCHANGE*/, 'custodian', '', 'Custodian Risk', 'custodian'],
+  ['', 'token', '', 'Yield Aggregator', 'yield', 'Yield de-pegging'],
+  ['3' /*EXCHANGE*/, 'custodian', '', '', 'Custodian Risk', 'custodian'],
   ['' , '', 'IDO Event Risk', '', 'ido', 'IDO Event Risk'],
   ['' , '', 'Bundled Cover', '', 'bundled', 'Bundled cover'],
+  ['' , '', '', 'Decentralized Exchange', 'exchange', 'Decentralized Exchange'],
 ];
 
 const CUSTOM_BRIDGE_PROTOCOLS : object = {
@@ -330,7 +331,10 @@ class CatalogHelper {
       cashBack: obj.cashBack,
       rawData: obj.response,
       stats: stats,
+      type: obj.type,
+      typeDescription: obj.typeDescription,
       minimumAmount: obj.minimumAmount,
+      capacity: obj.capacity,
     }
   }
 
@@ -407,9 +411,9 @@ class CatalogHelper {
   }
 
   public static descriptionByCategory (category: string) {
-    let categoryFound = bridge_nexus_insurace_categories.find(cat => cat[3] === category);
+    let categoryFound = bridge_nexus_insurace_categories.find(cat => cat[4] === category);
     if (categoryFound) {
-      return categoryFound[4]
+      return categoryFound[5]
     }
   }
 

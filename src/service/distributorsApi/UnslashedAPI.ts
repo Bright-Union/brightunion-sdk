@@ -19,7 +19,7 @@ export default class UnslashedAPI {
     static fetchQuote(amount: number, currency: string, period: number, protocol: any) {
         return this.fetchCoverables()
             .then(async (data: any) => {
-                let cover = data.BasketMarket.data;
+                let cover = data.BasketMarket ? data.BasketMarket.data : [];
                 let coverArr = Object.values(cover);
                 let addressArr = Object.keys(cover);
                 let fullCover:any = [];
@@ -45,6 +45,7 @@ export default class UnslashedAPI {
                 price = currency === 'USD' ? Number(fromWei(CurrencyHelper.eth2usd(price))) : fromWei(price)
 
                 if(quote) {
+                    console.log(amount)
                     const errorMsg = quote.cover.static.soldOut ? {message: `Sold out`, errorType: "capacity"} : null;
                     global.events.emit("quote", {
                         status: "INITIAL_DATA",
@@ -77,9 +78,10 @@ export default class UnslashedAPI {
                             name: quote.cover.static.name,
                             errorMsg: errorMsg,
                             type: quote.cover.static.type,
+                            capacity: quote.cover.static.soldOut ? 0 : "9999999999999999999999999999999999999999999999999999999",
                         },
                         {
-                            capacity: quote.cover.static.soldOut ? 0 : 100000,
+                            capacity: quote.cover.static.soldOut ? 0 : "9999999999999999999999999999999999999999999999999999999",
                         }
                     );
                 }

@@ -190,7 +190,8 @@ export async function getNexusCoverables(): Promise<any[]> {
       return await UnslashedAPI.fetchCoverables()
           .then(async (data: any) => {
             const coverablesArray: any = [];
-            let cover = data.BasketMarket.data;
+
+            let cover = data.BasketMarket ? data.BasketMarket.data : [];
             let coverArr = Object.values(cover);
 
             coverArr.forEach(async(item: any) => {
@@ -225,7 +226,6 @@ export async function getUnoReCoverables() {
   return await UnoReApi.fetchCoverables()
       .then(async (data:any) => {
         const coverablesArray: any  = [];
-        console.log(data.data.data)
         data.data.data.forEach(async (item: any) => {
           const type = CatalogHelper.commonCategory(item.type, 'unore')
           const typeDescr = type ? type : 'protocol';

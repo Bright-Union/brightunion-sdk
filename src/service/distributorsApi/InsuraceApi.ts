@@ -130,6 +130,18 @@ class InsuraceApi {
 
     }
 
+    static formatCapacity(_currency:any, _quoteCapacity:any, _chain:any ){
+      if(_currency === 'ETH') {
+        return CurrencyHelper.usd2eth(ERC20Helper.USDTtoERCDecimals(_quoteCapacity ) )
+      } else {
+        if(_chain == "BSC"){
+          return _quoteCapacity;
+        }else {
+          return ERC20Helper.USDTtoERCDecimals(_quoteCapacity);
+        }
+      }
+    }
+
     static async fetchInsuraceQuote ( web3:any, amount:string | number, currency:string , period:number, protocol:any): Promise<object> {
 
       let quoteData = await this.formatQuoteDataforInsurace(amount, currency, web3, protocol);
@@ -177,14 +189,19 @@ class InsuraceApi {
               minimumAmount: minimumAmount,
             } );
 
+
             const cashbackInInsur = Number(fromWei(response.ownerInsurReward));
-            const insurPrice = CurrencyHelper.insurPrice();
-            const cashbackInStable = cashbackInInsur * insurPrice;
-            let cashBackPercent = (cashbackInStable / Number(fromWei(premium))) * 100;
-            if ( defaultCurrencySymbol == quoteData.currency) {
-              const premiumInUSD = Number(fromWei(CurrencyHelper.eth2usd(premium)));
-              cashBackPercent = (cashbackInStable / premiumInUSD) * 100;
+            let cashbackInQuoteCurrency:any = cashbackInInsur * CurrencyHelper.insurPrice();
+
+            if (quoteData.currency == "ETH") {
+              cashbackInQuoteCurrency = fromWei(CurrencyHelper.usd2eth(toWei(cashbackInQuoteCurrency.toString())));
             }
+
+            let cashBackPercent:number = (cashbackInQuoteCurrency / Number(fromWei(premium))) * 100;
+
+            cashBackPercent = cashBackPercent ? Number(cashBackPercent.toFixed(1)) : 7.5;
+
+            const quoteCapacity:any = this.formatCapacity( currency , protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0 , web3.symbol );
 
             const quote = CatalogHelper.quoteFromCoverable(
                 'insurace',
@@ -197,11 +214,12 @@ class InsuraceApi {
                     chainId: web3.networkId,
                     price: premium,
                     cashBackPercent: cashBackPercent,
-                    cashBack: [ cashbackInInsur , cashbackInStable ],
+                    cashBack: [ cashbackInInsur , cashbackInQuoteCurrency ],
                     pricePercent: pricePercent,  //%, annualize
                     response: response,
                     defaultCurrencySymbol: defaultCurrencySymbol,
                     minimumAmount: minimumAmount,
+                    capacity: quoteCapacity,
                 },
                 {
                     remainingCapacity: protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0
@@ -215,6 +233,8 @@ class InsuraceApi {
                 let errorMsg:any = { message: e.response && e.response.data ? e.response.data.message : e.message }
 
                 let defaultCapacity = protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0;
+                const quoteCapacity:any = this.formatCapacity( currency , protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0 , web3.symbol );
+
 
                 if (errorMsg.message.match('GP: 4') || errorMsg.message.includes('cover duration is either too small or')) {
                   errorMsg = {message:"Minimum duration is 15 days. Maximum is 365" , errorType: "period" }
@@ -237,6 +257,7 @@ class InsuraceApi {
                         estimatedGasPrice: 0,
                         errorMsg: errorMsg,
                         minimumAmount: minimumAmount,
+                        capacity: quoteCapacity,
 
                     }, {
                         remainingCapacity: defaultCapacity,
