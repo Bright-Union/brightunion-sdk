@@ -193,7 +193,7 @@ export async function getNexusCoverables(): Promise<any[]> {
               const protocolName = item.static.name;
               const type = item.static.type
               const typeDescr = type ? type : 'protocol';
-              let logo:any = await CatalogHelper.getLogoUrl( item.static.name , null, 'unslashed');
+              let logo:any = await CatalogHelper.getLogoUrl( protocolName, null, 'unslashed');
               if (!item.static.hide) {
                 coverablesArray.push(CatalogHelper.createCoverable({
                   protocolAddress: item.static.address,
