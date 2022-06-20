@@ -60,6 +60,7 @@ export default class UnoReApi {
                     return res.data.premium
                 })
                 if(quote) {
+                    console.log(quote)
                     // const errorMsg = quote.cover.static.soldOut ? {message: `Sold out`, errorType: "capacity"} : null;
                     global.events.emit("quote", {
                         status: "INITIAL_DATA",
@@ -72,7 +73,7 @@ export default class UnoReApi {
                         name: quote.name,
                         source: 'unore',
                         rawDataUnore: quote,
-                        type: quote.type,
+                        type: quote.product_type,
                     });
 
                     return CatalogHelper.quoteFromCoverable(
@@ -91,10 +92,11 @@ export default class UnoReApi {
                             minimumAmount: 1,
                             name: quote.name,
                             // errorMsg: errorMsg,
-                            type: quote.type,
+                            type: quote.product_type,
+                            capacity: "9999999999999999999999999999999999999999999999999999999",
                         },
                         {
-                            capacity: 100000,
+                            capacity: "9999999999999999999999999999999999999999999999999999999",
                         }
                     );
                 }
