@@ -23,6 +23,7 @@ export default class UnslashedAPI {
                 let coverArr = Object.values(cover);
                 let addressArr = Object.keys(cover);
                 let fullCover:any = [];
+                let coveredAmount:any = null;
                 for (let i = 0; i < coverArr.length; i ++) {
                     let coverObj = {
                         address: addressArr[i],
@@ -30,16 +31,15 @@ export default class UnslashedAPI {
                     }
                     fullCover.push(coverObj);
                 }
-                if(currency === 'USD') {
-                    amount = Number(CurrencyHelper.usd2eth(amount))
-                }
+                coveredAmount = currency === 'USD' ? Number(CurrencyHelper.usd2eth(amount)) : amount;
+
                 const protocolName = protocol.name.toLowerCase().split(" ")[0];
                 const quote = fullCover.find((item: any) => item.cover.static.name.toLowerCase().includes(protocolName));
                 const unslashedInstance = await _getUnslashedContract(quote.address);
                 let apy = await unslashedInstance.methods.getDynamicPricePerYear18eRatio().call().then((pricePerYear:any) => {
                     return fromWei(pricePerYear);
                 })
-                let price = await unslashedInstance.methods.coverToPremium(toWei(String(amount))).call().then((premium:any) => {
+                let price = await unslashedInstance.methods.coverToPremium(toWei(String(coveredAmount))).call().then((premium:any) => {
                   return premium;
                 })
                 price = currency === 'USD' ? Number(fromWei(CurrencyHelper.eth2usd(price))) : fromWei(price)
