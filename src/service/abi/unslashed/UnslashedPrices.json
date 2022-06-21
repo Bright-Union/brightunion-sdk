@@ -5,9 +5,9 @@
       "anonymous":false,
       "inputs":[
         {
-          "indexed":true,
-          "internalType":"enum Market.PoolName",
-          "name":"class",
+          "indexed":false,
+          "internalType":"uint8",
+          "name":"cycle",
           "type":"uint8"
         },
         {
@@ -31,19 +31,6 @@
       "inputs":[
         {
           "indexed":false,
-          "internalType":"address",
-          "name":"account",
-          "type":"address"
-        }
-      ],
-      "name":"Paused",
-      "type":"event"
-    },
-    {
-      "anonymous":false,
-      "inputs":[
-        {
-          "indexed":false,
           "internalType":"uint256",
           "name":"value",
           "type":"uint256"
@@ -57,21 +44,8 @@
       "inputs":[
         {
           "indexed":false,
-          "internalType":"address",
-          "name":"account",
-          "type":"address"
-        }
-      ],
-      "name":"Unpaused",
-      "type":"event"
-    },
-    {
-      "anonymous":false,
-      "inputs":[
-        {
-          "indexed":true,
-          "internalType":"enum Market.PoolName",
-          "name":"class",
+          "internalType":"uint8",
+          "name":"cycle",
           "type":"uint8"
         },
         {
@@ -91,29 +65,60 @@
       "type":"event"
     },
     {
+      "inputs":[
+        {
+          "internalType":"uint256",
+          "name":"currentCycleCover",
+          "type":"uint256"
+        },
+        {
+          "internalType":"uint256",
+          "name":"nextCycleCover",
+          "type":"uint256"
+        }
+      ],
+      "name":"addCover",
+      "outputs":[
+
+      ],
       "stateMutability":"payable",
-      "type":"fallback"
+      "type":"function"
+    },
+    {
+      "inputs":[
+
+      ],
+      "name":"basketPremiumPerYear",
+      "outputs":[
+        {
+          "internalType":"uint256",
+          "name":"",
+          "type":"uint256"
+        }
+      ],
+      "stateMutability":"view",
+      "type":"function"
     },
     {
       "inputs":[
         {
           "internalType":"uint256",
-          "name":"groupClaimId",
+          "name":"",
           "type":"uint256"
         },
         {
           "internalType":"address",
-          "name":"user",
+          "name":"",
           "type":"address"
         },
         {
           "internalType":"uint256",
-          "name":"refundAmount",
+          "name":"",
           "type":"uint256"
         },
         {
           "internalType":"uint256",
-          "name":"originalRolloverPrice18eRatio",
+          "name":"",
           "type":"uint256"
         }
       ],
@@ -136,25 +141,6 @@
       "outputs":[
 
       ],
-      "stateMutability":"nonpayable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-        {
-          "internalType":"uint256",
-          "name":"cover",
-          "type":"uint256"
-        }
-      ],
-      "name":"coverToPremiumTokens",
-      "outputs":[
-        {
-          "internalType":"uint256",
-          "name":"",
-          "type":"uint256"
-        }
-      ],
       "stateMutability":"view",
       "type":"function"
     },
@@ -175,43 +161,6 @@
         }
       ],
       "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"cycleEndTime",
-      "outputs":[
-        {
-          "internalType":"uint256",
-          "name":"",
-          "type":"uint256"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"dappDeposit",
-      "outputs":[
-
-      ],
-      "stateMutability":"payable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"depositCollateral",
-      "outputs":[
-
-      ],
-      "stateMutability":"payable",
       "type":"function"
     },
     {
@@ -244,15 +193,30 @@
       "inputs":[
 
       ],
-      "name":"getClaims",
+      "name":"getCollateral",
       "outputs":[
         {
-          "internalType":"address",
+          "internalType":"uint256",
           "name":"",
-          "type":"address"
+          "type":"uint256"
         }
       ],
       "stateMutability":"view",
+      "type":"function"
+    },
+    {
+      "inputs":[
+
+      ],
+      "name":"getCollateralAvailableForWithdrawal",
+      "outputs":[
+        {
+          "internalType":"uint256",
+          "name":"",
+          "type":"uint256"
+        }
+      ],
+      "stateMutability":"pure",
       "type":"function"
     },
     {
@@ -267,23 +231,60 @@
           "type":"address"
         }
       ],
-      "stateMutability":"view",
+      "stateMutability":"pure",
       "type":"function"
     },
     {
       "inputs":[
         {
-          "internalType":"address",
-          "name":"tokenHolder",
-          "type":"address"
+          "internalType":"uint8",
+          "name":"cycle",
+          "type":"uint8"
         }
       ],
-      "name":"getCollateralTokenBalanceValue",
+      "name":"getCycle",
       "outputs":[
         {
-          "internalType":"uint256",
+          "components":[
+            {
+              "internalType":"uint256",
+              "name":"startTime",
+              "type":"uint256"
+            },
+            {
+              "internalType":"uint256",
+              "name":"basePrice18eRatio",
+              "type":"uint256"
+            },
+            {
+              "internalType":"uint256",
+              "name":"variablePrice18eRatio",
+              "type":"uint256"
+            },
+            {
+              "internalType":"uint256",
+              "name":"linearSlope18eRatio",
+              "type":"uint256"
+            },
+            {
+              "internalType":"uint8",
+              "name":"exponent",
+              "type":"uint8"
+            },
+            {
+              "internalType":"address",
+              "name":"premiumToken",
+              "type":"address"
+            },
+            {
+              "internalType":"uint256",
+              "name":"premium",
+              "type":"uint256"
+            }
+          ],
+          "internalType":"struct IBasketMarket.Cycle",
           "name":"",
-          "type":"uint256"
+          "type":"tuple"
         }
       ],
       "stateMutability":"view",
@@ -291,18 +292,14 @@
     },
     {
       "inputs":[
-        {
-          "internalType":"uint256",
-          "name":"tokenAmount",
-          "type":"uint256"
-        }
+
       ],
-      "name":"getCollateralTokensValue",
+      "name":"getCycleNumber",
       "outputs":[
         {
-          "internalType":"uint256",
+          "internalType":"uint8",
           "name":"",
-          "type":"uint256"
+          "type":"uint8"
         }
       ],
       "stateMutability":"view",
@@ -320,7 +317,7 @@
           "type":"uint256"
         }
       ],
-      "stateMutability":"view",
+      "stateMutability":"pure",
       "type":"function"
     },
     {
@@ -328,6 +325,51 @@
 
       ],
       "name":"getDirectCollateral",
+      "outputs":[
+        {
+          "internalType":"uint256",
+          "name":"",
+          "type":"uint256"
+        }
+      ],
+      "stateMutability":"pure",
+      "type":"function"
+    },
+    {
+      "inputs":[
+
+      ],
+      "name":"getDynamicPricePerYear18eRatio",
+      "outputs":[
+        {
+          "internalType":"uint256",
+          "name":"",
+          "type":"uint256"
+        }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+    },
+    {
+      "inputs":[
+
+      ],
+      "name":"getEffectiveCollateral",
+      "outputs":[
+        {
+          "internalType":"uint256",
+          "name":"",
+          "type":"uint256"
+        }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+    },
+    {
+      "inputs":[
+
+      ],
+      "name":"getFreeAssets",
       "outputs":[
         {
           "internalType":"uint256",
@@ -350,7 +392,7 @@
           "type":"uint256"
         }
       ],
-      "stateMutability":"view",
+      "stateMutability":"pure",
       "type":"function"
     },
     {
@@ -417,13 +459,24 @@
     },
     {
       "inputs":[
+
+      ],
+      "name":"getPoolAsset",
+      "outputs":[
         {
           "internalType":"address",
-          "name":"tokenHolder",
+          "name":"",
           "type":"address"
         }
       ],
-      "name":"getMaximumCollateralWithdrawal",
+      "stateMutability":"pure",
+      "type":"function"
+    },
+    {
+      "inputs":[
+
+      ],
+      "name":"getPremium",
       "outputs":[
         {
           "internalType":"uint256",
@@ -438,12 +491,12 @@
       "inputs":[
 
       ],
-      "name":"getPoolAsset",
+      "name":"getPremiumAccountTime",
       "outputs":[
         {
-          "internalType":"address",
+          "internalType":"uint256",
           "name":"",
-          "type":"address"
+          "type":"uint256"
         }
       ],
       "stateMutability":"view",
@@ -453,7 +506,7 @@
       "inputs":[
 
       ],
-      "name":"getPremium",
+      "name":"getPremiumPerYear",
       "outputs":[
         {
           "internalType":"uint256",
@@ -483,6 +536,21 @@
       "inputs":[
 
       ],
+      "name":"getRolloverDate",
+      "outputs":[
+        {
+          "internalType":"uint256",
+          "name":"",
+          "type":"uint256"
+        }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+    },
+    {
+      "inputs":[
+
+      ],
       "name":"getRolloverPrice18eRatio",
       "outputs":[
         {
@@ -498,22 +566,7 @@
       "inputs":[
 
       ],
-      "name":"getSelfInsurance",
-      "outputs":[
-        {
-          "internalType":"address",
-          "name":"",
-          "type":"address"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"getTotalCollateral",
+      "name":"getUsedBasketCollateral",
       "outputs":[
         {
           "internalType":"uint256",
@@ -528,7 +581,127 @@
       "inputs":[
 
       ],
-      "name":"getWithdrawPaused",
+      "name":"getVersion",
+      "outputs":[
+        {
+          "internalType":"uint16",
+          "name":"",
+          "type":"uint16"
+        }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+    },
+    {
+      "inputs":[
+        {
+          "internalType":"bool",
+          "name":"perpetual",
+          "type":"bool"
+        },
+        {
+          "internalType":"string",
+          "name":"tokenName",
+          "type":"string"
+        },
+        {
+          "internalType":"string",
+          "name":"tokenSymbol",
+          "type":"string"
+        },
+        {
+          "internalType":"uint256",
+          "name":"basePrice18eRatio",
+          "type":"uint256"
+        },
+        {
+          "internalType":"uint256",
+          "name":"variablePrice18eRatio",
+          "type":"uint256"
+        },
+        {
+          "internalType":"uint256",
+          "name":"linearSlope18eRatio",
+          "type":"uint256"
+        },
+        {
+          "internalType":"uint8",
+          "name":"exponent",
+          "type":"uint8"
+        },
+        {
+          "internalType":"uint8",
+          "name":"initPriceDenominator",
+          "type":"uint8"
+        },
+        {
+          "internalType":"address",
+          "name":"basket",
+          "type":"address"
+        },
+        {
+          "internalType":"address",
+          "name":"claims",
+          "type":"address"
+        }
+      ],
+      "name":"initialize",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    {
+      "inputs":[
+        {
+          "internalType":"address",
+          "name":"migrator",
+          "type":"address"
+        },
+        {
+          "internalType":"bool",
+          "name":"",
+          "type":"bool"
+        },
+        {
+          "internalType":"address[]",
+          "name":"",
+          "type":"address[]"
+        }
+      ],
+      "name":"initializeDirectUpgrade",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    {
+      "inputs":[
+        {
+          "internalType":"address",
+          "name":"migrator",
+          "type":"address"
+        },
+        {
+          "internalType":"bool",
+          "name":"",
+          "type":"bool"
+        }
+      ],
+      "name":"initializeUpgrade",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    {
+      "inputs":[
+
+      ],
+      "name":"isPerpetual",
       "outputs":[
         {
           "internalType":"bool",
@@ -537,36 +710,6 @@
         }
       ],
       "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-        {
-          "internalType":"bytes32",
-          "name":"auth",
-          "type":"bytes32"
-        }
-      ],
-      "name":"getWithdrawRequestTokenPrice18eRatio",
-      "outputs":[
-        {
-          "internalType":"uint256",
-          "name":"",
-          "type":"uint256"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"initNextPrice",
-      "outputs":[
-
-      ],
-      "stateMutability":"nonpayable",
       "type":"function"
     },
     {
@@ -588,7 +731,7 @@
       "inputs":[
         {
           "internalType":"uint256",
-          "name":"groupClaimId",
+          "name":"",
           "type":"uint256"
         },
         {
@@ -598,7 +741,7 @@
         },
         {
           "internalType":"address",
-          "name":"user",
+          "name":"insuree",
           "type":"address"
         }
       ],
@@ -637,343 +780,13 @@
     },
     {
       "inputs":[
-        {
-          "internalType":"uint256",
-          "name":"amount",
-          "type":"uint256"
-        }
-      ],
-      "name":"premiumDepositLiquidityCheck",
-      "outputs":[
-        {
-          "internalType":"bool",
-          "name":"",
-          "type":"bool"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
 
       ],
-      "name":"premiumTokenPrice18eRatio",
-      "outputs":[
-        {
-          "internalType":"uint256",
-          "name":"",
-          "type":"uint256"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-        {
-          "internalType":"uint256",
-          "name":"maxTokenAmount",
-          "type":"uint256"
-        }
-      ],
-      "name":"requestWithdrawCollateral",
+      "name":"payPremium",
       "outputs":[
 
       ],
       "stateMutability":"nonpayable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"resetCycle",
-      "outputs":[
-
-      ],
-      "stateMutability":"nonpayable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-        {
-          "internalType":"address",
-          "name":"claims",
-          "type":"address"
-        }
-      ],
-      "name":"setClaims",
-      "outputs":[
-
-      ],
-      "stateMutability":"nonpayable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-        {
-          "internalType":"uint256",
-          "name":"nextMaxPrice18eRatio",
-          "type":"uint256"
-        },
-        {
-          "internalType":"uint256",
-          "name":"nextMinPrice18eRatio",
-          "type":"uint256"
-        },
-        {
-          "internalType":"uint256",
-          "name":"nextCycleDuration",
-          "type":"uint256"
-        }
-      ],
-      "name":"setNextPremiumParams",
-      "outputs":[
-
-      ],
-      "stateMutability":"nonpayable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-        {
-          "internalType":"address",
-          "name":"selfInsurance",
-          "type":"address"
-        }
-      ],
-      "name":"setSelfInsurance",
-      "outputs":[
-
-      ],
-      "stateMutability":"nonpayable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"unpause",
-      "outputs":[
-
-      ],
-      "stateMutability":"nonpayable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-        {
-          "internalType":"uint256",
-          "name":"tokenAmount",
-          "type":"uint256"
-        },
-        {
-          "internalType":"uint256",
-          "name":"maxTokenAmount",
-          "type":"uint256"
-        },
-        {
-          "internalType":"uint256",
-          "name":"timestamp",
-          "type":"uint256"
-        }
-      ],
-      "name":"withdrawCollateral",
-      "outputs":[
-
-      ],
-      "stateMutability":"nonpayable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-        {
-          "internalType":"uint256",
-          "name":"tokenAmount",
-          "type":"uint256"
-        }
-      ],
-      "name":"withdrawPremium",
-      "outputs":[
-
-      ],
-      "stateMutability":"nonpayable",
-      "type":"function"
-    },
-    {
-      "stateMutability":"payable",
-      "type":"receive"
-    },
-    {
-      "inputs":[
-        {
-          "internalType":"address",
-          "name":"registry",
-          "type":"address"
-        },
-        {
-          "internalType":"address",
-          "name":"premiumToken",
-          "type":"address"
-        },
-        {
-          "internalType":"address",
-          "name":"collateralToken",
-          "type":"address"
-        },
-        {
-          "internalType":"uint256",
-          "name":"maxPrice18eRatio",
-          "type":"uint256"
-        },
-        {
-          "internalType":"uint256",
-          "name":"minPrice18eRatio",
-          "type":"uint256"
-        },
-        {
-          "internalType":"uint256",
-          "name":"variablePrice18eRatio",
-          "type":"uint256"
-        },
-        {
-          "internalType":"uint256",
-          "name":"cycleDuration",
-          "type":"uint256"
-        },
-        {
-          "internalType":"uint256",
-          "name":"withdrawWaitTime",
-          "type":"uint256"
-        }
-      ],
-      "name":"initialize",
-      "outputs":[
-
-      ],
-      "stateMutability":"nonpayable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-        {
-          "internalType":"uint256",
-          "name":"minPrice18eRatio",
-          "type":"uint256"
-        },
-        {
-          "internalType":"uint256",
-          "name":"maxPrice18eRatio",
-          "type":"uint256"
-        },
-        {
-          "internalType":"uint256",
-          "name":"cycleDuration",
-          "type":"uint256"
-        },
-        {
-          "internalType":"uint256",
-          "name":"basketWeight18eRatio",
-          "type":"uint256"
-        },
-        {
-          "internalType":"uint256",
-          "name":"marketLinearSlope18eRatio",
-          "type":"uint256"
-        },
-        {
-          "internalType":"uint256",
-          "name":"basketLinearSlope18eRatio",
-          "type":"uint256"
-        },
-        {
-          "internalType":"uint8",
-          "name":"marketExponent",
-          "type":"uint8"
-        },
-        {
-          "internalType":"uint8",
-          "name":"basketExponent",
-          "type":"uint8"
-        }
-      ],
-      "name":"setDynamicPricingParams",
-      "outputs":[
-
-      ],
-      "stateMutability":"nonpayable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-        {
-          "internalType":"address",
-          "name":"basketAddress",
-          "type":"address"
-        }
-      ],
-      "name":"setBasket",
-      "outputs":[
-
-      ],
-      "stateMutability":"nonpayable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"unsetBasket",
-      "outputs":[
-
-      ],
-      "stateMutability":"nonpayable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-        {
-          "internalType":"uint256",
-          "name":"minimum",
-          "type":"uint256"
-        }
-      ],
-      "name":"rebalanceUsageToBasket",
-      "outputs":[
-
-      ],
-      "stateMutability":"nonpayable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"getBasket",
-      "outputs":[
-        {
-          "internalType":"address",
-          "name":"",
-          "type":"address"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"basketPremiumPerYear",
-      "outputs":[
-        {
-          "internalType":"uint256",
-          "name":"",
-          "type":"uint256"
-        }
-      ],
-      "stateMutability":"view",
       "type":"function"
     },
     {
@@ -984,300 +797,27 @@
       "outputs":[
         {
           "internalType":"uint256",
-          "name":"total",
+          "name":"",
           "type":"uint256"
         }
       ],
-      "stateMutability":"view",
+      "stateMutability":"pure",
       "type":"function"
     },
     {
       "inputs":[
-
+        {
+          "internalType":"uint256",
+          "name":"premium",
+          "type":"uint256"
+        }
       ],
-      "name":"getUsedBasketCollateral",
+      "name":"premiumToCover",
       "outputs":[
         {
           "internalType":"uint256",
           "name":"",
           "type":"uint256"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"totalPremiumPerYear",
-      "outputs":[
-        {
-          "internalType":"uint256",
-          "name":"",
-          "type":"uint256"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"payPremium",
-      "outputs":[
-        {
-          "internalType":"bool",
-          "name":"",
-          "type":"bool"
-        }
-      ],
-      "stateMutability":"nonpayable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-        {
-          "internalType":"uint256",
-          "name":"groupClaimId",
-          "type":"uint256"
-        }
-      ],
-      "name":"withdrawRefund",
-      "outputs":[
-
-      ],
-      "stateMutability":"nonpayable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-        {
-          "internalType":"bool",
-          "name":"withdrawPaused",
-          "type":"bool"
-        }
-      ],
-      "name":"setWithdrawPaused",
-      "outputs":[
-
-      ],
-      "stateMutability":"nonpayable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"rebalanceUsageToMarket",
-      "outputs":[
-
-      ],
-      "stateMutability":"nonpayable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"moveClaimLockedCollateral",
-      "outputs":[
-
-      ],
-      "stateMutability":"payable",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"getRebalanceUsageToMarketAmount",
-      "outputs":[
-        {
-          "internalType":"uint256",
-          "name":"moveToMarket",
-          "type":"uint256"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"getFreeAssets",
-      "outputs":[
-        {
-          "internalType":"uint256",
-          "name":"",
-          "type":"uint256"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"getRebalanceUsageToBasketAmount",
-      "outputs":[
-        {
-          "internalType":"uint256",
-          "name":"amount",
-          "type":"uint256"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"getCollateral",
-      "outputs":[
-        {
-          "internalType":"uint256",
-          "name":"",
-          "type":"uint256"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"getEffectiveCollateral",
-      "outputs":[
-        {
-          "internalType":"uint256",
-          "name":"",
-          "type":"uint256"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"getUsedDirectCollateral",
-      "outputs":[
-        {
-          "internalType":"uint256",
-          "name":"",
-          "type":"uint256"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"getUsedCollateral",
-      "outputs":[
-        {
-          "internalType":"uint256",
-          "name":"",
-          "type":"uint256"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"getBasketCollateral",
-      "outputs":[
-        {
-          "internalType":"uint256",
-          "name":"",
-          "type":"uint256"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"getCollateralAvailableForWithdrawal",
-      "outputs":[
-        {
-          "internalType":"uint256",
-          "name":"",
-          "type":"uint256"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"getBasketClaimLockedCollateral",
-      "outputs":[
-        {
-          "internalType":"uint256",
-          "name":"",
-          "type":"uint256"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"getDirectClaimLockedCollateral",
-      "outputs":[
-        {
-          "internalType":"uint256",
-          "name":"",
-          "type":"uint256"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"getClaimLockedCollateral",
-      "outputs":[
-        {
-          "internalType":"uint256",
-          "name":"",
-          "type":"uint256"
-        }
-      ],
-      "stateMutability":"view",
-      "type":"function"
-    },
-    {
-      "inputs":[
-
-      ],
-      "name":"usesDynamicPricing",
-      "outputs":[
-        {
-          "internalType":"bool",
-          "name":"",
-          "type":"bool"
         }
       ],
       "stateMutability":"view",
@@ -1306,7 +846,7 @@
       "inputs":[
 
       ],
-      "name":"getUtilisation18eRatio",
+      "name":"premiumToPay",
       "outputs":[
         {
           "internalType":"uint256",
@@ -1319,17 +859,259 @@
     },
     {
       "inputs":[
+        {
+          "internalType":"uint256",
+          "name":"currentCycleCover",
+          "type":"uint256"
+        },
+        {
+          "internalType":"uint256",
+          "name":"nextCycleCover",
+          "type":"uint256"
+        }
+      ],
+      "name":"reduceCover",
+      "outputs":[
 
       ],
-      "name":"getDynamicPricePerYear18eRatio",
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    {
+      "inputs":[
+        {
+          "internalType":"bool",
+          "name":"perpetual",
+          "type":"bool"
+        }
+      ],
+      "name":"restart",
       "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    {
+      "inputs":[
+        {
+          "internalType":"address",
+          "name":"claims",
+          "type":"address"
+        }
+      ],
+      "name":"setClaims",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    {
+      "inputs":[
+        {
+          "internalType":"address",
+          "name":"migrator",
+          "type":"address"
+        }
+      ],
+      "name":"setMigrator",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    {
+      "inputs":[
+        {
+          "internalType":"bool",
+          "name":"perpetual",
+          "type":"bool"
+        }
+      ],
+      "name":"setPerpetual",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    {
+      "inputs":[
+        {
+          "internalType":"uint8",
+          "name":"cycleNumber",
+          "type":"uint8"
+        },
+        {
+          "internalType":"uint256",
+          "name":"basePrice18eRatio",
+          "type":"uint256"
+        },
+        {
+          "internalType":"uint256",
+          "name":"variablePrice18eRatio",
+          "type":"uint256"
+        },
+        {
+          "internalType":"uint256",
+          "name":"linearSlope18eRatio",
+          "type":"uint256"
+        },
+        {
+          "internalType":"uint8",
+          "name":"exponent",
+          "type":"uint8"
+        },
+        {
+          "internalType":"uint8",
+          "name":"initPriceDenominator",
+          "type":"uint8"
+        }
+      ],
+      "name":"setPricingParams",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    {
+      "inputs":[
+        {
+          "internalType":"uint256",
+          "name":"refundGasPrice",
+          "type":"uint256"
+        }
+      ],
+      "name":"setRefundGasPrice",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    {
+      "inputs":[
+        {
+          "internalType":"bool",
+          "name":"withdrawPaused",
+          "type":"bool"
+        }
+      ],
+      "name":"setWithdrawPaused",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    {
+      "inputs":[
+
+      ],
+      "name":"transferExcess",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    {
+      "inputs":[
+        {
+          "internalType":"uint256",
+          "name":"cover",
+          "type":"uint256"
+        }
+      ],
+      "name":"unlockCover",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    {
+      "inputs":[
+
+      ],
+      "name":"unpause",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    {
+      "inputs":[
+
+      ],
+      "name":"usesDynamicPricing",
+      "outputs":[
+        {
+          "internalType":"bool",
+          "name":"",
+          "type":"bool"
+        }
+      ],
+      "stateMutability":"pure",
+      "type":"function"
+    },
+    {
+      "inputs":[
+        {
+          "internalType":"address",
+          "name":"",
+          "type":"address"
+        },
+        {
+          "internalType":"uint256",
+          "name":"",
+          "type":"uint256"
+        },
         {
           "internalType":"uint256",
           "name":"",
           "type":"uint256"
         }
       ],
-      "stateMutability":"view",
+      "name":"validateWithdrawRequest",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    {
+      "inputs":[
+        {
+          "internalType":"uint256",
+          "name":"amount",
+          "type":"uint256"
+        }
+      ],
+      "name":"withdrawPremium",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    {
+      "inputs":[
+        {
+          "internalType":"uint256",
+          "name":"groupClaimId",
+          "type":"uint256"
+        }
+      ],
+      "name":"withdrawRefund",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
       "type":"function"
     }
   ]

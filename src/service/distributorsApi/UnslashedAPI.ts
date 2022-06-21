@@ -39,6 +39,10 @@ export default class UnslashedAPI {
                 let apy = await unslashedInstance.methods.getDynamicPricePerYear18eRatio().call().then((pricePerYear:any) => {
                     return fromWei(pricePerYear);
                 })
+                let rolloverDate = await unslashedInstance.methods.getRolloverDate().call().then((timestamp:any) => {
+                  return timestamp;
+                })
+
                 let price = await unslashedInstance.methods.coverToPremium(toWei(String(coveredAmount))).call().then((premium:any) => {
                   return premium;
                 })
@@ -56,8 +60,10 @@ export default class UnslashedAPI {
                         chain: 'ETH',
                         name: quote.cover.name,
                         source: 'ease',
+                        actualPeriod: rolloverDate,
                         rawDataUnslashed: quote.cover.static,
                         type: quote.cover.type,
+                        typeDescription: quote.cover.static.description,
                     });
 
                     return CatalogHelper.quoteFromCoverable(
@@ -65,6 +71,7 @@ export default class UnslashedAPI {
                         protocol,
                         {
                             amount: amount,
+                            actualPeriod: rolloverDate,
                             currency: currency,
                             period: period,
                             chain: 'ETH',
@@ -77,6 +84,7 @@ export default class UnslashedAPI {
                             name: quote.cover.static.name,
                             errorMsg: errorMsg,
                             type: quote.cover.static.type,
+                            typeDescription: quote.cover.static.description,
                             capacity: quote.cover.static.soldOut ? 0 : "9999999999999999999999999999999999999999999999999999999",
                         },
                         {
