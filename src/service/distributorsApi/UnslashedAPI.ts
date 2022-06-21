@@ -58,6 +58,7 @@ export default class UnslashedAPI {
                         source: 'ease',
                         rawDataUnslashed: quote.cover.static,
                         type: quote.cover.type,
+                        typeDescription: quote.cover.static.description,
                     });
 
                     return CatalogHelper.quoteFromCoverable(
@@ -77,6 +78,7 @@ export default class UnslashedAPI {
                             name: quote.cover.static.name,
                             errorMsg: errorMsg,
                             type: quote.cover.static.type,
+                            typeDescription: quote.cover.static.description,
                             capacity: quote.cover.static.soldOut ? 0 : "9999999999999999999999999999999999999999999999999999999",
                         },
                         {

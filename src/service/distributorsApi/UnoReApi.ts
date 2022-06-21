@@ -51,17 +51,24 @@ export default class UnoReApi {
         return this.fetchCoverables()
             .then(async (data: any) => {
                 let cover = data.data.data;
-                // if(currency === 'USD') {
-                //     amount = Number(CurrencyHelper.usd2eth(amount))
-                // }
+
                 const protocolName = protocol.name.toLowerCase().split(" ")[0];
                 const quote = cover.find((item: any) => item.name.toLowerCase().includes(protocolName));
-                let price = await this.fetchCoverPrice(quote, amount, period, usdcPrice).then((res:any) => {
-                    return res.data.premium
-                })
+
                 if(quote) {
-                    console.log(quote)
-                    // const errorMsg = quote.cover.static.soldOut ? {message: `Sold out`, errorType: "capacity"} : null;
+                    let type = CatalogHelper.commonCategory(quote.category, 'unore');
+                    const typeDescr = type ? type : 'protocol';
+                    let price:any = 0;
+                    if(currency === 'USD') {
+                        price = await this.fetchCoverPrice(quote, amount, period, usdcPrice).then((res:any) => {
+                            return res.data.premium
+                        })
+                    } else {
+                        price = await this.fetchCoverPrice(quote, Number(CurrencyHelper.eth2usd(amount)), period, usdcPrice).then((res:any) => {
+                            const convertedNumber = Number(CurrencyHelper.usd2eth(toWei(String(res.data.premium))));
+                            return fromWei(String(convertedNumber))
+                        })
+                    }
                     global.events.emit("quote", {
                         status: "INITIAL_DATA",
                         distributorName: "Unore",
@@ -73,7 +80,9 @@ export default class UnoReApi {
                         name: quote.name,
                         source: 'unore',
                         rawDataUnore: quote,
-                        type: quote.product_type,
+                        type: type,
+                        errorMsg: null,
+                        typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
                     });
 
                     return CatalogHelper.quoteFromCoverable(
@@ -91,8 +100,9 @@ export default class UnoReApi {
                             source: 'unore',
                             minimumAmount: 1,
                             name: quote.name,
-                            // errorMsg: errorMsg,
-                            type: quote.product_type,
+                            errorMsg: null,
+                            type: type,
+                            typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
                             capacity: "9999999999999999999999999999999999999999999999999999999",
                         },
                         {

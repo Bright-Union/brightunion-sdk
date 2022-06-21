@@ -58,15 +58,15 @@ const bridge_nexus_insurace = [
 
 
 const bridge_nexus_insurace_categories : string[][] = [
-  // BRIDGE CATEGORY, NEXUS CATEGORY, INSURACE, EASE, COMMON CATEGORY, DESCRIPTION
-  ['0' /*CONTRACT*/, 'protocol', 'Smart Contract Vulnerability', 'Lending Protocol', 'protocol', 'Protocol hack and failure'],
-  ['2', /*SERVICE*/ 'custodian', '', '', 'custodian', 'Custodian cover'],
-  ['1' /*STABLECOIN*/, '', 'Stablecoin De-Peg', '', 'stable', 'Stable token de-pegging'],
-  ['', 'token', '', 'Yield Aggregator', 'yield', 'Yield de-pegging'],
-  ['3' /*EXCHANGE*/, 'custodian', '', '', 'Custodian Risk', 'custodian'],
-  ['' , '', 'IDO Event Risk', '', 'ido', 'IDO Event Risk'],
-  ['' , '', 'Bundled Cover', '', 'bundled', 'Bundled cover'],
-  ['' , '', '', 'Decentralized Exchange', 'exchange', 'Decentralized Exchange'],
+  // BRIDGE CATEGORY, NEXUS CATEGORY, INSURACE, EASE, UNORE, COMMON CATEGORY, DESCRIPTION
+  ['0' /*CONTRACT*/, 'protocol', 'Smart Contract Vulnerability', 'Lending Protocol', 'Lending', 'protocol', 'Protocol hack and failure'],
+  ['2', /*SERVICE*/ 'custodian', '', '', '', 'custodian', 'Custodian cover'],
+  ['1' /*STABLECOIN*/, '', 'Stablecoin De-Peg', '', 'Stablecoin', 'stable', 'Stable token de-pegging'],
+  ['', 'token', '', 'Yield Aggregator', '', 'yield', 'Yield de-pegging'],
+  ['3' /*EXCHANGE*/, 'custodian', '', '', '', 'Custodian Risk', 'custodian'],
+  ['' , '', 'IDO Event Risk', '', '', 'ido', 'IDO Event Risk'],
+  ['' , '', 'Bundled Cover', '', '', 'bundled', 'Bundled cover'],
+  ['' , '', '', 'Decentralized Exchange', 'Dexes', 'exchange', 'Decentralized Exchange'],
 ];
 
 const CUSTOM_BRIDGE_PROTOCOLS : object = {
@@ -223,6 +223,7 @@ const catalogLogoLinks: any = [
   { name: "Instadapp" , link:"https://app.unslashed.finance/logos/instadapp@2x.png"},
   { name: "Visor Finance" , link:"https://assets.coingecko.com/coins/images/14381/small/visor_logo.png?1615782828"},
   { name: "Wall Street Games" , link:"https://assets.coingecko.com/coins/images/15872/small/X3Awe42.png?1622181358"},
+  { name: "88mph.app" , link:"https://files.insurace.io/public/asset/product/88mph.png"},
 ];
 
 class CatalogHelper {
@@ -287,6 +288,7 @@ class CatalogHelper {
   public static chainLogos (name:string) {
     let transformedName = name.toLowerCase();
     if (transformedName === 'ethereum') transformedName = 'eth';
+    if (transformedName === 'binance') transformedName = 'bsc';
     const insuraceSrc = `https://app.insurace.io/asset/chain/${transformedName}.png`
     const nexusPng = `https://app.nexusmutual.io/logos/${transformedName}.png`
     const nexusSvg = `https://app.nexusmutual.io/logos/${transformedName}.svg`
@@ -383,8 +385,10 @@ class CatalogHelper {
       commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[2] === category});
     } else if (provider == 'ease') {
       commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[3] === category});
+    } else if (provider == 'unore') {
+      commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[4] === category});
     }
-    return commonCategory ? commonCategory[4] : '' ;
+    return commonCategory ? commonCategory[5] : '' ;
   }
 
   public static chainList(_distributorName:string, coverable:any) {
@@ -411,9 +415,9 @@ class CatalogHelper {
   }
 
   public static descriptionByCategory (category: string) {
-    let categoryFound = bridge_nexus_insurace_categories.find(cat => cat[4] === category);
+    let categoryFound = bridge_nexus_insurace_categories.find(cat => cat[5] === category);
     if (categoryFound) {
-      return categoryFound[5]
+      return categoryFound[6]
     }
   }
 

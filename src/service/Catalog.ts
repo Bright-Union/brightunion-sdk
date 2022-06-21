@@ -28,15 +28,15 @@ export async function getCatalog(): Promise<any> {
   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'BRIDGE_MUTUAL')) {
     catalogPromiseArray.push(getBridgeV2Coverables())
   }
-  // if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'UNORE')) {
-    catalogPromiseArray.push(getUnoReCoverables())
-  // }
 
   // push EASE
   catalogPromiseArray.push(getEaseCoverables())
 
   // push UNSLASHED
   catalogPromiseArray.push(getUnslashedCoverables())
+
+  // push UNORE
+  catalogPromiseArray.push(getUnoReCoverables())
 
   for (let net of global.user.web3Passive) {
     catalogPromiseArray.push(getInsuraceCoverables(net.networkId))
@@ -222,30 +222,30 @@ export async function getNexusCoverables(): Promise<any[]> {
           })
 }
 
-export async function getUnoReCoverables() {
-  return await UnoReApi.fetchCoverables()
-      .then(async (data:any) => {
-        const coverablesArray: any  = [];
-        data.data.data.forEach(async (item: any) => {
-          const type = item.type;
-          const typeDescr = type ? type : 'protocol';
-            let logo:any = await CatalogHelper.getLogoUrl( item.name , null, 'unore');
-          coverablesArray.push(CatalogHelper.createCoverable({
-            protocolAddress: item.address,
-            name: CatalogHelper.unifyCoverName(item.name, 'unore' ),
-            source: 'unore',
-            logo: logo,
-            rawDataUnore: item,
-            type: type,
-            chainListUnore: item.chains,
-            typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
-            stats: {}
-          }))
-        })
-        global.events.emit("catalog" , { items: coverablesArray , distributorName:"unore" , networkId: 1, itemsCount: coverablesArray.length } );
-        return coverablesArray;
-      });
-}
+    export async function getUnoReCoverables() {
+      return await UnoReApi.fetchCoverables()
+          .then(async (data:any) => {
+            const coverablesArray: any  = [];
+            data.data.data.forEach(async (item: any) => {
+              let type = CatalogHelper.commonCategory(item.category, 'unore')
+              const typeDescr = type ? type : 'protocol';
+                let logo:any = await CatalogHelper.getLogoUrl( item.name , null, 'unore');
+              coverablesArray.push(CatalogHelper.createCoverable({
+                protocolAddress: item.address,
+                name: CatalogHelper.unifyCoverName(item.name, 'unore' ),
+                source: 'unore',
+                logo: logo,
+                rawDataUnore: item,
+                type: type,
+                chainListUnore: item.chains,
+                typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
+                stats: {}
+              }))
+            })
+            global.events.emit("catalog" , { items: coverablesArray , distributorName:"unore" , networkId: 1, itemsCount: coverablesArray.length } );
+            return coverablesArray;
+          });
+    }
 
 
 export default {
