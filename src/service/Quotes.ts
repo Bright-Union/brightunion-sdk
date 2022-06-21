@@ -86,9 +86,10 @@ export async function getQuoteFrom(
     return await getEaseQuote(_amount,_currency,_period,_protocol );
   }else if(_distributorName == 'unslashed'){
     return await getUnslashedQuote(_amount,_currency,_period,_protocol );
-  }else if(_distributorName == 'unore'){
-    return await getUnoReQuote(_amount,_currency,_period,_protocol );
   }
+  // else if(_distributorName == 'unore'){
+  //   return await getUnoReQuote(_amount,_currency,_period,_protocol );
+  // }
   else {
     return  {error: 'supported distributor names are: bridge, insurace, nexus'}
   }
