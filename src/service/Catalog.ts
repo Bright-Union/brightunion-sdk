@@ -36,7 +36,7 @@ export async function getCatalog(): Promise<any> {
   catalogPromiseArray.push(getUnslashedCoverables())
 
   // push UNORE
-  // catalogPromiseArray.push(getUnoReCoverables())
+  catalogPromiseArray.push(getUnoReCoverables())
 
   for (let net of global.user.web3Passive) {
     catalogPromiseArray.push(getInsuraceCoverables(net.networkId))
