@@ -12,6 +12,7 @@ import GoogleEvents from './config/GoogleEvents';
 import BridgeHelper from './distributorsApi/BridgeHelper';
 import EaseApi from "@/service/distributorsApi/EaseApi";
 import UnslashedAPI from "@/service/distributorsApi/UnslashedAPI";
+import UnoReApi from "@/service/distributorsApi/UnoReApi";
 
 
 /**
@@ -39,6 +40,7 @@ export async function getQuotes(
   quotesPromiseArray.push(getQuoteFrom('bridge' , _amount, _currency, _period, _protocol, null ))
   quotesPromiseArray.push(getQuoteFrom('ease' , _amount, _currency, _period, _protocol, null ))
   quotesPromiseArray.push(getQuoteFrom('unslashed' , _amount, _currency, _period, _protocol, null ))
+  quotesPromiseArray.push(getQuoteFrom('unore' , _amount, _currency, _period, _protocol, null ))
 
   for (let net of global.user.web3Passive) {
     quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, net))
@@ -84,6 +86,9 @@ export async function getQuoteFrom(
     return await getEaseQuote(_amount,_currency,_period,_protocol );
   }else if(_distributorName == 'unslashed'){
     return await getUnslashedQuote(_amount,_currency,_period,_protocol );
+  }
+  else if(_distributorName == 'unore'){
+    return await getUnoReQuote(_amount,_currency,_period,_protocol );
   }
   else {
     return  {error: 'supported distributor names are: bridge, insurace, nexus'}
@@ -209,6 +214,16 @@ export async function getUnslashedQuote(_amount: any, _currency: any, _period: a
   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'UNSLASHED')) {
     if (_protocol.rawDataUnslashed) {
       return await UnslashedAPI.fetchQuote(_amount, _currency, _period, _protocol);
+    }
+  } else {
+    return {error: "Not supported network for Unslashed"}
+  }
+}
+
+export async function getUnoReQuote(_amount: any, _currency: any, _period: any, _protocol: any): Promise<object> {
+  if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'UNORE')) {
+    if (_protocol.rawDataUnore) {
+      return await UnoReApi.fetchQuote(_amount, _currency, _period, _protocol);
     }
   } else {
     return {error: "Not supported network for Unslashed"}

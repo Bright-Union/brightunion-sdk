@@ -11,6 +11,7 @@ import NetConfig from './config/NetConfig';
 import GoogleEvents from './config/GoogleEvents';
 import EaseApi from "@/service/distributorsApi/EaseApi";
 import UnslashedAPI from "@/service/distributorsApi/UnslashedAPI";
+import UnoReApi from "@/service/distributorsApi/UnoReApi";
 
 export async function getCatalog(): Promise<any> {
 
@@ -33,6 +34,9 @@ export async function getCatalog(): Promise<any> {
 
   // push UNSLASHED
   catalogPromiseArray.push(getUnslashedCoverables())
+
+  // push UNORE
+  catalogPromiseArray.push(getUnoReCoverables())
 
   for (let net of global.user.web3Passive) {
     catalogPromiseArray.push(getInsuraceCoverables(net.networkId))
@@ -186,6 +190,7 @@ export async function getNexusCoverables(): Promise<any[]> {
       return await UnslashedAPI.fetchCoverables()
           .then(async (data: any) => {
             const coverablesArray: any = [];
+
             let cover = data.BasketMarket ? data.BasketMarket.data : [];
             let coverArr = Object.values(cover);
 
@@ -216,6 +221,31 @@ export async function getNexusCoverables(): Promise<any[]> {
             return coverablesArray;
           })
 }
+
+    export async function getUnoReCoverables() {
+      return await UnoReApi.fetchCoverables()
+          .then(async (data:any) => {
+            const coverablesArray: any  = [];
+            data.data.data.forEach(async (item: any) => {
+              let type = CatalogHelper.commonCategory(item.category, 'unore')
+              const typeDescr = type ? type : 'protocol';
+                let logo:any = await CatalogHelper.getLogoUrl( item.name , null, 'unore');
+              coverablesArray.push(CatalogHelper.createCoverable({
+                protocolAddress: item.address,
+                name: CatalogHelper.unifyCoverName(item.name, 'unore' ),
+                source: 'unore',
+                logo: logo,
+                rawDataUnore: item,
+                type: type,
+                chainListUnore: item.chains,
+                typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
+                stats: {}
+              }))
+            })
+            global.events.emit("catalog" , { items: coverablesArray , distributorName:"unore" , networkId: 1, itemsCount: coverablesArray.length } );
+            return coverablesArray;
+          });
+    }
 
 
 export default {
