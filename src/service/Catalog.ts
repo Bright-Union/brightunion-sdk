@@ -12,6 +12,7 @@ import GoogleEvents from './config/GoogleEvents';
 import EaseApi from "@/service/distributorsApi/EaseApi";
 import UnslashedAPI from "@/service/distributorsApi/UnslashedAPI";
 import UnoReApi from "@/service/distributorsApi/UnoReApi";
+import TidalApi from "@/service/distributorsApi/TidalApi";
 
 export async function getCatalog(): Promise<any> {
 
@@ -37,6 +38,9 @@ export async function getCatalog(): Promise<any> {
 
   // push UNORE
   catalogPromiseArray.push(getUnoReCoverables())
+
+    // push TIDAL
+  catalogPromiseArray.push(getTidalCoverables())
 
   for (let net of global.user.web3Passive) {
     catalogPromiseArray.push(getInsuraceCoverables(net.networkId))
@@ -245,6 +249,31 @@ export async function getNexusCoverables(): Promise<any[]> {
             global.events.emit("catalog" , { items: coverablesArray , distributorName:"unore" , networkId: 1, itemsCount: coverablesArray.length } );
             return coverablesArray;
           });
+    }
+
+    export async function getTidalCoverables() {
+        return await TidalApi.fetchCoverables()
+            .then(async (data:any) => {
+                const coverablesArray: any  = [];
+                data.forEach((item: any) => {
+                    const logoData = {url: `https://app.tidal.finance/assets/images/a${item.index + 1}.png`}
+                    if(item.price > 0 && item.token !== "0x0000000000000000000000000000000000000000") {
+                        coverablesArray.push(CatalogHelper.createCoverable({
+                            protocolAddress: item.address,
+                            name: CatalogHelper.unifyCoverName(item.name, 'tidal' ),
+                            source: 'tidal',
+                            logo: logoData,
+                            rawDataTidal: item,
+                            stats: {
+                                capacity: item.sellerBalance
+                            }
+                        }))
+                    }
+                })
+                global.events.emit("catalog" , { items: coverablesArray , distributorName:"tidal" , networkId: 1, itemsCount: coverablesArray.length } );
+                console.log(coverablesArray)
+                return coverablesArray;
+            })
     }
 
 

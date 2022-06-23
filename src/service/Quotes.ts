@@ -13,6 +13,7 @@ import BridgeHelper from './distributorsApi/BridgeHelper';
 import EaseApi from "@/service/distributorsApi/EaseApi";
 import UnslashedAPI from "@/service/distributorsApi/UnslashedAPI";
 import UnoReApi from "@/service/distributorsApi/UnoReApi";
+import TidalApi from "@/service/distributorsApi/TidalApi";
 
 
 /**
@@ -41,6 +42,7 @@ export async function getQuotes(
   quotesPromiseArray.push(getQuoteFrom('ease' , _amount, _currency, _period, _protocol, null ))
   quotesPromiseArray.push(getQuoteFrom('unslashed' , _amount, _currency, _period, _protocol, null ))
   quotesPromiseArray.push(getQuoteFrom('unore' , _amount, _currency, _period, _protocol, null ))
+  quotesPromiseArray.push(getQuoteFrom('tidal' , _amount, _currency, _period, _protocol, null ))
 
   for (let net of global.user.web3Passive) {
     quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, net))
@@ -229,6 +231,16 @@ export async function getUnoReQuote(_amount: any, _currency: any, _period: any, 
     return {error: "Not supported network for Unslashed"}
   }
 }
+
+// export async function getTidalQuote(_amount: any, _currency: any, _period: any, _protocol: any): Promise<object> {
+//     if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'TIDAL')) {
+//     if (_protocol.rawDataUnore) {
+//       return await TidalApi.fetchQuote(_amount, _currency, _period, _protocol);
+//     }
+//   } else {
+//     return {error: "Not supported network for Unslashed"}
+//   }
+// }
 
 export default {
   getQuoteFrom,
