@@ -92,6 +92,9 @@ export async function getQuoteFrom(
   else if(_distributorName == 'unore'){
     return await getUnoReQuote(_amount,_currency,_period,_protocol );
   }
+  else if(_distributorName == 'tidal'){
+    return await getTidalQuote(_amount,_currency,_period,_protocol );
+  }
   else {
     return  {error: 'supported distributor names are: bridge, insurace, nexus'}
   }
@@ -232,15 +235,15 @@ export async function getUnoReQuote(_amount: any, _currency: any, _period: any, 
   }
 }
 
-// export async function getTidalQuote(_amount: any, _currency: any, _period: any, _protocol: any): Promise<object> {
-//     if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'TIDAL')) {
-//     if (_protocol.rawDataUnore) {
-//       return await TidalApi.fetchQuote(_amount, _currency, _period, _protocol);
-//     }
-//   } else {
-//     return {error: "Not supported network for Unslashed"}
-//   }
-// }
+export async function getTidalQuote(_amount: any, _currency: any, _period: any, _protocol: any): Promise<object> {
+    if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'TIDAL')) {
+    if (_protocol.rawDataTidal) {
+      return await TidalApi.fetchQuote(_amount, _currency, _period, _protocol);
+    }
+  } else {
+    return {error: "Not supported network for Unslashed"}
+  }
+}
 
 export default {
   getQuoteFrom,

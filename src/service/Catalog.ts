@@ -198,11 +198,11 @@ export async function getNexusCoverables(): Promise<any[]> {
             let cover = data.BasketMarket ? data.BasketMarket.data : [];
             let coverArr = Object.values(cover);
 
-            coverArr.forEach(async(item: any) => {
+            coverArr.forEach((item: any) => {
               const protocolName = item.static.name;
               const type = item.static.type
               const typeDescr = type ? type : 'protocol';
-              let logo:any = await CatalogHelper.getLogoUrl( protocolName, null, 'unslashed');
+              let logo:any = CatalogHelper.getLogoUrl( protocolName, null, 'unslashed');
               if (!item.static.hide) {
                 coverablesArray.push(CatalogHelper.createCoverable({
                   protocolAddress: item.static.address,
@@ -230,10 +230,10 @@ export async function getNexusCoverables(): Promise<any[]> {
       return await UnoReApi.fetchCoverables()
           .then(async (data:any) => {
             const coverablesArray: any  = [];
-            data.data.data.forEach(async (item: any) => {
+            data.data.data.forEach((item: any) => {
               let type = CatalogHelper.commonCategory(item.category, 'unore')
               const typeDescr = type ? type : 'protocol';
-                let logo:any = await CatalogHelper.getLogoUrl( item.name , null, 'unore');
+                let logo:any = CatalogHelper.getLogoUrl( item.name , null, 'unore');
               coverablesArray.push(CatalogHelper.createCoverable({
                 protocolAddress: item.address,
                 name: CatalogHelper.unifyCoverName(item.name, 'unore' ),
