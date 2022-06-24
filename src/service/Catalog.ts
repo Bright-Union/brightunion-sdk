@@ -271,7 +271,6 @@ export async function getNexusCoverables(): Promise<any[]> {
                     }
                 })
                 global.events.emit("catalog" , { items: coverablesArray , distributorName:"tidal" , networkId: 1, itemsCount: coverablesArray.length } );
-                console.log(coverablesArray)
                 return coverablesArray;
             })
     }

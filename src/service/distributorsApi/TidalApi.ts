@@ -1,7 +1,7 @@
 import axios from 'axios';
 import CatalogHelper from "@/service/helpers/catalogHelper";
 import CurrencyHelper from "@/service/helpers/currencyHelper";
-import { toWei } from 'web3-utils';
+import {fromWei, toWei } from 'web3-utils';
 
 export default class TidalApi {
     static fetchCoverables() {
@@ -23,7 +23,6 @@ export default class TidalApi {
                 const quote = cover.find((item: any) => item.name.toLowerCase().includes(protocolName));
                 const capacity = currency === 'USD' ? quote.sellerBalance : Number(CurrencyHelper.usd2eth(quote.sellerBalance));
                 const price = currency === 'USD' ? toWei(String(quote.price)) : Number(CurrencyHelper.usd2eth(toWei(String(quote.price))));
-                console.log(price)
                 const exceedsCapacity = amount > capacity;
                 const errorMsg = exceedsCapacity ? { message: `Maximum available capacity is `, currency: currency, errorType:"capacity"} : null;
 
@@ -56,7 +55,7 @@ export default class TidalApi {
                             period: period,
                             chain: 'ETH',
                             chainId: global.user.ethNet.networkId,
-                            price: price,
+                            price: fromWei(String(price)),
                             pricePercent: quote.premiumRate / 10000,
                             response: quote,
                             source: 'tidal',
