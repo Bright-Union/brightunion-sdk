@@ -337,6 +337,7 @@ class CatalogHelper {
       typeDescription: obj.typeDescription,
       minimumAmount: obj.minimumAmount,
       capacity: obj.capacity,
+      nonPartnerLink: obj.nonPartnerLink,
     }
   }
 

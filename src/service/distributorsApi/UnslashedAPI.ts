@@ -19,6 +19,7 @@ export default class UnslashedAPI {
     static fetchQuote(amount: number, currency: string, period: number, protocol: any) {
         return this.fetchCoverables()
             .then(async (data: any) => {
+
                 let cover = data.BasketMarket ? data.BasketMarket.data : [];
                 let coverArr = Object.values(cover);
                 let addressArr = Object.keys(cover);
@@ -36,20 +37,40 @@ export default class UnslashedAPI {
                 const protocolName = protocol.name.toLowerCase().split(" ")[0];
                 const quote = fullCover.find((item: any) => item.cover.static.name.toLowerCase().includes(protocolName));
                 const unslashedInstance = await _getUnslashedContract(quote.address);
-                let apy = await unslashedInstance.methods.getDynamicPricePerYear18eRatio().call().then((pricePerYear:any) => {
-                    return fromWei(pricePerYear);
-                })
-                let rolloverDate = await unslashedInstance.methods.getRolloverDate().call().then((timestamp:any) => {
-                  return timestamp;
-                })
 
-                let price = await unslashedInstance.methods.coverToPremium(toWei(String(coveredAmount))).call().then((premium:any) => {
-                  return premium;
-                })
+                let apy = await unslashedInstance.methods.getDynamicPricePerYear18eRatio().call().then(
+                  (pricePerYear:any) => {
+                    return fromWei(pricePerYear);
+                  } , () => {
+                    return 0;
+                  }
+                )
+
+                let rolloverDate = await unslashedInstance.methods.getRolloverDate().call().then(
+                  (timestamp:any) => {
+                    return timestamp;
+                  }, () => {
+                    return 0;
+                  }
+                )
+
+                let price = await unslashedInstance.methods.coverToPremium(toWei(String(coveredAmount))).call()
+                .then(
+                  (premium:any) => {
+                    return premium;
+                  }, () => {
+                    return 0;
+                  }
+                )
+
+                let errorMsg = null;
+                if(quote.cover.static.soldOut || price == 0){
+                  errorMsg = {message: `Sold out`, errorType: "capacity"}
+                }
+
                 price = currency === 'USD' ? Number(fromWei(CurrencyHelper.eth2usd(price))) : fromWei(price)
 
                 if(quote) {
-                    const errorMsg = quote.cover.static.soldOut ? {message: `Sold out`, errorType: "capacity"} : null;
                     global.events.emit("quote", {
                         status: "INITIAL_DATA",
                         distributorName: "Unslashed",
@@ -86,6 +107,7 @@ export default class UnslashedAPI {
                             type: quote.cover.static.type,
                             typeDescription: quote.cover.static.description,
                             capacity: quote.cover.static.soldOut ? 0 : "9999999999999999999999999999999999999999999999999999999",
+                            nonPartnerLink: 'https://app.unslashed.finance/cover/' + quote.address,
                         },
                         {
                             capacity: quote.cover.static.soldOut ? 0 : "9999999999999999999999999999999999999999999999999999999",
