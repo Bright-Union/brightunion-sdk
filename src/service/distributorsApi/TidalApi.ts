@@ -65,6 +65,7 @@ export default class TidalApi {
                             type: type,
                             typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
                             capacity: toWei(String(capacity)),
+                            nonPartnerLink: 'https://app.tidal.finance/',
                         },
                         {
                             capacity: toWei(String(capacity)),
