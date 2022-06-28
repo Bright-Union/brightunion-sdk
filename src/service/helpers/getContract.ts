@@ -15,6 +15,7 @@ import NexusMasterABI from '../abi/nexus/INXMaster.json';
 import EaseContractABI from '../abi/ease/EaseContract.json';
 import PermitContractABI from '../abi/ease/PermitContract.json';
 import UnslashedContractABI from '../abi/unslashed/UnslashedPrices.json';
+import UnslashedCoversContractABI from '../abi/unslashed/UnslashedCovers.json';
 
 // BridgeV2
 import BridgeV2RegistryContractABI from '../abi/bridgeV2/ContractRegistry.json'
@@ -121,6 +122,11 @@ function _getUnslashedContract(address:string) : any {
   const distAbi:any = UnslashedContractABI.abi;
   return new web3.eth.Contract(distAbi, address );
 }
+function _getUnslashedCoversContract(address:string) : any {
+  const web3:any = global.user.ethNet.web3Instance;
+  const distAbi:any = UnslashedCoversContractABI.abi;
+  return new web3.eth.Contract(distAbi, address );
+}
 
 // BridgeV2
 const _getBridgeV2RegistryContract          =  (address:string,web3:any)  : any => new web3.eth.Contract(BridgeV2RegistryContractABI, address , web3);
@@ -155,15 +161,19 @@ export  {
     _getInsuraceDistributor,
     _getInsurAceCoverDataContract,
     _getInsurAceProductContract,
+
     _getNexusDistributorsContract,
     _getNexusDistributor,
     _getNexusQuotationContract,
     _getNexusGatewayContract,
     _getNexusClaimsDataContract,
     _getNexusMasterContract,
+
     _getEaseContract,
     _getPermitContract,
+
     _getUnslashedContract,
+    _getUnslashedCoversContract,
 
     // _loadAllABIs
 

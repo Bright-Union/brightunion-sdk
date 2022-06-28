@@ -1,11 +1,15 @@
 import axios from 'axios';
-import {_getUnslashedContract} from "@/service/helpers/getContract";
+import {
+  _getUnslashedContract,
+  _getUnslashedCoversContract,
+} from "@/service/helpers/getContract";
 import CatalogHelper from '../helpers/catalogHelper';
 import {fromWei, toWei} from "web3-utils";
 import CurrencyHelper from "@/service/helpers/currencyHelper";
 
 
 export default class UnslashedAPI {
+
     static fetchCoverables() {
 
         return axios.get(`https://static.unslashed.finance/networks/1.json`)
@@ -37,6 +41,8 @@ export default class UnslashedAPI {
                 const protocolName = protocol.name.toLowerCase().split(" ")[0];
                 const quote = fullCover.find((item: any) => item.cover.static.name.toLowerCase().includes(protocolName));
                 const unslashedInstance = await _getUnslashedContract(quote.address);
+
+                console.log("quote add - " , quote.address);
 
                 let apy = await unslashedInstance.methods.getDynamicPricePerYear18eRatio().call().then(
                   (pricePerYear:any) => {
@@ -116,5 +122,35 @@ export default class UnslashedAPI {
                 }
                 })
 
+    }
+
+    static fetchCovers (){
+      return this.fetchCoverables()
+          .then(async (data: any) => {
+
+            let covers = data.BasketMarket ? data.BasketMarket.data : [];
+            // let coverArr = Object.values(cover);
+            let addressArr:string[] = Object.keys(covers);
+            let addArray:string[] = [];
+
+            for (var i = 0; i < addressArr.length; i++) {
+              addArray.push(addressArr[i]);
+            }
+
+            console.log("addressArr , " ,typeof addressArr, typeof addArray);
+
+            const unslashedInstanceGetCovers = await _getUnslashedCoversContract(data.BulkDataGetter.address);
+
+            // ["0xfa6Ace98caAD9Ff12A4b764091c3B5E41705D230", "0x71879eD2897033EB9E4F3B94bE21ED810f759456"]
+
+            unslashedInstanceGetCovers.methods.getUserData( addArray , global.user.account ).call().then(( data:any ) => {
+
+              console.log("unslashedInstance res - " , data );
+
+            }, (err:any) => {
+              console.log("ERROROR - " , err );
+            })
+
+          })
     }
 }

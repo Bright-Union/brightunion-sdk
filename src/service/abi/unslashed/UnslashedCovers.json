@@ -1,0 +1,389 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "registry",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "basketAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getBasketPremiumYieldPerYear",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "basketAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getMarketUsagesInBasket",
+      "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "",
+          "type": "uint256[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "marketAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "coverAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "getAverageCoverCost",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_balance",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_distributedToken",
+          "type": "address"
+        }
+      ],
+      "name": "tokenPrice18eRatio",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "markets",
+          "type": "address[]"
+        },
+        {
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        }
+      ],
+      "name": "getUserData",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "userCollateralBalance",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "userCoverBalance",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "userCollateralTokenBalance",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "userPremiumTokenBalance",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "coveredAssetAmount",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct BulkDataGetter.UserData[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "markets",
+          "type": "address[]"
+        }
+      ],
+      "name": "getAllData",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "totalCollateralBalance",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "totalCoverBalance",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "premiumPriceEarnedPerYear18eRatio",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "premiumPricePaidPerYear18eRatio",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "maturityDate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "premiumMarketAssetBalance",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "collateralTokenSupply",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "premiumTokenSupply",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "collateralTokenPrice18eRatio",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "premiumTokenPrice18eRatio",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "coverPerPremium",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "effectiveCollateral",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "withdrawWaitTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "marketAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "collateralToken",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "premiumToken",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "lastClaimLockTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "availableCollateral",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct BulkDataGetter.MarketData[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "basketAddresses",
+          "type": "address[]"
+        },
+        {
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        }
+      ],
+      "name": "getUserBasketData",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "userCollateralBalance",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "userCollateralTokenBalance",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct BulkDataGetter.UserBasketData[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "basketAddresses",
+          "type": "address[]"
+        }
+      ],
+      "name": "getAllBasketData",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "collateralBalance",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "premiumYieldPerYear18eRatio",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "withdrawWaitTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "lastClaimLockTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "basketAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "collateralToken",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "collateralTokenPrice",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "effectiveCollateral",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "usedCollateral",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct BulkDataGetter.BasketData[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "markets",
+          "type": "address[]"
+        },
+        {
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        }
+      ],
+      "name": "filterMarketsForUserPremium",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ]
+}
