@@ -17,10 +17,15 @@ import {
   _getNexusGatewayContract,
   _getNexusClaimsDataContract,
   _getNexusDistributor,
-  _getNexusMasterContract, _getIERC20Contract, _getEaseContract,
+  _getNexusMasterContract,
+  _getIERC20Contract,
+  _getEaseContract,
+  _getUnslashedCoversContract,
+
 } from "../helpers/getContract";
 import {hexToUtf8, asciiToHex, fromWei} from 'web3-utils';
 import EaseApi from "@/service/distributorsApi/EaseApi";
+import UnslashedAPI from "@/service/distributorsApi/UnslashedAPI";
 
 /**
  * Returns the total cover count owned by an address
@@ -79,8 +84,6 @@ export async function getCovers(
   _limit : number,
 ) : Promise<any[]>  {
 
-  // if( _web3 || global.user.networkId ){ // global.user.networkId == 1
-
     if(_distributorName == "insurace"){
       return await getCoversInsurace(_web3);
     }else if(_distributorName == 'bridge'){
@@ -89,24 +92,9 @@ export async function getCovers(
       return await getCoversNexus();
     }else if(_distributorName == 'ease'){
       return await getCoversEase();
+    }else if(_distributorName == 'unslashed'){
+      return await getCoversUnslashed();
     }
-
-  // }else{
-  //
-  //   return await _getDistributorsContract(global.user.web3)
-  //   .methods
-  //   .getCovers(
-  //     _distributorName,
-  //     _ownerAddress,
-  //     _activeCover,
-  //     _limit,
-  //   ).call().then((_data:any) => {
-  //     console.log("getCovers SDK " , _distributorName ,  _data)
-  //     return _data;
-  //   });
-  //
-  // }
-
 }
 
 export async function getCoversNexus():Promise<any>{
@@ -331,6 +319,31 @@ export async function getCoversEase():Promise<any>{
         });
         return policies;
       })
+}
+
+export async function getCoversUnslashed():Promise<any>{
+
+  const activeCoversData =  await UnslashedAPI.fetchCovers();
+  let policies: any = [];
+
+  for (var i = 0; i < activeCoversData.length; i++) {
+
+    let cover = {
+      risk_protocol: 'unslashed',
+      status: 0,
+      coverAmount: activeCoversData[i].coverage.userCoverBalance,
+      coverAsset: "ETH",
+      validUntil: activeCoversData[i].static.rolloverDate,
+      endTime: activeCoversData[i].static.rolloverDate,
+      startTime: false,
+      name: CatalogHelper.unifyCoverName(activeCoversData[i].static.name, 'unlashed'),
+      net: global.user.ethNet.networkId,
+    }
+    global.events.emit("covers", {coverItem: cover});
+    policies.push(cover)
+  }
+  return policies;
+
 }
 
 export default {

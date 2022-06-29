@@ -13,6 +13,7 @@ import BridgeHelper from './distributorsApi/BridgeHelper';
 import EaseApi from "@/service/distributorsApi/EaseApi";
 import UnslashedAPI from "@/service/distributorsApi/UnslashedAPI";
 import UnoReApi from "@/service/distributorsApi/UnoReApi";
+import TidalApi from "@/service/distributorsApi/TidalApi";
 
 
 /**
@@ -40,7 +41,8 @@ export async function getQuotes(
   quotesPromiseArray.push(getQuoteFrom('bridge' , _amount, _currency, _period, _protocol, null ))
   quotesPromiseArray.push(getQuoteFrom('ease' , _amount, _currency, _period, _protocol, null ))
   quotesPromiseArray.push(getQuoteFrom('unslashed' , _amount, _currency, _period, _protocol, null ))
-  quotesPromiseArray.push(getQuoteFrom('unore' , _amount, _currency, _period, _protocol, null ))
+  // quotesPromiseArray.push(getQuoteFrom('unore' , _amount, _currency, _period, _protocol, null ))
+  // quotesPromiseArray.push(getQuoteFrom('tidal' , _amount, _currency, _period, _protocol, null ))
 
   for (let net of global.user.web3Passive) {
     quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, net))
@@ -89,6 +91,9 @@ export async function getQuoteFrom(
   }
   else if(_distributorName == 'unore'){
     return await getUnoReQuote(_amount,_currency,_period,_protocol );
+  }
+  else if(_distributorName == 'tidal'){
+    return await getTidalQuote(_amount,_currency,_period,_protocol );
   }
   else {
     return  {error: 'supported distributor names are: bridge, insurace, nexus'}
@@ -224,6 +229,16 @@ export async function getUnoReQuote(_amount: any, _currency: any, _period: any, 
   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'UNORE')) {
     if (_protocol.rawDataUnore) {
       return await UnoReApi.fetchQuote(_amount, _currency, _period, _protocol);
+    }
+  } else {
+    return {error: "Not supported network for Unslashed"}
+  }
+}
+
+export async function getTidalQuote(_amount: any, _currency: any, _period: any, _protocol: any): Promise<object> {
+    if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'TIDAL')) {
+    if (_protocol.rawDataTidal) {
+      return await TidalApi.fetchQuote(_amount, _currency, _period, _protocol);
     }
   } else {
     return {error: "Not supported network for Unslashed"}
