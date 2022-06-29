@@ -42,8 +42,6 @@ export default class UnslashedAPI {
                 const quote = fullCover.find((item: any) => item.cover.static.name.toLowerCase().includes(protocolName));
                 const unslashedInstance = await _getUnslashedContract(quote.address);
 
-                console.log("quote add - " , quote.address);
-
                 let apy = await unslashedInstance.methods.getDynamicPricePerYear18eRatio().call().then(
                   (pricePerYear:any) => {
                     return fromWei(pricePerYear);
@@ -125,32 +123,49 @@ export default class UnslashedAPI {
     }
 
     static fetchCovers (){
-      return this.fetchCoverables()
-          .then(async (data: any) => {
+      return this.fetchCoverables().then(
+        async (data: any) => {
 
-            let covers = data.BasketMarket ? data.BasketMarket.data : [];
-            // let coverArr = Object.values(cover);
-            let addressArr:string[] = Object.keys(covers);
-            let addArray:string[] = [];
+          // console.log("data" , data);
 
-            for (var i = 0; i < addressArr.length; i++) {
-              addArray.push(addressArr[i]);
+          const unslashedInstanceGetCovers = await _getUnslashedCoversContract(data.BulkDataGetter.address);
+
+
+          let addressArr:string[] = [];
+          let covers = data.BasketMarket ? data.BasketMarket.data : [];
+          covers = Object.values(covers).filter((item:any) => {
+            if(!item.static.soldOut && item.static.status != 'inactive'){
+              addressArr.push(item.static.address);
+              return item;
             }
+          });
 
-            console.log("addressArr , " ,typeof addressArr, typeof addArray);
-
-            const unslashedInstanceGetCovers = await _getUnslashedCoversContract(data.BulkDataGetter.address);
-
-            // ["0xfa6Ace98caAD9Ff12A4b764091c3B5E41705D230", "0x71879eD2897033EB9E4F3B94bE21ED810f759456"]
-
-            unslashedInstanceGetCovers.methods.getUserData( addArray , global.user.account ).call().then(( data:any ) => {
-
-              console.log("unslashedInstance res - " , data );
-
-            }, (err:any) => {
-              console.log("ERROROR - " , err );
-            })
-
+          const coverages = await unslashedInstanceGetCovers.methods.getUserData( addressArr , global.user.account ).call();
+          for (let i = 0; i < covers.length; i ++) {
+            covers[i].coverage = coverages[i];
+          }
+          covers = covers.filter( ( _cover:any ) => {
+            if( Number(_cover.coverage.userCoverBalance) > 0 ){
+              return _cover;
+            }
           })
+          for (let i = 0; i < covers.length; i ++) {
+            const unslashedInstance = await _getUnslashedContract(covers[i].static.address);
+            covers[i].static.rolloverDate = await unslashedInstance.methods.getRolloverDate().call().then(
+              (timestamp:any) => {
+                return timestamp;
+              }, () => {
+                return 0;
+              }
+            )
+          }
+
+          console.log("covers x " , covers);
+
+          return covers;
+
+        }
+      )
     }
+
 }

@@ -322,17 +322,27 @@ export async function getCoversEase():Promise<any>{
 }
 
 export async function getCoversUnslashed():Promise<any>{
-  console.log("getCoversUnslashed");
 
-  UnslashedAPI.fetchCovers().then((data:any) => {
+  const activeCoversData =  await UnslashedAPI.fetchCovers();
+  let policies: any = [];
 
-    // console.log("UnslashedAPI.fetchCovers - " , data);
+  for (var i = 0; i < activeCoversData.length; i++) {
 
-  })
-
-  // console.log("data - " , data ); 0x71879eD2897033EB9E4F3B94bE21ED810f759456
-
-
+    let cover = {
+      risk_protocol: 'unslashed',
+      status: 0,
+      coverAmount: activeCoversData[i].coverage.userCoverBalance,
+      coverAsset: "ETH",
+      validUntil: activeCoversData[i].static.rolloverDate,
+      endTime: activeCoversData[i].static.rolloverDate,
+      startTime: false,
+      name: CatalogHelper.unifyCoverName(activeCoversData[i].static.name, 'unlashed'),
+      net: global.user.ethNet.networkId,
+    }
+    global.events.emit("covers", {coverItem: cover});
+    policies.push(cover)
+  }
+  return policies;
 
 }
 

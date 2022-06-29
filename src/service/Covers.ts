@@ -1,6 +1,3 @@
-// import NetConfig from '@/service/config/NetConfig';
-// import NexusApi  from '@/service/distributorsApi/NexusApi';
-
 import NetConfig from './config/NetConfig';
 import {getCovers, getCoversCount} from './dao/Covers'
 import CatalogHelper from './helpers/catalogHelper'
