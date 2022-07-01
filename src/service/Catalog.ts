@@ -101,7 +101,6 @@ export async function getNexusCoverables(): Promise<any[]> {
         }
         let type = CatalogHelper.commonCategory(value.type, 'nexus')
         let typeDescr = type ? type : 'protocol';
-
         let logo:any = await CatalogHelper.getLogoUrl(value.logo, key , 'nexus');
 
         coverablesArray.push(CatalogHelper.createCoverable({
@@ -200,7 +199,7 @@ export async function getNexusCoverables(): Promise<any[]> {
 
             coverArr.forEach((item: any) => {
               const protocolName = item.static.name;
-              const type = item.static.type
+              let type = CatalogHelper.commonCategory(item.static.type, 'unslashed');
               const typeDescr = type ? type : 'protocol';
               let logo:any = CatalogHelper.getLogoUrl( protocolName, null, 'unslashed');
               if (!item.static.hide) {
