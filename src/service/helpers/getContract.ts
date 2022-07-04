@@ -9,6 +9,7 @@ import InsuraceProductABI from '../abi/insurace/IProduct.json';
 // import NexusDistributorABI from '../abi/nexus/NexusDistributor_old.json';
 import NexusDistributorABI from '../abi/nexus/NexusDistributor.json';
 import DistributorNexusABI from '../abi/nexus/Distributor.json';
+import DistributorNexusABIV1 from '../abi/nexus/Distributor.json';
 import NexusQuotationABI from '../abi/nexus/IQuotationData.json';
 import NexusGatewayABI from '../abi/nexus/IGateway.json';
 import NexusClaimsDataABI from '../abi/nexus/IClaimsData.json';
@@ -94,6 +95,11 @@ function _getNexusDistributor(address:string) : any {
   const distAbi:any = DistributorNexusABI .abi;
   return new web3.eth.Contract(distAbi, address );
 }
+function _getNexusDistributorV1(address:string) : any {
+  const web3:any = global.user.ethNet.web3Instance;
+  const distAbi:any = DistributorNexusABIV1 .abi;
+  return new web3.eth.Contract(distAbi, address );
+}
 
 function _getInsuraceDistributor(address:string, _web3:any) : any {
   const distAbi:any = ICoverABI.abi;
@@ -165,6 +171,7 @@ export  {
 
     _getNexusDistributorsContract,
     _getNexusDistributor,
+    _getNexusDistributorV1,
     _getNexusQuotationContract,
     _getNexusGatewayContract,
     _getNexusClaimsDataContract,

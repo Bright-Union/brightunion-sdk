@@ -29,6 +29,7 @@ const QUICKNODEPROVIDER = "https://spring-blue-tree.quiknode.pro/4fb23553784a0d8
         bridgeV2Registry: '0x45269F7e69EE636067835e0DfDd597214A1de6ea',
         bridgeV2Distributor: '0x213ffaca158c4f8863c1980a41c25f34fb0b95e0',
         brightTreasury: '0xAc0734C62B316041D190438d5d3e5D1359614407',
+        nexusDistributorV1: '0x3756C3C9374f38e0d9aAcB637Fed1641504a5b28',
         nexusDistributor: '0x425b3a68f1fd5de26b4b9f4be8049e36406b187a',
         nexusAPI: 'https://api.nexusmutual.io',
         brightProtocol:'0x7ca75bf6c3f5aa2c0f5a2c0bb07acb622ace1e3c',
