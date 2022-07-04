@@ -58,15 +58,15 @@ const bridge_nexus_insurace = [
 
 
 const bridge_nexus_insurace_categories : string[][] = [
-  // BRIDGE CATEGORY, NEXUS CATEGORY, INSURACE, EASE, UNORE, COMMON CATEGORY, DESCRIPTION
-  ['0' /*CONTRACT*/, 'protocol', 'Smart Contract Vulnerability', 'Lending Protocol', 'Lending', 'protocol', 'Protocol hack and failure'],
-  ['2', /*SERVICE*/ 'custodian', '', '', '', 'custodian', 'Custodian cover'],
-  ['1' /*STABLECOIN*/, '', 'Stablecoin De-Peg', '', 'Stablecoin', 'stable', 'Stable token de-pegging'],
-  ['', 'token', '', 'Yield Aggregator', '', 'yield', 'Yield de-pegging'],
-  ['3' /*EXCHANGE*/, 'custodian', '', '', '', 'Custodian Risk', 'custodian'],
-  ['' , '', 'IDO Event Risk', '', '', 'ido', 'IDO Event Risk'],
-  ['' , '', 'Bundled Cover', '', '', 'bundled', 'Bundled cover'],
-  ['' , '', '', 'Decentralized Exchange', 'Dexes', 'exchange', 'Decentralized Exchange'],
+  // BRIDGE CATEGORY, NEXUS CATEGORY, INSURACE, EASE, UNSLASHED, UNORE, COMMON CATEGORY, DESCRIPTION
+  ['0' /*CONTRACT*/, 'protocol', 'Smart Contract Vulnerability', 'Lending Protocol', 'DAPP', 'Lending', 'protocol', 'Protocol hack and failure'],
+  ['2', /*SERVICE*/ 'custodian', '', '', 'Custodian', '', 'custodian', 'Custodian cover'],
+  ['1' /*STABLECOIN*/, '', 'Stablecoin De-Peg', '', '', 'Stablecoin', 'stable', 'Stable token de-pegging'],
+  ['', 'token', '', 'Yield Aggregator', '', '', 'yield', 'Yield de-pegging'],
+  ['3' /*EXCHANGE*/, 'custodian', 'Custodian Risk', '', 'Custodian', '', 'custodian', 'Custodian Risk'],
+  ['' , '', 'IDO Event Risk', '', '', '', 'ido', 'IDO Event Risk'],
+  ['' , '', 'Bundled Cover', '', '', '', 'bundled', 'Bundled cover'],
+  ['' , '', '', 'Decentralized Exchange', 'Exchange', 'Dexes', 'exchange', 'Decentralized Exchange'],
 ];
 
 const CUSTOM_BRIDGE_PROTOCOLS : object = {
@@ -396,9 +396,11 @@ class CatalogHelper {
     } else if (provider == 'ease') {
       commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[3] === category});
     } else if (provider == 'unore') {
+      commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[5] === category});
+    } else if (provider == 'unslashed') {
       commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[4] === category});
     }
-    return commonCategory ? commonCategory[5] : '' ;
+    return commonCategory ? commonCategory[6] : '' ;
   }
 
   public static chainList(_distributorName:string, coverable:any) {
@@ -425,9 +427,9 @@ class CatalogHelper {
   }
 
   public static descriptionByCategory (category: string) {
-    let categoryFound = bridge_nexus_insurace_categories.find(cat => cat[5] === category);
+    let categoryFound = bridge_nexus_insurace_categories.find(cat => cat[6] === category);
     if (categoryFound) {
-      return categoryFound[6]
+      return categoryFound[7]
     }
   }
 

@@ -160,8 +160,6 @@ export default class UnslashedAPI {
             )
           }
 
-          console.log("covers x " , covers);
-
           return covers;
 
         }
