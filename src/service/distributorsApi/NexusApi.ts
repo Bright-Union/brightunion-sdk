@@ -26,16 +26,18 @@ export default class NexusApi {
     static async setNXMBasedquotePrice ( priceInNXM:any , quoteCurrency: string, fee:any ){
 
       let priceInNXMWithFee:any = fromWei(priceInNXM.mul(fee).div(toBN(10000)).add(priceInNXM));
-      // let priceInCurrencyFromNXM:any = null;
 
       priceInNXMWithFee = Number(priceInNXMWithFee);
 
       let [ priceInCurrencyFromNXM, routeData ]: any = await UniswapV3Api.getNXMPriceFor(quoteCurrency, priceInNXMWithFee );
 
       const BrightFeeCoef:any = toBN(120); // Margin added - 20%
-      let finalPrice:any = toBN(priceInCurrencyFromNXM).mul(BrightFeeCoef).div(toBN(100))
+      let finalPrice:any = null;
+      if(priceInCurrencyFromNXM){
+        finalPrice = toBN(priceInCurrencyFromNXM).mul(BrightFeeCoef).div(toBN(100))
+      }
 
-      return [ finalPrice, toBN(priceInCurrencyFromNXM),routeData ] ;
+      return [ finalPrice, priceInCurrencyFromNXM ? toBN(priceInCurrencyFromNXM) : null ,routeData ] ;
     }
 
     static fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<any> {
@@ -81,13 +83,17 @@ export default class NexusApi {
 
         const nexusMaxCapacityError = this.checkNexusCapacity(currency, amountInWei.toString(), capacityETH, capacityDAI);
 
-        let pricePercentNXM:any = 0;
+        let pricePercentNXM:any = null;
         let pricePercent:any = 0;
-        let [ nxmBasedPrice, nxmBasedPriceNoMargin, routeData] = [ 0, 0, {} ];
+        let [ nxmBasedPrice, nxmBasedPriceNoMargin] = [ 0, 0 ];
+        let routeData:any = {};
+
         if(!nexusMaxCapacityError){
           [ nxmBasedPrice, nxmBasedPriceNoMargin, routeData] = await NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee );
-          pricePercentNXM = new BigNumber(nxmBasedPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
           pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
+          if(nxmBasedPrice ){
+            pricePercentNXM = new BigNumber(nxmBasedPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
+          }
         }
 
         global.events.emit("quote" , {
@@ -95,10 +101,10 @@ export default class NexusApi {
           distributorName:"nexus",
           priceOrigin: priceWithFee,
           priceInNXM: response.data.priceInNXM,
-          price: nxmBasedPrice,
+          price: nxmBasedPrice ? nxmBasedPrice : priceWithFee,
           priceNoMargin: nxmBasedPriceNoMargin,
-          pricePercentOrigin:pricePercent,
-          pricePercent:pricePercentNXM,
+          pricePercentOrigin: pricePercent,
+          pricePercent: pricePercentNXM ? pricePercentNXM : pricePercent,
           amount:amount,
           currency:currency,
           period:period,
@@ -127,10 +133,10 @@ export default class NexusApi {
           protocol,
           {
             priceOrigin: priceWithFee.toString(),
-            price: nxmBasedPrice,
+            price: nxmBasedPrice ? nxmBasedPrice : priceWithFee,
             priceNoMargin: nxmBasedPriceNoMargin,
             pricePercentOrigin:pricePercent,
-            pricePercent:pricePercentNXM,
+            pricePercent:pricePercentNXM ? pricePercentNXM : pricePercent,
             priceInNXM: response.data.priceInNXM,
             amount: amountInWei,
             currency: currency,

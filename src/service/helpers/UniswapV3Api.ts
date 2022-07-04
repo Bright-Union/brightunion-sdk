@@ -28,8 +28,6 @@ class UniswapV3Api {
 
       let amountIn = null;
 
-      console.log("pure Uni Output Rout Data 1 " , _routeData);
-
       if(_routeData && _routeData.route && _routeData.route[0] ){
 
         let routeChosen = _routeData.route[0];
@@ -95,8 +93,6 @@ class UniswapV3Api {
       );
 
       const [ amountIn, routeDataFormated ] = this.chooseRouteAndSetPrice(route);
-
-      console.log("routeDataFormated" , routeDataFormated);
 
       return [amountIn, routeDataFormated];
     }
