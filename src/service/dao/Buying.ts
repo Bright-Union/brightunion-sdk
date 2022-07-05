@@ -203,7 +203,7 @@ const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
       .methods.buyCover(
         _contractAddress,
         _coverAsset,
-        _sumAssured,
+        fromWei(_sumAssured.toString()),
         _amountOut,
         _coverPeriod,
         _coverType,
