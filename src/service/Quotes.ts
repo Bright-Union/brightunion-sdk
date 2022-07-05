@@ -12,7 +12,7 @@ import GoogleEvents from './config/GoogleEvents';
 import BridgeHelper from './distributorsApi/BridgeHelper';
 import EaseApi from "@/service/distributorsApi/EaseApi";
 import UnslashedAPI from "@/service/distributorsApi/UnslashedAPI";
-import UnoReApi from "@/service/distributorsApi/UnoReApi";
+import UnoReAPI from "@/service/distributorsApi/UnoReAPI";
 import TidalApi from "@/service/distributorsApi/TidalApi";
 
 
@@ -228,7 +228,7 @@ export async function getUnslashedQuote(_amount: any, _currency: any, _period: a
 export async function getUnoReQuote(_amount: any, _currency: any, _period: any, _protocol: any): Promise<object> {
   if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'UNORE')) {
     if (_protocol.rawDataUnore) {
-      return await UnoReApi.fetchQuote(_amount, _currency, _period, _protocol);
+      return await UnoReAPI.fetchQuote(_amount, _currency, _period, _protocol);
     }
   } else {
     return {error: "Not supported network for Unslashed"}

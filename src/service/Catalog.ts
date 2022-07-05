@@ -11,7 +11,7 @@ import NetConfig from './config/NetConfig';
 import GoogleEvents from './config/GoogleEvents';
 import EaseApi from "@/service/distributorsApi/EaseApi";
 import UnslashedAPI from "@/service/distributorsApi/UnslashedAPI";
-import UnoReApi from "@/service/distributorsApi/UnoReApi";
+import UnoReAPI from "@/service/distributorsApi/UnoReAPI";
 import TidalApi from "@/service/distributorsApi/TidalApi";
 
 export async function getCatalog(): Promise<any> {
@@ -226,7 +226,7 @@ export async function getNexusCoverables(): Promise<any[]> {
 }
 
     export async function getUnoReCoverables() {
-      return await UnoReApi.fetchCoverables()
+      return await UnoReAPI.fetchCoverables()
           .then(async (data:any) => {
             const coverablesArray: any  = [];
             data.data.data.forEach((item: any) => {

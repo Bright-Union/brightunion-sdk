@@ -5,7 +5,7 @@ import {fromWei, toWei} from "web3-utils";
 import CatalogHelper from "@/service/helpers/catalogHelper";
 
 
-export default class UnoReApi {
+export default class UnoReAPI {
     static fetchCoverables() {
 
         return axios.get(`https://cover.unore.io/api/unlocked-smart-contract-params?first=0&search=&limit=100&type=2`)
