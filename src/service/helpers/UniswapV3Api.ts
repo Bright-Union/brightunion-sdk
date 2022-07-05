@@ -73,8 +73,7 @@ class UniswapV3Api {
       }
 
       const nxmAmoutInWei = toWei( _amountOfNXM.toString() ).split('.')[0];
-      // const amountWNXMOut = CurrencyAmount.fromRawAmount( WNXM , nxmAmoutInWei );
-      const amountWNXMOut = CurrencyAmount.fromRawAmount( WNXM , "99999999999999999999999999999999999999999" );
+      const amountWNXMOut = CurrencyAmount.fromRawAmount( WNXM , nxmAmoutInWei );
 
       const route = await this.router.route(
         amountWNXMOut,
