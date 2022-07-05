@@ -5,6 +5,7 @@ import {
   _getInsuraceDistributor,
   _getInsuraceDistributorsContract,
   _getNexusDistributorsContract,
+  _getNexusDistributorsContractV1,
   _getBridgeV2Distributor,
   _getBridgeV2PolicyBookContract,
   _getBridgeV2PolicyBookFacade,
@@ -174,58 +175,100 @@ export async function buyCoverNexus(
 const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
 
   return await new Promise( async (resolve, reject) => {
-    // const nexusAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('nexus').call();
-    const nexusAddress = NetConfig.netById(1).nexusDistributor;
 
-    const data = global.user.web3.eth.abi.encodeParameters(
-      [
-        'address[]', 'uint24[]', 'string',
-        'uint256', 'uint256', 'uint256',
-        'uint256', 'uint8', 'bytes32', 'bytes32'
-      ],
-      [
-        _quoteProtocol.uniSwapRouteData.swapVia,
-        _quoteProtocol.uniSwapRouteData.poolFees,
-        _quoteProtocol.uniSwapRouteData.protocol,
-        _quoteProtocol.rawData.price,
-        _quoteProtocol.rawData.priceInNXM,
-        _quoteProtocol.rawData.expiresAt,
-        _quoteProtocol.rawData.generatedAt,
-        _quoteProtocol.rawData.v,
-        _quoteProtocol.rawData.r,
-        _quoteProtocol.rawData.s
-      ]
-    );
+    if(_quoteProtocol.uniSwapRouteData.protocol){
+      const nexusAddress = NetConfig.netById(1).nexusDistributor;
 
-    _getNexusDistributorsContract(nexusAddress) // Nexus Call through Bright Protocol Distributors Layer
-    .methods.buyCover(
-      _contractAddress,
-      _coverAsset,
-      _sumAssured,
-      _amountOut,
-      _coverPeriod,
-      _coverType,
-      _maxPriceWithFee,
-      data,
-    ).send({ from: _ownerAddress, value: sendValue })
-    .on('transactionHash', (res:any) => {
-      tx.hash = res
-      global.events.emit("buy" , { status: "TX_GENERATED" , data: tx } );
-      GoogleEvents.onTxHash(tx);
-      resolve({success:res});
-    })
-    .on('error', (err:any, receipt:any) => {
-      global.events.emit("buy" , { status: "REJECTED" } );
-      GoogleEvents.onTxRejected(tx);
-      reject( {error: err, receipt:receipt})
-    })
-    .on('confirmation', (confirmationNumber:any) => {
-      if (confirmationNumber === 0) {
-        GoogleEvents.onTxConfirmation(tx);
-        global.events.emit("buy" , { status: "TX_CONFIRMED" } );
+      const data = global.user.web3.eth.abi.encodeParameters(
+        [
+          'address[]', 'uint24[]', 'string',
+          'uint256', 'uint256', 'uint256',
+          'uint256', 'uint8', 'bytes32', 'bytes32'
+        ],
+        [
+          _quoteProtocol.uniSwapRouteData.swapVia,
+          _quoteProtocol.uniSwapRouteData.poolFees,
+          _quoteProtocol.uniSwapRouteData.protocol,
+          _quoteProtocol.rawData.price,
+          _quoteProtocol.rawData.priceInNXM,
+          _quoteProtocol.rawData.expiresAt,
+          _quoteProtocol.rawData.generatedAt,
+          _quoteProtocol.rawData.v,
+          _quoteProtocol.rawData.r,
+          _quoteProtocol.rawData.s
+        ]
+      );
 
-      }
-    });
+      _getNexusDistributorsContract(nexusAddress) // Nexus Call through Bright Protocol Distributors Layer
+      .methods.buyCover(
+        _contractAddress,
+        _coverAsset,
+        _sumAssured,
+        _amountOut,
+        _coverPeriod,
+        _coverType,
+        _maxPriceWithFee,
+        data,
+      ).send({ from: _ownerAddress, value: sendValue })
+      .on('transactionHash', (res:any) => {
+        tx.hash = res
+        global.events.emit("buy" , { status: "TX_GENERATED" , data: tx } );
+        GoogleEvents.onTxHash(tx);
+        resolve({success:res});
+      })
+      .on('error', (err:any, receipt:any) => {
+        global.events.emit("buy" , { status: "REJECTED" } );
+        GoogleEvents.onTxRejected(tx);
+        reject( {error: err, receipt:receipt})
+      })
+      .on('confirmation', (confirmationNumber:any) => {
+        if (confirmationNumber === 0) {
+          GoogleEvents.onTxConfirmation(tx);
+          global.events.emit("buy" , { status: "TX_CONFIRMED" } );
+
+        }
+      });
+
+    }else{
+
+      const  nexusAddress = NetConfig.netById(1).nexusDistributorV1;
+
+      const data = global.user.web3.eth.abi.encodeParameters(
+        ['uint', 'uint', 'uint', 'uint', 'uint8', 'bytes32', 'bytes32'],
+        [_quoteProtocol.rawData.price, _quoteProtocol.rawData.priceInNXM, _quoteProtocol.rawData.expiresAt,
+          _quoteProtocol.rawData.generatedAt, _quoteProtocol.rawData.v, _quoteProtocol.rawData.r, _quoteProtocol.rawData.s],
+        );
+
+        _getNexusDistributorsContractV1(nexusAddress) // Nexus Call through Bright Protocol Distributors Layer
+        .methods.buyCover(
+          _contractAddress,
+          _coverAsset,
+          _sumAssured,
+          _coverPeriod,
+          _coverType,
+          _maxPriceWithFee,
+          data,
+        ).send({ from: _ownerAddress, value: sendValue })
+        .on('transactionHash', (res:any) => {
+          tx.hash = res
+          global.events.emit("buy" , { status: "TX_GENERATED" , data: tx } );
+          GoogleEvents.onTxHash(tx);
+          resolve({success:res});
+        })
+        .on('error', (err:any, receipt:any) => {
+          global.events.emit("buy" , { status: "REJECTED" } );
+          GoogleEvents.onTxRejected(tx);
+          reject( {error: err, receipt:receipt})
+        })
+        .on('confirmation', (confirmationNumber:any) => {
+          if (confirmationNumber === 0) {
+            GoogleEvents.onTxConfirmation(tx);
+            global.events.emit("buy" , { status: "TX_CONFIRMED" } );
+          }
+        });
+
+    }
+
   });
 }
 

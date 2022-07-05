@@ -313,60 +313,60 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
   // TEST START
   // ******************************
 
-  const data = global.user.web3.eth.abi.encodeParameters(
-    [
-      'address[]', 'uint24[]', 'string',
-      'uint256', 'uint256', 'uint256',
-      'uint256', 'uint8', 'bytes32', 'bytes32'
-    ],
-    [
-      _quoteProtocol.uniSwapRouteData.swapVia,
-      _quoteProtocol.uniSwapRouteData.poolFees,
-      _quoteProtocol.uniSwapRouteData.protocol,
-      _quoteProtocol.rawData.price,
-      _quoteProtocol.rawData.priceInNXM,
-      _quoteProtocol.rawData.expiresAt,
-      _quoteProtocol.rawData.generatedAt,
-      _quoteProtocol.rawData.v,
-      _quoteProtocol.rawData.r,
-      _quoteProtocol.rawData.s
-    ]
-  );
-
-    let net:any = NetConfig.netById(global.user.networkId);
-    let assetTest = net[_quoteProtocol.rawData.currency]
-
-    console.log( "buyCoverNexus --> ",
-    "\n_contractAddress: ",
-    _quoteProtocol.rawData.contract,
-    "\n_coverAsset: " ,
-    assetTest,  // payment asset
-    "\n_sumAssured: ",
-    _quoteProtocol.amount.toString(), // sum assured, compliant
-    "\n_amountOut:" ,
-    _quoteProtocol.priceInNXM,
-    "\n_coverPeriod",
-    _quoteProtocol.rawData.period, // period
-    "\n_coverType: ",
-    0, //coverType
-    "\n_maxPriceWithFee: ",
-    _quoteProtocol.price.toString(), // token amount to cover with FEE
-    "\n_data: ",
-    data ,// random data
-  );
-
-    console.log( "buyCoverNexus BEFORE ENCODING--> ",
-    "\nswapVia:" , _quoteProtocol.uniSwapRouteData.swapVia,
-    "\npoolFees:" ,_quoteProtocol.uniSwapRouteData.poolFees,
-    "\nprotocol:" ,_quoteProtocol.uniSwapRouteData.protocol,
-    "\nprice:" ,_quoteProtocol.rawData.price,
-    "\npriceInNXM:" ,_quoteProtocol.rawData.priceInNXM,
-    "\nexpiresAt:" ,_quoteProtocol.rawData.expiresAt,
-    "\ngeneratedAt:" ,_quoteProtocol.rawData.generatedAt,
-    "\nv:" ,_quoteProtocol.rawData.v,
-    "\nr:" ,_quoteProtocol.rawData.r,
-    "\ns:" ,_quoteProtocol.rawData.s
-  );
+  // const data = global.user.web3.eth.abi.encodeParameters(
+  //   [
+  //     'address[]', 'uint24[]', 'string',
+  //     'uint256', 'uint256', 'uint256',
+  //     'uint256', 'uint8', 'bytes32', 'bytes32'
+  //   ],
+  //   [
+  //     _quoteProtocol.uniSwapRouteData.swapVia,
+  //     _quoteProtocol.uniSwapRouteData.poolFees,
+  //     _quoteProtocol.uniSwapRouteData.protocol,
+  //     _quoteProtocol.rawData.price,
+  //     _quoteProtocol.rawData.priceInNXM,
+  //     _quoteProtocol.rawData.expiresAt,
+  //     _quoteProtocol.rawData.generatedAt,
+  //     _quoteProtocol.rawData.v,
+  //     _quoteProtocol.rawData.r,
+  //     _quoteProtocol.rawData.s
+  //   ]
+  // );
+  //
+  //   let net:any = NetConfig.netById(global.user.networkId);
+  //   let assetTest = net[_quoteProtocol.rawData.currency]
+  //
+  //   console.log( "buyCoverNexus --> ",
+  //   "\n_contractAddress: ",
+  //   _quoteProtocol.rawData.contract,
+  //   "\n_coverAsset: " ,
+  //   assetTest,  // payment asset
+  //   "\n_sumAssured: ",
+  //   _quoteProtocol.amount.toString(), // sum assured, compliant
+  //   "\n_amountOut:" ,
+  //   _quoteProtocol.priceInNXM,
+  //   "\n_coverPeriod",
+  //   _quoteProtocol.rawData.period, // period
+  //   "\n_coverType: ",
+  //   0, //coverType
+  //   "\n_maxPriceWithFee: ",
+  //   _quoteProtocol.price.toString(), // token amount to cover with FEE
+  //   "\n_data: ",
+  //   data ,// random data
+  // );
+  //
+  //   console.log( "buyCoverNexus BEFORE ENCODING--> ",
+  //   "\nswapVia:" , _quoteProtocol.uniSwapRouteData.swapVia,
+  //   "\npoolFees:" ,_quoteProtocol.uniSwapRouteData.poolFees,
+  //   "\nprotocol:" ,_quoteProtocol.uniSwapRouteData.protocol,
+  //   "\nprice:" ,_quoteProtocol.rawData.price,
+  //   "\npriceInNXM:" ,_quoteProtocol.rawData.priceInNXM,
+  //   "\nexpiresAt:" ,_quoteProtocol.rawData.expiresAt,
+  //   "\ngeneratedAt:" ,_quoteProtocol.rawData.generatedAt,
+  //   "\nv:" ,_quoteProtocol.rawData.v,
+  //   "\nr:" ,_quoteProtocol.rawData.r,
+  //   "\ns:" ,_quoteProtocol.rawData.s
+  // );
 
   // ******************************
   // TEST END
