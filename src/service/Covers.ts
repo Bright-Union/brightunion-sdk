@@ -11,8 +11,12 @@ export async function getCoversFrom(
       return getInsuraceCovers(global.user.web3);
     }else if(_distributorName == "nexus"){
       return getNexusCovers();
+    }else if(_distributorName == "unslashed"){
+      return getUnslashedCovers();
     }else if(_distributorName == "ease"){
       return getEaseCovers();
+    }else if(_distributorName == "unore"){
+      return getUnoReCovers();
     }else{
       return { error: "Wrong distributor name" }
     }

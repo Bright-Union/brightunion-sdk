@@ -114,4 +114,9 @@ export default class UnoReApi {
             })
 
     }
+
+    static fetchCovers():any {
+      return [];
+    }
+
 }
