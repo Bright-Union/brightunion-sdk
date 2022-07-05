@@ -2,10 +2,13 @@ import axios from 'axios';
 import NetConfig from '../config/NetConfig'
 import RiskCarriers from '../config/RiskCarriers'
 import CatalogHelper from '../helpers/catalogHelper'
+import CurrencyHelper from '../helpers/currencyHelper';
 import BigNumber from 'bignumber.js'
 import {toBN, toWei, asciiToHex, fromWei} from 'web3-utils'
 import {  _getNexusDistributor,  _getNexusDistributorsContract, _getDistributorsContract, _getNexusQuotationContract , _getNexusMasterContract } from '../helpers/getContract'
 import {getCoverMin} from "../helpers/cover_minimums"
+import UniswapV3Api from '../helpers/UniswapV3Api';
+
 
 export default class NexusApi {
 
@@ -18,6 +21,23 @@ export default class NexusApi {
             }).catch(error => {
               return [];
             });
+    }
+
+    static async setNXMBasedquotePrice ( priceInNXM:any , quoteCurrency: string, fee:any ){
+
+      let priceInNXMWithFee:any = fromWei(priceInNXM.mul(fee).div(toBN(10000)).add(priceInNXM));
+
+      priceInNXMWithFee = Number(priceInNXMWithFee);
+
+      let [ priceInCurrencyFromNXM, routeData ]: any = await UniswapV3Api.getNXMPriceFor(quoteCurrency, priceInNXMWithFee );
+
+      const BrightFeeCoef:any = toBN(120); // Margin added - 20%
+      let finalPrice:any = null;
+      if(priceInCurrencyFromNXM){
+        finalPrice = toBN(priceInCurrencyFromNXM).mul(BrightFeeCoef).div(toBN(100))
+      }
+
+      return [ finalPrice, priceInCurrencyFromNXM ? toBN(priceInCurrencyFromNXM) : null ,routeData ] ;
     }
 
     static fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<any> {
@@ -56,17 +76,35 @@ export default class NexusApi {
 
         const distributor = await _getNexusDistributorsContract(NetConfig.netById(global.user.ethNet.networkId).nexusDistributor);
         // hardcoded address, as Bright Distributors contract cannot be called by passive net - fix for Nexus Multichain Quotation
-
         let fee:any = await distributor.methods.feePercentage().call();
         fee = toBN(fee);
+
         let priceWithFee:any = basePrice.mul(fee).div(toBN(10000)).add(basePrice);
-        let pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
+
+        const nexusMaxCapacityError = this.checkNexusCapacity(currency, amountInWei.toString(), capacityETH, capacityDAI);
+
+        let pricePercentNXM:any = null;
+        let pricePercent:any = 0;
+        let [ nxmBasedPrice, nxmBasedPriceNoMargin] = [ 0, 0 ];
+        let routeData:any = {};
+
+        if(!nexusMaxCapacityError){
+          [ nxmBasedPrice, nxmBasedPriceNoMargin, routeData] = await NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee );
+          pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
+          if(nxmBasedPrice ){
+            pricePercentNXM = new BigNumber(nxmBasedPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
+          }
+        }
 
         global.events.emit("quote" , {
           status: "INITIAL_DATA" ,
           distributorName:"nexus",
-          price: priceWithFee ,
-          pricePercent:pricePercent,
+          priceOrigin: priceWithFee,
+          priceInNXM: response.data.priceInNXM,
+          price: nxmBasedPrice ? nxmBasedPrice : priceWithFee,
+          priceNoMargin: nxmBasedPriceNoMargin,
+          pricePercentOrigin: pricePercent,
+          pricePercent: pricePercentNXM ? pricePercentNXM : pricePercent,
           amount:amount,
           currency:currency,
           period:period,
@@ -89,23 +127,27 @@ export default class NexusApi {
         const totalActiveCoversDAI = await quotationContract.methods.getTotalSumAssured(asciiToHex('DAI')).call();
 
         let defaultCurrencySymbol = NetConfig.netById(global.user.ethNet.networkId).defaultCurrency;
-        const nexusMaxCapacityError = this.checkNexusCapacity(currency, amountInWei.toString(), capacityETH, capacityDAI);
 
         return CatalogHelper.quoteFromCoverable(
           'nexus',
           protocol,
           {
+            priceOrigin: priceWithFee.toString(),
+            price: nxmBasedPrice ? nxmBasedPrice : priceWithFee,
+            priceNoMargin: nxmBasedPriceNoMargin,
+            pricePercentOrigin:pricePercent,
+            pricePercent:pricePercentNXM ? pricePercentNXM : pricePercent,
+            priceInNXM: response.data.priceInNXM,
             amount: amountInWei,
             currency: currency,
             period: period,
             chain: 'ETH',
             chainId: global.user.ethNet.networkId,
-            price: priceWithFee.toString(),
-            pricePercent: pricePercent,
             response: response.data,
             defaultCurrencySymbol:defaultCurrencySymbol,
             errorMsg: nexusMaxCapacityError,
             minimumAmount: minimumAmount,
+            uniSwapRouteData: routeData,
             capacity: quoteCapacity,
           },
           {
@@ -149,8 +191,10 @@ export default class NexusApi {
                                 period: period,
                                 chain: 'ETH',
                                 chainId: global.user.ethNet.networkId,
+                                priceOrigin: 0,
                                 price: 0,
-                                pricePercent: 0,
+                                pricePercentOrigin:0,
+                                pricePercent:0,
                                 errorMsg: errorMsg,
                                 response: {error:error},
                                 minimumAmount: minimumAmount,

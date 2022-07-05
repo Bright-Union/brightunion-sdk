@@ -12,6 +12,8 @@ const VUE_APP_POLYGON_MODULES='INSURACE'
 const VUE_APP_MUMBAI_TESTNET_MODULES=''
 const VUE_APP_AVALANCHE_MODULES='INSURACE'
 const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
+const INFURAID= '98d7e501879243c5877bac07a57cde7e';   //wallet connect
+const QUICKNODEPROVIDER = "https://spring-blue-tree.quiknode.pro/4fb23553784a0d8369532e0dd629db7a3a18379c/"
 
  const NETWORK_CONFIG = [
     {
@@ -20,13 +22,15 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         symbol: 'ETH',
         defaultCurrency: "ETH",
         explorer: 'https://etherscan.io',
-        provider: 'https://eth-mainnet.alchemyapi.io/v2/OlIDDqLH9Uo3AUQ_0ezj6sfqHIGxJRxw',
+        // provider: 'https://eth-mainnet.alchemyapi.io/v2/OlIDDqLH9Uo3AUQ_0ezj6sfqHIGxJRxw',
+        provider: QUICKNODEPROVIDER,
         modules: VUE_APP_MAINNET_MODULES.split(' '),
         bridgeRegistry: '0x8050c5a46FC224E3BCfa5D7B7cBacB1e4010118d',
         bridgeV2Registry: '0x45269F7e69EE636067835e0DfDd597214A1de6ea',
         bridgeV2Distributor: '0x213ffaca158c4f8863c1980a41c25f34fb0b95e0',
         brightTreasury: '0xAc0734C62B316041D190438d5d3e5D1359614407',
-        nexusDistributor: '0x3756C3C9374f38e0d9aAcB637Fed1641504a5b28',
+        nexusDistributorV1: '0x3756C3C9374f38e0d9aAcB637Fed1641504a5b28',
+        nexusDistributor: '0x425b3a68f1fd5de26b4b9f4be8049e36406b187a',
         nexusAPI: 'https://api.nexusmutual.io',
         brightProtocol:'0x7ca75bf6c3f5aa2c0f5a2c0bb07acb622ace1e3c',
         insuraceDistributor: '0x98fb0e1191651b6292d3482cebf54e6d35542ca4',
@@ -39,6 +43,9 @@ const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
         USDT: '0xdac17f958d2ee523a2206206994597c13d831ec7',
         USDC: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
         INSUR:'0x544c42fbb96b39b21df61cf322b5edc285ee7429',
+        NXM:'0xd7c49cee7e9188cca6ad8ff264c1da2e69d4cf3b',
+        WNXM:'0x0d438F3b5175Bebc262bF23753C1E53d03432bDE',
+        WETH: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
     },
     {
         name: 'Ropsten',
@@ -284,6 +291,14 @@ const sixDecimalCurrencies:any = {
 
 
 class NetConfig{
+
+  public static getInfuraId (){
+    return INFURAID;
+  }
+
+  public static getQuickNodeProvider (){
+    return QUICKNODEPROVIDER;
+  }
 
   public static createWeb3Provider(provider:any){
     let web3 = null;

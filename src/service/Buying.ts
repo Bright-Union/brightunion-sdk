@@ -6,7 +6,7 @@ import {
   _getBridgeV2PolicyRegistry, _getPermitContract,
 
 } from './helpers/getContract';
-import { buyCoverInsurace, buyCover } from "./dao/Buying";
+import { buyCoverNexus, buyCoverInsurace, buyCoverBridge, buyCoverEase } from "./dao/Buying";
 import NetConfig from './config/NetConfig';
 import InsuraceApi from './distributorsApi/InsuraceApi';
 import ERC20Helper from './helpers/ERC20Helper';
@@ -274,32 +274,26 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
  *  Buy on Nexus Mutual
  * @param _quoteProtocol Quote to buy
  */
-export async function callNexus(_quoteProtocol:any , buyingWithNetworkCurrency: boolean){
+ export async function callNexus(_quoteProtocol:any , buyingWithNetworkCurrency: boolean){
 
-    const data = global.user.web3.eth.abi.encodeParameters(
-      ['uint', 'uint', 'uint', 'uint', 'uint8', 'bytes32', 'bytes32'],
-      [_quoteProtocol.rawData.price, _quoteProtocol.rawData.priceInNXM, _quoteProtocol.rawData.expiresAt,
-        _quoteProtocol.rawData.generatedAt, _quoteProtocol.rawData.v, _quoteProtocol.rawData.r, _quoteProtocol.rawData.s],
-      );
+   let net:any = NetConfig.netById(global.user.networkId);
+   let asset = net[_quoteProtocol.rawData.currency]
 
-      let net:any = NetConfig.netById(global.user.networkId);
-      let asset = net[_quoteProtocol.rawData.currency]
+     return buyCoverNexus(
+       global.user.account,
+       'nexus',
+       _quoteProtocol.rawData.contract,
+       asset,  // payment asset
+       _quoteProtocol.amount.toString(), // sum assured, compliant
+       _quoteProtocol.priceInNXM,
+       _quoteProtocol.rawData.period, // period
+       0, //coverType
+       _quoteProtocol.price.toString(), // token amount to cover with FEE
+       buyingWithNetworkCurrency,
+       _quoteProtocol,
+     )
 
-    return buyCover(
-      global.user.account,
-      'nexus',
-      _quoteProtocol.rawData.contract,
-      asset,  // payment asset
-      _quoteProtocol.amount.toString(), // sum assured, compliant
-      _quoteProtocol.rawData.period, // period
-      0, //coverType
-      _quoteProtocol.price.toString(), // token amount to cover with FEE
-      data ,// random data
-      buyingWithNetworkCurrency,
-      _quoteProtocol,
-    )
-
-}
+   }
 
 export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
@@ -315,12 +309,77 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
   global.events.emit("buy" , { status: "INITIALIZED"} );
 
+  // ******************************
+  // TEST START
+  // ******************************
+
+  // const data = global.user.web3.eth.abi.encodeParameters(
+  //   [
+  //     'address[]', 'uint24[]', 'string',
+  //     'uint256', 'uint256', 'uint256',
+  //     'uint256', 'uint8', 'bytes32', 'bytes32'
+  //   ],
+  //   [
+  //     _quoteProtocol.uniSwapRouteData.swapVia,
+  //     _quoteProtocol.uniSwapRouteData.poolFees,
+  //     _quoteProtocol.uniSwapRouteData.protocol,
+  //     _quoteProtocol.rawData.price,
+  //     _quoteProtocol.rawData.priceInNXM,
+  //     _quoteProtocol.rawData.expiresAt,
+  //     _quoteProtocol.rawData.generatedAt,
+  //     _quoteProtocol.rawData.v,
+  //     _quoteProtocol.rawData.r,
+  //     _quoteProtocol.rawData.s
+  //   ]
+  // );
+  //
+  //   let net:any = NetConfig.netById(global.user.networkId);
+  //   let assetTest = net[_quoteProtocol.rawData.currency]
+  //
+  //   console.log( "buyCoverNexus --> ",
+  //   "\n_contractAddress: ",
+  //   _quoteProtocol.rawData.contract,
+  //   "\n_coverAsset: " ,
+  //   assetTest,  // payment asset
+  //   "\n_sumAssured: ",
+  //   _quoteProtocol.amount.toString(), // sum assured, compliant
+  //   "\n_amountOut:" ,
+  //   _quoteProtocol.priceInNXM,
+  //   "\n_coverPeriod",
+  //   _quoteProtocol.rawData.period, // period
+  //   "\n_coverType: ",
+  //   0, //coverType
+  //   "\n_maxPriceWithFee: ",
+  //   _quoteProtocol.price.toString(), // token amount to cover with FEE
+  //   "\n_data: ",
+  //   data ,// random data
+  // );
+  //
+  //   console.log( "buyCoverNexus BEFORE ENCODING--> ",
+  //   "\nswapVia:" , _quoteProtocol.uniSwapRouteData.swapVia,
+  //   "\npoolFees:" ,_quoteProtocol.uniSwapRouteData.poolFees,
+  //   "\nprotocol:" ,_quoteProtocol.uniSwapRouteData.protocol,
+  //   "\nprice:" ,_quoteProtocol.rawData.price,
+  //   "\npriceInNXM:" ,_quoteProtocol.rawData.priceInNXM,
+  //   "\nexpiresAt:" ,_quoteProtocol.rawData.expiresAt,
+  //   "\ngeneratedAt:" ,_quoteProtocol.rawData.generatedAt,
+  //   "\nv:" ,_quoteProtocol.rawData.v,
+  //   "\nr:" ,_quoteProtocol.rawData.r,
+  //   "\ns:" ,_quoteProtocol.rawData.s
+  // );
+
+  // ******************************
+  // TEST END
+  // ******************************
+
+
+
   if(!NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.rawData.currency)){
 
     const erc20Instance = await _getIERC20Contract(asset);
     const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
-    if (Number(ercBalance) >= (Number)(_quoteProtocol.rawData.price)) {
+    if (Number(ercBalance) >= (Number)(_quoteProtocol.price)) {
 
       const onSuccess =  () => {
         global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
@@ -338,7 +397,7 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
       global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
 
-      return await ERC20Helper.approveAndCall( erc20Instance,  NetConfig.netById(global.user.networkId).nexusDistributor,  _quoteProtocol.rawData.price, onTXHash, onSuccess, onError);
+      return await ERC20Helper.approveAndCall( erc20Instance,  NetConfig.netById(global.user.networkId).nexusDistributor,  _quoteProtocol.price, onTXHash, onSuccess, onError);
 
     } else {
       GoogleEvents.buyRejected('You have insufficient funds to continue with this transaction' , _quoteProtocol );
@@ -349,7 +408,8 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
   }else{
 
     const netBalance = await global.user.web3.eth.getBalance(global.user.account);
-    if (Number(netBalance) >= (Number)(_quoteProtocol.rawData.price)) {
+
+    if (Number(netBalance) >= (Number)(_quoteProtocol.price)) {
       global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:1 , current:1 } );
 
       return callNexus(_quoteProtocol, true);
@@ -369,7 +429,7 @@ export async function callBridgeV2(_quoteProtocol:any){
     [_quoteProtocol.price, _quoteProtocol.period ],
   );
 
-  return buyCover(
+  return buyCoverBridge(
     global.user.account,
     'bridge',
     _quoteProtocol.protocol.bridgeProductAddress, //bridge prod address
@@ -491,9 +551,8 @@ export async function callEase(_quoteProtocol: any, buyingWithNetworkCurrency: b
   }
   return axios.post('https://app.ease.org/api/v1/permits', data)
       .then((response) => {
-        return buyCover(
+        return buyCoverEase(
             global.user.account,
-            'ease',
             _quoteProtocol.vault.address,
             _quoteProtocol.asset,  // payment asset
             _quoteProtocol.amount, // sum assured, compliant
@@ -501,7 +560,6 @@ export async function callEase(_quoteProtocol: any, buyingWithNetworkCurrency: b
             0, //coverType
             null, // token amount to cover with FEE
             response.data ,// random data
-            buyingWithNetworkCurrency,
             _quoteProtocol,
         )
         // return response.data;

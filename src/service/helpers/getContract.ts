@@ -6,8 +6,11 @@ import ICoverABI from '../abi/insurace/ICover.json';
 import InsuraceCoverDataABI from '../abi/insurace/ICoverData.json';
 import InsuraceProductABI from '../abi/insurace/IProduct.json';
 
+// import NexusDistributorABI from '../abi/nexus/NexusDistributor_old.json';
 import NexusDistributorABI from '../abi/nexus/NexusDistributor.json';
+import NexusDistributorABIV1 from '../abi/nexus/NexusDistributorV1.json';
 import DistributorNexusABI from '../abi/nexus/Distributor.json';
+import DistributorNexusABIV1 from '../abi/nexus/Distributor.json';
 import NexusQuotationABI from '../abi/nexus/IQuotationData.json';
 import NexusGatewayABI from '../abi/nexus/IGateway.json';
 import NexusClaimsDataABI from '../abi/nexus/IClaimsData.json';
@@ -46,6 +49,12 @@ function _getDistributorsContract(_web3:any) : any {
 function _getNexusDistributorsContract(address:any) : any {
   const web3:any = global.user.ethNet.web3Instance;
   const distAbi:any = NexusDistributorABI.abi;
+  return new web3.eth.Contract(distAbi, address );
+}
+
+function _getNexusDistributorsContractV1(address:any) : any {
+  const web3:any = global.user.ethNet.web3Instance;
+  const distAbi:any = NexusDistributorABIV1.abi;
   return new web3.eth.Contract(distAbi, address );
 }
 
@@ -91,6 +100,11 @@ function _getNexusQuotationContract(address:string) : any {
 function _getNexusDistributor(address:string) : any {
   const web3:any = global.user.ethNet.web3Instance;
   const distAbi:any = DistributorNexusABI .abi;
+  return new web3.eth.Contract(distAbi, address );
+}
+function _getNexusDistributorV1(address:string) : any {
+  const web3:any = global.user.ethNet.web3Instance;
+  const distAbi:any = DistributorNexusABIV1 .abi;
   return new web3.eth.Contract(distAbi, address );
 }
 
@@ -163,7 +177,9 @@ export  {
     _getInsurAceProductContract,
 
     _getNexusDistributorsContract,
+    _getNexusDistributorsContractV1,
     _getNexusDistributor,
+    _getNexusDistributorV1,
     _getNexusQuotationContract,
     _getNexusGatewayContract,
     _getNexusClaimsDataContract,

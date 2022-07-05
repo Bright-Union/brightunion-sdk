@@ -1,5 +1,4 @@
 {
-  "contractName": "NexusDistributor",
   "abi": [
     {
       "anonymous": false,
@@ -55,99 +54,43 @@
       "anonymous": false,
       "inputs": [
         {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "coverId",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "claimId",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
+          "indexed": false,
           "internalType": "address",
-          "name": "receiver",
+          "name": "_productAddress",
           "type": "address"
         },
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "amountPaid",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "coverAsset",
-          "type": "address"
-        }
-      ],
-      "name": "ClaimPayoutRedeemed",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "coverId",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "claimId",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "submitter",
-          "type": "address"
-        }
-      ],
-      "name": "ClaimSubmitted",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "coverId",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "buyer",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "contractAddress",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "feePercentage",
+          "name": "_productId",
           "type": "uint256"
         },
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "coverPrice",
+          "name": "_period",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_asset",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_price",
           "type": "uint256"
         }
       ],
-      "name": "CoverBought",
+      "name": "BuyCoverEvent",
       "type": "event"
     },
     {
@@ -205,8 +148,60 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_gatewayAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_nxmTokenAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_masterAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_wnxmTokenAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_wETHAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address payable",
+          "name": "_treasury",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "_tokenName",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_tokenSymbol",
+          "type": "string"
+        },
+        {
+          "internalType": "address[]",
+          "name": "_exchangeAdapters",
+          "type": "address[]"
+        }
+      ],
+      "name": "__NexusDistributor_init",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
       "inputs": [
@@ -243,8 +238,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -257,545 +251,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [],
-      "name": "buysAllowed",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [],
-      "name": "feePercentage",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [],
-      "name": "gateway",
-      "outputs": [
-        {
-          "internalType": "contract IGateway",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "tokenId",
-          "type": "uint256"
-        }
-      ],
-      "name": "getApproved",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "operator",
-          "type": "address"
-        }
-      ],
-      "name": "isApprovedForAll",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [],
-      "name": "master",
-      "outputs": [
-        {
-          "internalType": "contract INXMaster",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [],
-      "name": "name",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [],
-      "name": "nxmToken",
-      "outputs": [
-        {
-          "internalType": "contract IERC20Upgradeable",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [],
-      "name": "owner",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "tokenId",
-          "type": "uint256"
-        }
-      ],
-      "name": "ownerOf",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [],
-      "name": "renounceOwnership",
-      "outputs": [],
-      "stateMutability": "nonpayable",
       "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "from",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "to",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "tokenId",
-          "type": "uint256"
-        }
-      ],
-      "name": "safeTransferFrom",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "from",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "to",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "tokenId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "bytes",
-          "name": "_data",
-          "type": "bytes"
-        }
-      ],
-      "name": "safeTransferFrom",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "operator",
-          "type": "address"
-        },
-        {
-          "internalType": "bool",
-          "name": "approved",
-          "type": "bool"
-        }
-      ],
-      "name": "setApprovalForAll",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "symbol",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "index",
-          "type": "uint256"
-        }
-      ],
-      "name": "tokenByIndex",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "index",
-          "type": "uint256"
-        }
-      ],
-      "name": "tokenOfOwnerByIndex",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "tokenId",
-          "type": "uint256"
-        }
-      ],
-      "name": "tokenURI",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [],
-      "name": "totalSupply",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "from",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "to",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "tokenId",
-          "type": "uint256"
-        }
-      ],
-      "name": "transferFrom",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "newOwner",
-          "type": "address"
-        }
-      ],
-      "name": "transferOwnership",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "treasury",
-      "outputs": [
-        {
-          "internalType": "address payable",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "stateMutability": "payable",
-      "type": "receive",
-      "payable": true
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "gatewayAddress",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "nxmTokenAddress",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "masterAddress",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_feePercentage",
-          "type": "uint256"
-        },
-        {
-          "internalType": "address payable",
-          "name": "_treasury",
-          "type": "address"
-        },
-        {
-          "internalType": "string",
-          "name": "tokenName",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "tokenSymbol",
-          "type": "string"
-        }
-      ],
-      "name": "__NexusDistributor_init",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_owner",
-          "type": "address"
-        },
-        {
-          "internalType": "bool",
-          "name": "_isActive",
-          "type": "bool"
-        }
-      ],
-      "name": "getCoverCount",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "_sumAssured",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_coverPeriod",
-          "type": "uint256"
-        },
-        {
-          "internalType": "address",
-          "name": "_contractAddress",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_coverAsset",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_nexusCoverable",
-          "type": "address"
-        },
-        {
-          "internalType": "bytes",
-          "name": "_data",
-          "type": "bytes"
-        }
-      ],
-      "name": "getQuote",
-      "outputs": [
-        {
-          "components": [
-            {
-              "internalType": "uint256",
-              "name": "prop1",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "prop2",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "prop3",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "prop4",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "prop5",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "prop6",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "prop7",
-              "type": "uint256"
-            }
-          ],
-          "internalType": "struct IDistributor.CoverQuote",
-          "name": "",
-          "type": "tuple"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
     },
     {
       "inputs": [
@@ -812,6 +268,11 @@
         {
           "internalType": "uint256",
           "name": "sumAssured",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amountOut",
           "type": "uint256"
         },
         {
@@ -838,94 +299,11 @@
       "name": "buyCover",
       "outputs": [],
       "stateMutability": "payable",
-      "type": "function",
-      "payable": true
+      "type": "function"
     },
     {
-      "inputs": [
-        {
-          "components": [
-            {
-              "internalType": "uint16[]",
-              "name": "products",
-              "type": "uint16[]"
-            },
-            {
-              "internalType": "uint16[]",
-              "name": "durationInDays",
-              "type": "uint16[]"
-            },
-            {
-              "internalType": "uint256[]",
-              "name": "amounts",
-              "type": "uint256[]"
-            },
-            {
-              "internalType": "address",
-              "name": "currency",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "premium",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address",
-              "name": "owner",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "refCode",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256[]",
-              "name": "helperParameters",
-              "type": "uint256[]"
-            },
-            {
-              "internalType": "uint256[]",
-              "name": "securityParameters",
-              "type": "uint256[]"
-            },
-            {
-              "internalType": "uint8[]",
-              "name": "v",
-              "type": "uint8[]"
-            },
-            {
-              "internalType": "bytes32[]",
-              "name": "r",
-              "type": "bytes32[]"
-            },
-            {
-              "internalType": "bytes32[]",
-              "name": "s",
-              "type": "bytes32[]"
-            }
-          ],
-          "internalType": "struct IDistributor.BuyInsuraceQuote",
-          "name": "",
-          "type": "tuple"
-        }
-      ],
-      "name": "buyCoverInsurace",
-      "outputs": [],
-      "stateMutability": "payable",
-      "type": "function",
-      "payable": true
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "bytes4",
-          "name": "interfaceId",
-          "type": "bytes4"
-        }
-      ],
-      "name": "supportsInterface",
+      "inputs": [],
+      "name": "buysAllowed",
       "outputs": [
         {
           "internalType": "bool",
@@ -934,31 +312,6 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "tokenId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "bytes",
-          "name": "data",
-          "type": "bytes"
-        }
-      ],
-      "name": "submitClaim",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -1014,24 +367,6 @@
         },
         {
           "internalType": "uint256",
-          "name": "claimId",
-          "type": "uint256"
-        }
-      ],
-      "name": "redeemClaim",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "tokenId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
           "name": "assetAmount",
           "type": "uint256"
         },
@@ -1065,8 +400,52 @@
         }
       ],
       "stateMutability": "payable",
-      "type": "function",
-      "payable": true
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "feePercentage",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "gateway",
+      "outputs": [
+        {
+          "internalType": "contract IGateway",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getApproved",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "inputs": [
@@ -1146,14 +525,89 @@
               "type": "address"
             }
           ],
-          "internalType": "struct IDistributor.Cover",
-          "name": "",
+          "internalType": "struct NexusHelper.Cover",
+          "name": "_cover",
           "type": "tuple"
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "operator",
+          "type": "address"
+        }
+      ],
+      "name": "isApprovedForAll",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "master",
+      "outputs": [
+        {
+          "internalType": "contract INXMaster",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "name",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "nxmToken",
+      "outputs": [
+        {
+          "internalType": "contract IERC20Upgradeable",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "inputs": [
@@ -1163,97 +617,38 @@
           "type": "uint256"
         }
       ],
-      "name": "getCover",
+      "name": "ownerOf",
       "outputs": [
         {
-          "internalType": "uint8",
-          "name": "status",
-          "type": "uint8"
-        },
-        {
-          "internalType": "uint256",
-          "name": "sumAssured",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint16",
-          "name": "coverPeriod",
-          "type": "uint16"
-        },
-        {
-          "internalType": "uint256",
-          "name": "validUntil",
-          "type": "uint256"
-        },
-        {
           "internalType": "address",
-          "name": "contractAddress",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "coverAsset",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "premiumInNXM",
-          "type": "uint256"
-        },
-        {
-          "internalType": "address",
-          "name": "memberAddress",
+          "name": "",
           "type": "address"
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
         {
           "internalType": "uint256",
           "name": "claimId",
           "type": "uint256"
         }
       ],
-      "name": "getPayoutOutcome",
-      "outputs": [
-        {
-          "internalType": "enum IGateway.ClaimStatus",
-          "name": "status",
-          "type": "uint8"
-        },
-        {
-          "internalType": "uint256",
-          "name": "amountPaid",
-          "type": "uint256"
-        },
-        {
-          "internalType": "address",
-          "name": "coverAsset",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "name": "redeemClaim",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "spender",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "approveNXM",
+      "inputs": [],
+      "name": "renounceOwnership",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -1262,16 +657,21 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "recipient",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "to",
           "type": "address"
         },
         {
           "internalType": "uint256",
-          "name": "amount",
+          "name": "tokenId",
           "type": "uint256"
         }
       ],
-      "name": "withdrawNXM",
+      "name": "safeTransferFrom",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -1280,11 +680,26 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "newAddress",
+          "name": "from",
           "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_data",
+          "type": "bytes"
         }
       ],
-      "name": "switchMembership",
+      "name": "safeTransferFrom",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -1292,17 +707,30 @@
     {
       "inputs": [
         {
-          "internalType": "uint256",
-          "name": "nxmIn",
-          "type": "uint256"
+          "internalType": "address",
+          "name": "operator",
+          "type": "address"
         },
         {
-          "internalType": "uint256",
-          "name": "minEthOut",
-          "type": "uint256"
+          "internalType": "bool",
+          "name": "approved",
+          "type": "bool"
         }
       ],
-      "name": "sellNXM",
+      "name": "setApprovalForAll",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "baseURI_",
+          "type": "string"
+        }
+      ],
+      "name": "setBaseURI",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -1328,7 +756,7 @@
           "type": "address"
         }
       ],
-      "name": "setTreasury",
+      "name": "setTreasuryDetails",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -1337,11 +765,165 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "_feePercentage",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        }
+      ],
+      "name": "submitClaim",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
           "type": "uint256"
         }
       ],
-      "name": "setFeePercentage",
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes4",
+          "name": "interfaceId",
+          "type": "bytes4"
+        }
+      ],
+      "name": "supportsInterface",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newAddress",
+          "type": "address"
+        }
+      ],
+      "name": "switchMembership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "symbol",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "tokenByIndex",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "tokenOfOwnerByIndex",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "tokenURI",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalSupply",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "transferFrom",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -1349,15 +931,84 @@
     {
       "inputs": [
         {
-          "internalType": "string",
-          "name": "baseURI_",
-          "type": "string"
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
         }
       ],
-      "name": "setBaseURI",
+      "name": "transferOwnership",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "treasury",
+      "outputs": [
+        {
+          "internalType": "address payable",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "uniswapV2Adapter",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "uniswapV3Adapter",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "wEthToken",
+      "outputs": [
+        {
+          "internalType": "contract IWETH",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "wnxmToken",
+      "outputs": [
+        {
+          "internalType": "contract IWNXMToken",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
     }
   ]
 }

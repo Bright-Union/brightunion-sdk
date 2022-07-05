@@ -17,6 +17,7 @@ import {
   _getNexusGatewayContract,
   _getNexusClaimsDataContract,
   _getNexusDistributor,
+  _getNexusDistributorV1,
   _getNexusMasterContract,
   _getIERC20Contract,
   _getEaseContract,
@@ -111,6 +112,23 @@ export async function getCoversNexus():Promise<any>{
   let covers = [];
   //fetch covers bought from Nexus Distributor
   for (let i = 0; i < Number(count); i++) {
+    const tokenId = await distributor.methods.tokenOfOwnerByIndex(global.user.account, i).call();
+    const cover = await distributor.methods.getCover(tokenId).call();
+    cover.id = tokenId;
+    cover.source = 'distributor';
+    cover.risk_protocol = 'nexus';
+    cover.net = global.user.ethNet.networkId;
+    global.events.emit("covers" , { coverItem: cover} );
+    covers.push(cover)
+  }
+
+  const distributorV1 = await _getNexusDistributorV1(NetConfig.netById(global.user.ethNet.networkId).nexusDistributorV1 );
+  const countV1 = await distributor.methods.balanceOf(global.user.account).call();
+
+  global.events.emit("covers" , { itemsCount: countV1 } );
+
+  //fetch covers bought from Nexus Distributor
+  for (let i = 0; i < Number(countV1); i++) {
     const tokenId = await distributor.methods.tokenOfOwnerByIndex(global.user.account, i).call();
     const cover = await distributor.methods.getCover(tokenId).call();
     cover.id = tokenId;

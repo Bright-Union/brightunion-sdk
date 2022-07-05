@@ -271,6 +271,9 @@ class CatalogHelper {
       else if(_distributorName == 'nexus'){
         logoData.url = `https://app.nexusmutual.io/logos/${_name}`;
         logoData.strongLogoData = true;
+      } else if(_distributorName == 'ease'){
+        logoData.url = _name;
+        logoData.strongLogoData = true;
       }
     }
     return logoData;
@@ -314,6 +317,7 @@ class CatalogHelper {
     const chainList = this.chainList(_distributorName, _coverable);
 
     return {
+      priceInNXM: obj.priceInNXM,
       distributorName: _distributorName,
       risk_protocol: _distributorName,
       name: _coverable.name,
@@ -327,6 +331,9 @@ class CatalogHelper {
       actualPeriod: obj.actualPeriod ? obj.actualPeriod : obj.period,
       protocol: _coverable,
       price: obj.price,
+      priceOrigin: obj.priceOrigin,
+      priceNoMargin: obj.priceNoMargin,
+      pricePercentOrigin: obj.pricePercentOrigin,
       pricePercent: obj.pricePercent,
       errorMsg: obj.errorMsg,
       cashBackPercent: obj.cashBackPercent,
@@ -336,6 +343,7 @@ class CatalogHelper {
       type: obj.type,
       typeDescription: obj.typeDescription,
       minimumAmount: obj.minimumAmount,
+      uniSwapRouteData: obj.uniSwapRouteData,
       capacity: obj.capacity,
       nonPartnerLink: obj.nonPartnerLink,
     }

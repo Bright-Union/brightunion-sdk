@@ -1,6 +1,7 @@
 import NetConfig from '../config/NetConfig';
 import CatalogHelper from './catalogHelper';
 import UniswapV2Api from './UniswapV2Api';
+import UniswapV3Api from './UniswapV3Api';
 import {toBN, fromWei} from 'web3-utils'
 // import * as Sentry from "@sentry/browser";
 
@@ -8,6 +9,9 @@ class CurrencyHelper {
 
   public static eth_dai = '2000' //fallback to testnet ratio
   public static insur_usdc:any = '0.2'; //fallback
+  public static eth_nxm:any = '0.2'; //fallback
+  public static dai_nxm:any = '0.2'; //fallback
+
 
   public static getInsureUSDCPrice(_networkId:any){
     if (CatalogHelper.availableOnNetwork(_networkId, 'UNISWAP')) {
@@ -38,18 +42,23 @@ class CurrencyHelper {
   public static getETHDAIPrice (_networkId:any) {
     if (CatalogHelper.availableOnNetwork(_networkId, 'UNISWAP')) {
 
-      UniswapV2Api.priceTokenAtoETH(_networkId, NetConfig.netById(_networkId).DAI).then((price:any) => {
-        this.eth_dai =  price;
-        localStorage.setItem('ETHDAIPrice' , price);
+      return new Promise( async (resolve) => {
+
+        UniswapV2Api.priceTokenAtoETH(_networkId, NetConfig.netById(_networkId).DAI).then((price:any) => {
+          this.eth_dai =  price;
+          localStorage.setItem('ETHDAIPrice' , price);
+          resolve(price)
+        })
+
+        const ETHDAIPrice:any = localStorage.getItem('ETHDAIPrice');
+        if(ETHDAIPrice){
+          new Promise( async (resolve) => {
+            this.eth_dai = ETHDAIPrice;
+            resolve(ETHDAIPrice)
+          })
+        }
       })
 
-      const ETHDAIPrice:any = localStorage.getItem('ETHDAIPrice');
-      if(ETHDAIPrice){
-        new Promise( async (resolve) => {
-          this.eth_dai = ETHDAIPrice;
-          resolve(ETHDAIPrice)
-        })
-      }
     }
 
   }
