@@ -26,6 +26,8 @@ import {
 import {hexToUtf8, asciiToHex, fromWei} from 'web3-utils';
 import EaseApi from "@/service/distributorsApi/EaseApi";
 import UnslashedAPI from "@/service/distributorsApi/UnslashedAPI";
+import UnoReApi from "@/service/distributorsApi/UnoReApi";
+
 
 /**
  * Returns the total cover count owned by an address

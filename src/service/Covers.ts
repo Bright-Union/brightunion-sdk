@@ -31,6 +31,7 @@ export async function getAllCovers(
   coversPromiseArray.push(getNexusCovers())
   coversPromiseArray.push(getEaseCovers())
   coversPromiseArray.push(getUnslashedCovers())
+  coversPromiseArray.push(getUnoReCovers())
 
   for (let net of global.user.web3Passive) {
     coversPromiseArray.push( getInsuraceCovers(net))
@@ -72,6 +73,11 @@ export  function getEaseCovers(): Promise<any[]> {
 export  function getUnslashedCovers(): Promise<any[]> {
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'UNSLASHED')) {
     return  getCovers( null, 'unslashed' , global.user.account , false, 50);
+  }
+}
+export  function getUnoReCovers(): Promise<any[]> {
+  if (CatalogHelper.availableOnNetwork(global.user.networkId, 'UNSLASHED')) {
+    return  getCovers( null, 'unore' , global.user.account , false, 50);
   }
 }
 
