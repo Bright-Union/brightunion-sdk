@@ -99,9 +99,9 @@ export async function buyMutipleOnInsurace (_quotes:any):Promise<any> {
         erc20Instance,
         insuraceAddress,  // global.user.brightProtoAddress //0x7e758e0D330B9B340A7282029e73dA448fb4BdB6
         buyingObj.premium,
-          () => {
-            global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
-          },
+        () => {
+          global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
+        },
         () => {
           global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
           return callInsurace(buyingObj , false, _quotes);
@@ -181,9 +181,9 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
         () => {
           global.events.emit("buy" , { status: "CONFIRMATION" , type:"reset_usdt_allowance" , count:3 , current:2 } );
         },
-          () => {
-            global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
-          },
+        () => {
+          global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
+        },
         () => {
           buyingObj.premium = ERC20Helper.ERCtoUSDTDecimals(buyingObj.premium)
           global.events.emit("buy" , { status: "CONFIRMATION" , type:"main", count:2 , current:2 } );
@@ -205,9 +205,9 @@ export async function buyOnInsurace (_quoteProtocol:any):Promise<any> {
           erc20Instance,
           insuraceAddress,  // global.user.brightProtoAddress //0x7e758e0D330B9B340A7282029e73dA448fb4BdB6
           buyingObj.premium,
-            () => {
-              global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
-            },
+          () => {
+            global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
+          },
           () => {
             global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
             return callInsurace(buyingObj , false, _quoteProtocol);
@@ -309,90 +309,55 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
   global.events.emit("buy" , { status: "INITIALIZED"} );
 
-  // ******************************
-  // TEST START
-  // ******************************
+  const erc20Instance = await _getIERC20Contract(asset);
+  const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
+  const nexusVersion = _quoteProtocol.uniSwapRouteData.protocol ? 'nexus2' : 'nexus';
+  const nexusAddress:any =  await _getDistributorsContract(global.user.web3).methods.getDistributorAddress(nexusVersion).call();
 
-  // const data = global.user.web3.eth.abi.encodeParameters(
-  //   [
-  //     'address[]', 'uint24[]', 'string',
-  //     'uint256', 'uint256', 'uint256',
-  //     'uint256', 'uint8', 'bytes32', 'bytes32'
-  //   ],
-  //   [
-  //     _quoteProtocol.uniSwapRouteData.swapVia,
-  //     _quoteProtocol.uniSwapRouteData.poolFees,
-  //     _quoteProtocol.uniSwapRouteData.protocol,
-  //     _quoteProtocol.rawData.price,
-  //     _quoteProtocol.rawData.priceInNXM,
-  //     _quoteProtocol.rawData.expiresAt,
-  //     _quoteProtocol.rawData.generatedAt,
-  //     _quoteProtocol.rawData.v,
-  //     _quoteProtocol.rawData.r,
-  //     _quoteProtocol.rawData.s
-  //   ]
-  // );
-  //
-  //   let net:any = NetConfig.netById(global.user.networkId);
-  //   let assetTest = net[_quoteProtocol.rawData.currency]
-  //
-  //   console.log( "buyCoverNexus --> ",
-  //   "\n_contractAddress: ",
-  //   _quoteProtocol.rawData.contract,
-  //   "\n_coverAsset: " ,
-  //   assetTest,  // payment asset
-  //   "\n_sumAssured: ",
-  //   _quoteProtocol.amount.toString(), // sum assured, compliant
-  //   "\n_amountOut:" ,
-  //   _quoteProtocol.priceInNXM,
-  //   "\n_coverPeriod",
-  //   _quoteProtocol.rawData.period, // period
-  //   "\n_coverType: ",
-  //   0, //coverType
-  //   "\n_maxPriceWithFee: ",
-  //   _quoteProtocol.price.toString(), // token amount to cover with FEE
-  //   "\n_data: ",
-  //   data ,// random data
-  // );
-  //
-  //   console.log( "buyCoverNexus BEFORE ENCODING--> ",
-  //   "\nswapVia:" , _quoteProtocol.uniSwapRouteData.swapVia,
-  //   "\npoolFees:" ,_quoteProtocol.uniSwapRouteData.poolFees,
-  //   "\nprotocol:" ,_quoteProtocol.uniSwapRouteData.protocol,
-  //   "\nprice:" ,_quoteProtocol.rawData.price,
-  //   "\npriceInNXM:" ,_quoteProtocol.rawData.priceInNXM,
-  //   "\nexpiresAt:" ,_quoteProtocol.rawData.expiresAt,
-  //   "\ngeneratedAt:" ,_quoteProtocol.rawData.generatedAt,
-  //   "\nv:" ,_quoteProtocol.rawData.v,
-  //   "\nr:" ,_quoteProtocol.rawData.r,
-  //   "\ns:" ,_quoteProtocol.rawData.s
-  // );
+  // balance is enough?
+  if ( !NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency) && Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.price)) {
+    _quoteProtocol.price = ERC20Helper.USDTtoERCDecimals(_quoteProtocol.price)
 
-  // ******************************
-  // TEST END
-  // ******************************
+    //proceed with USDT
+    global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
+    return ERC20Helper.approveUSDTAndCall(
+      erc20Instance,
+      nexusAddress,
+      _quoteProtocol.price,
+      () => {
+        global.events.emit("buy" , { status: "CONFIRMATION" , type:"reset_usdt_allowance" , count:3 , current:2 } );
+      },
+      () => {
+        global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
+      },
+      () => {
+        _quoteProtocol.price = ERC20Helper.ERCtoUSDTDecimals(_quoteProtocol.price)
+        global.events.emit("buy" , { status: "CONFIRMATION" , type:"main", count:2 , current:2 } );
+        return callNexus(_quoteProtocol, false);
+      },
+      () => {
+        GoogleEvents.buyRejected('REJECTED - ERC20Helper - approveUSDTAndCall' , _quoteProtocol );
+        global.events.emit("buy" , { status: "REJECTED" } );
+        return {error: "Confirmation rejected"}
+      }
+    );
 
-
-
-  if(!NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.rawData.currency)){
-
-    const erc20Instance = await _getIERC20Contract(asset);
-    const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
+  } else if(!NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.rawData.currency)){
 
     if (Number(ercBalance) >= (Number)(_quoteProtocol.price)) {
 
+      const onTXHash =  () => {
+        global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
+        // return callNexus(_quoteProtocol, false);
+      };
       const onSuccess =  () => {
         global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
         return callNexus(_quoteProtocol, false);
       };
-      const onTXHash =  () => {
-        global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
-        return callNexus(_quoteProtocol, false);
-      };
       const onError =  (err:any) => {
-        GoogleEvents.buyRejected('REJECTED' , _quoteProtocol );
+        GoogleEvents.buyRejected('REJECTED - ERC20Helper - approveAndCall' , _quoteProtocol );
         global.events.emit("buy" , { status: "REJECTED" } );
-        return {error : "Confirmation rejected"};
+        return {error: err , message: 'ERC20Helper approveAndCall Error'};
       }
 
       global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
@@ -508,34 +473,33 @@ export async function buyOnBridgeV2(_quoteProtocol:any) : Promise<any>{
 
 export async function buyOnEase(_quoteProtocol: any) : Promise<any> {
   global.events.emit("buy" , { status: "INITIALIZED"} );
-  if(!NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency)){
-    const erc20Instance = await _getIERC20Contract(_quoteProtocol.asset);
-    const token = await _getIERC20Contract(_quoteProtocol.vault.token.address);
-    const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
-    if (Number(ercBalance) >= (Number)(_quoteProtocol.amount)) {
-      const onSuccess =  () => {
-        global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
-        return callEase(_quoteProtocol, false);
-      };
-      const onTXHash =  () => {
-        global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
-      };
-      const onError =  (err:any) => {
-        GoogleEvents.buyRejected('REJECTED' , _quoteProtocol );
-        global.events.emit("buy" , { status: "REJECTED" } );
-        return {error : "Confirmation rejected"};
-      }
+  const erc20Instance = await _getIERC20Contract(_quoteProtocol.asset);
+  const token = await _getIERC20Contract(_quoteProtocol.vault.token.address);
+  const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
-      global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
-      // await token.methods.approve('0xEA5eDEf14d71337C9B55eF50B0767FA89cd10eCF', toWei(_quoteProtocol.amount))
-      return await ERC20Helper.approveAndCall( token,  _quoteProtocol.vault.address,  toWei(_quoteProtocol.amount), onTXHash, onSuccess, onError);
-
-    } else {
-      GoogleEvents.buyRejected('You have insufficient funds to continue with this transaction' , _quoteProtocol );
-      global.events.emit("buy" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
-      return{ error: "You have insufficient funds to continue with this transaction" }
+  if (Number(ercBalance) >= (Number)(_quoteProtocol.amount)) {
+    const onTXHash =  () => {
+      global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
+    };
+    const onSuccess =  () => {
+      global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
+      return callEase(_quoteProtocol, false);
+    };
+    const onError =  (err:any) => {
+      GoogleEvents.buyRejected('REJECTED - ERC20Helper - approveAndCall' , _quoteProtocol );
+      global.events.emit("buy" , { status: "REJECTED" } );
+      return {error: err , message: 'ERC20Helper approveAndCall Error'};
     }
+
+    global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
+    // await token.methods.approve('0xEA5eDEf14d71337C9B55eF50B0767FA89cd10eCF', toWei(_quoteProtocol.amount))
+    return await ERC20Helper.approveAndCall( token,  _quoteProtocol.vault.address,  toWei(_quoteProtocol.amount), onTXHash, onSuccess, onError);
+
+  } else {
+    GoogleEvents.buyRejected('You have insufficient funds to continue with this transaction' , _quoteProtocol );
+    global.events.emit("buy" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
+    return{ error: "You have insufficient funds to continue with this transaction" }
   }
 
 }

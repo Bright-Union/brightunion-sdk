@@ -177,7 +177,7 @@ const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
   return await new Promise( async (resolve, reject) => {
 
     if(_quoteProtocol.uniSwapRouteData.protocol){
-      const nexusAddress = NetConfig.netById(1).nexusDistributor;
+      const nexusAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('nexus2').call();
 
       const data = global.user.web3.eth.abi.encodeParameters(
         [
@@ -231,7 +231,7 @@ const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
 
     }else{
 
-      const  nexusAddress = NetConfig.netById(1).nexusDistributorV1;
+      const nexusAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('nexus').call();
 
       const data = global.user.web3.eth.abi.encodeParameters(
         ['uint', 'uint', 'uint', 'uint', 'uint8', 'bytes32', 'bytes32'],
