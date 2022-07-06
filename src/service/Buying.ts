@@ -315,15 +315,17 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
   const nexusAddress:any =  await _getDistributorsContract(global.user.web3).methods.getDistributorAddress(nexusVersion).call();
 
   // balance is enough?
-  if ( !NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency) && Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.price)) {
-    _quoteProtocol.price = ERC20Helper.USDTtoERCDecimals(_quoteProtocol.price)
+  if ( !NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency) &&
+  Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.price)) {
+
+    let allowanceAmount = _quoteProtocol.price;
 
     //proceed with USDT
     global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
     return ERC20Helper.approveUSDTAndCall(
       erc20Instance,
       nexusAddress,
-      _quoteProtocol.price,
+       ERC20Helper.USDTtoERCDecimals(allowanceAmount),
       () => {
         global.events.emit("buy" , { status: "CONFIRMATION" , type:"reset_usdt_allowance" , count:3 , current:2 } );
       },
@@ -331,7 +333,7 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
         global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
       },
       () => {
-        _quoteProtocol.price = ERC20Helper.ERCtoUSDTDecimals(_quoteProtocol.price)
+        // _quoteProtocol.price = ERC20Helper.ERCtoUSDTDecimals(_quoteProtocol.price)
         global.events.emit("buy" , { status: "CONFIRMATION" , type:"main", count:2 , current:2 } );
         return callNexus(_quoteProtocol, false);
       },
