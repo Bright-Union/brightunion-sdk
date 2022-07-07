@@ -309,70 +309,73 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
   global.events.emit("buy" , { status: "INITIALIZED"} );
 
-  const erc20Instance = await _getIERC20Contract(asset);
-  const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
   const nexusVersion = _quoteProtocol.uniSwapRouteData.protocol ? 'nexus2' : 'nexus';
   const nexusAddress:any =  await _getDistributorsContract(global.user.web3).methods.getDistributorAddress(nexusVersion).call();
 
-  // balance is enough?
-  if ( !NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency) &&
-  Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.price)) {
+   if(!NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.rawData.currency)){
+     const erc20Instance = await _getIERC20Contract(asset);
+     const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
+     // balance is enough?
+     if ( Number(ERC20Helper.USDTtoERCDecimals(ercBalance)) >= (Number)(_quoteProtocol.price)) {
 
-    let allowanceAmount = _quoteProtocol.price;
+       let allowanceAmount = _quoteProtocol.price;
 
-    //proceed with USDT
-    global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
-    return ERC20Helper.approveUSDTAndCall(
-      erc20Instance,
-      nexusAddress,
-       ERC20Helper.USDTtoERCDecimals(allowanceAmount),
-      () => {
-        global.events.emit("buy" , { status: "CONFIRMATION" , type:"reset_usdt_allowance" , count:3 , current:2 } );
-      },
-      () => {
-        global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
-      },
-      () => {
-        // _quoteProtocol.price = ERC20Helper.ERCtoUSDTDecimals(_quoteProtocol.price)
-        global.events.emit("buy" , { status: "CONFIRMATION" , type:"main", count:2 , current:2 } );
-        return callNexus(_quoteProtocol, false);
-      },
-      () => {
-        GoogleEvents.buyRejected('REJECTED - ERC20Helper - approveUSDTAndCall' , _quoteProtocol );
-        global.events.emit("buy" , { status: "REJECTED" } );
-        return {error: "Confirmation rejected"}
-      }
-    );
+       //proceed with USDT
+       global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
+       return ERC20Helper.approveUSDTAndCall(
+         erc20Instance,
+         nexusAddress,
+         ERC20Helper.USDTtoERCDecimals(allowanceAmount),
+         () => {
+           global.events.emit("buy" , { status: "CONFIRMATION" , type:"reset_usdt_allowance" , count:3 , current:2 } );
+         },
+         () => {
+           global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
+         },
+         () => {
+           // _quoteProtocol.price = ERC20Helper.ERCtoUSDTDecimals(_quoteProtocol.price)
+           global.events.emit("buy" , { status: "CONFIRMATION" , type:"main", count:2 , current:2 } );
+           return callNexus(_quoteProtocol, false);
+         },
+         () => {
+           GoogleEvents.buyRejected('REJECTED - ERC20Helper - approveUSDTAndCall' , _quoteProtocol );
+           global.events.emit("buy" , { status: "REJECTED" } );
+           return {error: "Confirmation rejected"}
+         }
+       );
 
-  } else if(!NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.rawData.currency)){
+     } else {
 
-    if (Number(ercBalance) >= (Number)(_quoteProtocol.price)) {
+       if (Number(ercBalance) >= (Number)(_quoteProtocol.price)) {
 
-      const onTXHash =  () => {
-        global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
-        // return callNexus(_quoteProtocol, false);
-      };
-      const onSuccess =  () => {
-        global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
-        return callNexus(_quoteProtocol, false);
-      };
-      const onError =  (err:any) => {
-        GoogleEvents.buyRejected('REJECTED - ERC20Helper - approveAndCall' , _quoteProtocol );
-        global.events.emit("buy" , { status: "REJECTED" } );
-        return {error: err , message: 'ERC20Helper approveAndCall Error'};
-      }
+         const onTXHash =  () => {
+           global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
+           // return callNexus(_quoteProtocol, false);
+         };
+         const onSuccess =  () => {
+           global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
+           return callNexus(_quoteProtocol, false);
+         };
+         const onError =  (err:any) => {
+           GoogleEvents.buyRejected('REJECTED - ERC20Helper - approveAndCall' , _quoteProtocol );
+           global.events.emit("buy" , { status: "REJECTED" } );
+           return {error: err , message: 'ERC20Helper approveAndCall Error'};
+         }
 
-      global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
+         global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
 
-      return await ERC20Helper.approveAndCall( erc20Instance,  NetConfig.netById(global.user.networkId).nexusDistributor,  _quoteProtocol.price, onTXHash, onSuccess, onError);
+         return await ERC20Helper.approveAndCall( erc20Instance,  NetConfig.netById(global.user.networkId).nexusDistributor,  _quoteProtocol.price, onTXHash, onSuccess, onError);
 
-    } else {
-      GoogleEvents.buyRejected('You have insufficient funds to continue with this transaction' , _quoteProtocol );
-      global.events.emit("buy" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
-      return{ error: "You have insufficient funds to continue with this transaction" }
-    }
+       } else {
+         GoogleEvents.buyRejected('You have insufficient funds to continue with this transaction' , _quoteProtocol );
+         global.events.emit("buy" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
+         return{ error: "You have insufficient funds to continue with this transaction" }
+       }
 
-  }else{
+     }
+
+
+   } else{
 
     const netBalance = await global.user.web3.eth.getBalance(global.user.account);
 
