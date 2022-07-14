@@ -14,7 +14,7 @@ const bridge_nexus_insurace = [
   ['Aave', 'Aave V2', 'Aave V2', 'aave', '', 'AAVE', '', 'Aave V2'],
   ['Balancer v1', 'Balancer v1', 'Balancer v1', 'Balancer v1', 'Balancer V1 & V2', 'Balancer', '', 'Balancer v1'],
   ['Balancer v2', 'Balancer v2', 'Balancer v2', 'Balancer v2', 'Balancer V1 & V2', 'Balancer', '', 'Balancer v2'],
-  ['Anchor Protocol', 'Anchor Protocol', 'Anchor', '', '', '', '', 'Anchor'],
+  ['Anchor Protocol', 'Anchor Protocol', 'Anchor', '', '', '', 'Anchor Protocol', 'Anchor'],
   ['', '', '', 'ANC + UST De-Peg', 'Anchor + UST Peg', '', '', 'ANC + UST De-Peg'],
   ['Alchemix', 'Alchemix V1', '', '', '', 'Alchemix', '', 'Alchemix V1'],
   ['BadgerDAO', 'BadgerDAO', 'Badger Finance', '', '', '', '', 'BadgerDAO'],
