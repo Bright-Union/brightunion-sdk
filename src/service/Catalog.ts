@@ -256,7 +256,7 @@ export async function getNexusCoverables(): Promise<any[]> {
                 const coverablesArray: any  = [];
                 data.forEach((item: any) => {
                     const logoData = {url: `https://app.tidal.finance/assets/images/a${item.index + 1}.png`}
-                    if(item.price > 0 && item.token !== "0x0000000000000000000000000000000000000000") {
+                    // if(item.price > 0 && item.token !== "0x0000000000000000000000000000000000000000") {
                         coverablesArray.push(CatalogHelper.createCoverable({
                             protocolAddress: item.address,
                             name: CatalogHelper.unifyCoverName(item.name, 'tidal' ),
@@ -267,7 +267,7 @@ export async function getNexusCoverables(): Promise<any[]> {
                                 capacity: item.sellerBalance
                             }
                         }))
-                    }
+                    // }
                 })
                 global.events.emit("catalog" , { items: coverablesArray , distributorName:"tidal" , networkId: 1, itemsCount: coverablesArray.length } );
                 return coverablesArray;
