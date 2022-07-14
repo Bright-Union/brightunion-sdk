@@ -233,15 +233,15 @@ class InsuraceApi {
                 let errorMsg:any = { message: e.response && e.response.data ? e.response.data.message : e.message }
 
                 let defaultCapacity = protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0;
+
                 const quoteCapacity:any = this.formatCapacity( currency , protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0 , web3.symbol );
 
-
                 if (errorMsg.message.match('GP: 4') || errorMsg.message.includes('cover duration is either too small or')) {
-                  errorMsg = {message:"Minimum duration is 15 days. Maximum is 365" , errorType: "period" }
+                  errorMsg = {message:"Minimum duration is 15 days. Maximum is 90" , errorType: "period" }
 
                 } else if (errorMsg.message.includes('exceeds available capacity')) {
                   let capacityCurrency = web3.symbol == "POLYGON" ? "MATIC" : web3.symbol == "BSC" ? "BNB" : "ETH";
-                  errorMsg = { message: `Maximum available capacity is `, capacity:fromWei(defaultCapacity.toString()), currency: capacityCurrency, errorType:"capacity"}
+                  errorMsg = { message: `Maximum available capacity is `, capacity: fromWei(quoteCapacity.toString()), currency: capacityCurrency, errorType:"capacity"}
                 }
                 const quote = CatalogHelper.quoteFromCoverable(
                     "insurace",

@@ -1,7 +1,7 @@
 import axios from "axios";
 import CatalogHelper from "@/service/helpers/catalogHelper";
 import CurrencyHelper from "@/service/helpers/currencyHelper";
-import {toWei} from 'web3-utils';
+import {fromWei, toWei} from 'web3-utils';
 
 export default class EaseApi {
     static fetchCoverables() {
@@ -31,8 +31,10 @@ export default class EaseApi {
             capacityArr = this.rangeArray(capacityArr);
             const type = CatalogHelper.commonCategory(vault[0].protocol_type, 'ease')
             const typeDescr = type ? type : 'protocol';
-            const exceedsCapacity = currency === 'USD' ? amount > capacityArr[capacityArr.length - 1] :  amount > Number(CurrencyHelper.usd2eth(capacityArr[capacityArr.length - 1]));
-            const errorMsg = exceedsCapacity ? { message: `Maximum available capacity is `, currency: currency, errorType:"capacity"} : null;
+            const capacity = fromWei(capacityArr[capacityArr.length - 1].toString());
+            const exceedsCapacity = currency === 'USD' ? amount > +capacity :  amount > Number(CurrencyHelper.usd2eth(capacityArr[capacityArr.length - 1]));
+
+            const errorMsg = exceedsCapacity ? { message: `Maximum available capacity is `, capacity: fromWei(capacityArr[capacityArr.length - 1].toString()), currency: currency, errorType:"capacity"} : null;
 
             if(currency === 'ETH') {
               for (var i = 0; i < capacityArr.length; i++) {
