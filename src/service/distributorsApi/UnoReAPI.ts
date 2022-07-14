@@ -104,7 +104,6 @@ export default class UnoReAPI {
                             type: type,
                             typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
                             capacity: "9999999999999999999999999999999999999999999999999999999",
-                            nonPartnerLink: 'https://app.unore.io/buy-cover',
                         },
                         {
                             capacity: "9999999999999999999999999999999999999999999999999999999",
