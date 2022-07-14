@@ -51,6 +51,7 @@ class BrightClient {
   catalogUnsorted: object[];
   initialized:boolean;
   events:any;
+  version:any;
 
   constructor(_config:any) {
     global.user = {
@@ -65,6 +66,7 @@ class BrightClient {
       ethNet: {},
       // readOnly: null,
     }
+    this.version = version;
     this.initialized = false;
     global.events = this.events = new EventEmitter();
 
@@ -120,7 +122,7 @@ class BrightClient {
   }
 
   getVersion(){
-    return version;
+    return this.version;
   }
 
   async getCatalog () {
