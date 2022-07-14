@@ -10,6 +10,7 @@ import {
   _getBridgeV2PolicyBookContract,
   _getBridgeV2PolicyBookFacade,
   _getEaseContract,
+  _getEaseDistributorContract
 
 } from "../helpers/getContract";
 
@@ -115,16 +116,17 @@ export async function buyCoverEase(
   }
 
   return await new Promise( async (resolve, reject) => {
-    await _getEaseContract(_quoteProtocol.vault.address).methods.mintTo(
-      _data.user,
-      NetConfig.NETWORK_CONFIG[0].brightTreasury,
-      _data.amount,
-      _data.expiry,
-      _data.vInt,
-      _data.r,
-      _data.s,
-      _quoteProtocol.vault.liquidation_amount,
-      _quoteProtocol.vault.liquidation_proof
+    await _getEaseDistributorContract(NetConfig.NETWORK_CONFIG[0].easeDistributor).methods.buyCover(
+        _quoteProtocol.vault.token.address,
+        _data.amount,
+        _data.user,
+        _data.amount,
+        _data.expiry,
+        _data.vInt,
+        _data.r,
+        _data.s,
+        _quoteProtocol.vault.liquidation_amount,
+        _quoteProtocol.vault.liquidation_proof
     ).send({ from: _data.user})
     .on('transactionHash', (res:any) => {
       tx.hash = res

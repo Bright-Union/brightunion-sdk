@@ -38,6 +38,7 @@ const QUICKNODEPROVIDER = "https://spring-blue-tree.quiknode.pro/4fb23553784a0d8
         insuraceAPI: 'https://api.insurace.io/ops/v1',
         insuraceAPIKey: 'H7C8k69Eiisz7AG1/6xcI5UWGluTtyAbizXrsfbfQIBDapQZEHAHFw==',
         insuraceReferral: '982107115070280393099561761653261738634756834311',
+        easeDistributor: '0xF11186032dF1E2723600A253A975fcb3dC7bd419',
         ETH: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
         DAI: '0x6b175474e89094c44da98b954eedeac495271d0f',
         USDT: '0xdac17f958d2ee523a2206206994597c13d831ec7',
