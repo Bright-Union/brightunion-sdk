@@ -13,6 +13,7 @@ import EaseApi from "@/service/distributorsApi/EaseApi";
 import UnslashedAPI from "@/service/distributorsApi/UnslashedAPI";
 import UnoReAPI from "@/service/distributorsApi/UnoReAPI";
 import TidalApi from "@/service/distributorsApi/TidalApi";
+import SolaceSDK from "@/service/distributorsApi/SolaceSDK";
 
 export async function getCatalog(): Promise<any> {
 
