@@ -74,7 +74,7 @@ class BrightClient {
 
     global.sentry.init({
       environment: global.user.clientKey,
-      dsn: window && window.location.host.includes("localhost") ? null : "https://aa50bf5ac0164260947c9869f8d03c84@o1110132.ingest.sentry.io/6153025",
+      dsn: "https://aa50bf5ac0164260947c9869f8d03c84@o1110132.ingest.sentry.io/6153025",
       integrations: [
         new Integrations.BrowserTracing(),
       ],
