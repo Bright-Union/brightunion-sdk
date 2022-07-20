@@ -43,6 +43,9 @@ export async function getCatalog(): Promise<any> {
     // push TIDAL
   catalogPromiseArray.push(getTidalCoverables())
 
+    // push SOLACE
+  catalogPromiseArray.push(getSolaceCoverables())
+
   for (let net of global.user.web3Passive) {
     catalogPromiseArray.push(getInsuraceCoverables(net.networkId))
   }
@@ -272,6 +275,32 @@ export async function getNexusCoverables(): Promise<any[]> {
                 })
                 global.events.emit("catalog" , { items: coverablesArray , distributorName:"tidal" , networkId: 1, itemsCount: coverablesArray.length } );
                 return coverablesArray;
+            })
+    }
+
+    export async function getSolaceCoverables() {
+        return await SolaceSDK.getCoverData()
+            .then(async (data: any) => {
+                const coverablesArray: any  = [];
+                if(data.protocols.length > 0) {
+                    data.protocols.forEach((item:any) => {
+                        const logo = `https://assets.solace.fi/zapperLogos/${item.appId}`
+                        coverablesArray.push(CatalogHelper.createCoverable({
+                            protocolAddress: null,
+                            name: CatalogHelper.unifyCoverName(item.appId, 'solace' ),
+                            source: 'solace',
+                            logo: logo,
+                            rawDataSolace: item,
+                            stats: {
+                                capacity: 0 // could be fetched from the contract
+                            }
+                        }))
+                    })
+                    console.log(coverablesArray)
+                    global.events.emit("catalog" , { items: coverablesArray , distributorName:"solace" , networkId: 1, itemsCount: coverablesArray.length } );
+                    return coverablesArray;
+                } else return [];
+
             })
     }
 
