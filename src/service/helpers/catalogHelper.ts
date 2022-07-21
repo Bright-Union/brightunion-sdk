@@ -53,7 +53,7 @@ const bridge_nexus_insurace = [
   ['Uniswap', 'Uniswap V3', 'Uniswap V3', '', 'Uniswap V2 & V3', '', '', 'Uniswap V3'],
   ['','Convex Finance V1','Convex', 'Convex', '', 'Convex Finance', '', 'Convex'],
   ['IceToken','Popsicle Finance','', '', '', '', '', 'IceToken'],
-  ['Yearn Finance (all vaults)','Yearn Finance (all vaults)','Yearn Finance (all vaults)', 'yearn', 'Yearn', 'Yearn Finance', '', 'Yearn Finance (all vaults)']
+  ['Yearn Finance (all vaults)','Yearn Finance (all vaults)','Yearn Finance (all vaults)', 'yearn', 'Yearn', 'Yearn Finance', 'Yearn', 'Yearn Finance (all vaults)']
 ]
 
 
