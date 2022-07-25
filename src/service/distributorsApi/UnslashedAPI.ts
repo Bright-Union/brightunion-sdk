@@ -72,7 +72,7 @@ export default class UnslashedAPI {
                   errorMsg = {message: `Sold out`, errorType: "capacity"}
                 }
 
-                price = currency === 'USD' ? Number(fromWei(CurrencyHelper.eth2usd(price))) : fromWei(price)
+                price = currency === 'USD' ? Number(CurrencyHelper.eth2usd(price)) : price;
 
                 if(quote) {
                     global.events.emit("quote", {
@@ -80,6 +80,8 @@ export default class UnslashedAPI {
                         distributorName: "Unslashed",
                         amount: amount,
                         currency: currency,
+                        price: price,
+                        pricePercent: Number(apy) * 100,
                         period: period,
                         protocol: protocol,
                         chain: 'ETH',
