@@ -77,7 +77,7 @@ export default class UnslashedAPI {
                 if(quote) {
                     global.events.emit("quote", {
                         status: "INITIAL_DATA",
-                        distributorName: "Unslashed",
+                        distributorName: "unslashed",
                         amount: amount,
                         currency: currency,
                         price: price,
