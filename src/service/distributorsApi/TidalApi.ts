@@ -39,11 +39,11 @@ export default class TidalApi {
 
                     global.events.emit("quote", {
                         status: "INITIAL_DATA",
-                        distributorName: "Tidal",
+                        distributorName: "tidal",
                         amount: amount,
                         currency: currency,
                         period: period,
-                        price: periodPrice,
+                        price: toWei(periodPrice.toString()),
                         pricePercent: pricePercent,
                         protocol: protocol,
                         chain: 'ETH',
@@ -64,7 +64,7 @@ export default class TidalApi {
                             period: period,
                             chain: 'ETH',
                             chainId: global.user.ethNet.networkId,
-                            price: periodPrice,
+                            price:  toWei(periodPrice.toString()),
                             pricePercent: pricePercent,
                             response: quote,
                             source: 'tidal',
