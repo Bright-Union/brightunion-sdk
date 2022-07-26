@@ -26,12 +26,8 @@ export default class TidalApi {
                 const exceedsCapacity = amount > capacity;
                 const errorMsg = exceedsCapacity ? { message: `Maximum available capacity is `, currency: currency, errorType:"capacity"} : null;
 
-                let periodPrice = (Number(fromWei(String(price))) * 52);
-                const pricePercent = quote.premiumRate / 10000 * 52;
-
-                if(periodPrice == 0){
-                  periodPrice = amount * ( pricePercent / 100) ;
-                }
+                const pricePercentAnnual = (quote.premiumRate / 10000 * 52) ;
+                let periodPrice = amount * ( pricePercentAnnual / 100) * ( period / 365 );
 
                 if(quote) {
                     const type = 'protocol';
@@ -44,7 +40,7 @@ export default class TidalApi {
                         currency: currency,
                         period: period,
                         price: toWei(periodPrice.toString()),
-                        pricePercent: pricePercent,
+                        pricePercent: pricePercentAnnual,
                         protocol: protocol,
                         chain: 'ETH',
                         name: quote.name,
@@ -65,7 +61,7 @@ export default class TidalApi {
                             chain: 'ETH',
                             chainId: global.user.ethNet.networkId,
                             price: toWei(periodPrice.toString()),
-                            pricePercent: pricePercent,
+                            pricePercent: pricePercentAnnual,
                             response: quote,
                             source: 'tidal',
                             minimumAmount: 1,
