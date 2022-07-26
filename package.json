@@ -14,6 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/Bright-Union/brightjs.git"
   },
+  "types": "src/service/BrightClient.d.ts",
   "keywords": [
     "risk-platforms",
     "bright",
