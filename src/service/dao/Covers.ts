@@ -113,24 +113,27 @@ export async function getCoversNexus():Promise<any>{
   //fetch covers bought from Nexus Distributor
   for (let i = 0; i < Number(count); i++) {
     const tokenId = await distributor.methods.tokenOfOwnerByIndex(global.user.account, i).call();
-    const cover = await distributor.methods.getCover(tokenId).call();
-    cover.id = tokenId;
-    cover.source = 'distributor';
-    cover.risk_protocol = 'nexus';
-    cover.net = global.user.ethNet.networkId;
+    let cover:any = await distributor.methods.getCover(global.user.account, tokenId, true, 5).call();
+    cover = {
+      ...cover,
+      'id': tokenId,
+      'source': 'distributor',
+     'risk_protocol': 'nexus',
+     'net':  global.user.ethNet.networkId
+    }
     global.events.emit("covers" , { coverItem: cover} );
     covers.push(cover)
   }
 
   const distributorV1 = await _getNexusDistributorV1(NetConfig.netById(global.user.ethNet.networkId).nexusDistributorV1 );
-  const countV1 = await distributor.methods.balanceOf(global.user.account).call();
+  const countV1 = await distributorV1.methods.balanceOf(global.user.account).call();
 
   global.events.emit("covers" , { itemsCount: countV1 } );
 
   //fetch covers bought from Nexus Distributor
   for (let i = 0; i < Number(countV1); i++) {
-    const tokenId = await distributor.methods.tokenOfOwnerByIndex(global.user.account, i).call();
-    const cover = await distributor.methods.getCover(tokenId).call();
+    const tokenId = await distributorV1.methods.tokenOfOwnerByIndex(global.user.account, i).call();
+    const cover = await distributorV1.methods.getCover(tokenId).call();
     cover.id = tokenId;
     cover.source = 'distributor';
     cover.risk_protocol = 'nexus';
@@ -187,7 +190,6 @@ export async function getCoversNexus():Promise<any>{
     }
     covers[i].endTime = covers[i].validUntil;
   }
-
   return covers;
 
 }
