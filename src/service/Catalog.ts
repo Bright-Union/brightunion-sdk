@@ -279,12 +279,14 @@ export async function getNexusCoverables(): Promise<any[]> {
     }
 
     export async function getSolaceCoverables() {
-        return await SolaceSDK.getCoverData()
+        return await SolaceSDK.getCoverables()
             .then(async (data: any) => {
                 const coverablesArray: any  = [];
-                if(data.protocols.length > 0) {
-                    data.protocols.forEach((item:any) => {
-                        const logo = `https://assets.solace.fi/zapperLogos/${item.appId}`
+                // if(data.protocols.length > 0) {
+                if(data.length > 0) {
+                    // data.protocols.forEach((item:any) => {
+                    data.forEach((item:any) => {
+                        const logo:any = {url: `https://assets.solace.fi/zapperLogos/${item.appId}`}
                         coverablesArray.push(CatalogHelper.createCoverable({
                             protocolAddress: null,
                             name: CatalogHelper.unifyCoverName(item.appId, 'solace' ),
@@ -296,7 +298,6 @@ export async function getNexusCoverables(): Promise<any[]> {
                             }
                         }))
                     })
-                    console.log(coverablesArray)
                     global.events.emit("catalog" , { items: coverablesArray , distributorName:"solace" , networkId: 1, itemsCount: coverablesArray.length } );
                     return coverablesArray;
                 } else return [];

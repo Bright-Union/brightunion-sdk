@@ -14,6 +14,7 @@ import EaseApi from "@/service/distributorsApi/EaseApi";
 import UnslashedAPI from "@/service/distributorsApi/UnslashedAPI";
 import UnoReAPI from "@/service/distributorsApi/UnoReAPI";
 import TidalApi from "@/service/distributorsApi/TidalApi";
+import SolaceSDK from "@/service/distributorsApi/SolaceSDK";
 
 
 /**
@@ -43,6 +44,7 @@ export async function getQuotes(
   quotesPromiseArray.push(getQuoteFrom('unslashed' , _amount, _currency, _period, _protocol, null ))
   // quotesPromiseArray.push(getQuoteFrom('unore' , _amount, _currency, _period, _protocol, null ))
   quotesPromiseArray.push(getQuoteFrom('tidal' , _amount, _currency, _period, _protocol, null ))
+  quotesPromiseArray.push(getQuoteFrom('solace' , _amount, _currency, _period, _protocol, null ))
 
   for (let net of global.user.web3Passive) {
     quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, net))
@@ -94,8 +96,9 @@ export async function getQuoteFrom(
   }
   else if(_distributorName == 'tidal'){
     return await getTidalQuote(_amount,_currency,_period,_protocol );
-  }
-  else {
+  } else if(_distributorName == 'solace'){
+    return await getSolaceQuote(_amount,_currency,_period,_protocol );
+  } else {
     return  {error: 'supported distributor names are: bridge, insurace, nexus'}
   }
 }
@@ -243,6 +246,16 @@ export async function getTidalQuote(_amount: any, _currency: any, _period: any, 
   } else {
     return {error: "Not supported network for Unslashed"}
   }
+}
+
+export async function getSolaceQuote(_amount: any, _currency: any, _period: any, _protocol: any): Promise<object> {
+  // if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'SOLACE')) {
+  //   if (_protocol.rawDataSolace) {
+      return await SolaceSDK.fetchQuote(_amount, _currency, _period, _protocol);
+  //   }
+  // } else {
+  //   return {error: "Not supported network for Unslashed"}
+  // }
 }
 
 export default {
