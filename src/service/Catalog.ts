@@ -286,10 +286,11 @@ export async function getNexusCoverables(): Promise<any[]> {
                 if(data.length > 0) {
                     // data.protocols.forEach((item:any) => {
                     data.forEach((item:any) => {
-                        const logo:any = {url: `https://assets.solace.fi/zapperLogos/${item.appId}`}
+                        const logo:any = {url: `https://assets.solace.fi/zapperLogos/${item.appId}`};
+                        const name = item.appId.charAt(0).toUpperCase() + item.appId.slice(1)
                         coverablesArray.push(CatalogHelper.createCoverable({
                             protocolAddress: null,
-                            name: CatalogHelper.unifyCoverName(item.appId, 'solace' ),
+                            name: CatalogHelper.unifyCoverName(name, 'solace' ),
                             source: 'solace',
                             logo: logo,
                             rawDataSolace: item,
