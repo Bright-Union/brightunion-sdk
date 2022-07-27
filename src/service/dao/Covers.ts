@@ -113,7 +113,8 @@ export async function getCoversNexus():Promise<any>{
   //fetch covers bought from Nexus Distributor
   for (let i = 0; i < Number(count); i++) {
     const tokenId = await distributor.methods.tokenOfOwnerByIndex(global.user.account, i).call();
-    let cover:any = await distributor.methods.getCover(global.user.account, tokenId, true, 5).call();
+    let id = tokenId > 7661 ? tokenId : tokenId - 1
+    let cover:any = await distributor.methods.getCover(global.user.account, id, true, 5).call();
     cover = {
       ...cover,
       'id': tokenId,
