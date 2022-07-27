@@ -48,6 +48,8 @@ export default class EaseApi {
                     distributorName: "Ease",
                     amount:amount,
                     currency:currency,
+                    price: 0,
+                    pricePercent: 0,
                     period:period,
                     protocol:protocol,
                     chain: 'ETH',

@@ -61,7 +61,7 @@ export default class UnoReAPI {
                     let price:any = 0;
                     if(currency === 'USD') {
                         price = await this.fetchCoverPrice(quote, amount, period, usdcPrice).then((res:any) => {
-                            return res.data.premium
+                            return toWei(String(res.data.premium))
                         })
                     } else {
                         price = await this.fetchCoverPrice(quote, Number(CurrencyHelper.eth2usd(amount)), period, usdcPrice).then((res:any) => {
@@ -74,6 +74,8 @@ export default class UnoReAPI {
                         distributorName: "Unore",
                         amount: amount,
                         currency: currency,
+                        price: price,
+                        pricePercent: Number(quote.premium_factor) * 100,
                         period: period,
                         protocol: protocol,
                         chain: 'ETH',

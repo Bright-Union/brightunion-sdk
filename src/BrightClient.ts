@@ -56,7 +56,7 @@ class BrightClient {
   constructor(_config:any) {
     global.user = {
       googleEventsEnabled: _config.GADisable ? false : true, // use GADisable: true to disable Google Analytics Events
-      clientKey: _config.clientKey ?  _config.clientKey : window.location.host,
+      clientKey: _config.clientKey ?  _config.clientKey : 'local dev',
       web3: _config.web3,
       web3Passive: [],
       networkId: null,
@@ -74,7 +74,7 @@ class BrightClient {
 
     global.sentry.init({
       environment: global.user.clientKey,
-      dsn: window.location.host.includes("localhost") ? null : "https://aa50bf5ac0164260947c9869f8d03c84@o1110132.ingest.sentry.io/6153025",
+      dsn: "https://aa50bf5ac0164260947c9869f8d03c84@o1110132.ingest.sentry.io/6153025",
       integrations: [
         new Integrations.BrowserTracing(),
       ],

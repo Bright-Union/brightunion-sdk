@@ -212,7 +212,7 @@ export async function getNexusCoverables(): Promise<any[]> {
                   name: CatalogHelper.unifyCoverName(protocolName, 'unslashed'),
                   source: 'unslashed',
                   logo: logo,
-                  rawDataUnslashed: item.static,
+                  rawDataUnslashed: item,
                   type: type,
                   typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
                   stats: {}
