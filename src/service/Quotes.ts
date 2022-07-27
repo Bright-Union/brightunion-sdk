@@ -249,13 +249,13 @@ export async function getTidalQuote(_amount: any, _currency: any, _period: any, 
 }
 
 export async function getSolaceQuote(_amount: any, _currency: any, _period: any, _protocol: any): Promise<object> {
-  // if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'SOLACE')) {
-  //   if (_protocol.rawDataSolace) {
+  if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'SOLACE')) {
+    if (_protocol.rawDataSolace) {
       return await SolaceSDK.fetchQuote(_amount, _currency, _period, _protocol);
-  //   }
-  // } else {
-  //   return {error: "Not supported network for Unslashed"}
-  // }
+    }
+  } else {
+    return {error: "Not supported network for Unslashed"}
+  }
 }
 
 export default {
