@@ -13,6 +13,7 @@ import EaseApi from "@/service/distributorsApi/EaseApi";
 import UnslashedAPI from "@/service/distributorsApi/UnslashedAPI";
 import UnoReAPI from "@/service/distributorsApi/UnoReAPI";
 import TidalApi from "@/service/distributorsApi/TidalApi";
+import SolaceSDK from "@/service/distributorsApi/SolaceSDK";
 
 export async function getCatalog(): Promise<any> {
 
@@ -41,6 +42,9 @@ export async function getCatalog(): Promise<any> {
 
     // push TIDAL
   catalogPromiseArray.push(getTidalCoverables())
+
+    // push SOLACE
+  catalogPromiseArray.push(getSolaceCoverables())
 
   for (let net of global.user.web3Passive) {
     catalogPromiseArray.push(getInsuraceCoverables(net.networkId))
@@ -271,6 +275,34 @@ export async function getNexusCoverables(): Promise<any[]> {
                 })
                 global.events.emit("catalog" , { items: coverablesArray , distributorName:"tidal" , networkId: 1, itemsCount: coverablesArray.length } );
                 return coverablesArray;
+            })
+    }
+
+    export async function getSolaceCoverables() {
+        return await SolaceSDK.getCoverables()
+            .then(async (data: any) => {
+                const coverablesArray: any  = [];
+                // if(data.protocols.length > 0) {
+                if(data.length > 0) {
+                    // data.protocols.forEach((item:any) => {
+                    data.forEach((item:any) => {
+                        const logo:any = {url: `https://assets.solace.fi/zapperLogos/${item.appId}`};
+                        const name = item.appId.charAt(0).toUpperCase() + item.appId.slice(1)
+                        coverablesArray.push(CatalogHelper.createCoverable({
+                            protocolAddress: null,
+                            name: CatalogHelper.unifyCoverName(name, 'solace' ),
+                            source: 'solace',
+                            logo: logo,
+                            rawDataSolace: item,
+                            stats: {
+                                capacity: 0 // could be fetched from the contract
+                            }
+                        }))
+                    })
+                    global.events.emit("catalog" , { items: coverablesArray , distributorName:"solace" , networkId: 1, itemsCount: coverablesArray.length } );
+                    return coverablesArray;
+                } else return [];
+
             })
     }
 
