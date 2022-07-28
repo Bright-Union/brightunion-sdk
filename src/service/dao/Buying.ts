@@ -116,7 +116,7 @@ export async function buyCoverEase(
     }
 
     return await new Promise(async (resolve, reject) => {
-        await _getEaseDistributorContract(NetConfig.NETWORK_CONFIG[0].easeDistributor).methods.buyCover(
+        await _getEaseDistributorContract(NetConfig.netById(1).easeDistributor).methods.buyCover(
             _contractAddress,
             _coverAsset,
             _data.amount,

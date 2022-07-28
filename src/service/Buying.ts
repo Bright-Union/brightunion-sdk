@@ -478,11 +478,7 @@ export async function buyOnEase(_quoteProtocol: any) : Promise<any> {
     }
 
     global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
-    // await token.methods.approve('0xEA5eDEf14d71337C9B55eF50B0767FA89cd10eCF', toWei(_quoteProtocol.amount))
-    // TODO figure out whether i need to approve distributor or vault
-    // return await ERC20Helper.approveAndCall( token,  _quoteProtocol.vault.address,  toWei(_quoteProtocol.amount), onTXHash, onSuccess, onError);
     return await ERC20Helper.approveAndCall( token,  NetConfig.NETWORK_CONFIG[0].easeDistributor,  toWei(_quoteProtocol.amount), onTXHash, onSuccess, onError);
-
   } else {
     GoogleEvents.buyRejected('You have insufficient funds to continue with this transaction' , _quoteProtocol );
     global.events.emit("buy" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );

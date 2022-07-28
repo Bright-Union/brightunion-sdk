@@ -30,6 +30,7 @@ declare class NetConfig {
         insuraceAPI: string;
         insuraceAPIKey: string;
         insuraceReferral: string;
+        easeDistributor: string;
         ETH: string;
         DAI: string;
         USDT: string;
@@ -74,6 +75,7 @@ declare class NetConfig {
         nexusDistributorV1?: undefined;
         nexusDistributor?: undefined;
         insuraceDistributor?: undefined;
+        easeDistributor?: undefined;
         NXM?: undefined;
         WNXM?: undefined;
         WETH?: undefined;
@@ -112,6 +114,7 @@ declare class NetConfig {
         nexusDistributorV1?: undefined;
         nexusDistributor?: undefined;
         insuraceDistributor?: undefined;
+        easeDistributor?: undefined;
         NXM?: undefined;
         WNXM?: undefined;
         WETH?: undefined;
@@ -150,6 +153,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         insuraceDistributor?: undefined;
+        easeDistributor?: undefined;
         NXM?: undefined;
         WNXM?: undefined;
         WETH?: undefined;
@@ -189,6 +193,7 @@ declare class NetConfig {
         bridgeV2Registry?: undefined;
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
+        easeDistributor?: undefined;
         DAI?: undefined;
         USDT?: undefined;
         NXM?: undefined;
@@ -227,6 +232,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         insuraceDistributor?: undefined;
+        easeDistributor?: undefined;
         DAI?: undefined;
         USDT?: undefined;
         NXM?: undefined;
@@ -265,6 +271,7 @@ declare class NetConfig {
         bridgeV2Registry?: undefined;
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
+        easeDistributor?: undefined;
         NXM?: undefined;
         WNXM?: undefined;
         WETH?: undefined;
@@ -303,6 +310,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         insuraceDistributor?: undefined;
+        easeDistributor?: undefined;
         NXM?: undefined;
         WNXM?: undefined;
         WETH?: undefined;
@@ -342,6 +350,7 @@ declare class NetConfig {
         bridgeV2Registry?: undefined;
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
+        easeDistributor?: undefined;
         DAI?: undefined;
         USDT?: undefined;
         USDC?: undefined;
@@ -380,6 +389,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         insuraceDistributor?: undefined;
+        easeDistributor?: undefined;
         DAI?: undefined;
         USDT?: undefined;
         USDC?: undefined;
@@ -411,6 +421,7 @@ declare class NetConfig {
         insuraceAPI: string;
         insuraceAPIKey: string;
         insuraceReferral: string;
+        easeDistributor: string;
         ETH: string;
         DAI: string;
         USDT: string;
@@ -455,6 +466,7 @@ declare class NetConfig {
         nexusDistributorV1?: undefined;
         nexusDistributor?: undefined;
         insuraceDistributor?: undefined;
+        easeDistributor?: undefined;
         NXM?: undefined;
         WNXM?: undefined;
         WETH?: undefined;
@@ -493,6 +505,7 @@ declare class NetConfig {
         nexusDistributorV1?: undefined;
         nexusDistributor?: undefined;
         insuraceDistributor?: undefined;
+        easeDistributor?: undefined;
         NXM?: undefined;
         WNXM?: undefined;
         WETH?: undefined;
@@ -531,6 +544,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         insuraceDistributor?: undefined;
+        easeDistributor?: undefined;
         NXM?: undefined;
         WNXM?: undefined;
         WETH?: undefined;
@@ -570,6 +584,7 @@ declare class NetConfig {
         bridgeV2Registry?: undefined;
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
+        easeDistributor?: undefined;
         DAI?: undefined;
         USDT?: undefined;
         NXM?: undefined;
@@ -608,6 +623,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         insuraceDistributor?: undefined;
+        easeDistributor?: undefined;
         DAI?: undefined;
         USDT?: undefined;
         NXM?: undefined;
@@ -646,6 +662,7 @@ declare class NetConfig {
         bridgeV2Registry?: undefined;
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
+        easeDistributor?: undefined;
         NXM?: undefined;
         WNXM?: undefined;
         WETH?: undefined;
@@ -684,6 +701,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         insuraceDistributor?: undefined;
+        easeDistributor?: undefined;
         NXM?: undefined;
         WNXM?: undefined;
         WETH?: undefined;
@@ -723,6 +741,7 @@ declare class NetConfig {
         bridgeV2Registry?: undefined;
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
+        easeDistributor?: undefined;
         DAI?: undefined;
         USDT?: undefined;
         USDC?: undefined;
@@ -761,6 +780,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         insuraceDistributor?: undefined;
+        easeDistributor?: undefined;
         DAI?: undefined;
         USDT?: undefined;
         USDC?: undefined;

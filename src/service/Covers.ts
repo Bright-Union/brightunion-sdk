@@ -15,9 +15,11 @@ export async function getCoversFrom(
       return getUnslashedCovers();
     }else if(_distributorName == "ease"){
       return getEaseCovers();
-    }else if(_distributorName == "unore"){
-      return getUnoReCovers();
-    }else{
+    }
+    // else if(_distributorName == "unore"){
+    //   return getUnoReCovers();
+    // }
+    else{
       return { error: "Wrong distributor name" }
     }
 
@@ -35,7 +37,7 @@ export async function getAllCovers(
   coversPromiseArray.push(getNexusCovers())
   coversPromiseArray.push(getEaseCovers())
   coversPromiseArray.push(getUnslashedCovers())
-  coversPromiseArray.push(getUnoReCovers())
+  // coversPromiseArray.push(getUnoReCovers())
 
   for (let net of global.user.web3Passive) {
     coversPromiseArray.push( getInsuraceCovers(net))

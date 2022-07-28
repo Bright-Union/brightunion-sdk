@@ -1,3 +1,4 @@
+import { Contract } from "@ethersproject/contracts";
 declare function _getDistributorsContract(_web3: any): any;
 declare function _getNexusDistributorsContract(address: any): any;
 declare function _getNexusDistributorsContractV1(address: any): any;
@@ -12,6 +13,7 @@ declare function _getNexusDistributorV1(address: string): any;
 declare function _getInsuraceDistributor(address: string, _web3: any): any;
 declare function _getInsurAceCoverDataContract(address: string, _web3: any): any;
 declare function _getEaseContract(address: string): any;
+declare function _getEaseDistributorContract(address: string): Contract;
 declare function _getPermitContract(address: string): any;
 declare function _getUnslashedContract(address: string): any;
 declare function _getUnslashedCoversContract(address: string): any;
@@ -23,4 +25,4 @@ declare const _getBridgeV2PolicyBookFacade: (address: string, web3: any) => any;
 declare const _getBridgeV2PolicyRegistry: (address: string, web3: any) => any;
 declare const _getBridgeV2Distributor: (address: string, web3: any) => any;
 declare function _getIERC20Contract(address: any): any;
-export { _getDistributorsContract, _getIERC20Contract, _getBridgeV2RegistryContract, _getBridgeV2PolicyBookRegistryContract, _getBridgeV2PolicyRegistry, _getBridgeV2PolicyQuoteContract, _getBridgeV2PolicyBookContract, _getBridgeV2PolicyBookFacade, _getBridgeV2Distributor, _getInsuraceDistributorsContract, _getInsuraceDistributor, _getInsurAceCoverDataContract, _getInsurAceProductContract, _getNexusDistributorsContract, _getNexusDistributorsContractV1, _getNexusDistributor, _getNexusDistributorV1, _getNexusQuotationContract, _getNexusGatewayContract, _getNexusClaimsDataContract, _getNexusMasterContract, _getEaseContract, _getPermitContract, _getUnslashedContract, _getUnslashedCoversContract, };
+export { _getDistributorsContract, _getIERC20Contract, _getBridgeV2RegistryContract, _getBridgeV2PolicyBookRegistryContract, _getBridgeV2PolicyRegistry, _getBridgeV2PolicyQuoteContract, _getBridgeV2PolicyBookContract, _getBridgeV2PolicyBookFacade, _getBridgeV2Distributor, _getInsuraceDistributorsContract, _getInsuraceDistributor, _getInsurAceCoverDataContract, _getInsurAceProductContract, _getNexusDistributorsContract, _getNexusDistributorsContractV1, _getNexusDistributor, _getNexusDistributorV1, _getNexusQuotationContract, _getNexusGatewayContract, _getNexusClaimsDataContract, _getNexusMasterContract, _getEaseContract, _getEaseDistributorContract, _getPermitContract, _getUnslashedContract, _getUnslashedCoversContract, };

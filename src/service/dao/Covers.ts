@@ -372,28 +372,8 @@ export async function getCoversUnslashed():Promise<any>{
 }
 
 export async function getCoversUnoRe():Promise<any>{
-
   const activeCoversData = UnoReAPI.fetchCovers();
-  let policies: any = [];
-
-  // for (var i = 0; i < activeCoversData.length; i++) {
-  //
-  //   let cover = {
-  //     risk_protocol: 'unslashed',
-  //     status: 0,
-  //     coverAmount: activeCoversData[i].coverage.userCoverBalance,
-  //     coverAsset: "ETH",
-  //     validUntil: activeCoversData[i].static.rolloverDate,
-  //     endTime: activeCoversData[i].static.rolloverDate,
-  //     startTime: false,
-  //     name: CatalogHelper.unifyCoverName(activeCoversData[i].static.name, 'unlashed'),
-  //     net: global.user.ethNet.networkId,
-  //   }
-  //   global.events.emit("covers", {coverItem: cover});
-  //   policies.push(cover)
-  // }
-
-  return policies;
+  return activeCoversData;
 }
 
 export default {

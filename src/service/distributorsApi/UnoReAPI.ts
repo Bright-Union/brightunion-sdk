@@ -118,20 +118,6 @@ export default class UnoReAPI {
     }
 
     static fetchCovers():any {
-
-      console.log("fetchCovers UNORE");
-
-      // const options:any = {
-      //   // query: "\n      query getPolicyPurchased($from: String!) {\n        policyPurchases(where: { buyer: $from }) {\n          id\n          policyId\n          timestamp\n          protocolAddress\n          assetLocked\n          coverageAmount\n          coverageDuration\n          premiumCurrency\n          premiumPaid\n          transaction\n        }\n      }\n  ",
-      //   variables: {from:"0xe164a4197e57e7224d26594fb96f3478fef02d8e"}
-      // }
-      // return axios.get(`https://api.thegraph.com/subgraphs/name/luckywebdev/cover-portal-subgraph` , options )
-      //     .then((response) => {
-      //       console.log("fetchCovers UNOR RESRESE - " ,  response );
-      //         return response.data;
-      //     }).catch(error => {
-      //         return [];
-      //     });
       return [];
     }
 
