@@ -40,7 +40,7 @@ export async function getCatalog(): Promise<any> {
   // catalogPromiseArray.push(getUnoReCoverables())
 
     // push TIDAL
-  // catalogPromiseArray.push(getTidalCoverables())
+  catalogPromiseArray.push(getTidalCoverables())
 
   for (let net of global.user.web3Passive) {
     catalogPromiseArray.push(getInsuraceCoverables(net.networkId))
@@ -208,7 +208,7 @@ export async function getNexusCoverables(): Promise<any[]> {
                   name: CatalogHelper.unifyCoverName(protocolName, 'unslashed'),
                   source: 'unslashed',
                   logo: logo,
-                  rawDataUnslashed: item.static,
+                  rawDataUnslashed: item,
                   type: type,
                   typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
                   stats: {}
@@ -256,7 +256,7 @@ export async function getNexusCoverables(): Promise<any[]> {
                 const coverablesArray: any  = [];
                 data.forEach((item: any) => {
                     const logoData = {url: `https://app.tidal.finance/assets/images/a${item.index + 1}.png`}
-                    if(item.price > 0 && item.token !== "0x0000000000000000000000000000000000000000") {
+                    // if(item.price > 0 && item.token !== "0x0000000000000000000000000000000000000000") {
                         coverablesArray.push(CatalogHelper.createCoverable({
                             protocolAddress: item.address,
                             name: CatalogHelper.unifyCoverName(item.name, 'tidal' ),
@@ -267,7 +267,7 @@ export async function getNexusCoverables(): Promise<any[]> {
                                 capacity: item.sellerBalance
                             }
                         }))
-                    }
+                    // }
                 })
                 global.events.emit("catalog" , { items: coverablesArray , distributorName:"tidal" , networkId: 1, itemsCount: coverablesArray.length } );
                 return coverablesArray;

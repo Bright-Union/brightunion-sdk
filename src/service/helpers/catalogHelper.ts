@@ -6,7 +6,7 @@ import {hexToUtf8} from 'web3-utils';
 
 
 const bridge_nexus_insurace = [
-  // BRIDGE NAME, NEXUS NAME, INSURACE NAME, EASE, UNSLASHED, UNORE, TIDAL COMMON NAME
+  // BRIDGE NAME, NEXUS NAME, INSURACE NAME, EASE, UNSLASHED, UNORE, TIDAL, COMMON NAME
   ['88mph.app', '88mph', '88mph V2', '', '', '88mph.app', '', '88mph V2'],
   ['88mph.app', '88mph', '88mph V3', '', '', '88mph.app', '', '88mph V3'],
   ['1INCH Token', '1Inch (DEX & Liquidity Pools)', '1Inch', '', '', '1inch Network', '', '1Inch'],
@@ -14,7 +14,7 @@ const bridge_nexus_insurace = [
   ['Aave', 'Aave V2', 'Aave V2', 'aave', '', 'AAVE', '', 'Aave V2'],
   ['Balancer v1', 'Balancer v1', 'Balancer v1', 'Balancer v1', 'Balancer V1 & V2', 'Balancer', '', 'Balancer v1'],
   ['Balancer v2', 'Balancer v2', 'Balancer v2', 'Balancer v2', 'Balancer V1 & V2', 'Balancer', '', 'Balancer v2'],
-  ['Anchor Protocol', 'Anchor Protocol', 'Anchor', '', '', '', '', 'Anchor'],
+  ['Anchor Protocol', 'Anchor Protocol', 'Anchor', '', '', '', 'Anchor Protocol', 'Anchor'],
   ['', '', '', 'ANC + UST De-Peg', 'Anchor + UST Peg', '', '', 'ANC + UST De-Peg'],
   ['Alchemix', 'Alchemix V1', '', '', '', 'Alchemix', '', 'Alchemix V1'],
   ['BadgerDAO', 'BadgerDAO', 'Badger Finance', '', '', '', '', 'BadgerDAO'],
@@ -53,7 +53,7 @@ const bridge_nexus_insurace = [
   ['Uniswap', 'Uniswap V3', 'Uniswap V3', '', 'Uniswap V2 & V3', '', '', 'Uniswap V3'],
   ['','Convex Finance V1','Convex', 'Convex', '', 'Convex Finance', '', 'Convex'],
   ['IceToken','Popsicle Finance','', '', '', '', '', 'IceToken'],
-  ['Yearn Finance (all vaults)','Yearn Finance (all vaults)','Yearn Finance (all vaults)', 'yearn', 'Yearn', 'Yearn Finance', '', 'Yearn Finance (all vaults)']
+  ['Yearn Finance (all vaults)','Yearn Finance (all vaults)','Yearn Finance (all vaults)', 'yearn', 'Yearn', 'Yearn Finance', 'Yearn', 'Yearn Finance (all vaults)']
 ]
 
 

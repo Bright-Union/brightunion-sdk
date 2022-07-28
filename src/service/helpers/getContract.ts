@@ -10,7 +10,7 @@ import InsuraceProductABI from '../abi/insurace/IProduct.json';
 import NexusDistributorABI from '../abi/nexus/NexusDistributor.json';
 import NexusDistributorABIV1 from '../abi/nexus/NexusDistributorV1.json';
 import DistributorNexusABI from '../abi/nexus/Distributor.json';
-import DistributorNexusABIV1 from '../abi/nexus/Distributor.json';
+import DistributorNexusABIV1 from '../abi/nexus/DistributorV1.json';
 import NexusQuotationABI from '../abi/nexus/IQuotationData.json';
 import NexusGatewayABI from '../abi/nexus/IGateway.json';
 import NexusClaimsDataABI from '../abi/nexus/IClaimsData.json';
