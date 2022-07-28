@@ -16,6 +16,7 @@ import NexusGatewayABI from '../abi/nexus/IGateway.json';
 import NexusClaimsDataABI from '../abi/nexus/IClaimsData.json';
 import NexusMasterABI from '../abi/nexus/INXMaster.json';
 import EaseContractABI from '../abi/ease/EaseContract.json';
+import EaseDistributorContractABI from '../abi/ease/EaseDistributorContract.json';
 import PermitContractABI from '../abi/ease/PermitContract.json';
 import UnslashedContractABI from '../abi/unslashed/UnslashedPrices.json';
 import UnslashedCoversContractABI from '../abi/unslashed/UnslashedCovers.json';
@@ -28,6 +29,7 @@ import BridgeV2PolicyQuoteABI from '../abi/bridgeV2/PolicyQuote.json'
 import BridgeV2PolicyBookFacadeABI from '../abi/bridgeV2/PolicyBookFacade.json'
 import BridgeV2PolicyBookABI from '../abi/bridgeV2/PolicyBook.json'
 import BridgeV2DistributorABI from '../abi/bridgeV2/BridgeDistributorV2.json'
+import {Contract} from "@ethersproject/contracts";
 
 
 // possible JSON loader solution to reduce SDK code base size
@@ -125,6 +127,12 @@ function _getEaseContract(address:string) : any {
   return new web3.eth.Contract(distAbi, address );
 }
 
+function _getEaseDistributorContract(address:string) : Contract {
+  const web3:any = global.user.ethNet.web3Instance;
+  const distAbi:any = EaseDistributorContractABI.abi;
+  return new web3.eth.Contract(distAbi, address );
+}
+
 function _getPermitContract(address:string) : any {
   const web3:any = global.user.ethNet.web3Instance;
   const distAbi:any = PermitContractABI.abi;
@@ -186,6 +194,7 @@ export  {
     _getNexusMasterContract,
 
     _getEaseContract,
+    _getEaseDistributorContract,
     _getPermitContract,
 
     _getUnslashedContract,
