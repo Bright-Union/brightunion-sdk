@@ -45,7 +45,7 @@ export default class EaseApi {
 
                 global.events.emit("quote" , {
                     status: "INITIAL_DATA" ,
-                    distributorName: "Ease",
+                    distributorName: "ease",
                     amount:amount,
                     currency:currency,
                     price: 0,

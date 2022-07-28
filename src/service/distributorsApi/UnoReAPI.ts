@@ -71,7 +71,7 @@ export default class UnoReAPI {
                     }
                     global.events.emit("quote", {
                         status: "INITIAL_DATA",
-                        distributorName: "Unore",
+                        distributorName: "unore",
                         amount: amount,
                         currency: currency,
                         price: price,
