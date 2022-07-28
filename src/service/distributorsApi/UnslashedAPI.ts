@@ -59,6 +59,8 @@ export default class UnslashedAPI {
       }
 
       price = currency === 'USD' ? Number(CurrencyHelper.eth2usd(price)) : price;
+      const pricePerPeriod = price * ( period / 365 );
+      const pricePercent = Number(apy) * 100;
 
       if(quote) {
         global.events.emit("quote", {
@@ -66,8 +68,8 @@ export default class UnslashedAPI {
           distributorName: "unslashed",
           amount: amount,
           currency: currency,
-          price: price,
-          pricePercent: Number(apy) * 100,
+          price: pricePerPeriod,
+          pricePercent: pricePercent,
           period: period,
           protocol: protocol,
           chain: 'ETH',
@@ -89,8 +91,8 @@ export default class UnslashedAPI {
             period: period,
             chain: 'ETH',
             chainId: global.user.ethNet.networkId,
-            price: price,
-            pricePercent: Number(apy) * 100,
+            price: pricePerPeriod,
+            pricePercent: pricePercent,
             response: quote.static,
             source: 'unslashed',
             minimumAmount: 1,
