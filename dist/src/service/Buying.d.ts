@@ -9,6 +9,8 @@ export declare function callBridgeV2(_quoteProtocol: any): Promise<any>;
 export declare function buyOnBridgeV2(_quoteProtocol: any): Promise<any>;
 export declare function buyOnEase(_quoteProtocol: any): Promise<any>;
 export declare function callEase(_quoteProtocol: any, buyingWithNetworkCurrency: boolean): Promise<any>;
+export declare function callUnoRe(_quoteProtocol: any, buyingWithNetworkCurrency: boolean): Promise<unknown>;
+export declare function buyOnUnoRe(_quoteProtocol: any): Promise<any>;
 declare const _default: {
     buyQuote: typeof buyQuote;
     buyMultipleQuotes: typeof buyMultipleQuotes;
