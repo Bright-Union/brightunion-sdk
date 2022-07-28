@@ -41,8 +41,9 @@ export default class SolaceSDK {
                         data.protocols.forEach((protocol:any)=> {
                             balance = balance + protocol.balanceUSD
                         })
-                        // const price = global.user.account !== nullAddress ? balance * data.current_rate : amount * data.current_rate;
+
                         const price = amount * data.current_rate / 365.25 * period
+                        const pricePercent =  data.current_rate * 100;
 
                         global.events.emit("quote", {
                             status: "INITIAL_DATA",
@@ -52,7 +53,7 @@ export default class SolaceSDK {
                             period: period,
                             protocol: protocol,
                             price: toWei(price.toString()),
-                            pricePercent: data.current_rate,
+                            pricePercent: pricePercent,
                             chain: 'ETH',
                             source: 'solace',
                             rawDataSolace: data,
@@ -68,7 +69,7 @@ export default class SolaceSDK {
                                 chain: 'ETH',
                                 chainId: global.user.ethNet.networkId,
                                 price: toWei(price.toString()),
-                                pricePercent: data.current_rate,
+                                pricePercent: pricePercent,
                                 response: data,
                                 source: 'solace',
                                 minimumAmount: 1,
