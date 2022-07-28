@@ -26,6 +26,7 @@ declare class BridgeHelper {
         rawDataUnore: any;
         rawDataUnslashed: any;
         rawDataTidal: any;
+        rawDataSolace: any;
     }[]>;
     static preQuoteDataFormat(_amount: any, _currency: any, _period: any): {
         amountInWei: any;

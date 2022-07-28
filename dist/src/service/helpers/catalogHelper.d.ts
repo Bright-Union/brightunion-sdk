@@ -64,6 +64,7 @@ declare class CatalogHelper {
         rawDataUnore: any;
         rawDataUnslashed: any;
         rawDataTidal: any;
+        rawDataSolace: any;
     };
     static commonCategory(category: string, provider: string): any;
     static chainList(_distributorName: string, coverable: any): any;
