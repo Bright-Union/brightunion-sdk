@@ -59,23 +59,26 @@ export default class UnoReAPI {
                     let type = CatalogHelper.commonCategory(quote.category, 'unore');
                     const typeDescr = type ? type : 'protocol';
                     let price:any = 0;
-                    if(currency === 'USD') {
+                    let pricePercent:any = Number(quote.premium_factor) * 100;
+                    if(currency !== 'ETH') {
                         price = await this.fetchCoverPrice(quote, amount, period, usdcPrice).then((res:any) => {
                             return toWei(String(res.data.premium))
                         })
                     } else {
-                        price = await this.fetchCoverPrice(quote, Number(CurrencyHelper.eth2usd(amount)), period, usdcPrice).then((res:any) => {
-                            const convertedNumber = Number(CurrencyHelper.usd2eth(toWei(String(res.data.premium))));
-                            return fromWei(String(convertedNumber))
+                      let amountInUSD = Number(CurrencyHelper.eth2usd(amount));
+                        price = await this.fetchCoverPrice(quote, amountInUSD , period, usdcPrice).then((res:any) => {
+                            const priceInETH = Number(CurrencyHelper.usd2eth(toWei(String(res.data.premium))));
+                            return String(priceInETH);
                         })
                     }
+
                     global.events.emit("quote", {
                         status: "INITIAL_DATA",
                         distributorName: "unore",
                         amount: amount,
                         currency: currency,
                         price: price,
-                        pricePercent: Number(quote.premium_factor) * 100,
+                        pricePercent: pricePercent,
                         period: period,
                         protocol: protocol,
                         chain: 'ETH',
@@ -97,7 +100,7 @@ export default class UnoReAPI {
                             chain: 'ETH',
                             chainId: global.user.ethNet.networkId,
                             price: price,
-                            pricePercent: Number(quote.premium_factor) * 100,
+                            pricePercent: pricePercent,
                             response: quote,
                             source: 'unore',
                             minimumAmount: 1,
