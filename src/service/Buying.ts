@@ -258,16 +258,19 @@ export async function callInsurace(buyingObj:any, buyingWithNetworkCurrency: boo
  * @returns {Object} insurance buying struct
  */
 function setInsuraceBuyingObject(confirmCoverResult:any){
+
+  console.log("confirmCoverResult" , confirmCoverResult);
+
   return {
     products:            confirmCoverResult[0],
     durationInDays:      confirmCoverResult[1],
     amounts:             confirmCoverResult[2],
-    currency:            confirmCoverResult[3],
-    owner:               confirmCoverResult[4],
+    currency:            confirmCoverResult[3][1],
+    owner:               global.user.account,
     refCode:             confirmCoverResult[5],
-    premium:             confirmCoverResult[6],
+    premium:             confirmCoverResult[4],
     helperParameters:    confirmCoverResult[7],
-    securityParameters:  confirmCoverResult[8],
+    securityParameters:  confirmCoverResult[6],
     v:                   confirmCoverResult[9],
     r:                   confirmCoverResult[10],
     s:                   confirmCoverResult[11]
