@@ -259,6 +259,8 @@ export async function getNexusCoverables(): Promise<any[]> {
             .then(async (data:any) => {
                 const coverablesArray: any  = [];
                 data.forEach((item: any) => {
+                    let type = CatalogHelper.commonCategory(item.category, 'tidal')
+                    const typeDescr = type ? type : 'protocol';
                     const logoData = {url: `https://app.tidal.finance/assets/images/a${item.index + 1}.png`}
                     // if(item.price > 0 && item.token !== "0x0000000000000000000000000000000000000000") {
                         coverablesArray.push(CatalogHelper.createCoverable({
@@ -266,6 +268,8 @@ export async function getNexusCoverables(): Promise<any[]> {
                             name: CatalogHelper.unifyCoverName(item.name, 'tidal' ),
                             source: 'tidal',
                             logo: logoData,
+                            type: type,
+                            typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
                             rawDataTidal: item,
                             stats: {
                                 capacity: item.sellerBalance
