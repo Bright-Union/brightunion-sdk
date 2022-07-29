@@ -405,6 +405,7 @@ class CatalogHelper {
       chainListInsurace: obj.chainListInsurace,
       chainListNexus: obj.chainListNexus,
       chainListUnore: obj.chainListUnore,
+      chainListSolace: obj.chainListSolace,
       rawDataNexus: obj.rawDataNexus,                                           //field will be increased if similar products found
       rawDataBridge: obj.rawDataBridge,                                           //field will be increased if similar products found
       rawDataInsurace: obj.rawDataInsurace,                                           //field will be increased if similar products found
@@ -445,6 +446,8 @@ class CatalogHelper {
       list = coverable.chainListInsurace;
     } else if (_distributorName == 'unore') {
       list = coverable.chainListUnore;
+    } else if (_distributorName == 'solace') {
+      list = coverable.chainListSolace;
     } else {
       list = ['Ethereum']
     }

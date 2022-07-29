@@ -298,6 +298,7 @@ export async function getNexusCoverables(): Promise<any[]> {
                             source: 'solace',
                             logo: logo,
                             rawDataSolace: item,
+                            chainListSolace: ['Ethereum', 'Polygon', 'Fantom', 'Aurora'],
                             stats: {
                                 capacity: 0 // could be fetched from the contract
                             }
