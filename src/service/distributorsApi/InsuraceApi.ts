@@ -49,15 +49,17 @@ class InsuraceApi {
         protocolId : any,
         owner : any) {
 
-        let url = `${NetConfig.netById(web3.networkId).insuraceAPI}/getCoverPremium?code=${encodeURIComponent(NetConfig.netById(web3.networkId).insuraceAPIKey)}`;
+        let url = `${NetConfig.netById(web3.networkId).insuraceAPI}/getCoverPremiumV2?code=${encodeURIComponent(NetConfig.netById(web3.networkId).insuraceAPIKey)}`;
 
         return  axios.post(
             url, {
                     "chain": NetConfig.netById(web3.networkId).symbol,
                     "coverCurrency": currency,
+                    "premiumCurrency": currency,
                     "productIds": [protocolId],
                     "coverDays": [period],
                     "coverAmounts": [amount],
+                    "coveredAddresses": [global.user.account],
                     "owner": owner,
                     "referralCode": NetConfig.netById(web3.networkId).insuraceReferral,
 
@@ -74,15 +76,17 @@ class InsuraceApi {
         protocolIds : any[]
       ) {
 
-        let url = `${NetConfig.netById(web3.networkId).insuraceAPI}/getCoverPremium?code=${encodeURIComponent(NetConfig.netById(web3.networkId).insuraceAPIKey)}`;
+        let url = `${NetConfig.netById(web3.networkId).insuraceAPI}/getCoverPremiumV2?code=${encodeURIComponent(NetConfig.netById(web3.networkId).insuraceAPIKey)}`;
 
         return  axios.post(
             url, {
                     "chain": NetConfig.netById(web3.networkId).symbol,
                     "coverCurrency": currency.address,
+                    "premiumCurrency": currency,
                     "productIds": protocolIds,
                     "coverDays": periods,
                     "coverAmounts": amounts,
+                    "coveredAddresses": [global.user.account],
                     "owner": global.user.account,
                     "referralCode": NetConfig.netById(web3.networkId).insuraceReferral,
 
@@ -96,7 +100,7 @@ class InsuraceApi {
     static confirmCoverPremium (chainSymbol :any, params : any) {
 
         return axios.post(
-            `${NetConfig.netById(global.user.networkId).insuraceAPI}/confirmCoverPremium?code=${encodeURIComponent(NetConfig.netById(global.user.networkId).insuraceAPIKey)}`, {
+            `${NetConfig.netById(global.user.networkId).insuraceAPI}/confirmCoverPremiumV2?code=${encodeURIComponent(NetConfig.netById(global.user.networkId).insuraceAPIKey)}`, {
             chain: chainSymbol,
             params: params
         }).then((response : any) => {
