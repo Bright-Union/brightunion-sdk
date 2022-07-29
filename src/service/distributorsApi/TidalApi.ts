@@ -30,7 +30,7 @@ export default class TidalApi {
                 let periodPrice = amount * ( pricePercentAnnual / 100) * ( period / 365 );
 
                 if(quote) {
-                    const type = 'protocol';
+                    const type = CatalogHelper.commonCategory(quote.category, 'tidal');
                     const typeDescr = type ? type : 'protocol';
 
                     global.events.emit("quote", {

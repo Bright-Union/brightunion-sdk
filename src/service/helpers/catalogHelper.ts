@@ -88,15 +88,15 @@ const bridge_nexus_insurace = [
 
 
 const bridge_nexus_insurace_categories : string[][] = [
-  // BRIDGE CATEGORY, NEXUS CATEGORY, INSURACE, EASE, UNSLASHED, UNORE, COMMON CATEGORY, DESCRIPTION
-  ['0' /*CONTRACT*/, 'protocol', 'Smart Contract Vulnerability', 'Lending Protocol', 'DAPP', 'Lending', 'protocol', 'Protocol hack and failure'],
-  ['2', /*SERVICE*/ 'custodian', '', '', 'Custodian', '', 'custodian', 'Custodian cover'],
-  ['1' /*STABLECOIN*/, '', 'Stablecoin De-Peg', '', '', 'Stablecoin', 'stable', 'Stable token de-pegging'],
-  ['', 'token', '', 'Yield Aggregator', '', '', 'yield', 'Yield de-pegging'],
-  ['3' /*EXCHANGE*/, 'custodian', 'Custodian Risk', '', 'Custodian', '', 'custodian', 'Custodian Risk'],
-  ['' , '', 'IDO Event Risk', '', '', '', 'ido', 'IDO Event Risk'],
-  ['' , '', 'Bundled Cover', '', '', '', 'bundled', 'Bundled cover'],
-  ['' , '', '', 'Decentralized Exchange', 'Exchange', 'Dexes', 'exchange', 'Decentralized Exchange'],
+  // BRIDGE CATEGORY, NEXUS CATEGORY, INSURACE, EASE, UNSLASHED, UNORE, TIDAL, COMMON CATEGORY, DESCRIPTION
+  ['0' /*CONTRACT*/, 'protocol', 'Smart Contract Vulnerability', 'Lending Protocol', 'DAPP', 'Lending', '0', 'protocol', 'Protocol hack and failure'],
+  ['2', /*SERVICE*/ 'custodian', '', '', 'Custodian', '', '', 'custodian', 'Custodian cover'],
+  ['1' /*STABLECOIN*/, '', 'Stablecoin De-Peg', '', '', 'Stablecoin', '', 'stable', 'Stable token de-pegging'],
+  ['', 'token', '', 'Yield Aggregator', '', '', '', 'yield', 'Yield de-pegging'],
+  ['3' /*EXCHANGE*/, 'custodian', 'Custodian Risk', '', 'Custodian', '', '', 'custodian', 'Custodian Risk'],
+  ['' , '', 'IDO Event Risk', '', '', '', '', 'ido', 'IDO Event Risk'],
+  ['' , '', 'Bundled Cover', '', '', '', '', 'bundled', 'Bundled cover'],
+  ['' , '', '', 'Decentralized Exchange', 'Exchange', 'Dexes', '', 'exchange', 'Decentralized Exchange'],
 ];
 
 const CUSTOM_BRIDGE_PROTOCOLS : object = {
@@ -430,8 +430,10 @@ class CatalogHelper {
       commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[5] === category});
     } else if (provider == 'unslashed') {
       commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[4] === category});
+    } else if (provider == 'tidal') {
+      commonCategory = bridge_nexus_insurace_categories.find((cat) => {return cat[6] === category});
     }
-    return commonCategory ? commonCategory[6] : '' ;
+    return commonCategory ? commonCategory[7] : '' ;
   }
 
   public static chainList(_distributorName:string, coverable:any) {
