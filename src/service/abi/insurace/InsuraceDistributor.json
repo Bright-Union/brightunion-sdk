@@ -2,464 +2,487 @@
   "contractName": "InsuraceDistributor",
   "abi": [
     {
-      "anonymous": false,
-      "inputs": [
+      "anonymous":false,
+      "inputs":[
         {
-          "indexed": false,
-          "internalType": "address",
-          "name": "_productAddress",
-          "type": "address"
+          "indexed":false,
+          "internalType":"address",
+          "name":"_productAddress",
+          "type":"address"
         },
         {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_productId",
-          "type": "uint256"
+          "indexed":false,
+          "internalType":"uint256",
+          "name":"_productId",
+          "type":"uint256"
         },
         {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_period",
-          "type": "uint256"
+          "indexed":false,
+          "internalType":"uint256",
+          "name":"_period",
+          "type":"uint256"
         },
         {
-          "indexed": false,
-          "internalType": "address",
-          "name": "_asset",
-          "type": "address"
+          "indexed":false,
+          "internalType":"address",
+          "name":"_asset",
+          "type":"address"
         },
         {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_amount",
-          "type": "uint256"
+          "indexed":false,
+          "internalType":"uint256",
+          "name":"_amount",
+          "type":"uint256"
         },
         {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_price",
-          "type": "uint256"
+          "indexed":false,
+          "internalType":"uint256",
+          "name":"_price",
+          "type":"uint256"
         }
       ],
-      "name": "BuyCoverEvent",
-      "type": "event"
+      "name":"BuyCoverEvent",
+      "type":"event"
     },
     {
-      "anonymous": false,
-      "inputs": [
+      "anonymous":false,
+      "inputs":[
         {
-          "indexed": true,
-          "internalType": "address",
-          "name": "previousOwner",
-          "type": "address"
+          "indexed":true,
+          "internalType":"address",
+          "name":"previousOwner",
+          "type":"address"
         },
         {
-          "indexed": true,
-          "internalType": "address",
-          "name": "newOwner",
-          "type": "address"
+          "indexed":true,
+          "internalType":"address",
+          "name":"newOwner",
+          "type":"address"
         }
       ],
-      "name": "OwnershipTransferred",
-      "type": "event"
+      "name":"OwnershipTransferred",
+      "type":"event"
     },
     {
-      "stateMutability": "payable",
-      "type": "fallback"
+      "stateMutability":"payable",
+      "type":"fallback"
     },
     {
-      "inputs": [],
-      "name": "coverData",
-      "outputs": [
+      "inputs":[
         {
-          "internalType": "contract ICoverData",
-          "name": "",
-          "type": "address"
+          "internalType":"address",
+          "name":"_masterCover",
+          "type":"address"
         }
       ],
-      "stateMutability": "view",
-      "type": "function"
+      "name":"__InsuraceDistributor_init",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
     },
     {
-      "inputs": [],
-      "name": "masterCover",
-      "outputs": [
+      "inputs":[
         {
-          "internalType": "contract ICover",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "owner",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "product",
-      "outputs": [
-        {
-          "internalType": "contract IProduct",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "renounceOwnership",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "newOwner",
-          "type": "address"
-        }
-      ],
-      "name": "transferOwnership",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_masterCover",
-          "type": "address"
-        }
-      ],
-      "name": "__InsuraceDistributor_init",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_owner",
-          "type": "address"
-        },
-        {
-          "internalType": "bool",
-          "name": "_isActive",
-          "type": "bool"
-        }
-      ],
-      "name": "getCoverCount",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_owner",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_coverId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "bool",
-          "name": "_interfaceCompliant",
-          "type": "bool"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_loopLimit",
-          "type": "uint256"
-        }
-      ],
-      "name": "getCover",
-      "outputs": [
-        {
-          "components": [
+          "components":[
             {
-              "internalType": "bytes32",
-              "name": "coverType",
-              "type": "bytes32"
+              "internalType":"uint16[]",
+              "name":"products",
+              "type":"uint16[]"
             },
             {
-              "internalType": "uint256",
-              "name": "productId",
-              "type": "uint256"
+              "internalType":"uint16[]",
+              "name":"durationInDays",
+              "type":"uint16[]"
             },
             {
-              "internalType": "bytes32",
-              "name": "contractName",
-              "type": "bytes32"
+              "internalType":"uint256[]",
+              "name":"amounts",
+              "type":"uint256[]"
             },
             {
-              "internalType": "uint256",
-              "name": "coverAmount",
-              "type": "uint256"
+              "internalType":"address",
+              "name":"currency",
+              "type":"address"
             },
             {
-              "internalType": "uint256",
-              "name": "premium",
-              "type": "uint256"
+              "internalType":"address[]",
+              "name":"addresses",
+              "type":"address[]"
             },
             {
-              "internalType": "address",
-              "name": "currency",
-              "type": "address"
+              "internalType":"uint256",
+              "name":"premium",
+              "type":"uint256"
             },
             {
-              "internalType": "address",
-              "name": "contractAddress",
-              "type": "address"
+              "internalType":"uint256",
+              "name":"refCode",
+              "type":"uint256"
             },
             {
-              "internalType": "uint256",
-              "name": "expiration",
-              "type": "uint256"
+              "internalType":"uint256[]",
+              "name":"helperParameters",
+              "type":"uint256[]"
             },
             {
-              "internalType": "uint256",
-              "name": "status",
-              "type": "uint256"
+              "internalType":"uint256[]",
+              "name":"securityParameters",
+              "type":"uint256[]"
             },
             {
-              "internalType": "address",
-              "name": "refAddress",
-              "type": "address"
+              "internalType":"string",
+              "name":"freeText",
+              "type":"string"
+            },
+            {
+              "internalType":"uint8[]",
+              "name":"v",
+              "type":"uint8[]"
+            },
+            {
+              "internalType":"bytes32[]",
+              "name":"r",
+              "type":"bytes32[]"
+            },
+            {
+              "internalType":"bytes32[]",
+              "name":"s",
+              "type":"bytes32[]"
             }
           ],
-          "internalType": "struct IDistributor.Cover",
-          "name": "cover",
-          "type": "tuple"
+          "internalType":"struct IDistributor.BuyInsuraceQuote",
+          "name":"quote",
+          "type":"tuple"
         }
       ],
-      "stateMutability": "view",
-      "type": "function"
+      "name":"buyCoverInsurace",
+      "outputs":[
+
+      ],
+      "stateMutability":"payable",
+      "type":"function"
     },
     {
-      "inputs": [
+      "inputs":[
+
+      ],
+      "name":"coverData",
+      "outputs":[
         {
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
+          "internalType":"contract ICoverData",
+          "name":"",
+          "type":"address"
+        }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+    },
+    {
+      "inputs":[
+        {
+          "internalType":"address",
+          "name":"owner",
+          "type":"address"
         },
         {
-          "internalType": "address",
-          "name": "currency",
-          "type": "address"
+          "internalType":"address",
+          "name":"currency",
+          "type":"address"
         }
       ],
-      "name": "getAllowance",
-      "outputs": [
+      "name":"getAllowance",
+      "outputs":[
         {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
+          "internalType":"uint256",
+          "name":"",
+          "type":"uint256"
         }
       ],
-      "stateMutability": "view",
-      "type": "function"
+      "stateMutability":"view",
+      "type":"function"
     },
     {
-      "inputs": [
+      "inputs":[
         {
-          "components": [
+          "internalType":"address",
+          "name":"_owner",
+          "type":"address"
+        },
+        {
+          "internalType":"uint256",
+          "name":"_coverId",
+          "type":"uint256"
+        },
+        {
+          "internalType":"bool",
+          "name":"_interfaceCompliant",
+          "type":"bool"
+        },
+        {
+          "internalType":"uint256",
+          "name":"_loopLimit",
+          "type":"uint256"
+        }
+      ],
+      "name":"getCover",
+      "outputs":[
+        {
+          "components":[
             {
-              "internalType": "uint16[]",
-              "name": "products",
-              "type": "uint16[]"
+              "internalType":"bytes32",
+              "name":"coverType",
+              "type":"bytes32"
             },
             {
-              "internalType": "uint16[]",
-              "name": "durationInDays",
-              "type": "uint16[]"
+              "internalType":"uint256",
+              "name":"productId",
+              "type":"uint256"
             },
             {
-              "internalType": "uint256[]",
-              "name": "amounts",
-              "type": "uint256[]"
+              "internalType":"bytes32",
+              "name":"contractName",
+              "type":"bytes32"
             },
             {
-              "internalType": "address",
-              "name": "currency",
-              "type": "address"
+              "internalType":"uint256",
+              "name":"coverAmount",
+              "type":"uint256"
             },
             {
-              "internalType": "uint256",
-              "name": "premium",
-              "type": "uint256"
+              "internalType":"uint256",
+              "name":"premium",
+              "type":"uint256"
             },
             {
-              "internalType": "address",
-              "name": "owner",
-              "type": "address"
+              "internalType":"address",
+              "name":"currency",
+              "type":"address"
             },
             {
-              "internalType": "uint256",
-              "name": "refCode",
-              "type": "uint256"
+              "internalType":"address",
+              "name":"contractAddress",
+              "type":"address"
             },
             {
-              "internalType": "uint256[]",
-              "name": "helperParameters",
-              "type": "uint256[]"
+              "internalType":"uint256",
+              "name":"expiration",
+              "type":"uint256"
             },
             {
-              "internalType": "uint256[]",
-              "name": "securityParameters",
-              "type": "uint256[]"
+              "internalType":"uint256",
+              "name":"status",
+              "type":"uint256"
             },
             {
-              "internalType": "uint8[]",
-              "name": "v",
-              "type": "uint8[]"
-            },
-            {
-              "internalType": "bytes32[]",
-              "name": "r",
-              "type": "bytes32[]"
-            },
-            {
-              "internalType": "bytes32[]",
-              "name": "s",
-              "type": "bytes32[]"
+              "internalType":"address",
+              "name":"refAddress",
+              "type":"address"
             }
           ],
-          "internalType": "struct IDistributor.BuyInsuraceQuote",
-          "name": "quote",
-          "type": "tuple"
+          "internalType":"struct IDistributor.Cover",
+          "name":"cover",
+          "type":"tuple"
         }
       ],
-      "name": "buyCoverInsurace",
-      "outputs": [],
-      "stateMutability": "payable",
-      "type": "function"
+      "stateMutability":"view",
+      "type":"function"
     },
     {
-      "inputs": [
+      "inputs":[
         {
-          "internalType": "uint256",
-          "name": "_sumAssured",
-          "type": "uint256"
+          "internalType":"address",
+          "name":"_owner",
+          "type":"address"
         },
         {
-          "internalType": "uint256",
-          "name": "_coverPeriod",
-          "type": "uint256"
-        },
-        {
-          "internalType": "address",
-          "name": "_contractAddress",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_coverAsset",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_nexusCoverable",
-          "type": "address"
-        },
-        {
-          "internalType": "bytes",
-          "name": "_data",
-          "type": "bytes"
+          "internalType":"bool",
+          "name":"_isActive",
+          "type":"bool"
         }
       ],
-      "name": "getQuote",
-      "outputs": [
+      "name":"getCoverCount",
+      "outputs":[
         {
-          "components": [
+          "internalType":"uint256",
+          "name":"",
+          "type":"uint256"
+        }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+    },
+    {
+      "inputs":[
+        {
+          "internalType":"uint256",
+          "name":"_sumAssured",
+          "type":"uint256"
+        },
+        {
+          "internalType":"uint256",
+          "name":"_coverPeriod",
+          "type":"uint256"
+        },
+        {
+          "internalType":"address",
+          "name":"_contractAddress",
+          "type":"address"
+        },
+        {
+          "internalType":"address",
+          "name":"_coverAsset",
+          "type":"address"
+        },
+        {
+          "internalType":"address",
+          "name":"_nexusCoverable",
+          "type":"address"
+        },
+        {
+          "internalType":"bytes",
+          "name":"_data",
+          "type":"bytes"
+        }
+      ],
+      "name":"getQuote",
+      "outputs":[
+        {
+          "components":[
             {
-              "internalType": "uint256",
-              "name": "prop1",
-              "type": "uint256"
+              "internalType":"uint256",
+              "name":"prop1",
+              "type":"uint256"
             },
             {
-              "internalType": "uint256",
-              "name": "prop2",
-              "type": "uint256"
+              "internalType":"uint256",
+              "name":"prop2",
+              "type":"uint256"
             },
             {
-              "internalType": "uint256",
-              "name": "prop3",
-              "type": "uint256"
+              "internalType":"uint256",
+              "name":"prop3",
+              "type":"uint256"
             },
             {
-              "internalType": "uint256",
-              "name": "prop4",
-              "type": "uint256"
+              "internalType":"uint256",
+              "name":"prop4",
+              "type":"uint256"
             },
             {
-              "internalType": "uint256",
-              "name": "prop5",
-              "type": "uint256"
+              "internalType":"uint256",
+              "name":"prop5",
+              "type":"uint256"
             },
             {
-              "internalType": "uint256",
-              "name": "prop6",
-              "type": "uint256"
+              "internalType":"uint256",
+              "name":"prop6",
+              "type":"uint256"
             },
             {
-              "internalType": "uint256",
-              "name": "prop7",
-              "type": "uint256"
+              "internalType":"uint256",
+              "name":"prop7",
+              "type":"uint256"
             }
           ],
-          "internalType": "struct IDistributor.CoverQuote",
-          "name": "",
-          "type": "tuple"
+          "internalType":"struct IDistributor.CoverQuote",
+          "name":"",
+          "type":"tuple"
         }
       ],
-      "stateMutability": "view",
-      "type": "function"
+      "stateMutability":"view",
+      "type":"function"
     },
     {
-      "inputs": [
+      "inputs":[
+
+      ],
+      "name":"masterCover",
+      "outputs":[
         {
-          "internalType": "bytes4",
-          "name": "interfaceId",
-          "type": "bytes4"
+          "internalType":"contract ICover",
+          "name":"",
+          "type":"address"
         }
       ],
-      "name": "supportsInterface",
-      "outputs": [
+      "stateMutability":"view",
+      "type":"function"
+    },
+    {
+      "inputs":[
+
+      ],
+      "name":"owner",
+      "outputs":[
         {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
+          "internalType":"address",
+          "name":"",
+          "type":"address"
         }
       ],
-      "stateMutability": "view",
-      "type": "function"
+      "stateMutability":"view",
+      "type":"function"
+    },
+    {
+      "inputs":[
+
+      ],
+      "name":"product",
+      "outputs":[
+        {
+          "internalType":"contract IProduct",
+          "name":"",
+          "type":"address"
+        }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+    },
+    {
+      "inputs":[
+
+      ],
+      "name":"renounceOwnership",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    {
+      "inputs":[
+        {
+          "internalType":"bytes4",
+          "name":"interfaceId",
+          "type":"bytes4"
+        }
+      ],
+      "name":"supportsInterface",
+      "outputs":[
+        {
+          "internalType":"bool",
+          "name":"",
+          "type":"bool"
+        }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+    },
+    {
+      "inputs":[
+        {
+          "internalType":"address",
+          "name":"newOwner",
+          "type":"address"
+        }
+      ],
+      "name":"transferOwnership",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
     }
   ]
 }

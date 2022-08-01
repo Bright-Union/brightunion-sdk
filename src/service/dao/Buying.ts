@@ -317,7 +317,7 @@ export async function buyCoverInsurace(buyingObj: any, buyingWithNetworkCurrency
     let estimatedGasPrice: any = null;
 
     let buyTransactionData: any = {
-        from: buyingObj.owner,
+        from: global.user.account,
         value: sendValue,
     }
 
@@ -335,7 +335,7 @@ export async function buyCoverInsurace(buyingObj: any, buyingWithNetworkCurrency
         estimatedGasPrice = toWei(toBN(Number(gasPrice)), "gwei").toString();
 
         await contractInstance.methods.buyCoverInsurace(buyingObj).estimateGas({
-            from: buyingObj.owner,
+            from: global.user.account,
             gas: estimatedGasPrice,
             value: _quotes.price
         }).then(function (gasAmount: any) {
