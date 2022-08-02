@@ -15,8 +15,6 @@ import axios from "axios";
 import { toWei, toBN } from 'web3-utils';
 
 export async function buyQuote(_quoteProtocol: any): Promise<any> {
-  console.log('buyQuote in service/buying')
-  console.log(_quoteProtocol)
 
   GoogleEvents.buy(_quoteProtocol);
 
