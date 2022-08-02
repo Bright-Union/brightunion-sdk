@@ -264,11 +264,12 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
     durationInDays:      confirmCoverResult[1],
     amounts:             confirmCoverResult[2],
     currency:            confirmCoverResult[3][1],
-    owner:               global.user.account,
+    addresses:           confirmCoverResult[3],
     premium:             confirmCoverResult[4],
     refCode:             confirmCoverResult[5],
     helperParameters:    confirmCoverResult[6],
     securityParameters:  confirmCoverResult[7],
+    freeText:            confirmCoverResult[8],
     v:                   confirmCoverResult[9],
     r:                   confirmCoverResult[10],
     s:                   confirmCoverResult[11]
