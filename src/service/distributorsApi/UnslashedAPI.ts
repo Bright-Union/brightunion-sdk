@@ -62,6 +62,10 @@ export default class UnslashedAPI {
       const pricePerPeriod = price * ( period / 365 );
       const pricePercent = Number(apy) * 100;
 
+      const now:any = new Date();
+      rolloverDate = new Date( Number(rolloverDate) * 1000 );
+      const actualPeriod = Math.ceil( Math.abs(rolloverDate - now) / (1000 * 60 * 60 * 24));
+
       if(quote) {
         global.events.emit("quote", {
           status: "INITIAL_DATA",
@@ -75,7 +79,7 @@ export default class UnslashedAPI {
           chain: 'ETH',
           name: quote.name,
           source: 'ease',
-          actualPeriod: rolloverDate,
+          actualPeriod: actualPeriod,
           rawDataUnslashed: quote,
           type: quote.type,
           typeDescription: quote.description,
@@ -86,7 +90,7 @@ export default class UnslashedAPI {
           protocol,
           {
             amount: amount,
-            actualPeriod: rolloverDate,
+            actualPeriod: actualPeriod,
             currency: currency,
             period: period,
             chain: 'ETH',
