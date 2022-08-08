@@ -243,7 +243,7 @@ class InsuraceApi {
                 if (errorMsg.message.match('GP: 4') || errorMsg.message.includes('cover duration is either too small or')) {
                   errorMsg = {message:"Minimum duration is 15 days. Maximum is 90" , errorType: "period" }
 
-                } else if (errorMsg.message.includes('exceeds available capacity')) {
+                } else if (errorMsg.message.includes('exceeds available capacity') || errorMsg.message.includes('undefined') || errorMsg.message.includes('Invalid covered address')) {
                   let capacityCurrency = web3.symbol == "POLYGON" ? "MATIC" : web3.symbol == "BSC" ? "BNB" : "ETH";
                   errorMsg = { message: `Maximum available capacity is `, capacity: fromWei(quoteCapacity.toString()), currency: capacityCurrency, errorType:"capacity"}
                 }
