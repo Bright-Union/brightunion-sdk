@@ -368,7 +368,7 @@ class CatalogHelper {
       errorMsg: obj.errorMsg,
       cashBackPercent: obj.cashBackPercent,
       cashBack: obj.cashBack,
-      rawData: obj.response,
+      rawData: obj.rawData,
       stats: stats,
       type: obj.type,
       typeDescription: obj.typeDescription,

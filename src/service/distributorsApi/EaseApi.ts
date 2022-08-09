@@ -54,7 +54,7 @@ export default class EaseApi {
                     chainId: global.user.ethNet.networkId,
                     price: 0,
                     pricePercent: 0,
-                    response: vault,
+                    rawData: vault,
                     source: 'ease',
                     minimumAmount: 1,
                     name: CatalogHelper.unifyCoverName(vault[0].display_name, 'ease' ),

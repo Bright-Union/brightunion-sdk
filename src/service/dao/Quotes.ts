@@ -111,6 +111,27 @@ export async function getQuoteFromBridgeV2(
         })
       }
 
+      let quote:any = CatalogHelper.quoteFromCoverable(
+        'bridge',
+        _protocol,
+        {
+          amount: _amountInWei,
+          currency: _currency,
+          period: _period,
+          chain: "ETH",
+          chainId:  global.user.ethNet.networkId,
+          // actualPeriod: actualPeriod,
+          price: totalPrice,
+          response: stats,
+          // pricePercent: pricePercent, //%, annualize
+          errorMsg: errorMsg,
+          rawData: rawPriceData,
+          minimumAmount: minimumAmount,
+          // capacity: capacity,
+        },
+        stats
+      );
+
       let capacity:any = stats.maxCapacity ? stats.maxCapacity : 0;
 
       await policyBookRegistryV2.methods.getPoliciesPrices( [ _protocol.bridgeProductAddress ] , [ _bridgeEpochs ] , [ _amountInWei ] ).call()
@@ -165,28 +186,9 @@ export async function getQuoteFromBridgeV2(
         actualPeriod = _period;
       }
 
-      let quote:any = {};
-
-    quote = CatalogHelper.quoteFromCoverable(
-        'bridge',
-        _protocol,
-        {
-          amount: _amountInWei,
-          currency: _currency,
-          period: _period,
-          chain: "ETH",
-          chainId:  global.user.ethNet.networkId,
-          actualPeriod: actualPeriod,
-          price: totalPrice,
-          response: stats,
-          pricePercent: pricePercent, //%, annualize
-          errorMsg: errorMsg,
-          rawData: rawPriceData,
-          minimumAmount: minimumAmount,
-          capacity: capacity,
-        },
-        stats
-      );
+      quote.actualPeriod = actualPeriod;
+      quote.pricePercent = pricePercent;
+      quote.capacity = capacity;
 
       return quote;
 

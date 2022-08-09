@@ -158,6 +158,22 @@ class InsuraceApi {
 
         const minimumAmount = getCoverMin("insurace", web3.symbol, quoteData.selectedCurrency.name );
 
+        let quote:any = CatalogHelper.quoteFromCoverable(
+          'insurace',
+          protocol,
+          {
+            amount: quoteData.amountInWei,
+            currency: quoteData.currency,
+            period: period,
+            chain: web3.symbol,
+            chainId: web3.networkId,
+            minimumAmount: minimumAmount,
+          },
+          {
+            remainingCapacity: protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0
+          }
+        );
+
         return await this.getCoverPremium(
           web3,
           quoteData.amountInWei,
@@ -178,21 +194,12 @@ class InsuraceApi {
 
             const pricePercent = new BigNumber(premium).times(1000).dividedBy(quoteData.amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
 
-            global.events.emit("quote" , {
-              status: "INITIAL_DATA" ,
-              distributorName:"insurace",
-              price: premium ,
-              pricePercent:pricePercent,
-              amount:quoteData.amountInWei,
-              currency:quoteData.currency,
-              period:period,
-              protocol:protocol,
-              chain: web3.symbol,
-              chainId: web3.networkId,
-              rawData: response,
-              minimumAmount: minimumAmount,
-            } );
+            quote.price = premium,
+            quote.response = response,
+            quote.defaultCurrencySymbol = defaultCurrencySymbol,
+            quote.pricePercent= pricePercent;
 
+            global.events.emit("quote" , quote );
 
             const cashbackInInsur = Number(fromWei(response.ownerInsurReward));
             let cashbackInQuoteCurrency:any = cashbackInInsur * CurrencyHelper.insurPrice();
@@ -207,28 +214,9 @@ class InsuraceApi {
 
             const quoteCapacity:any = this.formatCapacity( currency , protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0 , web3.symbol );
 
-            const quote = CatalogHelper.quoteFromCoverable(
-                'insurace',
-                protocol,
-                {
-                    amount: quoteData.amountInWei,
-                    currency: quoteData.currency,
-                    period: period,
-                    chain: web3.symbol,
-                    chainId: web3.networkId,
-                    price: premium,
-                    cashBackPercent: cashBackPercent,
-                    cashBack: [ cashbackInInsur , cashbackInQuoteCurrency ],
-                    pricePercent: pricePercent,  //%, annualize
-                    response: response,
-                    defaultCurrencySymbol: defaultCurrencySymbol,
-                    minimumAmount: minimumAmount,
-                    capacity: quoteCapacity,
-                },
-                {
-                    remainingCapacity: protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0
-                }
-            );
+            quote.cashBackPercent = cashBackPercent;
+            quote.cashBack = [ cashbackInInsur , cashbackInQuoteCurrency ];
+            quote.capacity= quoteCapacity;
 
             return quote;
         })
@@ -247,26 +235,11 @@ class InsuraceApi {
                   let capacityCurrency = web3.symbol == "POLYGON" ? "MATIC" : web3.symbol == "BSC" ? "BNB" : "ETH";
                   errorMsg = { message: `Maximum available capacity is `, capacity: fromWei(quoteCapacity.toString()), currency: capacityCurrency, errorType:"capacity"}
                 }
-                const quote = CatalogHelper.quoteFromCoverable(
-                    "insurace",
-                    protocol, {
-                        amount: quoteData.amountInWei,
-                        currency: currency,
-                        period: period,
-                        chain: web3.symbol,
-                        chainId: web3.networkId,
-                        price: 0,
-                        cashBack: [0, 0],
-                        pricePercent: 0,
-                        estimatedGasPrice: 0,
-                        errorMsg: errorMsg,
-                        minimumAmount: minimumAmount,
-                        capacity: quoteCapacity,
 
-                    }, {
-                        remainingCapacity: defaultCapacity,
-                    }
-                );
+                quote.errorMsg = errorMsg;
+                quote.capacity = quoteCapacity;
+                quote.remainingCapacity = defaultCapacity;
+
                 return quote;
             })
     }
