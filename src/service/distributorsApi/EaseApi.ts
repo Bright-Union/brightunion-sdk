@@ -59,6 +59,7 @@ export default class EaseApi {
               rawDataEase: vault,
               type: type,
               typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
+              capacity:quoteCapacity,
             } );
 
             return CatalogHelper.quoteFromCoverable(
