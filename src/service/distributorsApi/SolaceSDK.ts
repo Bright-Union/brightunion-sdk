@@ -46,6 +46,7 @@ export default class SolaceSDK {
                         const pricePercent =  data.current_rate * 100;
 
                         global.events.emit("quote", {
+                            chainId: global.user.ethNet.networkId,
                             status: "INITIAL_DATA",
                             distributorName: "solace",
                             amount: amount,

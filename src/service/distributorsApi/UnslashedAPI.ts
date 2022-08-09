@@ -68,6 +68,7 @@ export default class UnslashedAPI {
 
       if(quote) {
         global.events.emit("quote", {
+          chainId: global.user.ethNet.networkId,
           status: "INITIAL_DATA",
           distributorName: "unslashed",
           amount: amount,
