@@ -43,26 +43,7 @@ export default class EaseApi {
             }
             let quoteCapacity = capacityArr[1];
 
-            global.events.emit("quote" , {
-              chainId: global.user.ethNet.networkId,
-              status: "INITIAL_DATA" ,
-              distributorName: "ease",
-              amount:amount,
-              currency:currency,
-              price: 0,
-              pricePercent: 0,
-              period:period,
-              protocol:protocol,
-              chain: 'ETH',
-              name: CatalogHelper.unifyCoverName(vault[0].display_name, 'ease' ),
-              source: 'ease',
-              rawDataEase: vault,
-              type: type,
-              typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
-              capacity:quoteCapacity,
-            } );
-
-            return CatalogHelper.quoteFromCoverable(
+            const quote = CatalogHelper.quoteFromCoverable(
                 'ease',
                 protocol,
                 {
@@ -86,6 +67,10 @@ export default class EaseApi {
                     capacity: capacityArr,
                 }
             );
+
+            global.events.emit("quote" , quote );
+
+            return quote;
         })
     }
 }
