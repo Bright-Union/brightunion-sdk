@@ -195,17 +195,17 @@ export async function getNexusCoverables(): Promise<any[]> {
 
     export async function getUnslashedCoverables() {
       return await UnslashedAPI.fetchCoverables()
-          .then(async (data: any) => {
+          .then((data: any) => {
             const coverablesArray: any = [];
 
             let cover = data.BasketMarket ? data.BasketMarket.data : [];
             let coverArr = Object.values(cover);
 
-            coverArr.forEach((item: any) => {
+            coverArr.forEach(async(item: any) => {
               const protocolName = item.static.name;
               let type = CatalogHelper.commonCategory(item.static.type, 'unslashed');
               const typeDescr = type ? type : 'protocol';
-              let logo:any = CatalogHelper.getLogoUrl( protocolName, null, 'unslashed');
+              let logo:any = await CatalogHelper.getLogoUrl( protocolName, item.static.address, 'unslashed');
               if (!item.static.hide) {
                 coverablesArray.push(CatalogHelper.createCoverable({
                   protocolAddress: item.static.address,
@@ -231,12 +231,12 @@ export async function getNexusCoverables(): Promise<any[]> {
 
     export async function getUnoReCoverables() {
       return await UnoReAPI.fetchCoverables()
-          .then(async (data:any) => {
+          .then((data:any) => {
             const coverablesArray: any  = [];
-            data.data.data.forEach((item: any) => {
+            data.data.data.forEach(async(item: any) => {
               let type = CatalogHelper.commonCategory(item.category, 'unore')
               const typeDescr = type ? type : 'protocol';
-                let logo:any = CatalogHelper.getLogoUrl( item.name , null, 'unore');
+                let logo:any = await CatalogHelper.getLogoUrl( item.name , item.address, 'unore');
               coverablesArray.push(CatalogHelper.createCoverable({
                 protocolAddress: item.address,
                 name: CatalogHelper.unifyCoverName(item.name, 'unore' ),
@@ -284,19 +284,19 @@ export async function getNexusCoverables(): Promise<any[]> {
 
     export async function getSolaceCoverables() {
         return await SolaceSDK.getCoverables()
-            .then(async (data: any) => {
+            .then((data: any) => {
                 const coverablesArray: any  = [];
                 // if(data.protocols.length > 0) {
                 if(data.length > 0) {
                     // data.protocols.forEach((item:any) => {
-                    data.forEach((item:any) => {
-                        const logo:any = {url: `https://assets.solace.fi/zapperLogos/${item.appId}`};
+                   data.forEach(async (item:any) => {
                         const name = item.appId.charAt(0).toUpperCase() + item.appId.slice(1)
+                         let specialLogo:any = await CatalogHelper.getLogoUrl( item.appId , null, 'solace');
                         coverablesArray.push(CatalogHelper.createCoverable({
                             protocolAddress: null,
                             name: CatalogHelper.unifyCoverName(name, 'solace' ),
                             source: 'solace',
-                            logo: logo,
+                            logo: specialLogo,
                             rawDataSolace: item,
                             chainListSolace: ['Ethereum', 'Polygon', 'Fantom', 'Aurora'],
                             stats: {
