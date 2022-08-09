@@ -50,6 +50,8 @@ export default class TidalApi {
                         type: type,
                         errorMsg: null,
                         typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
+                        nonPartnerLink: 'https://app.tidal.finance/',
+                        capacity: toWei(String(capacity)),
                     });
 
                     return CatalogHelper.quoteFromCoverable(

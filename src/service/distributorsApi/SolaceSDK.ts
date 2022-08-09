@@ -59,6 +59,8 @@ export default class SolaceSDK {
                             source: 'solace',
                             rawDataSolace: data,
                             errorMsg: null,
+                            nonPartnerLink: 'https://app.solace.fi/cover',
+                            capacity: capacity,
                         });
                         return CatalogHelper.quoteFromCoverable(
                             'solace',

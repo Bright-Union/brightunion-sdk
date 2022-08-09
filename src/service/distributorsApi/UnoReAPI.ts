@@ -89,6 +89,8 @@ export default class UnoReAPI {
                         type: type,
                         errorMsg: null,
                         typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
+                        nonPartnerLink: 'https://app.unore.io/buy-cover',
+                        capacity: "9999999999999999999999999999999999999999999999999999999",
                     });
 
                     return CatalogHelper.quoteFromCoverable(

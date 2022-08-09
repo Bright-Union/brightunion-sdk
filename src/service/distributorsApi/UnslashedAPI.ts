@@ -84,6 +84,8 @@ export default class UnslashedAPI {
           rawDataUnslashed: quote,
           type: quote.type,
           typeDescription: quote.description,
+          capacity: quote.soldOut ? 0 : "9999999999999999999999999999999999999999999999999999999",
+          nonPartnerLink: 'https://app.unslashed.finance/cover/' + quote.address,
         });
 
         return CatalogHelper.quoteFromCoverable(
