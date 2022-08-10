@@ -233,7 +233,7 @@ const catalogLogoLinks: any = [
   { name: "Popsicle Finance" , link:"https://icons.llama.fi/popsicle-finance.jpg"},
   { name: "Polychain Monsters" , link:"https://raw.githubusercontent.com/Uno-Re/cover-products-info/main/logos/polychain%20monsters_logo.png"},
   { name: "Orion Protocol" , link:"https://icons.llama.fi/orion-protocol.jpg"},
-  { name: "Orion Money + UST De-Peg" , link:"https://app.insurace.io/asset/product/OrionMoney.png"},
+  { name: "Orion Money" , link:"https://app.insurace.io/asset/product/OrionMoney.png"},
   { name: "OwlDAO" , link:"https://polygonscan.com/token/images/owldao_32.png"},
   { name: "StepHero Multiverse" , link:"https://raw.githubusercontent.com/Uno-Re/cover-products-info/main/logos/stephero%20multiverse_logo.png"},
   { name: "RefinedApe" , link:"https://rabp.io/ggo-1b-1.png"},
