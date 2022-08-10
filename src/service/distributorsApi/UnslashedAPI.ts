@@ -62,8 +62,13 @@ export default class UnslashedAPI {
       const pricePerPeriod = price * ( period / 365 );
       const pricePercent = Number(apy) * 100;
 
+      const now:any = new Date();
+      rolloverDate = new Date( Number(rolloverDate) * 1000 );
+      const actualPeriod = Math.ceil( Math.abs(rolloverDate - now) / (1000 * 60 * 60 * 24));
+
       if(quote) {
         global.events.emit("quote", {
+          chainId: global.user.ethNet.networkId,
           status: "INITIAL_DATA",
           distributorName: "unslashed",
           amount: amount,
@@ -75,10 +80,12 @@ export default class UnslashedAPI {
           chain: 'ETH',
           name: quote.name,
           source: 'ease',
-          actualPeriod: rolloverDate,
+          actualPeriod: actualPeriod,
           rawDataUnslashed: quote,
           type: quote.type,
           typeDescription: quote.description,
+          capacity: quote.soldOut ? 0 : "9999999999999999999999999999999999999999999999999999999",
+          nonPartnerLink: 'https://app.unslashed.finance/cover/' + quote.address,
         });
 
         return CatalogHelper.quoteFromCoverable(
@@ -86,7 +93,7 @@ export default class UnslashedAPI {
           protocol,
           {
             amount: amount,
-            actualPeriod: rolloverDate,
+            actualPeriod: actualPeriod,
             currency: currency,
             period: period,
             chain: 'ETH',

@@ -34,6 +34,7 @@ export default class TidalApi {
                     const typeDescr = type ? type : 'protocol';
 
                     global.events.emit("quote", {
+                        chainId: global.user.ethNet.networkId,
                         status: "INITIAL_DATA",
                         distributorName: "tidal",
                         amount: amount,
@@ -49,6 +50,8 @@ export default class TidalApi {
                         type: type,
                         errorMsg: null,
                         typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
+                        nonPartnerLink: 'https://app.tidal.finance/',
+                        capacity: toWei(String(capacity)),
                     });
 
                     return CatalogHelper.quoteFromCoverable(
