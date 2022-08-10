@@ -16,5 +16,6 @@
     "rootDir": ".",
     "resolveJsonModule" : true,
     "esModuleInterop" : true,
+    "allowSyntheticDefaultImports" : true
   }
 }
