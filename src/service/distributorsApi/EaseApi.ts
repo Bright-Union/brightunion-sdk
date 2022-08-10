@@ -43,10 +43,11 @@ export default class EaseApi {
             }
             let quoteCapacity = capacityArr[1];
 
-            const quote = CatalogHelper.quoteFromCoverable(
+            let quote:any = CatalogHelper.quoteFromCoverable(
                 'ease',
                 protocol,
                 {
+                    status: "INITIAL_DATA",
                     amount: amount,
                     currency: currency,
                     period: period,
@@ -55,7 +56,6 @@ export default class EaseApi {
                     price: 0,
                     pricePercent: 0,
                     rawData: vault,
-                    source: 'ease',
                     minimumAmount: 1,
                     name: CatalogHelper.unifyCoverName(vault[0].display_name, 'ease' ),
                     errorMsg: errorMsg,
@@ -69,6 +69,8 @@ export default class EaseApi {
             );
 
             global.events.emit("quote" , quote );
+
+            quote.status = "FINAL_DATA";
 
             return quote;
         })

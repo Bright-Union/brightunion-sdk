@@ -30,6 +30,26 @@ export default class SolaceSDK {
         const exceedsCapacity =  amount > +fromWei(capacity.toString());
         const errorMsg = exceedsCapacity ? { message: `Maximum available capacity is `, capacity: fromWei(capacity.toString()), currency: currency, errorType:"capacity"} : null;
 
+        let quote = CatalogHelper.quoteFromCoverable(
+          'solace',
+          protocol,
+          {
+            status: "INITIAL_DATA",
+            amount: amount,
+            currency: currency,
+            period: period,
+            chain: 'ETH',
+            chainId: global.user.ethNet.networkId,
+            minimumAmount: 1,
+            errorMsg: errorMsg,
+            capacity: capacity,
+            nonPartnerLink: 'https://app.solace.fi/cover',
+          },
+          {
+            capacity: capacity,
+          }
+        );
+
         // if (array && global.user.account !== '0x0000000000000000000000000000000000000001') {
         if (array) {
             return axios.post('https://risk-data.solace.fi/scores',
@@ -43,50 +63,20 @@ export default class SolaceSDK {
                         })
 
                         const price = amount * data.current_rate / 365.25 * period
-                        const pricePercent =  data.current_rate * 100;
 
-                        global.events.emit("quote", {
-                            chainId: global.user.ethNet.networkId,
-                            status: "INITIAL_DATA",
-                            distributorName: "solace",
-                            amount: amount,
-                            currency: currency,
-                            period: period,
-                            protocol: protocol,
-                            price: toWei(price.toString()),
-                            pricePercent: pricePercent,
-                            chain: 'ETH',
-                            source: 'solace',
-                            rawDataSolace: data,
-                            errorMsg: null,
-                            nonPartnerLink: 'https://app.solace.fi/cover',
-                            capacity: capacity,
-                        });
-                        return CatalogHelper.quoteFromCoverable(
-                            'solace',
-                            protocol,
-                            {
-                                amount: amount,
-                                currency: currency,
-                                period: period,
-                                chain: 'ETH',
-                                chainId: global.user.ethNet.networkId,
-                                price: toWei(price.toString()),
-                                pricePercent: pricePercent,
-                                response: data,
-                                source: 'solace',
-                                minimumAmount: 1,
-                                errorMsg: errorMsg,
-                                capacity: capacity,
-                                nonPartnerLink: 'https://app.solace.fi/cover',
-                            },
-                            {
-                                capacity: capacity,
-                            }
-                        );
+                        quote.price = toWei(price.toString()),
+                        quote.pricePercent = data.current_rate * 100,
+                        quote.rawData = data;
+
+                        global.events.emit("quote", quote );
+
+                        quote.status = "FINAL_DATA";
+
+                        return quote;
+
                     } else return []
                 }).catch(error => {
-                    return [];
+                    return  {error: error};
                 });
         } else return [];
     }

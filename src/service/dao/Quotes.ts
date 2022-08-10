@@ -115,19 +115,15 @@ export async function getQuoteFromBridgeV2(
         'bridge',
         _protocol,
         {
+          status: "INITIAL_DATA" ,
           amount: _amountInWei,
           currency: _currency,
           period: _period,
           chain: "ETH",
+          protocol:_protocol,
           chainId:  global.user.ethNet.networkId,
-          // actualPeriod: actualPeriod,
-          price: totalPrice,
-          response: stats,
-          // pricePercent: pricePercent, //%, annualize
           errorMsg: errorMsg,
-          rawData: rawPriceData,
           minimumAmount: minimumAmount,
-          // capacity: capacity,
         },
         stats
       );
@@ -161,34 +157,24 @@ export async function getQuoteFromBridgeV2(
       });
 
       let actualPeriod = Math.floor(Number(totalSeconds) / 3600 / 24);
-      const pricePercent = new BigNumber(totalPrice).times(1000).dividedBy(_amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000;
 
-      global.events.emit("quote" , {
-        status: "INITIAL_DATA" ,
-        distributorName:"bridge",
-        price: totalPrice ,
-        pricePercent:pricePercent,
-        amount:_amountInWei,
-        currency:_currency,
-        period:_period,
-        actualPeriod:actualPeriod,
-        protocol:_protocol,
-        chain: 'ETH',
-        chainId: global.user.ethNet.networkId,
-        rawData: rawPriceData,
-        errorMsg: errorMsg,
-        minimumAmount: minimumAmount,
-      });
+      quote.errorMsg = errorMsg;
+      quote.capacity = capacity;
 
-      // let errorMsg = null;
       if(_period > 365){
         errorMsg = { message: "Minimum duration is 1 day. Maximum is 365" , errorType:"period"};
         actualPeriod = _period;
       }
 
-      quote.actualPeriod = actualPeriod;
+      quote.rawData = rawPriceData;
+      quote.price = totalPrice;
+      const pricePercent = new BigNumber(totalPrice).times(1000).dividedBy(_amountInWei).dividedBy(new BigNumber(actualPeriod)).times(365).times(100).toNumber() / 1000;
       quote.pricePercent = pricePercent;
-      quote.capacity = capacity;
+      quote.actualPeriod = actualPeriod;
+
+      global.events.emit("quote" , quote);
+
+      quote.status = "FINAL_DATA";
 
       return quote;
 

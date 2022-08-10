@@ -40,14 +40,14 @@ export default class NexusApi {
       return [ finalPrice, priceInCurrencyFromNXM ? toBN(priceInCurrencyFromNXM) : null ,routeData ] ;
     }
 
-    static fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<any> {
+    static async fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<any> {
 
       let capacityETH:any = null;
       let capacityDAI:any = null;
 
       let quoteCapacity:any = null;
 
-     this.fetchCapacity(protocol.nexusCoverable).then((capacity:any) => {
+     await this.fetchCapacity(protocol.nexusCoverable).then((capacity:any) => {
         capacityETH = capacity.capacityETH;
         capacityDAI = capacity.capacityDAI;
         quoteCapacity = currency === 'ETH' ? capacityETH : capacityDAI;
@@ -62,6 +62,24 @@ export default class NexusApi {
        }
 
        const minimumAmount= getCoverMin("nexus", global.user.ethNet.symbol , currency );
+
+
+       let quote:any = CatalogHelper.quoteFromCoverable(
+         'nexus',
+         protocol,
+         {
+           status: "INITIAL_DATA" ,
+           amount: amountInWei,
+           currency: currency,
+           period: period,
+           chain: 'ETH',
+           chainId: global.user.ethNet.networkId,
+           minimumAmount: minimumAmount,
+           capacity: quoteCapacity,
+         },
+         {
+         }
+       );
 
        return axios.get(
          `${NetConfig.netById(global.user.ethNet.networkId).nexusAPI}/v1/quote?coverAmount=${amount}&currency=${currency}&period=${period}&contractAddress=${protocol.nexusCoverable}`,
@@ -96,25 +114,17 @@ export default class NexusApi {
           }
         }
 
-        global.events.emit("quote" , {
-          status: "INITIAL_DATA" ,
-          distributorName:"nexus",
-          priceOrigin: priceWithFee,
-          priceInNXM: response.data.priceInNXM,
-          price: nxmBasedPrice ? nxmBasedPrice : priceWithFee,
-          priceNoMargin: nxmBasedPriceNoMargin,
-          pricePercentOrigin: pricePercent,
-          pricePercent: pricePercentNXM ? pricePercentNXM : pricePercent,
-          amount:amount,
-          currency:currency,
-          period:period,
-          protocol:protocol,
-          chain: 'ETH',
-          chainId: global.user.ethNet.networkId,
-          rawData: response.data,
-          minimumAmount:minimumAmount,
-        } );
+        quote.rawData =  response.data;
+        quote.errorMsg =  nexusMaxCapacityError;
+        quote.uniSwapRouteData =  routeData;
+        quote.priceOrigin = priceWithFee.toString();
+        quote.price = nxmBasedPrice ? nxmBasedPrice : priceWithFee;
+        quote.priceNoMargin = nxmBasedPriceNoMargin;
+        quote.pricePercentOrigin =pricePercent;
+        quote.pricePercent =pricePercentNXM ? pricePercentNXM : pricePercent;
+        quote.priceInNXM = response.data.priceInNXM;
 
+        global.events.emit("quote" , quote );
 
         const masterAddress = await distributor.methods.master().call()
         const masterContract = await _getNexusMasterContract(masterAddress );
@@ -128,38 +138,19 @@ export default class NexusApi {
 
         let defaultCurrencySymbol = NetConfig.netById(global.user.ethNet.networkId).defaultCurrency;
 
-        return CatalogHelper.quoteFromCoverable(
-          'nexus',
-          protocol,
-          {
-            priceOrigin: priceWithFee.toString(),
-            price: nxmBasedPrice ? nxmBasedPrice : priceWithFee,
-            priceNoMargin: nxmBasedPriceNoMargin,
-            pricePercentOrigin:pricePercent,
-            pricePercent:pricePercentNXM ? pricePercentNXM : pricePercent,
-            priceInNXM: response.data.priceInNXM,
-            amount: amountInWei,
-            currency: currency,
-            period: period,
-            chain: 'ETH',
-            chainId: global.user.ethNet.networkId,
-            response: response.data,
-            defaultCurrencySymbol:defaultCurrencySymbol,
-            errorMsg: nexusMaxCapacityError,
-            minimumAmount: minimumAmount,
-            uniSwapRouteData: routeData,
-            capacity: quoteCapacity,
-          },
-          {
-            activeCoversETH: activeCoversETH,
-            activeCoversDAI: activeCoversDAI,
-            capacityETH: capacityETH,
-            capacityDAI: capacityDAI,
-            totalCovers: totalCovers,
-            totalActiveCoversDAI: totalActiveCoversDAI,
-            totalActiveCoversETH: totalActiveCoversETH,
-          }
-        );
+        quote.stats = {
+          activeCoversETH: activeCoversETH,
+          activeCoversDAI: activeCoversDAI,
+          capacityETH: capacityETH,
+          capacityDAI: capacityDAI,
+          totalCovers: totalCovers,
+          totalActiveCoversDAI: totalActiveCoversDAI,
+          totalActiveCoversETH: totalActiveCoversETH,
+        }
+        quote.defaultCurrencySymbol = defaultCurrencySymbol;
+        quote.status = "FINAL_DATA";
+
+        return  quote;
 
       }).catch(function (error) {
 
@@ -182,29 +173,20 @@ export default class NexusApi {
                        errorMsg = { message: "Nexus supports only ETH currency for this cover"};
                     }
 
-                    return CatalogHelper.quoteFromCoverable(
-                            'nexus',
-                            protocol,
-                            {
-                                amount: amountInWei,
-                                currency: currency,
-                                period: period,
-                                chain: 'ETH',
-                                chainId: global.user.ethNet.networkId,
-                                priceOrigin: 0,
-                                price: 0,
-                                pricePercentOrigin:0,
-                                pricePercent:0,
-                                errorMsg: errorMsg,
-                                response: {error:error},
-                                minimumAmount: minimumAmount,
-                                capacity: quoteCapacity,
-                            },
-                            {
-                                capacityETH: capacityETH,
-                                capacityDAI: capacityDAI,
-                            }
-                        );
+                    quote.priceOrigin = 0,
+                    quote.price =  0,
+                    quote.pricePercentOrigin = 0,
+                    quote.pricePercent = 0,
+                    quote.errorMsg = errorMsg,
+                    quote.rawData = {error:error},
+                    quote.status = {
+                      capacityETH: capacityETH,
+                      capacityDAI: capacityDAI,
+                    };
+                    quote.errorMsg = errorMsg;
+                    quote.status = "FINAL_DATA";
+
+                    return quote ;
                 }
             } else {
               return {error: error}

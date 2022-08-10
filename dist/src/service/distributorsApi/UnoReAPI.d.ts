@@ -3,6 +3,7 @@ export default class UnoReAPI {
     static fetchUSDCPrice(): Promise<unknown>;
     static fetchCoverPrice(cover: any, amount: number, period: number, usdcPrice: number): Promise<unknown>;
     static fetchQuote(amount: number, currency: string, period: number, protocol: any): Promise<{
+        status: any;
         priceInNXM: any;
         distributorName: string;
         risk_protocol: string;

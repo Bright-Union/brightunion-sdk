@@ -7,6 +7,7 @@ declare class CatalogHelper {
     };
     static coverFromData(_distributorName: string, _rawData: any): {};
     static quoteFromCoverable(_distributorName: string, _coverable: any, obj: any, stats: object): {
+        status: any;
         priceInNXM: any;
         distributorName: string;
         risk_protocol: string;

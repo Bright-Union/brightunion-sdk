@@ -162,6 +162,7 @@ class InsuraceApi {
           'insurace',
           protocol,
           {
+            status: "INITIAL_DATA",
             amount: quoteData.amountInWei,
             currency: quoteData.currency,
             period: period,
@@ -195,7 +196,7 @@ class InsuraceApi {
             const pricePercent = new BigNumber(premium).times(1000).dividedBy(quoteData.amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
 
             quote.price = premium,
-            quote.response = response,
+            quote.rawData = response,
             quote.defaultCurrencySymbol = defaultCurrencySymbol,
             quote.pricePercent= pricePercent;
 
@@ -217,6 +218,7 @@ class InsuraceApi {
             quote.cashBackPercent = cashBackPercent;
             quote.cashBack = [ cashbackInInsur , cashbackInQuoteCurrency ];
             quote.capacity= quoteCapacity;
+            quote.status= "FINAL_DATA";
 
             return quote;
         })
@@ -239,6 +241,7 @@ class InsuraceApi {
                 quote.errorMsg = errorMsg;
                 quote.capacity = quoteCapacity;
                 quote.remainingCapacity = defaultCapacity;
+                quote.status= "FINAL_DATA";
 
                 return quote;
             })

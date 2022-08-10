@@ -48,76 +48,62 @@ export default class UnoReAPI {
         const usdcPrice = await this.fetchUSDCPrice().then((res:any) => {
             return res.data.usdcAmtForOneDollar;
         })
+
+        let quote =   CatalogHelper.quoteFromCoverable(
+          'unore',
+          protocol,
+          {
+            status: "INITIAL_DATA",
+            amount: amount,
+            currency: currency,
+            period: period,
+            chain: 'ETH',
+            chainId: global.user.ethNet.networkId,
+            minimumAmount: 1,
+            errorMsg: null,
+            capacity: "9999999999999999999999999999999999999999999999999999999",
+            nonPartnerLink: 'https://app.unore.io/buy-cover',
+          },
+          {
+            capacity: "9999999999999999999999999999999999999999999999999999999",
+          }
+        );
+
         return this.fetchCoverables()
             .then(async (data: any) => {
                 let cover = data.data.data;
 
                 const protocolName = protocol.name.toLowerCase().split(" ")[0];
-                const quote = cover.find((item: any) => item.name.toLowerCase().includes(protocolName));
+                const quoteFound = cover.find((item: any) => item.name.toLowerCase().includes(protocolName));
 
-                if(quote) {
-                    let type = CatalogHelper.commonCategory(quote.category, 'unore');
+                if(quoteFound) {
+                    let type = CatalogHelper.commonCategory(quoteFound.category, 'unore');
                     const typeDescr = type ? type : 'protocol';
                     let price:any = 0;
-                    let pricePercent:any = Number(quote.premium_factor) * 100;
+                    let pricePercent:any = Number(quoteFound.premium_factor) * 100;
                     if(currency !== 'ETH') {
-                        price = await this.fetchCoverPrice(quote, amount, period, usdcPrice).then((res:any) => {
+                        price = await this.fetchCoverPrice(quoteFound, amount, period, usdcPrice).then((res:any) => {
                             return toWei(String(res.data.premium))
                         })
                     } else {
                       let amountInUSD = Number(CurrencyHelper.eth2usd(amount));
-                        price = await this.fetchCoverPrice(quote, amountInUSD , period, usdcPrice).then((res:any) => {
+                        price = await this.fetchCoverPrice(quoteFound, amountInUSD , period, usdcPrice).then((res:any) => {
                             const priceInETH = Number(CurrencyHelper.usd2eth(toWei(String(res.data.premium))));
                             return String(priceInETH);
                         })
                     }
 
-                    global.events.emit("quote", {
-                        chainId: global.user.ethNet.networkId,
-                        status: "INITIAL_DATA",
-                        distributorName: "unore",
-                        amount: amount,
-                        currency: currency,
-                        price: price,
-                        pricePercent: pricePercent,
-                        period: period,
-                        protocol: protocol,
-                        chain: 'ETH',
-                        name: quote.name,
-                        source: 'unore',
-                        rawDataUnore: quote,
-                        type: type,
-                        errorMsg: null,
-                        typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
-                        nonPartnerLink: 'https://app.unore.io/buy-cover',
-                        capacity: "9999999999999999999999999999999999999999999999999999999",
-                    });
+                    quote.price = price;
+                    quote.pricePercent = pricePercent;
+                    quote.name = quoteFound.name;
+                    quote.type = type;
+                    quote.typeDescription = CatalogHelper.descriptionByCategory(typeDescr);
+                    quote.rawData = quoteFound;
 
-                    return CatalogHelper.quoteFromCoverable(
-                        'unore',
-                        protocol,
-                        {
-                            amount: amount,
-                            currency: currency,
-                            period: period,
-                            chain: 'ETH',
-                            chainId: global.user.ethNet.networkId,
-                            price: price,
-                            pricePercent: pricePercent,
-                            response: quote,
-                            source: 'unore',
-                            minimumAmount: 1,
-                            name: quote.name,
-                            errorMsg: null,
-                            type: type,
-                            typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
-                            capacity: "9999999999999999999999999999999999999999999999999999999",
-                            nonPartnerLink: 'https://app.unore.io/buy-cover',
-                        },
-                        {
-                            capacity: "9999999999999999999999999999999999999999999999999999999",
-                        }
-                    );
+                    global.events.emit("quote", quote);
+                    quote.status = "FINAL_DATA";
+
+                    return quote
                 }
             })
 

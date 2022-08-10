@@ -347,6 +347,7 @@ class CatalogHelper {
     const chainList = this.chainList(_distributorName, _coverable);
 
     return {
+      status: obj.status,
       priceInNXM: obj.priceInNXM,
       distributorName: _distributorName,
       risk_protocol: _distributorName,

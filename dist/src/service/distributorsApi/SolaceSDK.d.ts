@@ -1,6 +1,7 @@
 export default class SolaceSDK {
     static getCoverables(): Promise<any>;
     static fetchQuote(amount: number, currency: string, period: number, protocol: any): Promise<any[] | {
+        status: any;
         priceInNXM: any;
         distributorName: string;
         risk_protocol: string;
@@ -30,5 +31,7 @@ export default class SolaceSDK {
         uniSwapRouteData: any;
         capacity: any;
         nonPartnerLink: any;
+    } | {
+        error: any;
     }>;
 }

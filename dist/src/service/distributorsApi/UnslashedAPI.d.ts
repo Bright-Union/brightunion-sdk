@@ -1,6 +1,7 @@
 export default class UnslashedAPI {
     static fetchCoverables(): Promise<unknown>;
     static fetchQuote(amount: number, currency: string, period: number, protocol: any): Promise<{
+        status: any;
         priceInNXM: any;
         distributorName: string;
         risk_protocol: string;
