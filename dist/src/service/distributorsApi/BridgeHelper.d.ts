@@ -20,6 +20,7 @@ declare class BridgeHelper {
         chainListNexus: any;
         chainListUnore: any;
         chainListSolace: any;
+        chainListTidal: any;
         rawDataNexus: any;
         rawDataBridge: any;
         rawDataInsurace: any;

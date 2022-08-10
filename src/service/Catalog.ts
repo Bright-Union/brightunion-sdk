@@ -271,6 +271,7 @@ export async function getNexusCoverables(): Promise<any[]> {
                             type: type,
                             typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
                             rawDataTidal: item,
+                            chainListTidal: ['Polygon'],
                             stats: {
                                 capacity: item.sellerBalance
                             }
