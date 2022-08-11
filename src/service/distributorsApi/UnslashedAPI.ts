@@ -58,13 +58,13 @@ export default class UnslashedAPI {
         errorMsg = {message: `Sold out`, errorType: "capacity"}
       }
 
-      price = currency === 'USD' ? Number(CurrencyHelper.eth2usd(price)) : price;
-      const pricePerPeriod = price * ( period / 365 );
-      const pricePercent = Number(apy) * 100;
-
       const now:any = new Date();
       rolloverDate = new Date( Number(rolloverDate) * 1000 );
       const actualPeriod = Math.ceil( Math.abs(rolloverDate - now) / (1000 * 60 * 60 * 24));
+
+      price = currency === 'USD' ? Number(CurrencyHelper.eth2usd(price)) : price;
+      const pricePerPeriod = price * ( period / actualPeriod );
+      const pricePercent = Number(apy) * 100;
 
       if(quote) {
         global.events.emit("quote", {
