@@ -489,9 +489,9 @@ class CatalogHelper {
   }
 
   public static descriptionByCategory (category: string) {
-    let categoryFound = bridge_nexus_insurace_categories.find(cat => cat[6] === category);
+    let categoryFound = bridge_nexus_insurace_categories.find(cat => cat[7] === category);
     if (categoryFound) {
-      return categoryFound[7]
+      return categoryFound[8]
     }
   }
 
