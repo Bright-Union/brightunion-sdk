@@ -24,7 +24,7 @@ export default class TidalApi {
                 amount: amount,
                 currency: currency,
                 period: period,
-                chain: 'ETH',
+                chain: 'POLYGON',
                 chainId: global.user.ethNet.networkId,
                 minimumAmount: 1,
                 nonPartnerLink: 'https://app.tidal.finance/',
