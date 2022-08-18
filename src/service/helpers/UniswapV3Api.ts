@@ -92,9 +92,13 @@ class UniswapV3Api {
         (error:any) => { return error }
       );
 
-      const [ amountIn, routeDataFormated ] = this.chooseRouteAndSetPrice(route);
+      if(!route){
+        return [null, null];
+      }else{
+        const [ amountIn, routeDataFormated ] = this.chooseRouteAndSetPrice(route);
+        return [amountIn, routeDataFormated];
+      }
 
-      return [amountIn, routeDataFormated];
     }
 
   }

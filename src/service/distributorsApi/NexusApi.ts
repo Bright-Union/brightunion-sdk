@@ -103,16 +103,21 @@ export default class NexusApi {
 
         let pricePercentNXM:any = null;
         let pricePercent:any = 0;
-        let [ nxmBasedPrice, nxmBasedPriceNoMargin] = [ 0, 0 ];
+        let [ nxmBasedPrice, nxmBasedPriceNoMargin]:any = [ null, 0 ];
         let routeData:any = {};
 
         if(!nexusMaxCapacityError){
-          [ nxmBasedPrice, nxmBasedPriceNoMargin, routeData] = await NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee );
+
+          // [ nxmBasedPrice, nxmBasedPriceNoMargin, routeData] = await NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee );
+          [ nxmBasedPrice, nxmBasedPriceNoMargin, routeData] = await NexusApi.setNXMBasedquotePrice( toBN("108426414334994477900") , currency , fee );
+
           pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
-          if(nxmBasedPrice ){
+
+          if( nxmBasedPrice && nxmBasedPrice > 0 ){
             pricePercentNXM = new BigNumber(nxmBasedPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
           }
         }
+
 
         quote.rawData =  response.data;
         quote.errorMsg =  nexusMaxCapacityError;
