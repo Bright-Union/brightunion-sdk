@@ -108,8 +108,8 @@ export default class NexusApi {
 
         if(!nexusMaxCapacityError){
 
-          // [ nxmBasedPrice, nxmBasedPriceNoMargin, routeData] = await NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee );
-          [ nxmBasedPrice, nxmBasedPriceNoMargin, routeData] = await NexusApi.setNXMBasedquotePrice( toBN("108426414334994477900") , currency , fee );
+          [ nxmBasedPrice, nxmBasedPriceNoMargin, routeData] = await NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee );
+          // [ nxmBasedPrice, nxmBasedPriceNoMargin, routeData] = await NexusApi.setNXMBasedquotePrice( toBN("108426414334994477900111") , currency , fee );
 
           pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
 
