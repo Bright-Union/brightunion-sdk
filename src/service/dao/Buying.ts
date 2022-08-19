@@ -16,6 +16,7 @@ import {
 
 import ERC20Helper from '../helpers/ERC20Helper';
 import NetConfig from '../config/NetConfig';
+import gasCostEstimator from '../helpers/gasCostEstimator';
 import {fromWei, toBN, toWei} from 'web3-utils'
 import axios from 'axios'
 
