@@ -16,7 +16,7 @@ import {
 
 import ERC20Helper from '../helpers/ERC20Helper';
 import NetConfig from '../config/NetConfig';
-import gasCostEstimator from '../helpers/gasCostEstimator';
+import GasCostEstimator from '../helpers/gasCostEstimator';
 import {fromWei, toBN, toWei} from 'web3-utils'
 import axios from 'axios'
 
@@ -71,9 +71,15 @@ export async function buyCoverBridge(
     // convert period from days to bridge epochs (weeks)
     let epochs = Math.min(52, Math.ceil(_coverPeriod / 7));
 
+    console.log("Bridge buy");
+
+    let buyTransactionData = await GasCostEstimator.estimateMethod("a","a","a");
+
+    buyTransactionData.from = global.user.account;
+
     return await new Promise((resolve, reject) => {
         policyBookFacade.methods.buyPolicyFromDistributorFor(global.user.account, epochs, _sumAssured, brightRewardsAddress)
-            .send({from: global.user.account})
+            .send(buyTransactionData)
             .on('transactionHash', (transactionHash: any) => {
                 tx.hash = transactionHash;
                 global.events.emit("buy", {status: "TX_GENERATED", data: tx});

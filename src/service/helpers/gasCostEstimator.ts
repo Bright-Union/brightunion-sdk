@@ -1,6 +1,12 @@
-export default class GasCostEstimator {
+import axios from "axios";
+import {toWei, toBN} from "web3-utils";
+import GasStationApi from "./gasStationApi"
 
-  static estimateMethod (_method:any, _gasPrice:any) {
+export default class  GasCostEstimator {
+
+  static async estimateMethod ( _methodArgument:any , _contractMethod:any , _quotes:any ) {
+
+    // let gasPriceNow = GasStationApi.fetchGasPrice();
 
     let gasPriceNow = await axios.get("https://gasstation-mainnet.matic.network/")
     .then((response: any) => {
@@ -11,12 +17,11 @@ export default class GasCostEstimator {
       return 50;
     });
 
-
-
     let gasPrice = Math.round(Number(gasPriceNow));
-    estimatedGasPrice = toWei(toBN(Number(gasPrice)), "gwei").toString();
+    let estimatedGasPrice = toWei(toBN(Number(gasPrice)), "gwei").toString();
+    let gasEstimationCost = 0;
 
-    await contractInstance.methods.buyCoverInsurace(buyingObj).estimateGas({
+    await _contractMethod(_methodArgument).estimateGas({
       from: global.user.account,
       gas: estimatedGasPrice,
       value: _quotes.price
@@ -27,11 +32,12 @@ export default class GasCostEstimator {
       console.info("Simulated transaction to estimate gas costs", error)
     });
 
+    let buyTransactionData:any = {};
     buyTransactionData.gas = gasEstimationCost;
     buyTransactionData.gasLimit = 2500000;
     buyTransactionData.gasPrice = estimatedGasPrice;
 
-
+    return buyTransactionData;
 
   }
 

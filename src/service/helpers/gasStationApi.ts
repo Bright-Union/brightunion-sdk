@@ -1,5 +1,4 @@
 import axios from "axios";
-import ExchangeRateAPI from "./ExchangeRateAPI";
 
 export default class GasStationApi {
 
@@ -15,7 +14,7 @@ export default class GasStationApi {
       }
 
       return axios.get("https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=N1AR8EKTZMBZMVSPW6F3XY45D6DKWUQUP5")
-      .then((response) => {
+      .then((response:any) => {
         if(!response.data.result){
           return backupFetch();
         }
@@ -56,7 +55,7 @@ export default class GasStationApi {
     static fetchAvalancheGasPrice() {
       // return axios.get("https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=N1AR8EKTZMBZMVSPW6F3XY45D6DKWUQUP5")
       return axios.get("https://gavax.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle")
-      .then((response) => {
+      .then((response:any) => {
         return response.data.result;
       },
       (error) => {
@@ -64,28 +63,28 @@ export default class GasStationApi {
       });
     }
 
-    static  fetchGasPrice(symbol) {
+    static  fetchGasPrice(symbol:any) {
         if (symbol === "POLYGON") {
-            return  GasStationApi.fetchMaticGasPrice().then(async(data) => {
-            const  USDRate = await ExchangeRateAPI.fetchExchangeRate('MATIC');
+            return  GasStationApi.fetchMaticGasPrice().then(async(data:any) => {
+            // const  USDRate = await ExchangeRateAPI.fetchExchangeRate('MATIC');
                 return {
                     rapid: data.fastest,
                     fast: data.fast,
                     standard: data.standard,
                     slow: data.safeLow,
-                    USDRate: USDRate,
+                    // USDRate: USDRate,
                 };
             });
         } else if (symbol === "BSC") {
-            return  GasStationApi.fetchBSCGasPrice().then(async(data) => {
-              const USDRate = await ExchangeRateAPI.fetchExchangeRate('BNB')
+            return  GasStationApi.fetchBSCGasPrice().then(async(data:any) => {
+              // const USDRate = await ExchangeRateAPI.fetchExchangeRate('BNB')
               if( data.speeds){
                 return {
                   rapid: data.speeds[0].gasPrice,
                   fast: data.speeds[1].gasPrice,
                   standard: data.speeds[2].gasPrice,
                   slow: data.speeds[3].gasPrice,
-                  USDRate: USDRate,
+                  // USDRate: USDRate,
 
                 };
               }else if(data.result){
@@ -94,37 +93,36 @@ export default class GasStationApi {
                   fast: data.result.FastGasPrice,
                   standard: data.result.ProposeGasPrice,
                   slow:data.result.SafeGasPrice,
-                  USDRate: USDRate,
-
+                  // USDRate: USDRate,
                 }
               }
             });
 
           } else if (symbol === "AVALANCHE") {
             return  GasStationApi.fetchAvalancheGasPrice().then(async(data) => {
-              const USDRate = await ExchangeRateAPI.fetchExchangeRate('AVAX')
+              // const USDRate = await ExchangeRateAPI.fetchExchangeRate('AVAX')
                 return {
                     rapid: data.FastGasPrice,
                     fast: data.FastGasPrice,
                     standard: data.SafeGasPrice,
                     slow: data.ProposeGasPrice,
-                    USDRate: USDRate,
+                    // USDRate: USDRate,
                 };
             });
 
         } else if (symbol === "ETH") {
             return  GasStationApi.fetchEthereumGasPrice().then(async(data) => {
-              const USDRate = await ExchangeRateAPI.fetchExchangeRate('ETH')
-                if(!data) return {
-                  USDRate: USDRate,
-                };
+              // const USDRate = await ExchangeRateAPI.fetchExchangeRate('ETH')
+                // if(!data) return {
+                  // USDRate: USDRate,
+                // };
                 if(data.FastGasPrice){
                   return {
                     rapid: data.FastGasPrice,
                     fast: data.FastGasPrice,
                     standard: data.SafeGasPrice,
                     slow: data.ProposeGasPrice,
-                    USDRate: USDRate,
+                    // USDRate: USDRate,
                   };
                 }else if(data.fast) {
                   return {
@@ -132,7 +130,7 @@ export default class GasStationApi {
                     fast: data.fast,
                     standard: data.standard,
                     slow: data.safeLow,
-                    USDRate: USDRate,
+                    // USDRate: USDRate,
                   };
                 }
             });
