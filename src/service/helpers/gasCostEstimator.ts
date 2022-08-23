@@ -4,7 +4,7 @@ import GasStationApi from "./gasStationApi"
 
 export default class  GasCostEstimator {
 
-  static async estimateMethod ( _methodArgument:any , _contractMethod:any , _quotes:any ) {
+  static async estimateMethod (  _contractMethod:any , _methodArguments:any, _sendArguments:any ) {
 
     // let gasPriceNow = GasStationApi.fetchGasPrice();
 
@@ -21,11 +21,7 @@ export default class  GasCostEstimator {
     let estimatedGasPrice = toWei(toBN(Number(gasPrice)), "gwei").toString();
     let gasEstimationCost = 0;
 
-    await _contractMethod(_methodArgument).estimateGas({
-      from: global.user.account,
-      gas: estimatedGasPrice,
-      value: _quotes.price
-    }).then(function (gasAmount: any) {
+    await _contractMethod(_methodArguments).estimateGas(_sendArguments).then(function (gasAmount: any) {
       gasEstimationCost = gasAmount && gasAmount.toString()
     })
     .catch(function (error: any) {

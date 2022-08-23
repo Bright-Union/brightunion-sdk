@@ -77,6 +77,8 @@ export async function buyCoverBridge(
 
     buyTransactionData.from = global.user.account;
 
+    console.log("Bridge buy - buyTransactionData " , buyTransactionData );
+
     return await new Promise((resolve, reject) => {
         policyBookFacade.methods.buyPolicyFromDistributorFor(global.user.account, epochs, _sumAssured, brightRewardsAddress)
             .send(buyTransactionData)

@@ -1,3 +1,3 @@
 export default class GasCostEstimator {
-    static estimateMethod(_methodArgument: any, _contractMethod: any, _quotes: any): Promise<any>;
+    static estimateMethod(_contractMethod: any, _methodArguments: any, _sendArguments: any): Promise<any>;
 }
