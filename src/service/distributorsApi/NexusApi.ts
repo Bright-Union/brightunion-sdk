@@ -51,9 +51,9 @@ export default class NexusApi {
         capacityETH = capacity.capacityETH;
         capacityDAI = capacity.capacityDAI;
         quoteCapacity = currency === 'ETH' ? capacityETH : capacityDAI;
-      })
-
-
+      }, () => {
+        quoteCapacity = false;
+      });
 
       const amountInWei:any = toBN(toWei(amount.toString(), 'ether'));
 
@@ -62,7 +62,6 @@ export default class NexusApi {
        }
 
        const minimumAmount= getCoverMin("nexus", global.user.ethNet.symbol , currency );
-
 
        let quote:any = CatalogHelper.quoteFromCoverable(
          'nexus',
@@ -193,7 +192,8 @@ export default class NexusApi {
                     return quote ;
                 }
             } else {
-              return {error: error}
+              quote.error = error;
+              return quote;
             }
         });
     }
