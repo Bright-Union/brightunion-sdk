@@ -1,4 +1,4 @@
-import { Coverage, Risk } from "@solace-fi/sdk"
+import { CoverageV3, Risk } from "@solace-fi/sdk"
 import axios from "axios";
 import CatalogHelper from "@/service/helpers/catalogHelper";
 import {fromWei, toWei} from "web3-utils";
@@ -17,7 +17,7 @@ export default class SolaceSDK {
 
     static async fetchQuote(amount: number, currency: string, period: number, protocol: any) {
         const risk = new Risk();
-        const coverage = new Coverage(1);
+        const coverage = new CoverageV3(1);
         const nullAddress = '0x0000000000000000000000000000000000000001';
         // let walletAddress = global.user.account !== nullAddress ? global.user.account : nullAddress;
         let walletAddress = nullAddress; // till we want the same info for connected and disconnected wallets
