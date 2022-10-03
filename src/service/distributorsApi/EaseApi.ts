@@ -5,7 +5,7 @@ import {fromWei, toWei} from 'web3-utils';
 
 export default class EaseApi {
     static fetchCoverables() {
-        return axios.get('https://app.ease.org/api/v1/vaults')
+        return axios.get('https://api.ease.org/api/v1/vaults')
             .then((response) => {
                 return response.data;
             }).catch(error => {

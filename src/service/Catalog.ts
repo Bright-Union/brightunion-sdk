@@ -129,8 +129,7 @@ export async function getNexusCoverables(): Promise<any[]> {
 
   }
 
-  export async function getInsuraceCoverables(netId : string|number) : Promise<object[]> { // Daniel
-
+  export async function getInsuraceCoverables(netId : string|number) : Promise<object[]> {
     let netSymbol = NetConfig.netById(netId) ? NetConfig.netById(netId).symbol : false;
     if(!netSymbol) return [];
 
@@ -146,7 +145,6 @@ export async function getNexusCoverables(): Promise<any[]> {
 
         let type = CatalogHelper.commonCategory(value.risk_type, 'insurace')
         let typeDescr = type ? type : 'protocol';
-
         coverablesArray.push(CatalogHelper.createCoverable({
             name: CatalogHelper.unifyCoverName(value.name.trim(), 'insurace' ),
             logo: logo,
@@ -160,13 +158,16 @@ export async function getNexusCoverables(): Promise<any[]> {
             rawDataInsurace: value,
             chainListInsurace: value.chain_type_list
           }))
-
         }
 
         global.events.emit("catalog" , { items: coverablesArray , distributorName:"insurace" , networkId: netId, itemsCount: coverablesArray.length } );
 
         return coverablesArray;
       })
+        .catch(error => {
+            console.error('Couldn\'t load InsurAce Covers');
+            return [];
+        });
     }
 
     export async function getEaseCoverables() {
@@ -190,6 +191,10 @@ export async function getNexusCoverables(): Promise<any[]> {
               })
             global.events.emit("catalog" , { items: coverablesArray , distributorName:"ease" , networkId: 1, itemsCount: coverablesArray.length } );
             return coverablesArray;
+          })
+          .catch(error => {
+              console.warn('Couldn\'t load Ease Covers');
+              return [];
           });
     }
 
@@ -227,6 +232,10 @@ export async function getNexusCoverables(): Promise<any[]> {
             });
             return coverablesArray;
           })
+          .catch(error => {
+              console.error('Couldn\'t load Unslashed Covers');
+              return [];
+          });
 }
 
     export async function getUnoReCoverables() {
@@ -251,7 +260,11 @@ export async function getNexusCoverables(): Promise<any[]> {
             })
             global.events.emit("catalog" , { items: coverablesArray , distributorName:"unore" , networkId: 1, itemsCount: coverablesArray.length } );
             return coverablesArray;
-          });
+          })
+          .catch(error => {
+              console.error('Couldn\'t load UnoRe Covers');
+              return [];
+          });;
     }
 
     export async function getTidalCoverables() {
@@ -281,6 +294,10 @@ export async function getNexusCoverables(): Promise<any[]> {
                 global.events.emit("catalog" , { items: coverablesArray , distributorName:"tidal" , networkId: 1, itemsCount: coverablesArray.length } );
                 return coverablesArray;
             })
+            .catch(error => {
+                console.error('Couldn\'t load Tidal Covers');
+                return [];
+            });
     }
 
     export async function getSolaceCoverables() {
@@ -310,6 +327,10 @@ export async function getNexusCoverables(): Promise<any[]> {
                 } else return [];
 
             })
+            .catch(error => {
+                console.error('Couldn\'t load Solace Covers');
+                return [];
+            });
     }
 
 
