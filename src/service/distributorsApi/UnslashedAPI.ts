@@ -84,7 +84,7 @@ export default class UnslashedAPI {
           rawDataUnslashed: quote,
           type: quote.type,
           typeDescription: quote.description,
-          capacity: quote.soldOut ? 0 : "9999999999999999999999999999999999999999999999999999999",
+          capacity: "9999999999999999999999999999999999999999999999999999999",        //unknown
           nonPartnerLink: 'https://app.unslashed.finance/cover/' + quote.address,
         });
 
@@ -107,11 +107,11 @@ export default class UnslashedAPI {
             errorMsg: errorMsg,
             type: quote.type,
             typeDescription: quote.description,
-            capacity: quote.soldOut ? 0 : "9999999999999999999999999999999999999999999999999999999",
+            capacity: "9999999999999999999999999999999999999999999999999999999",        //unknown
             nonPartnerLink: 'https://app.unslashed.finance/cover/' + quote.address,
           },
           {
-            capacity: quote.soldOut ? 0 : "9999999999999999999999999999999999999999999999999999999",
+            capacity: "9999999999999999999999999999999999999999999999999999999", //unknown
           }
         );
       }
