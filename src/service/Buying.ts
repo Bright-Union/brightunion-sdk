@@ -292,6 +292,7 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
        asset,  // payment asset
        _quoteProtocol.amount.toString(), // sum assured, compliant
        _quoteProtocol.priceInNXM,
+       _quoteProtocol.priceWithSlippage,
        _quoteProtocol.rawData.period, // period
        0, //coverType
        _quoteProtocol.price.toString(), // token amount to cover with FEE
@@ -324,10 +325,8 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
      if (Number(ercBalance) >= (Number)(_quoteProtocol.price)) {
 
-       let allowanceAmount = _quoteProtocol.price;
        const currentAllowance = await erc20Instance.methods.allowance(global.user.account, nexusAddress).call();
-
-       if (toBN(currentAllowance.toString()).gte(toBN( allowanceAmount.toString() ))) {
+       if (toBN(currentAllowance.toString()).gte(toBN( _quoteProtocol.price.toString() ))) {
          global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
          return callNexus(_quoteProtocol, false);
        } else {
@@ -347,7 +346,7 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
          }
 
          global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
-         return await ERC20Helper.approveAndCall( erc20Instance,  NetConfig.netById(global.user.networkId).nexusDistributor,  _quoteProtocol.price, onTXHash, onSuccess, onError);
+         return await ERC20Helper.approveAndCall( erc20Instance, nexusAddress, _quoteProtocol.price, onTXHash, onSuccess, onError);
 
        }
 
@@ -536,6 +535,7 @@ export async function callEase(_quoteProtocol: any, buyingWithNetworkCurrency: b
        asset,  // payment asset
        _quoteProtocol.amount.toString(), // sum assured, compliant
        _quoteProtocol.priceInNXM,
+       _quoteProtocol.priceWithSlippage,
        _quoteProtocol.rawData.period, // period
        0, //coverType
        _quoteProtocol.price.toString(), // token amount to cover with FEE

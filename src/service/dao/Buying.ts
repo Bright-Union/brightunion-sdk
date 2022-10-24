@@ -157,6 +157,7 @@ export async function buyCoverNexus(
     _coverAsset: string,
     _sumAssured: number,
     _amountOut: number,
+    _priceWithSlippage: number,
     _coverPeriod: number,
     _coverType: any,
     _maxPriceWithFee: number,
@@ -209,6 +210,7 @@ export async function buyCoverNexus(
                 _amountOut,
                 _coverPeriod,
                 _coverType,
+                _priceWithSlippage,
                 _maxPriceWithFee,
                 data,
             ).send({from: _ownerAddress, value: sendValue})

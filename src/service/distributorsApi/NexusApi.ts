@@ -30,14 +30,14 @@ export default class NexusApi {
       priceInNXMWithFee = Number(priceInNXMWithFee);
 
       let [ priceInCurrencyFromNXM, routeData ]: any = await UniswapV3Api.getNXMPriceFor(quoteCurrency, priceInNXMWithFee );
-
       const BrightFeeCoef:any = toBN(120); // Margin added - 20%
-      let finalPrice:any = null;
+      let [finalPrice, priceWithSlippage]:any = [null, null];
       if(priceInCurrencyFromNXM){
-        finalPrice = toBN(priceInCurrencyFromNXM).mul(BrightFeeCoef).div(toBN(100))
+        finalPrice = toBN(priceInCurrencyFromNXM).mul(BrightFeeCoef).div(toBN(100));
+        priceWithSlippage = toBN(priceInCurrencyFromNXM).mul(toBN(101)).div(toBN(100)) //max 1% slippage
       }
 
-      return [ finalPrice, priceInCurrencyFromNXM ? toBN(priceInCurrencyFromNXM) : null ,routeData ] ;
+      return [ finalPrice, priceWithSlippage, priceInCurrencyFromNXM ? toBN(priceInCurrencyFromNXM) : null ,routeData ] ;
     }
 
     static async fetchQuote ( amount:number, currency:string, period:number, protocol:any) :Promise<any> {
@@ -102,15 +102,13 @@ export default class NexusApi {
 
         let pricePercentNXM:any = null;
         let pricePercent:any = 0;
-        let [ nxmBasedPrice, nxmBasedPriceNoMargin]:any = [ null, 0 ];
+        let [ nxmBasedPrice, priceWithSlippage, nxmBasedPriceNoMargin]:any = [ null, null, 0 ];
         let routeData:any = {};
 
         if(!nexusMaxCapacityError){
 
-          [ nxmBasedPrice, nxmBasedPriceNoMargin, routeData] = await NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee );
-
+          [ nxmBasedPrice, priceWithSlippage, nxmBasedPriceNoMargin, routeData] = await NexusApi.setNXMBasedquotePrice( toBN(response.data.priceInNXM) , currency , fee );
           pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
-
           if( nxmBasedPrice && nxmBasedPrice > 0 ){
             pricePercentNXM = new BigNumber(nxmBasedPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
           }
@@ -122,6 +120,7 @@ export default class NexusApi {
         quote.uniSwapRouteData =  routeData;
         quote.priceOrigin = priceWithFee.toString();
         quote.price = nxmBasedPrice ? nxmBasedPrice : priceWithFee;
+        quote.priceWithSlippage = priceWithSlippage ? priceWithSlippage : priceWithFee;
         quote.priceNoMargin = nxmBasedPriceNoMargin;
         quote.pricePercentOrigin =pricePercent;
         quote.pricePercent =pricePercentNXM ? pricePercentNXM : pricePercent;
