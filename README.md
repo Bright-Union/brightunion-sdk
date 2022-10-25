@@ -9,7 +9,7 @@ This SDK will give you access to the Bright Union aggregator contract that combi
 
 - [Nexus Mutual](https://nexusmutual.io/)
 - [Bridge Mutual](https://www.bridgemutual.io/)
-- [Inurace](https://www.insurace.io/)
+- [Insurace](https://www.insurace.io/)
 
 A swagger API documentation can be found [here](http://api.brightunion.io/protocol/api-docs/).
 ## Prerequisites
