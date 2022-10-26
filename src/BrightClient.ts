@@ -193,18 +193,19 @@ class BrightClient {
     _amount:number,
     _currency:string,
     _period:number,
-    _protocol:any): Promise<any> {
+    _protocol:any,
+    _owner:string): Promise<any> {
       if(!this.initialized){
         return this.initErrorResponse();
       }
-
       return await getQuoteFrom(
         _distributorName,
         _amount,
         _currency,
         _period,
         _protocol,
-        global.user.web3
+        global.user.web3,
+        _owner
       );
     }
 

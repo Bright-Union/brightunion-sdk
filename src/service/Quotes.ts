@@ -37,17 +37,17 @@ export async function getQuotes(
 ): Promise<any[]> {
   const quotesPromiseArray:any = [];
 
-  quotesPromiseArray.push(getQuoteFrom('nexus', _amount, _currency, _period, _protocol, null ))
-  quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, global.user.web3 ))
-  quotesPromiseArray.push(getQuoteFrom('bridge' , _amount, _currency, _period, _protocol, null ))
-  quotesPromiseArray.push(getQuoteFrom('ease' , _amount, _currency, _period, _protocol, null ))
-  quotesPromiseArray.push(getQuoteFrom('unslashed' , _amount, _currency, _period, _protocol, null ))
-  quotesPromiseArray.push(getQuoteFrom('unore' , _amount, _currency, _period, _protocol, null ))
-  quotesPromiseArray.push(getQuoteFrom('tidal' , _amount, _currency, _period, _protocol, null ))
-  quotesPromiseArray.push(getQuoteFrom('solace' , _amount, _currency, _period, _protocol, null ))
+  quotesPromiseArray.push(getQuoteFrom('nexus', _amount, _currency, _period, _protocol, null , ''))
+  quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, global.user.web3, 'brUnion'))
+  quotesPromiseArray.push(getQuoteFrom('bridge' , _amount, _currency, _period, _protocol, null, '' ))
+  quotesPromiseArray.push(getQuoteFrom('ease' , _amount, _currency, _period, _protocol, null, ''))
+  quotesPromiseArray.push(getQuoteFrom('unslashed' , _amount, _currency, _period, _protocol, null, ''))
+  quotesPromiseArray.push(getQuoteFrom('unore' , _amount, _currency, _period, _protocol, null, ''))
+  quotesPromiseArray.push(getQuoteFrom('tidal' , _amount, _currency, _period, _protocol, null, ''))
+  quotesPromiseArray.push(getQuoteFrom('solace' , _amount, _currency, _period, _protocol, null, ''))
 
   for (let net of global.user.web3Passive) {
-    quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, net))
+    quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, net, 'brUnion'))
   }
 
   return Promise.all(quotesPromiseArray).then((data:any) => {
@@ -75,7 +75,8 @@ export async function getQuoteFrom(
                                     _currency:string, // coverAddress for bridge
                                     _period: number,
                                     _protocol:any,
-                                    _net:any,
+                                    _net:any,         // optional
+                                    _owner: string    //optional
     ): Promise<object> {
 
       GoogleEvents.quote( {_amount, _currency, _period, _protocol, _distributorName , _net } , "getQuoteFrom")
@@ -85,7 +86,7 @@ export async function getQuoteFrom(
   }else if(_distributorName == 'nexus'){
     return await getNexusQuote(_amount,_currency,_period,_protocol );
   }else if(_distributorName == 'insurace'){
-    return await getInsuraceQuote( _net , _amount,_currency,_period,_protocol);
+    return await getInsuraceQuote( _net , _amount,_currency,_period,_protocol, _owner);
   }else if(_distributorName == 'ease'){
     return await getEaseQuote(_amount,_currency,_period,_protocol );
   }else if(_distributorName == 'unslashed'){
@@ -149,8 +150,7 @@ export async function getQuoteFrom(
  }
 
 
-export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
-
+export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_period :any,_protocol :any,_owner :any ) : Promise<object> {
   if(!_web3.networkId){ // if active net
     const newWeb3Instance = {
         account: global.user.account,
@@ -164,7 +164,7 @@ export async function getInsuraceQuote( _web3:any, _amount :any,_currency :any,_
 
   if (CatalogHelper.availableOnNetwork(_web3.networkId, 'INSURACE')) {
     if(_protocol.productId){
-      return await InsuraceApi.fetchInsuraceQuote(_web3, _amount , _currency, _period, _protocol);
+      return await InsuraceApi.fetchInsuraceQuote(_web3, _amount , _currency, _period, _protocol, _owner);
     }else{
       return {error: "Please provide productId of Insurace protocol in protocol object"}
     }

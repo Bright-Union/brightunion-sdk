@@ -49,10 +49,7 @@ export default class ERC20Helper {
         transactionData.gasPrice = estimatedGasPrice;
       }
 
-      return erc20Instance.methods
-      .approve(spender, amount)
-      .send(transactionData)
-      // .send({from: global.user.account})
+      return erc20Instance.methods.approve(spender, amount).send(transactionData)
       .on('transactionHash', () => {
         onTxHash();
         //

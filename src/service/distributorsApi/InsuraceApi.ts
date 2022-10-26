@@ -47,23 +47,25 @@ class InsuraceApi {
         currency : any,
         period : any,
         protocolId : any,
-        owner : any) {
+        owner : any,
+        protocolType : any,
+        coveredID: any) {
 
         let url = `${NetConfig.netById(web3.networkId).insuraceAPI}/getCoverPremiumV2?code=${encodeURIComponent(NetConfig.netById(web3.networkId).insuraceAPIKey)}`;
-
+        let object = {
+            "chain": NetConfig.netById(web3.networkId).symbol,
+            "coverCurrency": currency,
+            "premiumCurrency": currency,
+            "productIds": [protocolId],
+            "coverDays": [period],
+            "coverAmounts": [amount],
+            "owner": owner,
+            "referralCode": NetConfig.netById(web3.networkId).insuraceReferral,
+            "coveredAccounts": protocolType == 'custodian' ? [coveredID] : [],
+            "coveredAddresses": protocolType == 'custodian' ? [] : [owner],
+        };
         return  axios.post(
-            url, {
-                    "chain": NetConfig.netById(web3.networkId).symbol,
-                    "coverCurrency": currency,
-                    "premiumCurrency": currency,
-                    "productIds": [protocolId],
-                    "coverDays": [period],
-                    "coverAmounts": [amount],
-                    "coveredAddresses": [global.user.account],
-                    "owner": owner,
-                    "referralCode": NetConfig.netById(web3.networkId).insuraceReferral,
-
-        }).then((response : any) => {
+            url, object).then((response : any) => {
             return response.data;
         })
     }
@@ -87,6 +89,7 @@ class InsuraceApi {
                     "coverDays": periods,
                     "coverAmounts": amounts,
                     "coveredAddresses": [global.user.account],
+                    "coveredAccounts": [],      //custodians
                     "owner": global.user.account,
                     "referralCode": NetConfig.netById(web3.networkId).insuraceReferral,
 
@@ -146,7 +149,7 @@ class InsuraceApi {
       }
     }
 
-    static async fetchInsuraceQuote ( web3:any, amount:string | number, currency:string , period:number, protocol:any): Promise<object> {
+    static async fetchInsuraceQuote ( web3:any, amount:string | number, currency:string , period:number, protocol:any, owner:any): Promise<object> {
 
       let quoteData = await this.formatQuoteDataforInsurace(amount, currency, web3, protocol);
 
@@ -169,12 +172,12 @@ class InsuraceApi {
             chain: web3.symbol,
             chainId: web3.networkId,
             minimumAmount: minimumAmount,
+            type: protocol.type,
           },
           {
             remainingCapacity: protocol['stats_'+web3.symbol] ? protocol['stats_'+web3.symbol].capacityRemaining : 0
           }
         );
-
         return await this.getCoverPremium(
           web3,
           quoteData.amountInWei,
@@ -182,6 +185,8 @@ class InsuraceApi {
           period,
           parseInt(protocol.productId),
           global.user.account,
+          protocol.type,
+          owner,
         ).then( async (response: any) => {
 
           const defaultCurrencySymbol = NetConfig.netById(web3.networkId).defaultCurrency;

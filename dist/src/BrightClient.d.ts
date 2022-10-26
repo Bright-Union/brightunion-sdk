@@ -33,7 +33,7 @@ declare class BrightClient {
     getQuotes(_amount: number, _currency: string, _period: number, _protocol: any): Promise<any[] | {
         error: string;
     }>;
-    getQuoteFrom(_distributorName: string, _amount: number, _currency: string, _period: number, _protocol: any): Promise<any>;
+    getQuoteFrom(_distributorName: string, _amount: number, _currency: string, _period: number, _protocol: any, _owner: string): Promise<any>;
     getMultipleQuotes(_arrayOfQuotes: any): Promise<object>;
     buyQuote(_quote: any): Promise<any>;
     buyQuotes(_quotes: any[]): Promise<any>;
