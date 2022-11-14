@@ -44,7 +44,7 @@ export async function getQuotes(
   quotesPromiseArray.push(getQuoteFrom('unslashed' , _amount, _currency, _period, _protocol, null, ''))
   quotesPromiseArray.push(getQuoteFrom('unore' , _amount, _currency, _period, _protocol, null, ''))
   quotesPromiseArray.push(getQuoteFrom('tidal' , _amount, _currency, _period, _protocol, null, ''))
-  quotesPromiseArray.push(getQuoteFrom('solace' , _amount, _currency, _period, _protocol, null, ''))
+  //quotesPromiseArray.push(getQuoteFrom('solace' , _amount, _currency, _period, _protocol, null, ''))
 
   for (let net of global.user.web3Passive) {
     quotesPromiseArray.push(getQuoteFrom('insurace' , _amount, _currency, _period, _protocol, net, 'brUnion'))

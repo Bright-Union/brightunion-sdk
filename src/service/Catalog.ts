@@ -44,7 +44,7 @@ export async function getCatalog(): Promise<any> {
   catalogPromiseArray.push(getTidalCoverables())
 
     // push SOLACE
-  catalogPromiseArray.push(getSolaceCoverables())
+  //catalogPromiseArray.push(getSolaceCoverables())
 
   for (let net of global.user.web3Passive) {
     catalogPromiseArray.push(getInsuraceCoverables(net.networkId))
