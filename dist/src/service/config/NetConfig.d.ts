@@ -798,7 +798,6 @@ declare class NetConfig {
     isNetworkCurrencyByAddress(address: any): boolean;
     static requiresAllowanceReset(networkId: any, symbol: any): boolean;
     static sixDecimalsCurrency(networkId: any, symbol: any): any;
-    static insuraceDePegTestCurrency(protocol: any, currency: any, web3Symbol: any, selectedCurrency: any): any;
     static isNetworkCurrencyBySymbol(asset: any): boolean;
     static getETHNetwork(): any;
     static isSupportedNetwork(_netId: any): boolean;
