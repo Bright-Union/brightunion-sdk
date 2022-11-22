@@ -11,8 +11,9 @@ const bridge_nexus_insurace = [
   ['', '88mph', '88mph V3', '', '', '88mph.app', '', '', '88mph V3'],
   ['88mph.app', '', '', '', '', '', '', '88mph', '88mph.app'],
   ['1INCH Token', '1Inch (DEX & Liquidity Pools)', '1inch (Liquidity Pools)', '', '', '1inch Network', '', '', '1Inch'],
-  ['Aave', 'Aave V1', '', '', '', '', '', 'aave-v1', 'Aave V1'],
+  ['', 'Aave V1', '', '', '', '', '', 'aave-v1', 'Aave V1'],
   ['Aave', 'Aave V2', 'Aave V2', 'aave', '', 'AAVE', '', 'aave-v2', 'Aave V2'],
+  ['', 'Aura', 'Aura Finance', '', '', '', '', '', 'Aura'],
   ['', '', 'AAVE V3', '', '', '', '', 'aave-v3', 'AAVE V3'],
   ['Balancer v1', 'Balancer v1', 'Balancer v1', 'Balancer v1', 'Balancer V1 & V2', 'Balancer', '', 'balancer-v1', 'Balancer v1'],
   ['Balancer v2', 'Balancer v2', 'Balancer v2', 'Balancer v2', 'Balancer V1 & V2', 'Balancer', '', 'balancer-v2', 'Balancer v2'],
@@ -78,14 +79,14 @@ const bridge_nexus_insurace = [
   ['','','UST De-Peg', '', 'UST Peg', '', '', '', 'UST De-Peg'],
   ['','','USDT De-Peg', '', 'USDT Peg', '', '', '', 'USDT De-Peg'],
   ['','','USDT De-Peg', '', 'USDT Peg', 'USDT', '', '', 'USDT De-Peg'],
-  ['','','USDC De-Peg', '', '', 'USDC', '', '', 'USDC De-Peg'],
-  ['','','MIM De-Peg', '', '', 'MIM', '', '', 'MIM De-Peg'],
+  ['USD Coin','','USDC De-Peg', '', '', 'USDC', '', '', 'USDC De-Peg'],
+  ['bmiV2MIMCover','','MIM De-Peg', '', '', 'MIM', '', '', 'MIM De-Peg'],
   ['','UMA','UMA', '', '', 'UMA Protocol', '', '', 'UMA'],
   ['','','Unagii (Vaults)', '', '', '', '', 'unagii', 'Unagii (vaults)'],
   ['','','VVS Finance', '', '', '', '', 'vvs-finance', 'VVS Finance'],
   ['','Stake DAO','Stake DAO', '', '', 'StakeDAO', '', 'stake-dao', 'Stake DAO'],
   ['','','Frax Finance', '', '', 'FRAX', '', '', 'Frax Finance'],
-  ['','','BUSD De-Peg', '', '', 'BUSD', '', '', 'BUSD De-Peg'],
+  ['Binance USD','','BUSD De-Peg', '', '', 'BUSD', '', '', 'BUSD De-Peg'],
   ['Spell Token', 'Abracadabra', 'Abracadabra.money', '', '', '', '', '', 'Abracadabra'],
   ['Uniswap', 'Uniswap V1', '', '', '', '', '', 'uniswap-v1', 'Uniswap V1'],
   ['Uniswap', 'Uniswap V2', 'Uniswap V2', '', 'Uniswap V2 & V3', 'Uniswap', '', 'uniswap-v2', 'Uniswap V2'],
@@ -94,7 +95,7 @@ const bridge_nexus_insurace = [
   ['IceToken','Popsicle Finance','', '', '', '', '', '', 'IceToken'],
   ['','Yield Protocol','', '', '', '', '', 'yield-protocol', 'Yield Protocol'],
   ['Universe.XYZ','','', '', '', '', '', 'Universe', 'Universe'],
-  ['Yearn Finance (all vaults)','Yearn Finance (all vaults)','Yearn Finance (all vaults)', 'yearn', 'Yearn', 'Yearn Finance', '', '', 'Yearn Finance (all vaults)']
+  ['Yearn Finance (all vaults)','Yearn Finance (all vaults)','Yearn Finance (all vaults)', 'yearn', 'Yearn', 'Yearn Finance', '', '', 'Yearn Finance (all vaults)'],
 ]
 
 

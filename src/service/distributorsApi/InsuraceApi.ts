@@ -111,30 +111,73 @@ class InsuraceApi {
         });
     }
 
-    static async formatQuoteDataforInsurace(amount:any , currency:any, web3:any, protocol:any ) {
+    static async formatQuoteDataforInsurace(amount:any , currencyName:any, web3:any, protocol:any ) {
 
-      let amountInWei:any= toWei(amount.toString(), 'ether');
+        let amountInWei:any= toWei(amount.toString(), 'ether');
 
-      if (currency === 'USD') {
-        currency = RiskCarriers.INSURACE.fallbackQuotation[NetConfig.netById(web3.networkId).symbol];
-      }
+        //fallbacks for USD (normal and de-peg)
+        if (currencyName.includes('USD') && protocol.name.includes('De-Peg')) {
+            currencyName = this.insuraceDePegCurrency(protocol, currencyName, web3.symbol);
+        }
+        else if (currencyName === 'USD') {
+            currencyName = RiskCarriers.INSURACE.fallbackQuotation[NetConfig.netById(web3.networkId).symbol];
+        }
 
-      let currencies:object[] = await this.getCurrencyList(web3.networkId);
+        console.log('Falling back on ' + web3.symbol + ' to ' + currencyName);
 
-      let selectedCurrency:any = currencies.find((curr:any) => {return curr.name == currency});
+        let currencies:object[] = await this.getCurrencyList(web3.networkId);
+        let selectedCurrency:any = currencies.find((curr:any) => {return curr.name == currencyName});
 
-      if (!selectedCurrency) {
-        return {error: `Selected currency is not supported by InsurAce: ${currency} on net ${web3.networkId}`};
-      }
+        console.log('Fetched back on ' + web3.symbol + ' to ' + selectedCurrency.name);
 
-      [currency, selectedCurrency] = NetConfig.insuraceDePegTestCurrency(protocol,currency,web3.symbol,selectedCurrency);
+        if (!selectedCurrency) {
+            return {error: `Selected currency is not supported by InsurAce: ${currencyName} on net ${web3.networkId}`};
+        }
 
-      if (NetConfig.sixDecimalsCurrency(web3.networkId, currency)) {
-        amountInWei = ERC20Helper.ERCtoUSDTDecimals(amountInWei);
-      }
+        if (NetConfig.sixDecimalsCurrency(web3.networkId, currencyName)) {
+            amountInWei = ERC20Helper.ERCtoUSDTDecimals(amountInWei);
+        }
 
-      return {amountInWei: amountInWei, currency:currency, selectedCurrency: selectedCurrency}
+        return {amountInWei: amountInWei, currency:currencyName, selectedCurrency: selectedCurrency}
 
+    }
+
+    static insuraceDePegCurrency(protocol:any,currency:any,web3Symbol:any) : any {
+        let currencyName:any = 'ETH';
+        if(!protocol.name){
+            return currencyName;
+        }
+        if(currency !== 'ETH'){
+            if (protocol.name.includes('USDT') || protocol.name.includes('BUSD')) {
+                switch (web3Symbol) {
+                    case "ETH":
+                    case "BSC":
+                    case "POLYGON":
+                        currencyName = 'USDC';
+                        break;
+                    case "AVALANCHE":
+                        currencyName = 'USDCe';
+                        break;
+                }
+            } else if (protocol.name.includes('USDC')) {
+                switch (web3Symbol) {
+                    case "ETH":
+                        currencyName = 'USDT';
+                        break;
+                    case "BSC":
+                        currencyName = 'BUSD-T';
+                        break;
+                    case "POLYGON":
+                        currencyName = 'USDT';
+                        break;
+                    case "AVALANCHE":
+                        currencyName = 'USDTe';
+                        break;
+                }
+            }
+            return currencyName;
+        }
+        return currencyName;
     }
 
     static formatCapacity(_currency:any, _quoteCapacity:any, _chain:any ){
@@ -167,7 +210,7 @@ class InsuraceApi {
           {
             status: "INITIAL_DATA",
             amount: quoteData.amountInWei,
-            currency: quoteData.currency,
+            currency: quoteData.selectedCurrency.name,
             period: period,
             chain: web3.symbol,
             chainId: web3.networkId,

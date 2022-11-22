@@ -378,48 +378,6 @@ class NetConfig{
     return sixDecimalCurrencies[networkId].includes(symbol);
   }
 
-  // Cannot buy De-peg bundles with testnet tokens
-  public static insuraceDePegTestCurrency(protocol:any,currency:any,web3Symbol:any,selectedCurrency:any) : any {
-    if(!protocol.name){
-      return [currency,selectedCurrency]
-    }
-    if(currency !== 'ETH' && protocol.name.includes('De-Peg')){
-      if (protocol.name.includes('USDT') || protocol.name.includes('BUSD')) {
-          switch (web3Symbol) {
-              case "ETH":
-                  selectedCurrency.address = this.netById(1)['USDC'];
-                  break;
-              case "BSC":
-                  selectedCurrency.address = this.netById(56)['USDC'];
-                  break;
-              case "POLYGON":
-                  selectedCurrency.address = this.netById(137)['USDC'];
-                  break;
-              case "AVALANCHE":
-                  selectedCurrency.address = this.netById(43114)['USDCe'];
-                  break;
-          }
-      } else if (protocol.name.includes('USDC')) {
-          switch (web3Symbol) {
-              case "ETH":
-                  selectedCurrency.address = this.netById(1)['USDT'];
-                  break;
-              case "BSC":
-                  selectedCurrency.address = this.netById(56)['BUSD-T'];
-                  break;
-              case "POLYGON":
-                  selectedCurrency.address = this.netById(137)['USDT'];
-                  break;
-              case "AVALANCHE":
-                  selectedCurrency.address = this.netById(43114)['USDTe'];
-                  break;
-          }
-      }
-      return ['USDC',selectedCurrency]
-    }
-    return [currency,selectedCurrency]
-  }
-
   public static isNetworkCurrencyBySymbol(asset:any) {
     return asset === 'ETH' || asset === 'BNB' || asset === 'MATIC' || asset === "AVAX";
   }
