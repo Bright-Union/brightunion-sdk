@@ -123,12 +123,8 @@ class InsuraceApi {
             currencyName = RiskCarriers.INSURACE.fallbackQuotation[NetConfig.netById(web3.networkId).symbol];
         }
 
-        console.log('Falling back on ' + web3.symbol + ' to ' + currencyName);
-
         let currencies:object[] = await this.getCurrencyList(web3.networkId);
         let selectedCurrency:any = currencies.find((curr:any) => {return curr.name == currencyName});
-
-        console.log('Fetched back on ' + web3.symbol + ' to ' + selectedCurrency.name);
 
         if (!selectedCurrency) {
             return {error: `Selected currency is not supported by InsurAce: ${currencyName} on net ${web3.networkId}`};
