@@ -464,22 +464,27 @@ export async function buyOnEase(_quoteProtocol: any) : Promise<any> {
   const token = await _getIERC20Contract(_quoteProtocol.vault.token.address);
   const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
-  if (Number(ercBalance) >= (Number)(_quoteProtocol.amount)) {
-    const onTXHash =  () => {
-      global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
-    };
-    const onSuccess =  () => {
+  if (Number(ercBalance) >= (Number)(toWei(_quoteProtocol.amount))) {
+    const currentAllowance = await erc20Instance.methods.allowance(global.user.account, NetConfig.NETWORK_CONFIG[0].easeDistributor).call();
+    if (toBN(currentAllowance.toString()).gte(toBN(toWei(_quoteProtocol.amount).toString()))) {
       global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
       return callEase(_quoteProtocol, false);
-    };
-    const onError =  (err:any) => {
-      GoogleEvents.buyRejected('REJECTED - ERC20Helper - approveAndCall' , _quoteProtocol );
-      global.events.emit("buy" , { status: "REJECTED" } );
-      return {error: err , message: 'ERC20Helper approveAndCall Error'};
+    } else {
+      const onTXHash = () => {
+        global.events.emit("buy", {status: "CONFIRMATION", type: "get_transaction_hash", count: 2, current: 2});
+      };
+      const onSuccess = () => {
+        global.events.emit("buy", {status: "CONFIRMATION", type: "main", count: 2, current: 2});
+        return callEase(_quoteProtocol, false);
+      };
+      const onError = (err: any) => {
+        GoogleEvents.buyRejected('REJECTED - ERC20Helper - approveAndCall', _quoteProtocol);
+        global.events.emit("buy", {status: "REJECTED"});
+        return {error: err, message: 'ERC20Helper approveAndCall Error'};
+      }
+      global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
+      return await ERC20Helper.approveAndCall( token,  NetConfig.NETWORK_CONFIG[0].easeDistributor,  toWei(_quoteProtocol.amount), onTXHash, onSuccess, onError);
     }
-
-    global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
-    return await ERC20Helper.approveAndCall( token,  NetConfig.NETWORK_CONFIG[0].easeDistributor,  toWei(_quoteProtocol.amount), onTXHash, onSuccess, onError);
   } else {
     GoogleEvents.buyRejected('You have insufficient funds to continue with this transaction' , _quoteProtocol );
     global.events.emit("buy" , { status: "ERROR" , message:"You have insufficient funds to continue with this transaction" } );
@@ -497,7 +502,7 @@ export async function callEase(_quoteProtocol: any, buyingWithNetworkCurrency: b
     amount: toWei(_quoteProtocol.amount),
     nonce: nonce
   }
-  return axios.post('https://app.ease.org/api/v1/permits', data)
+  return axios.post('https://api.ease.org/api/v1/permits', data)
       .then((response) => {
         return buyCoverEase(
             global.user.account,
