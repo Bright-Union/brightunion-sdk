@@ -25,7 +25,7 @@ const bridge_nexus_insurace = [
   ['', '', 'Alpha Homora V1', '', '', '', '', 'alpha-v1', 'Alpha Homora V1'],
   ['', '', '', '', '', '', '', 'alpha-v2', 'Alpha Homora V2'],
   ['bmiV2DropsDAOCover', '', '', '', '', '', '', '', 'Drops Ownership Power'],
-  ['BadgerDAO', 'BadgerDAO', 'Badger Finance', '', '', '', '', 'badger', 'BadgerDAO'],
+  ['BadgerDAO', 'BadgerDAO', 'Badger Finance', 'Badger', '', '', '', 'badger', 'BadgerDAO'],
   ['', 'Bancor v3', '', '', '', '', '', 'bancor-v3', 'Bancor v3'],
   ['BarnBridge', 'Barnbridge Smart Yield V1', '', '', '', '', '', 'barnbridge', 'Barnbridge V1'],
   ['', '', 'Beethoven X', '', '', '', '', 'beethoven-x', 'Beethoven X'],

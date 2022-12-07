@@ -21,7 +21,7 @@ export default class EaseApi {
 
     static fetchQuote ( amount:number, currency:string, period:number, protocol:any) {
         return axios.get('https://api.ease.org/api/v1/vaults').then(async (response:any) => {
-            const protocolName = protocol.name.toLowerCase().split(" ")[0];
+            const protocolName = protocol.rawDataEase.top_protocol.toLowerCase().split(" ")[0];
             const vault = response.data.filter((item: any) => item.token.name.toLowerCase().includes(protocolName));
             let capacityArr:any = [];
             vault.forEach((item: any) => {
