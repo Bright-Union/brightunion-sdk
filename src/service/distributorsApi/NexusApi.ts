@@ -30,7 +30,7 @@ export default class NexusApi {
       priceInNXMWithFee = Number(priceInNXMWithFee);
 
       let [ priceInCurrencyFromNXM, routeData ]: any = await UniswapV3Api.getNXMPriceFor(quoteCurrency, priceInNXMWithFee );
-      const BrightFeeCoef:any = toBN(120); // Margin added - 20%
+      const BrightFeeCoef:any = toBN(140); // Margin added - 40%
       let [finalPrice, priceWithSlippage]:any = [null, null];
       if(priceInCurrencyFromNXM){
         finalPrice = toBN(priceInCurrencyFromNXM).mul(BrightFeeCoef).div(toBN(100));
