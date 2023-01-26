@@ -28,6 +28,7 @@ var config = {
       "http": require.resolve("stream-http") ,
       "https": require.resolve("https-browserify"),
       "crypto": require.resolve('crypto-browserify'),
+      "buffer": require.resolve("buffer")
     }
   },
   output: {
@@ -37,6 +38,9 @@ var config = {
     clean: true,
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+    }),
     new webpack.ProvidePlugin({
        process: 'process/browser',
      }),

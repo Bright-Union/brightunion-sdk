@@ -174,7 +174,8 @@ const QUICKNODEPROVIDER = "https://spring-blue-tree.quiknode.pro/4fb23553784a0d8
         symbol: 'POLYGON',
         defaultCurrency: "MATIC",
         explorer: 'https://polygonscan.com',
-        provider: 'https://polygon-mainnet.g.alchemy.com/v2/VeWz_iAaRaHf6zqmDnNkFcls6FrXd3Fm',
+        //provider: 'https://polygon-mainnet.g.alchemy.com/v2/VeWz_iAaRaHf6zqmDnNkFcls6FrXd3Fm',
+        provider: 'https://floral-still-forest.matic.quiknode.pro/e65e7caf71baf127ce3a3408dc7843bac0c447d7/',
         // provider: 'https://polygon-rpc.com',
         modules: VUE_APP_POLYGON_MODULES.split(' '),
         bridgeRegistry: '',
@@ -276,7 +277,6 @@ const QUICKNODEPROVIDER = "https://spring-blue-tree.quiknode.pro/4fb23553784a0d8
 ]
 
 const MAIN_NETS = [1, 56, 137, 43114];
-// const MAIN_NETS = [1, 56, 137]; // disable avaanche until release
 const TEST_NETS = [4, 42, 97, 80001]; //using Kovan here as Eth testnet
 
 const sixDecimalCurrencies:any = {
