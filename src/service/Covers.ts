@@ -60,30 +60,30 @@ export async function getAllCovers(
 
 export  function getBridgeCovers(): Promise<any[]> {
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'BRIDGE_MUTUAL')) {
-    return  getCovers(null, 'bridge' , global.user.account , false, 50);
+    return  getCovers(null, 'bridge');
   }
 }
 
 export  function getNexusCovers(): Promise<any[]> {
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'NEXUS_MUTUAL')) {
-    return  getCovers( null, 'nexus' , global.user.account , false, 50);
+    return  getCovers( null, 'nexus');
   }
 }
 
 export  function getEaseCovers(): Promise<any[]> {
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'EASE')) {
-    return  getCovers( null, 'ease' , global.user.account , false, 50);
+    return  getCovers( null, 'ease');
   }
 }
 
 export  function getUnslashedCovers(): Promise<any[]> {
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'UNSLASHED')) {
-    return  getCovers( null, 'unslashed' , global.user.account , false, 50);
+    return  getCovers( null, 'unslashed');
   }
 }
 export  function getUnoReCovers(): Promise<any[]> {
   if (CatalogHelper.availableOnNetwork(global.user.networkId, 'UNSLASHED')) {
-    return  getCovers( null, 'unore' , global.user.account , false, 50);
+    return  getCovers( null, 'unore');
   }
 }
 
@@ -101,7 +101,7 @@ export  function getInsuraceCovers(_web3:any) : Promise<any[]> {
   }
 
   if (CatalogHelper.availableOnNetwork(_web3.networkId, 'INSURACE')) {
-    return  getCovers(_web3, 'insurace' , _web3.account , false, 50);
+    return  getCovers(_web3, 'insurace');
   }
 }
 

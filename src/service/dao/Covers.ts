@@ -72,33 +72,27 @@ export async function getCoversCount(
  * @remarks
  * Get active/inactive cover from user address
  *
- * @param distributorName
- * @param ownerAddress
- * @param activeCover
- * @param limit
  * @param web3
+ * @param distributorName
  * @returns Cover Object
  */
 export async function getCovers(
   _web3 : any,
   _distributorName : string,
-  _ownerAddress : string,
-  _activeCover : boolean,
-  _limit : number,
 ) : Promise<any[]>  {
 
     if(_distributorName == "insurace"){
-      return await getCoversInsurace(_web3);
+      return getCoversInsurace(_web3);
     }else if(_distributorName == 'bridge'){
-      return await getCoversBridgeV2();
+      return getCoversBridgeV2();
     }else if(_distributorName == 'nexus'){
-      return await getCoversNexus();
+      return getCoversNexus();
     }else if(_distributorName == 'ease'){
-      return await getCoversEase();
+      return getCoversEase();
     }else if(_distributorName == 'unslashed'){
-      return await getCoversUnslashed();
+      return getCoversUnslashed();
     }else if(_distributorName == 'unore'){
-      return await getCoversUnoRe();
+      return getCoversUnoRe();
     }
 }
 
