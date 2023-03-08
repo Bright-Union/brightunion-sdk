@@ -11,7 +11,7 @@ declare class BrightClient {
     events: any;
     version: any;
     constructor(_config: any);
-    initialize(): Promise<object>;
+    initialize(_account: string): Promise<object>;
     initErrorResponse(): {
         error: string;
     };

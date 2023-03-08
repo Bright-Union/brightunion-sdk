@@ -87,9 +87,9 @@ class BrightClient {
   }
 
 
-  async initialize(): Promise<object>{
+  async initialize(_account: string): Promise<object>{
     global.user.networkId = await global.user.web3.eth.net.getId();
-    global.user.account = (await  global.user.web3.eth.getAccounts())[0];
+    global.user.account = _account ? _account : (await  global.user.web3.eth.getAccounts())[0];
     if(!global.user.account) global.user.account = "0x0000000000000000000000000000000000000001";
 
     const activeNetOpt = NetConfig.netById(global.user.networkId);
