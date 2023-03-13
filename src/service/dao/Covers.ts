@@ -146,44 +146,49 @@ export async function getCoversNexus():Promise<any>{
   const nexusQuotationContract = await  _getNexusQuotationContract(quotationAddress);
 
   //fetch covers bought from Nexus directly
-  const coverIds = await nexusQuotationContract.methods.getAllCoversOfUser(global.user.account).call();
+  try {
+    const coverIds = await nexusQuotationContract.methods.getAllCoversOfUser(global.user.account).call();
 
-  global.events.emit("covers" , { itemsCount: coverIds.length } );
+    global.events.emit("covers", {itemsCount: coverIds.length});
 
-  for (const coverId of coverIds) {
-    try {
-      const cover = await nexusGatewayContract.methods.getCover(coverId).call();
-      cover.id = coverId;
-      cover.source = 'nexus';
-      cover.risk_protocol = 'nexus';
-      cover.net = global.user.ethNet.networkId;
-      global.events.emit("covers" , { coverItem: cover} );
-      covers.push(cover)
-    } catch (e) {
-      //ignore this cover
+    for (const coverId of coverIds) {
+      try {
+        const cover = await nexusGatewayContract.methods.getCover(coverId).call();
+        cover.id = coverId;
+        cover.source = 'nexus';
+        cover.risk_protocol = 'nexus';
+        cover.net = global.user.ethNet.networkId;
+        global.events.emit("covers", {coverItem: cover});
+        covers.push(cover)
+      } catch (e) {
+        //ignore this cover
+      }
     }
-  }
 
-  const claimsDataAddress = await nexusGatewayContract.methods.claimsData().call();
-  const nexusClaimsDataContract = await _getNexusClaimsDataContract(claimsDataAddress);
-  const coverToClaim:any = {};
-  if (covers.length > 0) {
-    //collect all claims for distributor AND user
-    const claimsByDistributor = await nexusClaimsDataContract.methods.getAllClaimsByAddress(distributor.options.address).call();
-    const claimsByUser = await nexusClaimsDataContract.methods.getAllClaimsByAddress(global.user.account).call();
-    const claims = claimsByDistributor.concat(claimsByUser);
-    for (let i = 0; i < claims.length; i++) {
-      let coverId = await nexusGatewayContract.methods.getClaimCoverId(claims[i]).call();
-      coverToClaim[coverId] = claims[i];
+    const claimsDataAddress = await nexusGatewayContract.methods.claimsData().call();
+    const nexusClaimsDataContract = await _getNexusClaimsDataContract(claimsDataAddress);
+    const coverToClaim:any = {};
+    if (covers.length > 0) {
+      //collect all claims for distributor AND user
+      const claimsByDistributor = await nexusClaimsDataContract.methods.getAllClaimsByAddress(distributor.options.address).call();
+      const claimsByUser = await nexusClaimsDataContract.methods.getAllClaimsByAddress(global.user.account).call();
+      const claims = claimsByDistributor.concat(claimsByUser);
+      for (let i = 0; i < claims.length; i++) {
+        let coverId = await nexusGatewayContract.methods.getClaimCoverId(claims[i]).call();
+        coverToClaim[coverId] = claims[i];
+      }
     }
-  }
 
-  //update each with own claim (if any)
-  for (let i = 0; i < covers.length; i++) {
-    if (coverToClaim[covers[i].id]) {
-      covers[i].claimId = coverToClaim[covers[i].id];
+    //update each with own claim (if any)
+    for (let i = 0; i < covers.length; i++) {
+      if (coverToClaim[covers[i].id]) {
+        covers[i].claimId = coverToClaim[covers[i].id];
+      }
+      covers[i].endTime = covers[i].validUntil;
     }
-    covers[i].endTime = covers[i].validUntil;
+  } catch (e) {
+    // Nexus side of not available
+    console.error('Nexus contracts are not available');
   }
   return covers;
 
