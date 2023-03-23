@@ -5,7 +5,6 @@ import {
     _getInsuraceDistributor,
     _getInsuraceDistributorsContract,
     _getNexusDistributorsContract,
-    _getNexusDistributorsContractV1,
     _getBridgeV2Distributor,
     _getBridgeV2PolicyBookContract,
     _getBridgeV2PolicyBookFacade,
@@ -18,6 +17,7 @@ import ERC20Helper from '../helpers/ERC20Helper';
 import NetConfig from '../config/NetConfig';
 import {fromWei, toBN, toWei} from 'web3-utils'
 import axios from 'axios'
+import RiskCarriers from "@/service/config/RiskCarriers";
 
 /**
  * Returns a transaction receipt.
@@ -153,13 +153,11 @@ export async function buyCoverEase(
 export async function buyCoverNexus(
     _ownerAddress: string,
     _distributorName: string,
-    _contractAddress: string,
     _coverAsset: string,
     _sumAssured: number,
     _amountOut: number,
     _priceWithSlippage: number,
     _coverPeriod: number,
-    _coverType: any,
     _maxPriceWithFee: number,
     buyingWithNetworkCurrency: boolean,
     _quoteProtocol: any,
@@ -178,41 +176,45 @@ export async function buyCoverNexus(
     const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
 
     return await new Promise(async (resolve, reject) => {
-
         if (_quoteProtocol.uniSwapRouteData.protocol) {
             const nexusAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('nexus2').call();
 
-            const data = global.user.web3.eth.abi.encodeParameters(
+            const swapData = global.user.web3.eth.abi.encodeParameters(
                 [
                     'address[]', 'uint24[]', 'string',
-                    'uint256', 'uint256', 'uint256',
-                    'uint256', 'uint8', 'bytes32', 'bytes32'
+                    'uint256', 'address', 'uint256',
+                    'uint256', 'uint256'
                 ],
                 [
                     _quoteProtocol.uniSwapRouteData.swapVia,
                     _quoteProtocol.uniSwapRouteData.poolFees,
                     _quoteProtocol.uniSwapRouteData.protocol,
-                    _quoteProtocol.rawData.price,
-                    _quoteProtocol.rawData.priceInNXM,
-                    _quoteProtocol.rawData.expiresAt,
-                    _quoteProtocol.rawData.generatedAt,
-                    _quoteProtocol.rawData.v,
-                    _quoteProtocol.rawData.r,
-                    _quoteProtocol.rawData.s
+                    _amountOut,
+                    _coverAsset,
+                    _amountOut,
+                    _priceWithSlippage,
+                    _maxPriceWithFee
                 ]
             );
+            const buyCoverParams:any = [
+                0,                                                      // coverId
+                _ownerAddress,                                          // owner
+                _quoteProtocol.nexusProductId.toString(),               // productId
+                RiskCarriers.NEXUS.assetsIds[_quoteProtocol.currency],  // coverAsset
+                _sumAssured.toString(),                                 // amount
+                Number(_coverPeriod) * 24 * 3600,                       // period
+                _quoteProtocol.priceInNXM,                              // maxPremiumInAsset, NXM amount we buy
+                '255',                                                  // paymentAsset, NXM
+                '1765',                                                 // commissionRatio, 17.5% we got in NXM as a kickback fee
+                '0xac0734c62b316041d190438d5d3e5d1359614407',           // commissionDestination, treasury
+                ''                                                      // ipfsData
+            ];
+            const poolAllocationRequest: any = _quoteProtocol.rawData.quote.poolAllocationRequests;
 
-            _getNexusDistributorsContract(nexusAddress) // Nexus Call through Bright Protocol Distributors Layer
-                .methods.buyCover(
-                _contractAddress,
-                _coverAsset,
-                fromWei(_sumAssured.toString()),
-                _amountOut,
-                _coverPeriod,
-                _coverType,
-                _priceWithSlippage,
-                _maxPriceWithFee,
-                data,
+            _getNexusDistributorsContract(nexusAddress).methods.buyCover(
+                    buyCoverParams,
+                    poolAllocationRequest,
+                    swapData
             ).send({from: _ownerAddress, value: sendValue})
                 .on('transactionHash', (res: any) => {
                     tx.hash = res
@@ -234,43 +236,7 @@ export async function buyCoverNexus(
                 });
 
         } else {
-
-            const nexusAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('nexus').call();
-
-            const data = global.user.web3.eth.abi.encodeParameters(
-                ['uint', 'uint', 'uint', 'uint', 'uint8', 'bytes32', 'bytes32'],
-                [_quoteProtocol.rawData.price, _quoteProtocol.rawData.priceInNXM, _quoteProtocol.rawData.expiresAt,
-                    _quoteProtocol.rawData.generatedAt, _quoteProtocol.rawData.v, _quoteProtocol.rawData.r, _quoteProtocol.rawData.s],
-            );
-
-            _getNexusDistributorsContractV1(nexusAddress) // Nexus Call through Bright Protocol Distributors Layer
-                .methods.buyCover(
-                _contractAddress,
-                _coverAsset,
-                _sumAssured,
-                _coverPeriod,
-                _coverType,
-                _maxPriceWithFee,
-                data,
-            ).send({from: _ownerAddress, value: sendValue})
-                .on('transactionHash', (res: any) => {
-                    tx.hash = res
-                    global.events.emit("buy", {status: "TX_GENERATED", data: tx});
-                    GoogleEvents.onTxHash(tx);
-                    resolve({success: res});
-                })
-                .on('error', (err: any, receipt: any) => {
-                    global.events.emit("buy", {status: "REJECTED"});
-                    GoogleEvents.onTxRejected(tx);
-                    reject({error: err, receipt: receipt})
-                })
-                .on('confirmation', (confirmationNumber: any) => {
-                    if (confirmationNumber === 0) {
-                        GoogleEvents.onTxConfirmation(tx);
-                        global.events.emit("buy", {status: "TX_CONFIRMED"});
-                    }
-                });
-
+            // Warning! TODO - can't find a route for NXM buy on Uni!
         }
 
     });

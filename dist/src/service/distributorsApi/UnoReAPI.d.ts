@@ -5,6 +5,7 @@ export default class UnoReAPI {
     static fetchQuote(amount: number, currency: string, period: number, protocol: any): Promise<{
         status: any;
         priceInNXM: any;
+        nexusProductId: any;
         distributorName: string;
         risk_protocol: string;
         name: any;

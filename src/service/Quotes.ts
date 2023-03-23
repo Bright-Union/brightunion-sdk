@@ -139,10 +139,10 @@ export async function getQuoteFrom(
 
  export async function getNexusQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
     if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'NEXUS_MUTUAL')){
-      if(_protocol.nexusCoverable){
+      if(_protocol.nexusProductId){
         return await NexusApi.fetchQuote( _amount , _currency, _period, _protocol);
       }else{
-        return {error: "Please provide nexusCoverable address in protocol object"}
+        return {error: "Please provide nexusProductId address in protocol object"}
       }
    }else{
      return {error: "Not supported network for Nexus"}

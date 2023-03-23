@@ -25,6 +25,10 @@ const NEXUS:any = {
         costs: ''
     },
     fallbackQuotation: 'DAI',
+    assetsIds: {
+        ETH: '0',
+        DAI: '1',
+    }
 }
 
 const BRIDGE:any = {

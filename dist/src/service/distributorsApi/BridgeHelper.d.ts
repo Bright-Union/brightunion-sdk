@@ -3,8 +3,7 @@ declare class BridgeHelper {
         [x: string]: any;
         bridgeCoverable: any;
         bridgeProductAddress: any;
-        bridgeAPY: any;
-        nexusCoverable: any;
+        nexusProductId: any;
         coingecko: any;
         productId: any;
         stats: any;
@@ -21,7 +20,6 @@ declare class BridgeHelper {
         chainListUnore: any;
         chainListSolace: any;
         chainListTidal: any;
-        rawDataNexus: any;
         rawDataBridge: any;
         rawDataInsurace: any;
         rawDataEase: any;

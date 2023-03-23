@@ -101,14 +101,15 @@ const bridge_nexus_insurace = [
 
 const bridge_nexus_insurace_categories : string[][] = [
   // BRIDGE CATEGORY, NEXUS CATEGORY, INSURACE, EASE, UNSLASHED, UNORE, TIDAL, COMMON CATEGORY, DESCRIPTION
-  ['0' /*CONTRACT*/, 'protocol', 'Smart Contract Vulnerability', 'Lending Protocol', 'DAPP', 'Lending', '0', 'protocol', 'Protocol hack and failure'],
-  ['2', /*SERVICE*/ 'custodian', '', '', 'Custodian', '', '', 'custodian', 'Custodian cover'],
+  ['0' /*CONTRACT*/, '0', 'Smart Contract Vulnerability', 'Lending Protocol', 'DAPP', 'Lending', '0', 'protocol', 'Protocol hack and failure'],
+  ['2', /*SERVICE*/ '1', '', '', 'Custodian', '', '', 'custodian', 'Custodian cover'],
   ['1' /*STABLECOIN*/, '', 'Stablecoin De-Peg', '', '', 'Stablecoin', '', 'stable', 'Stable token de-pegging'],
   ['', 'token', '', 'Yield Aggregator', '', '', '', 'yield', 'Yield de-pegging'],
-  ['3' /*EXCHANGE*/, 'custodian', 'Custodian Risk', '', 'Custodian', '', '', 'custodian', 'Custodian Risk'],
+  ['3' /*EXCHANGE*/, '1', 'Custodian Risk', '', 'Custodian', '', '', 'custodian', 'Custodian Risk'],
   ['' , '', 'IDO Event Risk', '', '', '', '', 'ido', 'IDO Event Risk'],
-  ['' , '', 'Bundled Cover', '', '', '', '', 'bundled', 'Bundled cover'],
+  ['' , '', '3', '', '', '', '', 'bundled', 'Bundled cover'],
   ['' , '', '', 'Decentralized Exchange', 'Exchange', 'Dexes', '', 'exchange', 'Decentralized Exchange'],
+  ['' , '3', '', '', '', '', '', 'ETH2', 'ETH2 Staking'],
 ];
 
 const CUSTOM_BRIDGE_PROTOCOLS : object = {
@@ -313,7 +314,7 @@ class CatalogHelper {
         }
       }
       else if(_distributorName == 'nexus'){
-        logoData.url = `https://app.nexusmutual.io/logos/${_name}`;
+        logoData.url = `https://app.nexusmutual.io/logos/${_name}.png`; // is extension always png?
         logoData.strongLogoData = true;
       } else if(_distributorName == 'ease'){
         logoData.url = _name;
@@ -372,6 +373,7 @@ class CatalogHelper {
     return {
       status: obj.status,
       priceInNXM: obj.priceInNXM,
+      nexusProductId: _coverable.nexusProductId,
       distributorName: _distributorName,
       risk_protocol: _distributorName,
       name: _coverable.name,
@@ -408,9 +410,8 @@ class CatalogHelper {
       //Bridge
       bridgeCoverable: obj.bridgeCoverable,
       bridgeProductAddress: obj.bridgeProductAddress,                     // address of Bridge contract
-      bridgeAPY: obj.bridgeAPY,                                           // staking APY is available for Bridge
       //Nexus
-      nexusCoverable: obj.nexusCoverable,
+      nexusProductId: obj.nexusProductId,
       //InsurAce
       coingecko: obj.coingecko,
       productId: obj.productId,// underlying token on Coingecko
@@ -431,7 +432,6 @@ class CatalogHelper {
       chainListUnore: obj.chainListUnore,
       chainListSolace: obj.chainListSolace,
       chainListTidal: obj.chainListTidal,
-      rawDataNexus: obj.rawDataNexus,                                           //field will be increased if similar products found
       rawDataBridge: obj.rawDataBridge,                                           //field will be increased if similar products found
       rawDataInsurace: obj.rawDataInsurace,                                           //field will be increased if similar products found
       rawDataEase: obj.rawDataEase,

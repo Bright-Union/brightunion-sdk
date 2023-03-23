@@ -42,7 +42,6 @@ class BridgeHelper {
           bridgeProductAddress: _policyBooksArr[i],
           bridgeCoverable: _stats[i].insuredContract,
           protocolAddress: _stats[i].insuredContract,
-          bridgeAPY: Number(_stats[i].APY) / (10 ** 5),
           logo: logo,
           name: CatalogHelper.unifyCoverName(name, 'bridge' ),
           type: type,

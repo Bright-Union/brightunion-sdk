@@ -283,18 +283,16 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
  export async function callNexus(_quoteProtocol:any , buyingWithNetworkCurrency: boolean){
 
    let net:any = NetConfig.netById(global.user.networkId);
-   let asset = net[_quoteProtocol.rawData.currency]
+   let asset = net[_quoteProtocol.currency]
 
      return buyCoverNexus(
        global.user.account,
        'nexus',
-       _quoteProtocol.rawData.contract,
        asset,  // payment asset
        _quoteProtocol.amount.toString(), // sum assured, compliant
        _quoteProtocol.priceInNXM,
        _quoteProtocol.priceWithSlippage,
-       _quoteProtocol.rawData.period, // period
-       0, //coverType
+       _quoteProtocol.period, // period
        _quoteProtocol.price.toString(), // token amount to cover with FEE
        buyingWithNetworkCurrency,
        _quoteProtocol,
@@ -305,7 +303,7 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
 export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
   let asset:any;
-  if (NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.rawData.currency)) {
+  if (NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency)) {
     asset = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
   } else if (_quoteProtocol.currency === 'DAI') {
     asset = NetConfig.netById(global.user.networkId).DAI;
@@ -318,8 +316,9 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
 
   const nexusVersion = _quoteProtocol.uniSwapRouteData.protocol ? 'nexus2' : 'nexus';
   const nexusAddress:any =  await _getDistributorsContract(global.user.web3).methods.getDistributorAddress(nexusVersion).call();
+  console.log('Buying WITH ' + _quoteProtocol.currency);
 
-   if(!NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.rawData.currency)){
+   if(!NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency)){
      const erc20Instance = await _getIERC20Contract(asset);
      const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
@@ -330,7 +329,6 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
          global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
          return callNexus(_quoteProtocol, false);
        } else {
-
          const onTXHash =  () => {
            global.events.emit("buy" , { status: "CONFIRMATION" , type:"get_transaction_hash" , count:2 , current:2 } );
            // return callNexus(_quoteProtocol, false);
@@ -530,23 +528,7 @@ export async function callEase(_quoteProtocol: any, buyingWithNetworkCurrency: b
  */
  export async function callUnoRe(_quoteProtocol:any , buyingWithNetworkCurrency: boolean){
 
-   let net:any = NetConfig.netById(global.user.networkId);
-   let asset = net[_quoteProtocol.rawData.currency]
-
-     return buyCoverNexus(
-       global.user.account,
-       'nexus',
-       _quoteProtocol.rawData.contract,
-       asset,  // payment asset
-       _quoteProtocol.amount.toString(), // sum assured, compliant
-       _quoteProtocol.priceInNXM,
-       _quoteProtocol.priceWithSlippage,
-       _quoteProtocol.rawData.period, // period
-       0, //coverType
-       _quoteProtocol.price.toString(), // token amount to cover with FEE
-       buyingWithNetworkCurrency,
-       _quoteProtocol,
-     )
+   //TODO
 
    }
 

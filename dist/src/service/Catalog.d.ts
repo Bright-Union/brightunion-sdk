@@ -1,6 +1,6 @@
 export declare function getCatalog(): Promise<any>;
 export declare function getBridgeV2Coverables(): Promise<any[]>;
-export declare function getNexusCoverables(): Promise<any[]>;
+export declare function getNexusV2Coverables(): Promise<any[]>;
 export declare function getInsuraceCoverables(netId: string | number): Promise<object[]>;
 export declare function getEaseCoverables(): Promise<any>;
 export declare function getUnslashedCoverables(): Promise<any>;

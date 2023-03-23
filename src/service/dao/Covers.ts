@@ -1,5 +1,4 @@
 import NetConfig from "../config/NetConfig";
-import Cover from "../domain/Cover";
 import CatalogHelper from "../helpers/catalogHelper"
 import {
   _getDistributorsContract,
@@ -8,26 +7,21 @@ import {
   _getInsurAceProductContract,
 
   _getBridgeV2RegistryContract,
-  _getBridgeV2PolicyBookRegistryContract,
   _getBridgeV2PolicyBookContract,
   _getBridgeV2PolicyRegistry,
 
-  _getNexusDistributorsContract,
-  _getNexusQuotationContract,
-  _getNexusGatewayContract,
-  _getNexusClaimsDataContract,
   _getNexusDistributor,
-  _getNexusDistributorV1,
-  _getNexusMasterContract,
+  _getNexusV2CoverNFT,
   _getIERC20Contract,
-  _getEaseContract,
-  _getUnslashedCoversContract,
+  _getEaseContract, _getNexusV2CoverViewer,
 
 } from "../helpers/getContract";
 import {hexToUtf8, asciiToHex, fromWei} from 'web3-utils';
 import EaseApi from "@/service/distributorsApi/EaseApi";
 import UnslashedAPI from "@/service/distributorsApi/UnslashedAPI";
 import UnoReAPI from "@/service/distributorsApi/UnoReAPI";
+import { Network, Alchemy } from 'alchemy-sdk';
+import RiskCarriers from "@/service/config/RiskCarriers";
 
 
 /**
@@ -99,97 +93,63 @@ export async function getCovers(
 export async function getCoversNexus():Promise<any>{
 
   const distributor = await _getNexusDistributor(NetConfig.netById(global.user.ethNet.networkId).nexusDistributor );
-  const count = await distributor.methods.balanceOf(global.user.account).call();
+  const coverNFT = await _getNexusV2CoverNFT(NetConfig.netById(global.user.ethNet.networkId).nexusV2CoverNFT );
 
-  global.events.emit("covers" , { itemsCount: count } );
+  const countV1 = await distributor.methods.balanceOf(global.user.account).call();
+  const countV2 = await coverNFT.methods.balanceOf(global.user.account).call();
 
-  let covers = [];
-  //fetch covers bought from Nexus Distributor
-  for (let i = 0; i < Number(count); i++) {
+  global.events.emit("covers" , { itemsCount: Number(countV1) + Number(countV2) } );
+  let covers:any = [];
+
+  //fetch covers bought from Nexus Distributor for V1
+  for (let i = 0; i < Number(countV1); i++) {
     const tokenId = await distributor.methods.tokenOfOwnerByIndex(global.user.account, i).call();
-    let id = tokenId > 7661 ? tokenId : tokenId - 1
-    let cover:any = await distributor.methods.getCover(global.user.account, id, true, 5).call();
+    let cover:any = await distributor.methods.getCover(global.user.account, tokenId, true, 5).call();
     cover = {
       ...cover,
       'id': tokenId,
       'source': 'distributor',
-     'risk_protocol': 'nexus',
-     'net':  global.user.ethNet.networkId
+      'risk_protocol': 'nexus',
+      'endTime': cover.validUntil,
+      'net':  global.user.ethNet.networkId
     }
     global.events.emit("covers" , { coverItem: cover} );
     covers.push(cover)
   }
 
-  const distributorV1 = await _getNexusDistributorV1(NetConfig.netById(global.user.ethNet.networkId).nexusDistributorV1 );
-  const countV1 = await distributorV1.methods.balanceOf(global.user.account).call();
+  // V2
+  const settings = {
+    apiKey: NetConfig.netById(global.user.networkId).alchemyApiKey,
+    network: Network.ETH_MAINNET,
+  };
+  const alchemy = new Alchemy(settings);
+  const coverViewer = await _getNexusV2CoverViewer(NetConfig.netById(global.user.ethNet.networkId).nexusV2CoverViewer );
 
-  global.events.emit("covers" , { itemsCount: countV1 } );
-
-  //fetch covers bought from Nexus Distributor
-  for (let i = 0; i < Number(countV1); i++) {
-    const tokenId = await distributorV1.methods.tokenOfOwnerByIndex(global.user.account, i).call();
-    const cover = await distributorV1.methods.getCover(tokenId).call();
-    cover.id = tokenId;
-    cover.source = 'distributor';
-    cover.risk_protocol = 'nexus';
-    cover.net = global.user.ethNet.networkId;
-    global.events.emit("covers" , { coverItem: cover} );
-    covers.push(cover)
-  }
-
-
-  const gatewayAddress = await  distributor.methods.gateway().call()
-  const nexusGatewayContract = await _getNexusGatewayContract(gatewayAddress);
-  const masterAddress = await distributor.methods.master().call();
-  const masterContract = await _getNexusMasterContract(masterAddress);
-  const quotationAddress = await masterContract.methods.getLatestAddress(asciiToHex('QD')).call()
-  const nexusQuotationContract = await  _getNexusQuotationContract(quotationAddress);
-
-  //fetch covers bought from Nexus directly
-  try {
-    const coverIds = await nexusQuotationContract.methods.getAllCoversOfUser(global.user.account).call();
-
-    global.events.emit("covers", {itemsCount: coverIds.length});
-
-    for (const coverId of coverIds) {
-      try {
-        const cover = await nexusGatewayContract.methods.getCover(coverId).call();
-        cover.id = coverId;
-        cover.source = 'nexus';
-        cover.risk_protocol = 'nexus';
-        cover.net = global.user.ethNet.networkId;
-        global.events.emit("covers", {coverItem: cover});
-        covers.push(cover)
-      } catch (e) {
-        //ignore this cover
-      }
+  await alchemy.nft.getNftsForOwner(global.user.account, {
+    'contractAddresses' : [coverNFT.options.address]
+  }).then(async data => {
+    let tokenIds = data.ownedNfts.map(a => a.tokenId);
+    let coverObjs = await coverViewer.methods.getCovers(tokenIds).call();
+    let i:number = 0;
+    let nexusAssetsIds = RiskCarriers.NEXUS.assetsIds;
+    for (let cover of coverObjs) {
+      let lastSegment = cover.segments[cover.segments.length - 1];
+      covers.push({
+        'id': tokenIds[i],
+        'nexusProductId': cover.productId,
+        'status' : '0', //'active'
+        'coverAsset' : Object.keys(nexusAssetsIds).find(key => nexusAssetsIds[key] === cover.coverAsset),
+        'coverAmount' : lastSegment.amount,
+        'source': 'distributor',
+        'risk_protocol': 'nexus',
+        'coverPeriod' : Number(lastSegment.period) / 3600 / 24,
+        'endTime': Number(lastSegment.start) + Number(lastSegment.period),
+        'net':  global.user.ethNet.networkId
+      })
+      i++;
     }
+  });
 
-    const claimsDataAddress = await nexusGatewayContract.methods.claimsData().call();
-    const nexusClaimsDataContract = await _getNexusClaimsDataContract(claimsDataAddress);
-    const coverToClaim:any = {};
-    if (covers.length > 0) {
-      //collect all claims for distributor AND user
-      const claimsByDistributor = await nexusClaimsDataContract.methods.getAllClaimsByAddress(distributor.options.address).call();
-      const claimsByUser = await nexusClaimsDataContract.methods.getAllClaimsByAddress(global.user.account).call();
-      const claims = claimsByDistributor.concat(claimsByUser);
-      for (let i = 0; i < claims.length; i++) {
-        let coverId = await nexusGatewayContract.methods.getClaimCoverId(claims[i]).call();
-        coverToClaim[coverId] = claims[i];
-      }
-    }
-
-    //update each with own claim (if any)
-    for (let i = 0; i < covers.length; i++) {
-      if (coverToClaim[covers[i].id]) {
-        covers[i].claimId = coverToClaim[covers[i].id];
-      }
-      covers[i].endTime = covers[i].validUntil;
-    }
-  } catch (e) {
-    // Nexus side of not available
-    console.error('Nexus contracts are not available');
-  }
   return covers;
 
 }

@@ -9,6 +9,7 @@ declare class CatalogHelper {
     static quoteFromCoverable(_distributorName: string, _coverable: any, obj: any, stats: object): {
         status: any;
         priceInNXM: any;
+        nexusProductId: any;
         distributorName: string;
         risk_protocol: string;
         name: any;
@@ -42,8 +43,7 @@ declare class CatalogHelper {
         [x: string]: any;
         bridgeCoverable: any;
         bridgeProductAddress: any;
-        bridgeAPY: any;
-        nexusCoverable: any;
+        nexusProductId: any;
         coingecko: any;
         productId: any;
         stats: any;
@@ -60,7 +60,6 @@ declare class CatalogHelper {
         chainListUnore: any;
         chainListSolace: any;
         chainListTidal: any;
-        rawDataNexus: any;
         rawDataBridge: any;
         rawDataInsurace: any;
         rawDataEase: any;
