@@ -7,10 +7,10 @@ var config = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.ts|\.tsx$/,
         use: 'ts-loader',
         //include: /node_modules/,
-        exclude: /node_modules/,
+        //exclude: /node_modules/,
         include: __dirname
       },
     ],
