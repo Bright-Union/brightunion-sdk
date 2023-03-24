@@ -29,6 +29,7 @@ declare class NetConfig {
         nexusV2Cover: string;
         nexusV2CoverNFT: string;
         nexusV2CoverViewer: string;
+        nexusV2ProductsV1: string;
         brightProtocol: string;
         insuraceDistributor: string;
         insuraceCover: string;
@@ -83,6 +84,7 @@ declare class NetConfig {
         nexusV2Cover?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
+        nexusV2ProductsV1?: undefined;
         insuraceDistributor?: undefined;
         easeDistributor?: undefined;
         NXM?: undefined;
@@ -126,6 +128,7 @@ declare class NetConfig {
         nexusV2Cover?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
+        nexusV2ProductsV1?: undefined;
         insuraceDistributor?: undefined;
         easeDistributor?: undefined;
         NXM?: undefined;
@@ -169,6 +172,7 @@ declare class NetConfig {
         nexusV2Cover?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
+        nexusV2ProductsV1?: undefined;
         insuraceDistributor?: undefined;
         easeDistributor?: undefined;
         NXM?: undefined;
@@ -214,6 +218,7 @@ declare class NetConfig {
         nexusV2Cover?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
+        nexusV2ProductsV1?: undefined;
         easeDistributor?: undefined;
         DAI?: undefined;
         USDT?: undefined;
@@ -256,6 +261,7 @@ declare class NetConfig {
         nexusV2Cover?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
+        nexusV2ProductsV1?: undefined;
         insuraceDistributor?: undefined;
         easeDistributor?: undefined;
         DAI?: undefined;
@@ -300,6 +306,7 @@ declare class NetConfig {
         nexusV2Cover?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
+        nexusV2ProductsV1?: undefined;
         easeDistributor?: undefined;
         NXM?: undefined;
         WNXM?: undefined;
@@ -342,6 +349,7 @@ declare class NetConfig {
         nexusV2Cover?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
+        nexusV2ProductsV1?: undefined;
         insuraceDistributor?: undefined;
         easeDistributor?: undefined;
         NXM?: undefined;
@@ -387,6 +395,7 @@ declare class NetConfig {
         nexusV2Cover?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
+        nexusV2ProductsV1?: undefined;
         easeDistributor?: undefined;
         DAI?: undefined;
         USDT?: undefined;
@@ -429,6 +438,7 @@ declare class NetConfig {
         nexusV2Cover?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
+        nexusV2ProductsV1?: undefined;
         insuraceDistributor?: undefined;
         easeDistributor?: undefined;
         DAI?: undefined;
@@ -460,6 +470,7 @@ declare class NetConfig {
         nexusV2Cover: string;
         nexusV2CoverNFT: string;
         nexusV2CoverViewer: string;
+        nexusV2ProductsV1: string;
         brightProtocol: string;
         insuraceDistributor: string;
         insuraceCover: string;
@@ -514,6 +525,7 @@ declare class NetConfig {
         nexusV2Cover?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
+        nexusV2ProductsV1?: undefined;
         insuraceDistributor?: undefined;
         easeDistributor?: undefined;
         NXM?: undefined;
@@ -557,6 +569,7 @@ declare class NetConfig {
         nexusV2Cover?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
+        nexusV2ProductsV1?: undefined;
         insuraceDistributor?: undefined;
         easeDistributor?: undefined;
         NXM?: undefined;
@@ -600,6 +613,7 @@ declare class NetConfig {
         nexusV2Cover?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
+        nexusV2ProductsV1?: undefined;
         insuraceDistributor?: undefined;
         easeDistributor?: undefined;
         NXM?: undefined;
@@ -645,6 +659,7 @@ declare class NetConfig {
         nexusV2Cover?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
+        nexusV2ProductsV1?: undefined;
         easeDistributor?: undefined;
         DAI?: undefined;
         USDT?: undefined;
@@ -687,6 +702,7 @@ declare class NetConfig {
         nexusV2Cover?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
+        nexusV2ProductsV1?: undefined;
         insuraceDistributor?: undefined;
         easeDistributor?: undefined;
         DAI?: undefined;
@@ -731,6 +747,7 @@ declare class NetConfig {
         nexusV2Cover?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
+        nexusV2ProductsV1?: undefined;
         easeDistributor?: undefined;
         NXM?: undefined;
         WNXM?: undefined;
@@ -773,6 +790,7 @@ declare class NetConfig {
         nexusV2Cover?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
+        nexusV2ProductsV1?: undefined;
         insuraceDistributor?: undefined;
         easeDistributor?: undefined;
         NXM?: undefined;
@@ -818,6 +836,7 @@ declare class NetConfig {
         nexusV2Cover?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
+        nexusV2ProductsV1?: undefined;
         easeDistributor?: undefined;
         DAI?: undefined;
         USDT?: undefined;
@@ -860,6 +879,7 @@ declare class NetConfig {
         nexusV2Cover?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
+        nexusV2ProductsV1?: undefined;
         insuraceDistributor?: undefined;
         easeDistributor?: undefined;
         DAI?: undefined;

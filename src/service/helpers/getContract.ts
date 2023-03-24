@@ -11,6 +11,7 @@ import DistributorNexusABI from '../abi/nexus/Distributor.json';
 import NexusMasterABI from '../abi/nexus/INXMaster.json';
 import NexusCoverNFTABI from '../abi/nexus/CoverNFT.json';
 import NexusCoverViewerABI from '../abi/nexus/CoverViewer.json';
+import NexusProductsV1ABI from '../abi/nexus/ProductsV1.json';
 import EaseContractABI from '../abi/ease/EaseContract.json';
 import EaseDistributorContractABI from '../abi/ease/EaseDistributorContract.json';
 import PermitContractABI from '../abi/ease/PermitContract.json';
@@ -90,6 +91,11 @@ function _getNexusV2CoverNFT(address:string) : any {
 function _getNexusV2CoverViewer(address:string) : any {
   const web3:any = global.user.ethNet.web3Instance;
   const distAbi:any = NexusCoverViewerABI;
+  return new web3.eth.Contract(distAbi, address );
+}
+function _getNexusV2ProductsV1(address:string) : any {
+  const web3:any = global.user.ethNet.web3Instance;
+  const distAbi:any = NexusProductsV1ABI;
   return new web3.eth.Contract(distAbi, address );
 }
 function _getInsuraceDistributor(address:string, _web3:any) : any {
@@ -175,6 +181,7 @@ export  {
     _getNexusV2CoverContract,
     _getNexusV2CoverNFT,
     _getNexusV2CoverViewer,
+    _getNexusV2ProductsV1,
 
     _getEaseContract,
     _getEaseDistributorContract,

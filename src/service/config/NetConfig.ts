@@ -35,6 +35,7 @@ const QUICKNODEPROVIDER = "https://spring-blue-tree.quiknode.pro/4fb23553784a0d8
         nexusV2Cover: '0xcafeac0fF5dA0A2777d915531bfA6B29d282Ee62',
         nexusV2CoverNFT: '0xcafeaca76be547f14d0220482667b42d8e7bc3eb',
         nexusV2CoverViewer: '0xcafea84e199C85E44F34CD75374188D33FB94B4b',
+        nexusV2ProductsV1: '0xcafeab02966fdc69ce5afdd532dd51466892e32b',
         brightProtocol:'0x7ca75bf6c3f5aa2c0f5a2c0bb07acb622ace1e3c',
         insuraceDistributor: '0x98fb0e1191651b6292d3482cebf54e6d35542ca4',
         insuraceCover: '0x88Ef6F235a4790292068646e79Ee563339c796a0',

@@ -1,0 +1,1 @@
+[{"inputs":[{"internalType":"address","name":"legacyProductId","type":"address"}],"name":"getNewProductId","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"pure","type":"function"}]
