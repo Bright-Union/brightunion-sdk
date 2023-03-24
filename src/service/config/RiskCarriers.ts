@@ -11,8 +11,8 @@ const NEXUS:any = {
         kycDescription: 'Requirements for membership are payment of 0.002Eth and a KYC check',
         inclusions:'Code Failure & hacks, Economic & Governance attacks, oracle failures.',
         exclusions: 'Phishing & malware at individual customer, rug pulls, secret key theft of individual customers.',
-        period:'30-365 days, specify per day.',
-        minPeriod: 30,
+        period:'28-365 days, specify per day.',
+        minPeriod: 28,
         capitalReq: 'Staked amount is at least 100% of the amount reserved by active covers.',
         network: 'Ethereum',
         payment:' Single upfront payment'
