@@ -1,12 +1,13 @@
+import Web3 from 'web3';
 declare class NetConfig {
     static getInfuraId(): string;
     static getQuickNodeProvider(): string;
-    static createWeb3Provider(provider: any): any;
+    static createWeb3Provider(provider: any): Web3;
     static createWeb3Passives(): Promise<{
         account: any;
         networkId: any;
         symbol: string;
-        web3Instance: any;
+        web3Instance: Web3;
         readOnly: boolean;
     }[]>;
     static NETWORK_CONFIG: ({

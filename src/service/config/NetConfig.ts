@@ -1,5 +1,4 @@
 import Web3 from 'web3';
-const { createAlchemyWeb3 } = require("@alch/alchemy-web3");
 
 
 const VUE_APP_MAINNET_MODULES='BRIGHT_TOKEN UNISWAP BRIDGE_MUTUAL NEXUS_MUTUAL INSURACE EASE UNSLASHED UNORE TIDAL SOLACE'
@@ -306,13 +305,7 @@ class NetConfig{
   }
 
   public static createWeb3Provider(provider:any){
-    let web3 = null;
-    if(provider.includes("alchemy")){
-      web3 =  createAlchemyWeb3(provider);
-    } else {
-      web3 = new Web3(new Web3.providers.HttpProvider(provider));
-    }
-    return web3;
+    return new Web3(new Web3.providers.HttpProvider(provider));
   };
 
   public static async createWeb3Passives() {

@@ -12,47 +12,6 @@ object-assign
  */
 
 /*!
- * URI.js - Mutating URLs
- *
- * Version: 1.19.11
- *
- * Author: Rodney Rehm
- * Web: http://medialize.github.io/URI.js/
- *
- * Licensed under
- *   MIT License http://www.opensource.org/licenses/mit-license
- *
- */
-
-/*!
- * URI.js - Mutating URLs
- * IPv6 Support
- *
- * Version: 1.19.11
- *
- * Author: Rodney Rehm
- * Web: http://medialize.github.io/URI.js/
- *
- * Licensed under
- *   MIT License http://www.opensource.org/licenses/mit-license
- *
- */
-
-/*!
- * URI.js - Mutating URLs
- * Second Level Domain (SLD) Support
- *
- * Version: 1.19.11
- *
- * Author: Rodney Rehm
- * Web: http://medialize.github.io/URI.js/
- *
- * Licensed under
- *   MIT License http://www.opensource.org/licenses/mit-license
- *
- */
-
-/*!
  * v2.1.4-104-gc868b3a
  * 
  */
@@ -73,8 +32,6 @@ PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 
 /*! decimal.js-light v2.5.1 https://github.com/MikeMcl/decimal.js-light/LICENCE */
-
-/*! https://mths.be/punycode v1.4.0 by @mathias */
 
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
