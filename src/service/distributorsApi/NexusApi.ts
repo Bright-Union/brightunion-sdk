@@ -2,11 +2,10 @@ import axios from 'axios';
 import NetConfig from '../config/NetConfig'
 import RiskCarriers from '../config/RiskCarriers'
 import CatalogHelper from '../helpers/catalogHelper'
-import CurrencyHelper from '../helpers/currencyHelper';
 import BigNumber from 'bignumber.js'
 import {toBN, toWei, fromWei} from 'web3-utils'
 import {
-    _getNexusDistributorsContract,
+    _getNexusDistributorsContract, _getNexusV2CoverContract, _getNexusV2CoverNFT,
 } from '../helpers/getContract'
 import {getCoverMin} from "../helpers/cover_minimums"
 import UniswapV3Api from '../helpers/UniswapV3Api';
@@ -17,7 +16,6 @@ export default class NexusApi {
     static fetchCoverables() {
 
         return axios.get(`${NetConfig.netById(global.user.ethNet.networkId).nexusAPI}/coverables/contracts.json`)
-            // return axios.get(`https://api.nexusmutual.io/coverables/contracts.json`)
             .then((response) => {
                 return response.data;
             }).catch(error => {
@@ -101,7 +99,10 @@ export default class NexusApi {
             }
         )
             .then(async (response: any) => {
-                //TODO For 'wrong' params (duration or amount) this request doesn't fail. Bad.
+                if (Number(period) < 28 || Number(period) > 365) {
+                    //API doesn't fall for wrong params
+                    return NexusApi.emptyErrorQuote(quote, {message: "Minimum duration is 28 days. Maximum is 365", errorType: "period"});
+                }
 
                 let basePrice = toBN(response.data.quote.premiumInAsset);
                 //add 17.65% that Nexus adds to the 'base quotation', we do same
@@ -133,54 +134,32 @@ export default class NexusApi {
 
                 global.events.emit("quote", quote);
 
-               /* const masterAddress = await distributor.methods.master().call()
-                const masterContract = await _getNexusMasterContract(masterAddress);
-                const quotationAddress = await masterContract.methods.getLatestAddress(asciiToHex('QD')).call();
-                const totalCovers = await quotationContract.methods.getCoverLength().call();
-                const activeCoversETH = await quotationContract.methods.getTotalSumAssuredSC(protocol.nexusCoverable, asciiToHex('ETH')).call();
-                const activeCoversDAI = await quotationContract.methods.getTotalSumAssuredSC(protocol.nexusCoverable, asciiToHex('DAI')).call();
-                const totalActiveCoversETH = await quotationContract.methods.getTotalSumAssured(asciiToHex('ETH')).call();
-                const totalActiveCoversDAI = await quotationContract.methods.getTotalSumAssured(asciiToHex('DAI')).call();*/
+                const nexusV2CoverAddr = NetConfig.netById(global.user.ethNet.networkId).nexusV2Cover;
+                const NexusV2CoverContract = await _getNexusV2CoverContract(nexusV2CoverAddr, global.user.ethNet.web3Instance);
+                const totalActiveCoversETH = fromWei(await NexusV2CoverContract.methods.totalActiveCoverInAsset(RiskCarriers.NEXUS.assetsIds.ETH).call());
+                const totalActiveCoversDAI = fromWei(await NexusV2CoverContract.methods.totalActiveCoverInAsset(RiskCarriers.NEXUS.assetsIds.DAI).call());
+                const coverNFT = await _getNexusV2CoverNFT(NetConfig.netById(global.user.ethNet.networkId).nexusV2CoverNFT);
+                const totalCovers = await coverNFT.methods.totalSupply().call();
 
-                let defaultCurrencySymbol = NetConfig.netById(global.user.ethNet.networkId).defaultCurrency;
-
-                // TODO
                 quote.stats = {
-                    activeCoversETH: '0',
-                    activeCoversDAI: 'O',
-                    capacityETH: capacityETH,
-                    capacityDAI: capacityDAI,
-                    totalCovers: '0',
-                    totalActiveCoversDAI: '0',
-                    totalActiveCoversETH: '0',
-                }
-                /*quote.stats = {
-                    activeCoversETH: activeCoversETH,
-                    activeCoversDAI: activeCoversDAI,
                     capacityETH: capacityETH,
                     capacityDAI: capacityDAI,
                     totalCovers: totalCovers,
                     totalActiveCoversDAI: totalActiveCoversDAI,
                     totalActiveCoversETH: totalActiveCoversETH,
-                }*/
-                quote.defaultCurrencySymbol = defaultCurrencySymbol;
+                }
                 quote.status = "FINAL_DATA";
-
                 return quote;
 
             }).catch(function (error) {
-
                 if ((error.response && error.response.status === 400) || (error.response && error.response.status === 409)) {
                     //wrong parameters
                     if (error.response.data.error || error.response.data.message.details || error.response.data.message) {
                         let errorMsg: any = null;
                         if (error.response.data.error) {
-                            errorMsg = {message: error.response.data.error};
+                            errorMsg = {message: error.response.data.error, errorType: "capacity"};
                         } else {
                             errorMsg = {message: error.response.data.message.details[0].message}
-                        }
-                        if (errorMsg.message.toLowerCase().includes("\"period\" must be")) {
-                            errorMsg = {message: "Minimum duration is 30 days. Maximum is 365", errorType: "period"};
                         }
                         if (errorMsg.message.includes("coverAmount") && errorMsg.message.includes("required pattern")) {
                             errorMsg = {message: "Nexus supports only whole amounts to cover (e.g. 1999)", errorType: "amount"};
@@ -188,27 +167,23 @@ export default class NexusApi {
                         if (errorMsg.message.includes("only allows ETH as a currency")) {
                             errorMsg = {message: "Nexus supports only ETH currency for this cover"};
                         }
-
-                        quote.priceOrigin = 0,
-                            quote.price = 0,
-                            quote.pricePercentOrigin = 0,
-                            quote.pricePercent = 0,
-                            quote.errorMsg = errorMsg,
-                            quote.rawData = {error: error},
-                            quote.status = {
-                                capacityETH: capacityETH,
-                                capacityDAI: capacityDAI,
-                            };
-                        quote.errorMsg = errorMsg;
-                        quote.status = "FINAL_DATA";
-
-                        return quote;
+                        return NexusApi.emptyErrorQuote(quote, errorMsg);
                     }
                 } else {
                     quote.error = error;
                     return quote;
                 }
             });
+    }
+
+    static emptyErrorQuote(quote:any, errorMsg:any) {
+        quote.priceOrigin = 0,
+            quote.price = 0,
+            quote.pricePercentOrigin = 0,
+            quote.pricePercent = 0,
+            quote.errorMsg = errorMsg,
+            quote.status = "FINAL_DATA";
+        return quote;
     }
 
     static fetchCapacity(_productId: any) {

@@ -81,11 +81,11 @@ export async function getQuoteFrom(
 
       GoogleEvents.quote( {_amount, _currency, _period, _protocol, _distributorName , _net } , "getQuoteFrom")
 
-  if(_distributorName == 'bridge'){
+  /*if(_distributorName == 'bridge'){
     return await getBridgeV2Quote( _amount,_currency,_period,_protocol);
-  }else if(_distributorName == 'nexus'){
+  }else*/ if(_distributorName == 'nexus'){
     return await getNexusQuote(_amount,_currency,_period,_protocol );
-  }else if(_distributorName == 'insurace'){
+  }/*else if(_distributorName == 'insurace'){
     return await getInsuraceQuote( _net , _amount,_currency,_period,_protocol, _owner);
   }else if(_distributorName == 'ease'){
     return await getEaseQuote(_amount,_currency,_period,_protocol );
@@ -99,7 +99,7 @@ export async function getQuoteFrom(
     return await getTidalQuote(_amount,_currency,_period,_protocol );
   } else if(_distributorName == 'solace'){
     return await getSolaceQuote(_amount,_currency,_period,_protocol );
-  } else {
+  } */else {
     return  {error: 'supported distributor names are: bridge, insurace, nexus'}
   }
 }
@@ -139,7 +139,7 @@ export async function getQuoteFrom(
 
  export async function getNexusQuote( _amount :any,_currency :any,_period :any,_protocol :any ) : Promise<object> {
     if (CatalogHelper.availableOnNetwork(global.user.ethNet.networkId, 'NEXUS_MUTUAL')){
-      if(_protocol.nexusProductId){
+      if(_protocol.nexusProductId || _protocol.nexusProductId >= 0){
         return await NexusApi.fetchQuote( _amount , _currency, _period, _protocol);
       }else{
         return {error: "Please provide nexusProductId address in protocol object"}

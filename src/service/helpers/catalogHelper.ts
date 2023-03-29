@@ -109,6 +109,7 @@ const bridge_nexus_insurace_categories : string[][] = [
   ['' , '', 'IDO Event Risk', '', '', '', '', 'ido', 'IDO Event Risk'],
   ['' , '', '3', '', '', '', '', 'bundled', 'Bundled cover'],
   ['' , '', '', 'Decentralized Exchange', 'Exchange', 'Dexes', '', 'exchange', 'Decentralized Exchange'],
+  ['' , '2', '', '', '', '', '', 'Yield token', 'Yield Token'],
   ['' , '3', '', '', '', '', '', 'ETH2', 'ETH2 Staking'],
 ];
 
@@ -281,7 +282,11 @@ class CatalogHelper {
 
     let assetLogo: any = null;
     Object.keys(trustWalletAssets).find((k: string) => {
-      if (trustWalletAssets[k].name && _address && trustWalletAssets[k].name.toUpperCase() == _address.toUpperCase()) {
+      if ((_address && trustWalletAssets[k].name.toUpperCase() == _address.toUpperCase()) ||  /*by address*/
+          (_name.toUpperCase() == trustWalletAssets[k].name.toUpperCase()) || /*by name*/
+          (_name.split(' ')[0].toUpperCase() == trustWalletAssets[k].name.toUpperCase() /*by first part of the name*/
+          )
+      ) {
         assetLogo = trustWalletAssets[k].logoURI;
       }
     });
@@ -314,7 +319,7 @@ class CatalogHelper {
         }
       }
       else if(_distributorName == 'nexus'){
-        logoData.url = `https://app.nexusmutual.io/logos/${_name}.png`; // is extension always png?
+        logoData.url = `https://app.nexusmutual.io/logos/${_name.toLowerCase()}.png`; // is extension always png?
         logoData.strongLogoData = true;
       } else if(_distributorName == 'ease'){
         logoData.url = _name;

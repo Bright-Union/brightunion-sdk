@@ -227,9 +227,6 @@ class InsuraceApi {
           protocol.type,
           owner,
         ).then( async (response: any) => {
-
-          const defaultCurrencySymbol = NetConfig.netById(web3.networkId).defaultCurrency;
-
             let premium: any = response.premiumAmount;
 
             if (NetConfig.sixDecimalsCurrency(web3.networkId, quoteData.currency)) {
@@ -241,7 +238,6 @@ class InsuraceApi {
 
             quote.price = premium,
             quote.rawData = response,
-            quote.defaultCurrencySymbol = defaultCurrencySymbol,
             quote.pricePercent= pricePercent;
 
             global.events.emit("quote" , quote );
