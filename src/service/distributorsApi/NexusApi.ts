@@ -24,9 +24,9 @@ export default class NexusApi {
     }
 
     static async setNXMBasedquotePrice(priceInNXM: any, quoteCurrency: string, fee: any) {
-        //add 17.65% that Nexus adds to the 'base quotation', we do same
+        //add 10%, Nexus adds 17,65% to the 'base quotation'
         //PLUS 0.35% to cover a slight quotation volatility
-        priceInNXM = priceInNXM.mul(toBN(1800)).div(toBN(10000)).add(priceInNXM);
+        priceInNXM = priceInNXM.mul(toBN(1035)).div(toBN(10000)).add(priceInNXM);
         let priceInNXMWithFee: any = fromWei(priceInNXM.mul(fee).div(toBN(10000)).add(priceInNXM));
 
         priceInNXMWithFee = Number(priceInNXMWithFee);
@@ -106,8 +106,8 @@ export default class NexusApi {
                 }
 
                 let basePrice = toBN(response.data.quote.premiumInAsset);
-                //add 17.65% that Nexus adds to the 'base quotation', we do same
-                basePrice = basePrice.mul(toBN(1765)).div(toBN(10000)).add(basePrice);
+                //add 10%, Nexus adds 17,65% to the 'base quotation'
+                basePrice = basePrice.mul(toBN(1000)).div(toBN(10000)).add(basePrice);
 
                 const distributor = await _getNexusDistributorsContract(NetConfig.netById(global.user.ethNet.networkId).nexusDistributor);
                 // hardcoded address, as Bright Distributors contract cannot be called by passive net - fix for Nexus Multichain Quotation

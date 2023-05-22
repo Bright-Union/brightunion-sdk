@@ -283,12 +283,12 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
  export async function callNexus(_quoteProtocol:any , buyingWithNetworkCurrency: boolean){
 
    let net:any = NetConfig.netById(global.user.networkId);
-   let asset = net[_quoteProtocol.currency]
+   let paymentAsset = net[_quoteProtocol.paymentCurrency]
 
      return buyCoverNexus(
        global.user.account,
        'nexus',
-       asset,  // payment asset
+       paymentAsset,
        _quoteProtocol.amount.toString(), // sum assured, compliant
        _quoteProtocol.priceInNXM,
        _quoteProtocol.priceWithSlippage,
@@ -301,12 +301,16 @@ function setInsuraceBuyingObject(confirmCoverResult:any){
    }
 
 export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
-
-  let asset:any;
-  if (NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency)) {
-    asset = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
-  } else if (_quoteProtocol.currency === 'DAI') {
-    asset = NetConfig.netById(global.user.networkId).DAI;
+  let buyingCurrency = _quoteProtocol.paymentCurrency;
+  let buyingAsset:any;
+  let requiredAmount = _quoteProtocol.price;
+  if (NetConfig.isNetworkCurrencyBySymbol(buyingCurrency)) {
+    buyingAsset = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
+  } else if (buyingCurrency === 'DAI') {
+    buyingAsset = NetConfig.netById(global.user.networkId).DAI;
+  } else if (buyingCurrency === 'NXM') {
+    buyingAsset = NetConfig.netById(global.user.networkId).NXM;
+    requiredAmount = _quoteProtocol.priceInNXM;
   } else {
     //Not supported yet
     throw new Error();
@@ -315,17 +319,22 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
   global.events.emit("buy" , { status: "INITIALIZED"} );
 
   const nexusVersion = _quoteProtocol.uniSwapRouteData.protocol ? 'nexus2' : 'nexus';
-  const nexusAddress:any =  await _getDistributorsContract(global.user.web3).methods.getDistributorAddress(nexusVersion).call();
-  console.log('Buying WITH ' + _quoteProtocol.currency);
+  let spenderAddress:String;
+  if (buyingCurrency === 'NXM') {
+    spenderAddress = NetConfig.netById(global.user.networkId).nexusV2TokenController;
+  } else {
+    spenderAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress(nexusVersion).call();
+  }
+  console.log('Buying WITH ' + buyingCurrency);
 
-   if(!NetConfig.isNetworkCurrencyBySymbol(_quoteProtocol.currency)){
-     const erc20Instance = await _getIERC20Contract(asset);
+   if(!NetConfig.isNetworkCurrencyBySymbol(buyingCurrency)){
+     const erc20Instance = await _getIERC20Contract(buyingAsset);
      const ercBalance = await erc20Instance.methods.balanceOf(global.user.account).call();
 
-     if (Number(ercBalance) >= (Number)(_quoteProtocol.price)) {
+     if (Number(ercBalance) >= (Number)(requiredAmount)) {
 
-       const currentAllowance = await erc20Instance.methods.allowance(global.user.account, nexusAddress).call();
-       if (toBN(currentAllowance.toString()).gte(toBN( _quoteProtocol.price.toString() ))) {
+       const currentAllowance = await erc20Instance.methods.allowance(global.user.account, spenderAddress).call();
+       if (toBN(currentAllowance.toString()).gte(toBN( requiredAmount.toString() ))) {
          global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:2 , current:2 } );
          return callNexus(_quoteProtocol, false);
        } else {
@@ -344,7 +353,7 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
          }
 
          global.events.emit("buy" , { status: "CONFIRMATION" , type:"approve_spending" , count:2 , current:1 } );
-         return await ERC20Helper.approveAndCall( erc20Instance, nexusAddress, _quoteProtocol.price, onTXHash, onSuccess, onError);
+         return await ERC20Helper.approveAndCall( erc20Instance, spenderAddress, requiredAmount, onTXHash, onSuccess, onError);
 
        }
 
@@ -355,12 +364,9 @@ export async function buyOnNexus(_quoteProtocol:any) : Promise<any>{
      }
 
    } else{
-
     const netBalance = await global.user.web3.eth.getBalance(global.user.account);
-
-    if (Number(netBalance) >= (Number)(_quoteProtocol.price)) {
+    if (Number(netBalance) >= (Number)(requiredAmount)) {
       global.events.emit("buy" , { status: "CONFIRMATION" , type:"main" , count:1 , current:1 } );
-
       return callNexus(_quoteProtocol, true);
     } else {
       GoogleEvents.buyRejected('You have insufficient funds to continue with this transaction' , _quoteProtocol );

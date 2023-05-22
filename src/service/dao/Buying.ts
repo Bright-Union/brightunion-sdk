@@ -9,7 +9,7 @@ import {
     _getBridgeV2PolicyBookContract,
     _getBridgeV2PolicyBookFacade,
     _getEaseContract,
-    _getEaseDistributorContract
+    _getEaseDistributorContract, _getNexusV2CoverContract
 
 } from "../helpers/getContract";
 
@@ -153,7 +153,7 @@ export async function buyCoverEase(
 export async function buyCoverNexus(
     _ownerAddress: string,
     _distributorName: string,
-    _coverAsset: string,
+    _paymentAsset: string,
     _sumAssured: number,
     _amountOut: number,
     _priceWithSlippage: number,
@@ -176,7 +176,49 @@ export async function buyCoverNexus(
     const sendValue = buyingWithNetworkCurrency ? _maxPriceWithFee : 0;
 
     return await new Promise(async (resolve, reject) => {
-        if (_quoteProtocol.uniSwapRouteData.protocol) {
+        const buyCoverParams:any = [
+            0,                                                      // coverId
+            _ownerAddress,                                          // owner
+            _quoteProtocol.nexusProductId.toString(),               // productId
+            RiskCarriers.NEXUS.assetsIds[_quoteProtocol.currency],  // coverAsset
+            _sumAssured.toString(),                                 // amount
+            Number(_coverPeriod) * 24 * 3600,                       // period
+            _quoteProtocol.priceInNXM,                              // maxPremiumInAsset, NXM amount we buy
+            '255',                                                  // paymentAsset, NXM
+            '1000',                                                 // commissionRatio, 10% we got in NXM as a kickback fee
+            '0xac0734c62b316041d190438d5d3e5d1359614407',           // commissionDestination, treasury
+            ''                                                      // ipfsData
+        ];
+        const poolAllocationRequest: any = _quoteProtocol.rawData.quote.poolAllocationRequests;
+
+        //buying directly on Nexus for NXM?
+        if (_quoteProtocol.paymentCurrency === 'NXM') {
+            const nexusV2CoverAddr = NetConfig.netById(global.user.ethNet.networkId).nexusV2Cover;
+            const NexusV2CoverContract = await _getNexusV2CoverContract(nexusV2CoverAddr, global.user.ethNet.web3Instance);
+            NexusV2CoverContract.methods.buyCover(
+                buyCoverParams,
+                poolAllocationRequest
+            ).send({from: _ownerAddress, value: sendValue})
+                .on('transactionHash', (res: any) => {
+                    tx.hash = res
+                    global.events.emit("buy", {status: "TX_GENERATED", data: tx});
+                    GoogleEvents.onTxHash(tx);
+                    resolve({success: res});
+                })
+                .on('error', (err: any, receipt: any) => {
+                    global.events.emit("buy", {status: "REJECTED"});
+                    GoogleEvents.onTxRejected(tx);
+                    reject({error: err, receipt: receipt})
+                })
+                .on('confirmation', (confirmationNumber: any) => {
+                    if (confirmationNumber === 0) {
+                        GoogleEvents.onTxConfirmation(tx);
+                        global.events.emit("buy", {status: "TX_CONFIRMED"});
+
+                    }
+                });
+        }
+        else if (_quoteProtocol.uniSwapRouteData.protocol) {
             const nexusAddress = await _getDistributorsContract(global.user.web3).methods.getDistributorAddress('nexus2').call();
 
             const swapData = global.user.web3.eth.abi.encodeParameters(
@@ -190,27 +232,12 @@ export async function buyCoverNexus(
                     _quoteProtocol.uniSwapRouteData.poolFees,
                     _quoteProtocol.uniSwapRouteData.protocol,
                     _amountOut,
-                    _coverAsset,
+                    _paymentAsset,
                     _amountOut,
                     _priceWithSlippage,
                     _maxPriceWithFee
                 ]
             );
-            const buyCoverParams:any = [
-                0,                                                      // coverId
-                _ownerAddress,                                          // owner
-                _quoteProtocol.nexusProductId.toString(),               // productId
-                RiskCarriers.NEXUS.assetsIds[_quoteProtocol.currency],  // coverAsset
-                _sumAssured.toString(),                                 // amount
-                Number(_coverPeriod) * 24 * 3600,                       // period
-                _quoteProtocol.priceInNXM,                              // maxPremiumInAsset, NXM amount we buy
-                '255',                                                  // paymentAsset, NXM
-                '1765',                                                 // commissionRatio, 17.5% we got in NXM as a kickback fee
-                '0xac0734c62b316041d190438d5d3e5d1359614407',           // commissionDestination, treasury
-                ''                                                      // ipfsData
-            ];
-            const poolAllocationRequest: any = _quoteProtocol.rawData.quote.poolAllocationRequests;
-
             _getNexusDistributorsContract(nexusAddress).methods.buyCover(
                     buyCoverParams,
                     poolAllocationRequest,
@@ -234,7 +261,6 @@ export async function buyCoverNexus(
 
                     }
                 });
-
         } else {
             // Warning! TODO - can't find a route for NXM buy on Uni!
         }
