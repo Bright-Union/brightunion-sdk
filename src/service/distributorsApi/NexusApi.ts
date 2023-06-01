@@ -190,7 +190,7 @@ export default class NexusApi {
     static fetchCapacity(_productId: any) {
         return axios.get(`https://api.nexusmutual.io/v2/capacity/${_productId}`)
             .then((response: any) => {
-                return response.data.capacity;
+                return response.data.availableCapacity;
             });
     }
 
