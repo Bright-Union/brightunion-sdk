@@ -25,8 +25,8 @@ export default class NexusApi {
 
     static async setNXMBasedquotePrice(priceInNXM: any, quoteCurrency: string, fee: any) {
         //add 10%, Nexus adds 17,65% to the 'base quotation'
-        //PLUS 0.35% to cover a slight quotation volatility
-        priceInNXM = priceInNXM.mul(toBN(1035)).div(toBN(10000)).add(priceInNXM);
+        //PLUS 2% to cover a slight quotation volatility
+        priceInNXM = priceInNXM.mul(toBN(1200)).div(toBN(10000)).add(priceInNXM);
         let priceInNXMWithFee: any = fromWei(priceInNXM.mul(fee).div(toBN(10000)).add(priceInNXM));
 
         priceInNXMWithFee = Number(priceInNXMWithFee);
