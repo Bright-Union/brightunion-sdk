@@ -95,16 +95,18 @@ export async function getCoversNexus(): Promise<any> {
 
     const distributor = await _getNexusDistributor(NetConfig.netById(global.user.ethNet.networkId).nexusDistributor);
     const coverNFT = await _getNexusV2CoverNFT(NetConfig.netById(global.user.ethNet.networkId).nexusV2CoverNFT);
-    const productsV1 = await _getNexusV2ProductsV1(NetConfig.netById(global.user.ethNet.networkId).nexusV2ProductsV1);
+    //const productsV1 = await _getNexusV2ProductsV1(NetConfig.netById(global.user.ethNet.networkId).nexusV2ProductsV1);
 
-    const countV1 = await distributor.methods.balanceOf(global.user.account).call();
+    //const countV1 = await distributor.methods.balanceOf(global.user.account).call();
     const countV2 = await coverNFT.methods.balanceOf(global.user.account).call();
 
-    global.events.emit("covers", {itemsCount: Number(countV1) + Number(countV2)});
+    global.events.emit("covers", {itemsCount: Number(countV2)});
     let covers: any = [];
 
     //fetch covers bought from Nexus Distributor for V1
-    for (let i = 0; i < Number(countV1); i++) {
+    //DEPRECATED
+
+    /*for (let i = 0; i < Number(countV1); i++) {
         await distributor.methods.tokenOfOwnerByIndex(global.user.account, i).call().then ((tokenId:any) => {
             distributor.methods.getCover(global.user.account, tokenId, true, 5).call().then((cover:any) => {
                 productsV1.methods.getNewProductId(cover.contractAddress).call().then((productId:any) => {
@@ -122,7 +124,7 @@ export async function getCoversNexus(): Promise<any> {
                 })
             });
         });
-    }
+    }*/
 
     // V2
     const coverViewer = await _getNexusV2CoverViewer(NetConfig.netById(global.user.ethNet.networkId).nexusV2CoverViewer);

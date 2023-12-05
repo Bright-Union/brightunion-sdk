@@ -7,7 +7,7 @@ class NexusHelper {
   static async catalogDataFormat(_productsArr:any, _productNames:any) {
     let policyBooksArray = [];
     for (let i = 0; i < _productsArr.length; i++) {
-      if (_productsArr[i].isDeprecated) {
+      if (_productsArr[i].isDeprecated || _productsArr[i].useFixedPrice) {
         continue;
       }
       const name = _productNames[i];
