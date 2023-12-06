@@ -23,16 +23,13 @@ export default class NexusApi {
             });
     }
 
-    static async setNXMBasedquotePrice(priceInNXM: any, quoteCurrency: string, fee: any) {
+    static async setNXMBasedquotePrice(priceInNXM: any, quoteCurrency: string) {
         //add 10%, Nexus adds 17,65% to the 'base quotation'
-        //PLUS 2% to cover a slight quotation volatility
-        priceInNXM = priceInNXM.mul(toBN(1200)).div(toBN(10000)).add(priceInNXM);
-        let priceInNXMWithFee: any = fromWei(priceInNXM.mul(fee).div(toBN(10000)).add(priceInNXM));
+        //PLUS 4% to cover a slight quotation volatility
+        priceInNXM = fromWei(priceInNXM.mul(toBN(1400)).div(toBN(10000)).add(priceInNXM));
 
-        priceInNXMWithFee = Number(priceInNXMWithFee);
-
-        let [priceInCurrencyFromNXM, routeData]: any = await UniswapV3Api.getNXMPriceFor(quoteCurrency, priceInNXMWithFee);
-        const BrightFeeCoef: any = toBN(140); // Margin added - 40%
+        let [priceInCurrencyFromNXM, routeData]: any = await UniswapV3Api.getNXMPriceFor(quoteCurrency, Number(priceInNXM.toString()));
+        const BrightFeeCoef: any = toBN(103); // Margin added - 3%
         let [finalPrice, priceWithSlippage]: any = [null, null];
         if (priceInCurrencyFromNXM) {
             finalPrice = toBN(priceInCurrencyFromNXM).mul(BrightFeeCoef).div(toBN(100));
@@ -43,7 +40,7 @@ export default class NexusApi {
             finalPrice,
             priceWithSlippage,
             priceInCurrencyFromNXM ? toBN(priceInCurrencyFromNXM) : null,
-            toWei(priceInNXMWithFee.toString()),
+            toWei(priceInNXM.toString()),
             routeData
         ];
     }
@@ -107,27 +104,27 @@ export default class NexusApi {
 
                 let basePrice = toBN(response.data.quote.premiumInAsset);
                 //add 10%, Nexus adds 17,65% to the 'base quotation'
-                basePrice = basePrice.mul(toBN(1000)).div(toBN(10000)).add(basePrice);
+                //basePrice = basePrice.mul(toBN(1000)).div(toBN(10000)).add(basePrice);
 
-                const distributor = await _getNexusDistributorsContract(NetConfig.netById(global.user.ethNet.networkId).nexusDistributor);
+                //const distributor = await _getNexusDistributorsContract(NetConfig.netById(global.user.ethNet.networkId).nexusDistributor);
                 // hardcoded address, as Bright Distributors contract cannot be called by passive net - fix for Nexus Multichain Quotation
-                let fee: any = await distributor.methods.feePercentage().call();
-                fee = toBN(fee);
+                //let fee: any = await distributor.methods.feePercentage().call();
+                //fee = toBN(fee);
 
-                let priceWithFee: any = basePrice.mul(fee).div(toBN(10000)).add(basePrice);
+                let priceWithNexusUIFee: any = basePrice.mul(toBN(11750)).div(toBN(10000));
 
                 let pricePercentNXM: any = null;
                 let pricePercent: any = 0;
-                let [nxmBasedPrice, priceWithSlippage, nxmBasedPriceNoMargin, nxmNexusExpects, routeData] = await NexusApi.setNXMBasedquotePrice(toBN(response.data.quote.premiumInNXM), currency, fee);
-                pricePercent = new BigNumber(priceWithFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
+                let [nxmBasedPrice, priceWithSlippage, nxmBasedPriceNoMargin, nxmNexusExpects, routeData] = await NexusApi.setNXMBasedquotePrice(toBN(response.data.quote.premiumInNXM), currency);
+                pricePercent = new BigNumber(priceWithNexusUIFee).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
                 if (nxmBasedPrice && nxmBasedPrice > 0) {
                     pricePercentNXM = new BigNumber(nxmBasedPrice).times(1000).dividedBy(amountInWei).dividedBy(new BigNumber(period)).times(365).times(100).dividedBy(1000);
                 }
                 quote.rawData = response.data;
                 quote.uniSwapRouteData = routeData;
-                quote.priceOrigin = priceWithFee.toString();
-                quote.price = nxmBasedPrice ? nxmBasedPrice : priceWithFee;
-                quote.priceWithSlippage = priceWithSlippage ? priceWithSlippage : priceWithFee;
+                quote.priceOrigin = priceWithNexusUIFee.toString();
+                quote.price = nxmBasedPrice ? nxmBasedPrice : priceWithNexusUIFee;
+                quote.priceWithSlippage = priceWithSlippage ? priceWithSlippage : priceWithNexusUIFee;
                 quote.priceNoMargin = nxmBasedPriceNoMargin;
                 quote.pricePercentOrigin = pricePercent;
                 quote.pricePercent = pricePercentNXM ? pricePercentNXM : pricePercent;
