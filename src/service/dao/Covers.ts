@@ -75,7 +75,6 @@ export async function getCovers(
     _web3: any,
     _distributorName: string,
 ): Promise<any[]> {
-
     if (_distributorName == "insurace") {
         return getCoversInsurace(_web3);
     } else if (_distributorName == 'bridge') {

@@ -33,10 +33,10 @@ export async function getAllCovers(
   const coversPromiseArray:any[] = [];
 
   coversPromiseArray.push(getInsuraceCovers(global.user.web3))
-  coversPromiseArray.push(getBridgeCovers())
+  //coversPromiseArray.push(getBridgeCovers())
   coversPromiseArray.push(getNexusCovers())
   coversPromiseArray.push(getEaseCovers())
-  coversPromiseArray.push(getUnslashedCovers())
+  // coversPromiseArray.push(getUnslashedCovers())
   // coversPromiseArray.push(getUnoReCovers())
 
   for (let net of global.user.web3Passive) {
