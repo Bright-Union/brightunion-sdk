@@ -12,7 +12,7 @@ const VUE_APP_MUMBAI_TESTNET_MODULES=''
 const VUE_APP_AVALANCHE_MODULES='INSURACE'
 const VUE_APP_AVALANCHE_TEST_MODULES='INSURACE'
 const INFURAID= '98d7e501879243c5877bac07a57cde7e';   //wallet connect
-const QUICKNODEPROVIDER = "https://spring-blue-tree.quiknode.pro/4fb23553784a0d8369532e0dd629db7a3a18379c/"
+const QUICKNODEPROVIDER = "https://eth-mainnet.g.alchemy.com/v2/OlIDDqLH9Uo3AUQ_0ezj6sfqHIGxJRxw/"
 
  const NETWORK_CONFIG = [
     {
