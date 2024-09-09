@@ -27,6 +27,7 @@ declare class NetConfig {
         nexusDistributor: string;
         nexusAPI: string;
         nexusV2Cover: string;
+        nexusV2CoverProducts: string;
         nexusV2CoverNFT: string;
         nexusV2CoverViewer: string;
         nexusV2ProductsV1: string;
@@ -83,6 +84,7 @@ declare class NetConfig {
         nexusDistributorV1?: undefined;
         nexusDistributor?: undefined;
         nexusV2Cover?: undefined;
+        nexusV2CoverProducts?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
         nexusV2ProductsV1?: undefined;
@@ -128,6 +130,7 @@ declare class NetConfig {
         nexusDistributorV1?: undefined;
         nexusDistributor?: undefined;
         nexusV2Cover?: undefined;
+        nexusV2CoverProducts?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
         nexusV2ProductsV1?: undefined;
@@ -173,6 +176,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         nexusV2Cover?: undefined;
+        nexusV2CoverProducts?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
         nexusV2ProductsV1?: undefined;
@@ -220,6 +224,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         nexusV2Cover?: undefined;
+        nexusV2CoverProducts?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
         nexusV2ProductsV1?: undefined;
@@ -264,6 +269,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         nexusV2Cover?: undefined;
+        nexusV2CoverProducts?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
         nexusV2ProductsV1?: undefined;
@@ -310,6 +316,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         nexusV2Cover?: undefined;
+        nexusV2CoverProducts?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
         nexusV2ProductsV1?: undefined;
@@ -354,6 +361,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         nexusV2Cover?: undefined;
+        nexusV2CoverProducts?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
         nexusV2ProductsV1?: undefined;
@@ -401,6 +409,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         nexusV2Cover?: undefined;
+        nexusV2CoverProducts?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
         nexusV2ProductsV1?: undefined;
@@ -445,6 +454,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         nexusV2Cover?: undefined;
+        nexusV2CoverProducts?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
         nexusV2ProductsV1?: undefined;
@@ -478,6 +488,7 @@ declare class NetConfig {
         nexusDistributor: string;
         nexusAPI: string;
         nexusV2Cover: string;
+        nexusV2CoverProducts: string;
         nexusV2CoverNFT: string;
         nexusV2CoverViewer: string;
         nexusV2ProductsV1: string;
@@ -534,6 +545,7 @@ declare class NetConfig {
         nexusDistributorV1?: undefined;
         nexusDistributor?: undefined;
         nexusV2Cover?: undefined;
+        nexusV2CoverProducts?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
         nexusV2ProductsV1?: undefined;
@@ -579,6 +591,7 @@ declare class NetConfig {
         nexusDistributorV1?: undefined;
         nexusDistributor?: undefined;
         nexusV2Cover?: undefined;
+        nexusV2CoverProducts?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
         nexusV2ProductsV1?: undefined;
@@ -624,6 +637,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         nexusV2Cover?: undefined;
+        nexusV2CoverProducts?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
         nexusV2ProductsV1?: undefined;
@@ -671,6 +685,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         nexusV2Cover?: undefined;
+        nexusV2CoverProducts?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
         nexusV2ProductsV1?: undefined;
@@ -715,6 +730,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         nexusV2Cover?: undefined;
+        nexusV2CoverProducts?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
         nexusV2ProductsV1?: undefined;
@@ -761,6 +777,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         nexusV2Cover?: undefined;
+        nexusV2CoverProducts?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
         nexusV2ProductsV1?: undefined;
@@ -805,6 +822,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         nexusV2Cover?: undefined;
+        nexusV2CoverProducts?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
         nexusV2ProductsV1?: undefined;
@@ -852,6 +870,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         nexusV2Cover?: undefined;
+        nexusV2CoverProducts?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
         nexusV2ProductsV1?: undefined;
@@ -896,6 +915,7 @@ declare class NetConfig {
         brightTreasury?: undefined;
         nexusDistributorV1?: undefined;
         nexusV2Cover?: undefined;
+        nexusV2CoverProducts?: undefined;
         nexusV2CoverNFT?: undefined;
         nexusV2CoverViewer?: undefined;
         nexusV2ProductsV1?: undefined;

@@ -30,6 +30,7 @@ import {Contract} from "@ethersproject/contracts";
 
 // Neuxs V2
 import NexusV2CoverContractABI from '../abi/nexusV2/Cover.json'
+import NexusV2CoverProductsABI from '../abi/nexusV2/CoverProducts.json'
 
 
 // possible JSON loader solution to reduce SDK code base size
@@ -149,6 +150,7 @@ const _getBridgeV2Distributor = (address:string,web3:any)  : any => new web3.eth
 
 // NexusV2
 const _getNexusV2CoverContract = (address:string,web3:any)  : any => new web3.eth.Contract(NexusV2CoverContractABI, address , web3);
+const _getNexusV2CoverProducts = (address:string,web3:any)  : any => new web3.eth.Contract(NexusV2CoverProductsABI, address , web3);
 
 function _getIERC20Contract(address:any) {
     const web3:any = global.user.web3;
@@ -179,6 +181,7 @@ export  {
     _getNexusMasterContract,
 
     _getNexusV2CoverContract,
+    _getNexusV2CoverProducts,
     _getNexusV2CoverNFT,
     _getNexusV2CoverViewer,
     _getNexusV2ProductsV1,

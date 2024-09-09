@@ -5,6 +5,7 @@ import CatalogHelper from './helpers/catalogHelper';
 import {
     _getBridgeV2RegistryContract,
     _getBridgeV2PolicyBookRegistryContract, _getNexusV2CoverContract,
+    _getNexusV2CoverProducts
 
 } from './helpers/getContract';
 import NetConfig from './config/NetConfig';
@@ -15,6 +16,7 @@ import UnoReAPI from "@/service/distributorsApi/UnoReAPI";
 import TidalApi from "@/service/distributorsApi/TidalApi";
 import SolaceSDK from "@/service/distributorsApi/SolaceSDK";
 import NexusHelper from "@/service/distributorsApi/NexusHelper";
+import {errors} from "ethers";
 
 export async function getCatalog(): Promise<any> {
 
@@ -73,7 +75,9 @@ export async function getBridgeV2Coverables(): Promise<any[]> {
         return;
     }
 
-    const bridgeRegistryAdd = NetConfig.netById(global.user.ethNet.networkId).bridgeV2Registry;
+    return [];
+
+    /*const bridgeRegistryAdd = NetConfig.netById(global.user.ethNet.networkId).bridgeV2Registry;
     const BridgeContract = await _getBridgeV2RegistryContract(bridgeRegistryAdd, global.user.ethNet.web3Instance);
 
     return BridgeContract.methods.getPolicyBookRegistryContract().call().then(async (policyBookRegistryAddr: any) => {
@@ -95,7 +99,7 @@ export async function getBridgeV2Coverables(): Promise<any[]> {
                 })
 
         })
-    })
+    })*/
 
 }
 
@@ -103,15 +107,15 @@ export async function getNexusV2Coverables(): Promise<any[]> {
     if (!global.user.ethNet || !global.user.ethNet.networkId) {
         return;
     }
-
-    const nexusV2CoverAddr = NetConfig.netById(global.user.ethNet.networkId).nexusV2Cover;
-    const NexusV2CoverContract = await _getNexusV2CoverContract(nexusV2CoverAddr, global.user.ethNet.web3Instance);
-    return NexusV2CoverContract.methods.getProducts().call().then(async (products: any) => {
+    const nexusV2CoverProductsAddr = NetConfig.netById(global.user.ethNet.networkId).nexusV2CoverProducts;
+    const NexusV2CoverProductsContract = await _getNexusV2CoverProducts(nexusV2CoverProductsAddr, global.user.ethNet.web3Instance);
+    return NexusV2CoverProductsContract.methods.getProducts().call().then(async (products: any) => {
         const productNames:any = [];
         for (let i = 0; i < products.length; i++) {
-            await NexusV2CoverContract.methods.productNames(i).call().then((prodName: any) => {
-                productNames.push(prodName);
-            });
+            await NexusV2CoverProductsContract.methods.getProductName(i).call()
+                .then((prodName: any) => {
+                    productNames.push(prodName);
+                })
         }
         return NexusHelper.catalogDataFormat(products, productNames).then(productsArray => {
             global.events.emit("catalog", {items: productsArray, distributorName: "nexus", networkId: 1, itemsCount: products.length});
@@ -124,7 +128,9 @@ export async function getInsuraceCoverables(netId: string | number): Promise<obj
     let netSymbol = NetConfig.netById(netId) ? NetConfig.netById(netId).symbol : false;
     if (!netSymbol) return [];
 
-    return await InsuraceApi.fetchCoverables(netId).then(async (data: object) => {
+    return [];
+
+    /*return await InsuraceApi.fetchCoverables(netId).then(async (data: object) => {
 
         const coverablesArray = [];
         for (const [key, value] of Object.entries(data)) {
@@ -158,7 +164,7 @@ export async function getInsuraceCoverables(netId: string | number): Promise<obj
         .catch(error => {
             console.error('Couldn\'t load InsurAce Covers');
             return [];
-        });
+        });*/
 }
 
 export async function getEaseCoverables() {
@@ -169,21 +175,25 @@ export async function getEaseCoverables() {
                 const protocolName = item.top_protocol;
                 const type = CatalogHelper.commonCategory(item.protocol_type, 'ease')
                 const typeDescr = type ? type : 'protocol';
-                coverablesArray.push(CatalogHelper.createCoverable({
-                    protocolAddress: item.address,
-                    name: CatalogHelper.unifyCoverName(protocolName, 'ease'),
-                    source: 'ease',
-                    logo: item.icon,
-                    rawDataEase: item,
-                    type: type,
-                    typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
-                    stats: {
-                        "capacityRemaining": item.remaining_capacity,
-                        "unitCost": item.token.apy,
-                        "priceETH": item.token.priceETH,
-                        "priceUSD": item.token.priceUSD
-                    }
-                }))
+                try {
+                    coverablesArray.push(CatalogHelper.createCoverable({
+                        protocolAddress: item.address,
+                        name: CatalogHelper.unifyCoverName(protocolName, 'ease'),
+                        source: 'ease',
+                        logo: item.icon,
+                        rawDataEase: item,
+                        type: type,
+                        typeDescription: CatalogHelper.descriptionByCategory(typeDescr),
+                        stats: {
+                            "capacityRemaining": item.remaining_capacity,
+                            "unitCost": item.token.apy,
+                            "priceETH": item.token.priceETH,
+                            "priceUSD": item.token.priceUSD
+                        }
+                    }))
+                } catch(error) {
+                    console.warn('Couldn\'t create a coverable from Ease object');
+                };
             })
             global.events.emit("catalog", {items: coverablesArray, distributorName: "ease", networkId: 1, itemsCount: coverablesArray.length});
             return coverablesArray;
@@ -195,7 +205,8 @@ export async function getEaseCoverables() {
 }
 
 export async function getUnslashedCoverables() {
-    return await UnslashedAPI.fetchCoverables()
+    return Promise.resolve([]);
+    /*return await UnslashedAPI.fetchCoverables()
         .then((data: any) => {
             const coverablesArray: any = [];
 
@@ -231,11 +242,14 @@ export async function getUnslashedCoverables() {
         .catch(error => {
             console.error('Couldn\'t load Unslashed Covers');
             return [];
-        });
+        });*/
 }
 
 export async function getUnoReCoverables() {
-    return await UnoReAPI.fetchCoverables()
+
+    return Promise.resolve([]);
+
+    /*return await UnoReAPI.fetchCoverables()
         .then((data: any) => {
             const coverablesArray: any = [];
             data.data.data.forEach(async (item: any) => {
@@ -261,11 +275,14 @@ export async function getUnoReCoverables() {
             console.error('Couldn\'t load UnoRe Covers');
             return [];
         });
-    ;
+    ;*/
 }
 
 export async function getTidalCoverables() {
-    return await TidalApi.fetchCoverables()
+
+    return Promise.resolve([]);
+
+    /*return await TidalApi.fetchCoverables()
         .then(async (data: any) => {
             const coverablesArray: any = [];
             data.forEach((item: any) => {
@@ -294,7 +311,7 @@ export async function getTidalCoverables() {
         .catch(error => {
             console.error('Couldn\'t load Tidal Covers');
             return [];
-        });
+        });*/
 }
 
 export async function getSolaceCoverables() {
